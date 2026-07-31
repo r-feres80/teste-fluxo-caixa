@@ -6,7 +6,7 @@ import { fmtBRL } from "../utils/formatUtils.js";
 import { normalizarLinha, marcarDuplicados, COLUNAS_TEMPLATE_LANCAMENTOS } from "../financial-engine/importacao.js";
 
 export default function ImportarDadosPage({ data }) {
-  const { entidades, addItem } = data;
+  const { entidades, addItem, sincronizarPeriodoComReferencia } = data;
   const [linhas, setLinhas] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [importado, setImportado] = useState(false);
@@ -40,6 +40,7 @@ export default function ImportarDadosPage({ data }) {
 
   const confirmarImportacao = () => {
     validos.forEach((l) => addItem("lancamentos", l.lancamento));
+    sincronizarPeriodoComReferencia();
     setImportado(true);
     setLinhas(null);
   };

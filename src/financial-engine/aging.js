@@ -48,9 +48,12 @@ export function calcularDSOouDPO(saldoEmAberto, valorPeriodo, diasPeriodo) {
   return (saldoEmAberto / valorPeriodo) * diasPeriodo;
 }
 
+/** Títulos com vencimento entre hoje e "dias" dias à frente — usa diffDaysISO
+ * como toda comparação de data do app (mesma base do Aging), em vez de
+ * comparação de string, que falhava a depender do formato armazenado. */
 export function vencimentosProximos(abertos, dataReferencia, dias) {
-  const limite = new Date(dataReferencia + "T00:00:00");
-  limite.setDate(limite.getDate() + dias);
-  const limiteISO = limite.toISOString().slice(0, 10);
-  return abertos.filter((l) => l.dataVencimento >= dataReferencia && l.dataVencimento <= limiteISO);
+  return abertos.filter((l) => {
+    const diasAteVencer = diffDaysISO(dataReferencia, l.dataVencimento);
+    return diasAteVencer >= 0 && diasAteVencer <= dias;
+  });
 }

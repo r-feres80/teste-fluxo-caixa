@@ -4,7 +4,7 @@ import { Panel, KPI, InfoNote } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, vencimentosProximos } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
-import { addDaysISO } from "../utils/dateUtils.js";
+import { addDaysISO, diffDaysISO } from "../utils/dateUtils.js";
 
 export function ContasPagarReceberView({ data, tipo }) {
   const { entidades, filtros, parametros } = data;
@@ -22,7 +22,7 @@ export function ContasPagarReceberView({ data, tipo }) {
   const proximos7 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, parametros.diasParaAlertas), [abertos, filtros.dataReferencia, parametros.diasParaAlertas]);
   const proximos15 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, 15), [abertos, filtros.dataReferencia]);
   const proximos30 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, 30), [abertos, filtros.dataReferencia]);
-  const vencimentosHoje = abertos.filter((l) => l.dataVencimento === filtros.dataReferencia);
+  const vencimentosHoje = abertos.filter((l) => diffDaysISO(filtros.dataReferencia, l.dataVencimento) === 0);
 
   const realizadoNoMes = useMemo(() => {
     const [ano, mes] = filtros.dataReferencia.slice(0, 7).split("-").map(Number);

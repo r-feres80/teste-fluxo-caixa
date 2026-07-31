@@ -72,6 +72,17 @@ export function useAppData() {
   const updateFiltros = useCallback((patch) => setFiltros((prev) => ({ ...prev, ...patch })), []);
   const updateParametros = useCallback((patch) => setParametros((prev) => ({ ...prev, ...patch })), []);
 
+  // Realinha Mês/Ano com a Data de Referência atual. Chamado sempre que a base
+  // muda de forma abrupta (Limpar Base, Carregar Demo, importação concluída) —
+  // sem isso o filtro de mês fica "preso" no último valor manual, ainda que
+  // não reflita mais o período que a Data de Referência indica.
+  const sincronizarPeriodoComReferencia = useCallback(() => {
+    setFiltros((prev) => {
+      const d = parseISO(prev.dataReferencia);
+      return { ...prev, anoRef: d.getFullYear(), mesRef: d.getMonth() };
+    });
+  }, []);
+
   // ---- CRUD genérico por entidade ----
 
   const addItem = useCallback((entidade, item) => {
@@ -96,16 +107,18 @@ export function useAppData() {
       planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
       lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens],
     });
-  }, []);
+    sincronizarPeriodoComReferencia();
+  }, [sincronizarPeriodoComReferencia]);
 
   const limparBase = useCallback(() => {
     setEntidades(criarEntidadesVazias());
-  }, []);
+    sincronizarPeriodoComReferencia();
+  }, [sincronizarPeriodoComReferencia]);
 
   return {
     loaded, savedFlash, lastUpdated,
     entidades, filtros, updateFiltros, parametros, updateParametros,
     addItem, updateItem, removeItem,
-    carregarDemo, limparBase,
+    carregarDemo, limparBase, sincronizarPeriodoComReferencia,
   };
 }

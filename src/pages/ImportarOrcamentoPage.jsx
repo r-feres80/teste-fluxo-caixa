@@ -6,7 +6,7 @@ import { fmtBRL } from "../utils/formatUtils.js";
 import { normalizarLinhaOrcamento, marcarDuplicadosOrcamento, COLUNAS_TEMPLATE_ORCAMENTO } from "../financial-engine/importacaoOrcamento.js";
 
 export default function ImportarOrcamentoPage({ data }) {
-  const { entidades, addItem } = data;
+  const { entidades, addItem, sincronizarPeriodoComReferencia } = data;
   const [linhas, setLinhas] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [importado, setImportado] = useState(false);
@@ -40,6 +40,7 @@ export default function ImportarOrcamentoPage({ data }) {
 
   const confirmarImportacao = () => {
     validos.forEach((l) => addItem("orcamentoItens", l.orcamentoItem));
+    sincronizarPeriodoComReferencia();
     setImportado(true);
     setLinhas(null);
   };
