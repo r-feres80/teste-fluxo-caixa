@@ -44,7 +44,7 @@ function criarContaGerencial(descricao, entidades, classificacaoDRE, classificac
     contaPaiId: null,
     classificacaoDRE: classificacaoDRE || "Não classificado",
     classificacaoDFC: classificacaoDFC || "Operacional",
-    aceitaOrcamento: false,
+    aceitaOrcamento: true,
     centroCustoObrigatorio: false,
   };
   entidades.planoDeContas.push(conta);
@@ -70,10 +70,15 @@ function criarClienteFornecedor(nome, tipo, entidades) {
   return { id, tipo };
 }
 
+// Remove acentos para comparação (ex.: "Comércio" === "Comercio"), evitando
+// que a mesma Empresa/Conta/Cliente seja criada em duplicidade por causa
+// de acentuação divergente entre planilhas.
+const normalizarTexto = (s) => (s || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 export function normalizarLinha(row, entidades) {
   const erros = [];
   const avisos = [];
-  const buscarPorNome = (lista, nome, campo = "nome") => lista.find((i) => (i[campo] || "").trim().toLowerCase() === (nome || "").trim().toLowerCase());
+  const buscarPorNome = (lista, nome, campo = "nome") => lista.find((i) => normalizarTexto(i[campo]) === normalizarTexto(nome));
 
   let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
   if (!empresa) {

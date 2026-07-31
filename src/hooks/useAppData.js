@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { storageService } from "../services/storageService.js";
 import { STORAGE_KEY, DEFAULT_PARAMETROS } from "../config/appConfig.js";
-import { todayISO } from "../utils/dateUtils.js";
+import { todayISO, parseISO } from "../utils/dateUtils.js";
 import { uid } from "../utils/formatUtils.js";
 import {
   demoEmpresas, demoUnidades, demoClientes, demoFornecedores, demoBancos,
@@ -14,12 +14,15 @@ const ENTIDADES_VAZIAS = {
   lancamentos: [], orcamentoItens: [],
 };
 
+// anoRef/mesRef sempre derivados da Data de Referência (nunca de new Date()
+// isoladamente), para que o filtro de mês nasce sincronizado com ela.
+const HOJE_ISO = todayISO();
 const DEFAULT_FILTROS = {
-  dataReferencia: todayISO(),
+  dataReferencia: HOJE_ISO,
   empresaId: "TODAS",
   unidadeId: "TODAS",
-  anoRef: new Date().getFullYear(),
-  mesRef: new Date().getMonth(),
+  anoRef: parseISO(HOJE_ISO).getFullYear(),
+  mesRef: parseISO(HOJE_ISO).getMonth(),
   tipoPeriodo: "mes",
 };
 
