@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar } from "recharts";
 import { AlertTriangle } from "lucide-react";
 import { Panel, Badge } from "../components/ui/Primitives.jsx";
-import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
+import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 
 function KpiCard({ label, value, sub, tone = "neutral" }) {
@@ -17,9 +17,9 @@ function KpiCard({ label, value, sub, tone = "neutral" }) {
 }
 
 const TEXTO_ALERTA = {
-  liquidez: (a) => `Risco de liquidez: caixa projetado negativo (${fmtBRL(a.saldo)}) em ${a.data}.`,
+  liquidez: (a) => `Risco de liquidez: caixa projetado negativo (${fmtBRL(a.saldo)}) em ${fmtData(a.data)}.`,
   caixa_abaixo_minimo: (a) => `Caixa (${fmtBRL(a.valor)}) abaixo do mínimo configurado.`,
-  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado fica abaixo do mínimo (${fmtBRL(a.valor)}) em ${a.data}.`,
+  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado fica abaixo do mínimo (${fmtBRL(a.valor)}) em ${fmtData(a.data)}.`,
   titulos_vencidos_receber: (a) => `Títulos vencidos a receber: ${fmtBRL(a.valor)}.`,
   titulos_vencidos_pagar: (a) => `Títulos vencidos a pagar: ${fmtBRL(a.valor)}.`,
   pagamentos_proximos: (a) => `${a.qtd} pagamento(s) relevante(s) nos próximos ${a.dias} dias (${fmtBRL(a.valor)}).`,
