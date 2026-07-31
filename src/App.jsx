@@ -24,6 +24,7 @@ import ForecastPage from "./pages/ForecastPage.jsx";
 import CenariosPage from "./pages/CenariosPage.jsx";
 import LancamentosPage from "./pages/LancamentosPage.jsx";
 import ImportarDadosPage from "./pages/ImportarDadosPage.jsx";
+import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
 import EmpresasPage from "./pages/cadastros/EmpresasPage.jsx";
 import UnidadesPage from "./pages/cadastros/UnidadesPage.jsx";
 import ClientesPage from "./pages/cadastros/ClientesPage.jsx";
@@ -50,6 +51,7 @@ const NAV = [
   { id: "cenarios", label: "Cenários", icon: GitBranch, Page: CenariosPage },
   { id: "lancamentos", label: "Lançamentos", icon: ListPlus, Page: LancamentosPage },
   { id: "importar", label: "Importar Dados", icon: Upload, Page: ImportarDadosPage },
+  { id: "importar-orcamento", label: "Importar Orçamento", icon: Upload, Page: ImportarOrcamentoPage },
 ];
 
 const CADASTROS = [

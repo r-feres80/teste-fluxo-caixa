@@ -40,7 +40,7 @@ export const SITUACOES_LANCAMENTO = ["Previsto", "Em aberto", "Realizado", "Venc
 
 export const TIPOS_PERIODO = [
   { id: "mes", label: "Mês" },
-  { id: "ytd", label: "YTD (acumulado no ano)" },
+  { id: "ytd", label: "Acumulado no ano" },
   { id: "anoCompleto", label: "Ano Completo" },
   { id: "ultimos12meses", label: "Últimos 12 meses" },
 ];

@@ -15,20 +15,34 @@ function gerarId(prefixo, lista) {
   return `${prefixo}${max + 1}`;
 }
 
-function criarEmpresa(nome, entidades) {
+function criarEmpresa(nome, entidades, numeroConta) {
   const empresa = { id: gerarId("emp", entidades.empresas), nome, ativo: true };
   entidades.empresas.push(empresa);
+
+  // Criar Conta Bancária padrão se número for fornecido
+  if (numeroConta) {
+    const contaBancaria = {
+      id: gerarId("cb", entidades.contasBancarias),
+      empresaId: empresa.id,
+      apelido: "Conta Movimento",
+      numero: numeroConta,
+      saldoInicial: 100000,
+      banco: null,
+    };
+    entidades.contasBancarias.push(contaBancaria);
+  }
+
   return empresa;
 }
 
-function criarContaGerencial(descricao, entidades) {
+function criarContaGerencial(descricao, entidades, classificacaoDRE, classificacaoDFC) {
   const conta = {
     id: gerarId("pc", entidades.planoDeContas),
     descricao,
     tipo: "Analítica",
     contaPaiId: null,
-    classificacaoDRE: "Não classificado",
-    classificacaoDFC: "Operacional",
+    classificacaoDRE: classificacaoDRE || "Não classificado",
+    classificacaoDFC: classificacaoDFC || "Operacional",
     aceitaOrcamento: false,
     centroCustoObrigatorio: false,
   };
@@ -62,8 +76,20 @@ export function normalizarLinha(row, entidades) {
 
   let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
   if (!empresa) {
-    empresa = criarEmpresa(row["Empresa"], entidades);
-    avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente`);
+    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"]);
+    avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente com Conta Movimento`);
+  } else if (row["Conta Bancária"] && !entidades.contasBancarias.some((c) => c.empresaId === empresa.id)) {
+    // Se empresa existe mas não tem conta bancária, criar uma
+    const contaBancaria = {
+      id: gerarId("cb", entidades.contasBancarias),
+      empresaId: empresa.id,
+      apelido: "Conta Movimento",
+      numero: row["Conta Bancária"],
+      saldoInicial: 100000,
+      banco: null,
+    };
+    entidades.contasBancarias.push(contaBancaria);
+    avisos.push(`Conta Bancária criada para "${row["Empresa"]}"`);
   }
 
   const unidade = row["Filial"] ? buscarPorNome(entidades.unidades.filter((u) => u.empresaId === empresa?.id), row["Filial"]) : null;
@@ -73,8 +99,8 @@ export function normalizarLinha(row, entidades) {
 
   let conta = buscarPorNome(entidades.planoDeContas, row["Conta Gerencial"], "descricao");
   if (!conta) {
-    conta = criarContaGerencial(row["Conta Gerencial"], entidades);
-    avisos.push(`Conta Gerencial "${row["Conta Gerencial"]}" criada como Analítica/Operacional`);
+    conta = criarContaGerencial(row["Conta Gerencial"], entidades, row["Classificação DRE"], row["Classificação DFC"]);
+    avisos.push(`Conta Gerencial "${row["Conta Gerencial"]}" criada automaticamente`);
   } else if (conta.tipo !== "Analítica") erros.push(`Conta "${conta.descricao}" é Sintética — não recebe lançamento`);
 
   let centro = row["Centro de Custo"] ? buscarPorNome(entidades.centrosCusto, row["Centro de Custo"], "nome") : null;
