@@ -8,11 +8,17 @@ import {
   demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoOrcamentoItens,
 } from "../data/demoData.js";
 
-const ENTIDADES_VAZIAS = {
+// Fábrica (nunca um objeto único compartilhado): o importador cria Empresa/
+// Conta Gerencial/Centro de Custo/Cliente-Fornecedor/Conta Bancária via
+// .push() direto no objeto entidades recebido. Se "vazio" fosse um único
+// objeto reaproveitado, essas criações contaminariam permanentemente seus
+// arrays, e "Limpar Base" passaria a reaplicar um molde já sujo — cada
+// chamada aqui precisa devolver arrays novos.
+const criarEntidadesVazias = () => ({
   empresas: [], unidades: [], clientes: [], fornecedores: [], bancos: [],
   contasBancarias: [], projetos: [], planoDeContas: [], centrosCusto: [],
   lancamentos: [], orcamentoItens: [],
-};
+});
 
 // anoRef/mesRef sempre derivados da Data de Referência (nunca de new Date()
 // isoladamente), para que o filtro de mês nasce sincronizado com ela.
@@ -28,7 +34,7 @@ const DEFAULT_FILTROS = {
 
 export function useAppData() {
   const [loaded, setLoaded] = useState(false);
-  const [entidades, setEntidades] = useState(ENTIDADES_VAZIAS);
+  const [entidades, setEntidades] = useState(criarEntidadesVazias);
   const [filtros, setFiltros] = useState(DEFAULT_FILTROS);
   const [parametros, setParametros] = useState(DEFAULT_PARAMETROS);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -39,7 +45,7 @@ export function useAppData() {
     (async () => {
       const s = await storageService.getItem(STORAGE_KEY);
       if (s) {
-        setEntidades(s.entidades ?? ENTIDADES_VAZIAS);
+        setEntidades(s.entidades ?? criarEntidadesVazias());
         setFiltros(s.filtros ?? DEFAULT_FILTROS);
         setParametros(s.parametros ?? DEFAULT_PARAMETROS);
         setLastUpdated(s.lastUpdated ?? null);
@@ -81,16 +87,19 @@ export function useAppData() {
   // ---- Dados: Carregar Demonstrativo / Limpar Base ----
 
   const carregarDemo = useCallback(() => {
+    // Cópia rasa de cada array demo — pelo mesmo motivo do criarEntidadesVazias:
+    // o importador muta arrays de entidades por referência, e os arrays demo*
+    // são constantes de módulo que não podem ser contaminadas.
     setEntidades({
-      empresas: demoEmpresas, unidades: demoUnidades, clientes: demoClientes, fornecedores: demoFornecedores,
-      bancos: demoBancos, contasBancarias: demoContasBancarias, projetos: demoProjetos,
-      planoDeContas: demoPlanoDeContas, centrosCusto: demoCentrosCusto,
-      lancamentos: demoLancamentos, orcamentoItens: demoOrcamentoItens,
+      empresas: [...demoEmpresas], unidades: [...demoUnidades], clientes: [...demoClientes], fornecedores: [...demoFornecedores],
+      bancos: [...demoBancos], contasBancarias: [...demoContasBancarias], projetos: [...demoProjetos],
+      planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
+      lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens],
     });
   }, []);
 
   const limparBase = useCallback(() => {
-    setEntidades(ENTIDADES_VAZIAS);
+    setEntidades(criarEntidadesVazias());
   }, []);
 
   return {
