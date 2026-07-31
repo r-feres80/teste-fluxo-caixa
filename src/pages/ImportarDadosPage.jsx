@@ -46,7 +46,7 @@ export default function ImportarDadosPage({ data }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <InfoNote>Fluxo: 1) ler arquivo → 2) prévia → 3) validar campos → 4) mostrar válidos/inválidos → 5) só então confirmar. Registros já existentes (mesma empresa/documento/vencimento/valor) não são duplicados.</InfoNote>
+      <InfoNote>Fluxo: 1) ler arquivo → 2) prévia → 3) validar campos → 4) mostrar válidos/inválidos → 5) só então confirmar. Registros faltantes (Empresa, Conta, Centro de Custo, Cliente/Fornecedor) são criados automaticamente. Registros já existentes não são duplicados.</InfoNote>
 
       <Panel title="Importar Lançamentos (XLSX ou CSV)">
         <div className="flex items-center gap-3">
@@ -68,7 +68,7 @@ export default function ImportarDadosPage({ data }) {
         >
           <div className="overflow-x-auto max-h-96 overflow-y-auto">
             <table className="w-full text-xs">
-              <thead><tr className="text-left text-slate-500 uppercase border-b border-slate-200"><th className="py-2 pr-3">#</th><th className="py-2 pr-3">Status</th><th className="py-2 pr-3">Empresa</th><th className="py-2 pr-3">Documento</th><th className="py-2 pr-3">Valor</th><th className="py-2 pr-3">Erros</th></tr></thead>
+              <thead><tr className="text-left text-slate-500 uppercase border-b border-slate-200"><th className="py-2 pr-3">#</th><th className="py-2 pr-3">Status</th><th className="py-2 pr-3">Empresa</th><th className="py-2 pr-3">Documento</th><th className="py-2 pr-3">Valor</th><th className="py-2 pr-3">Avisos</th><th className="py-2 pr-3">Erros</th></tr></thead>
               <tbody>
                 {linhas.map((l, i) => (
                   <tr key={i} className="border-b border-slate-100">
@@ -77,6 +77,7 @@ export default function ImportarDadosPage({ data }) {
                     <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Empresa"]}</td>
                     <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Documento"]}</td>
                     <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Valor"]}</td>
+                    <td className="py-1.5 pr-3 text-blue-600 text-xs">{l.avisos?.length > 0 ? l.avisos.join("; ") : ""}</td>
                     <td className="py-1.5 pr-3 text-rose-600">{l.erros.join("; ")}</td>
                   </tr>
                 ))}

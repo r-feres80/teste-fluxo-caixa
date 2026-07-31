@@ -1,27 +1,87 @@
 // Regras do item 16: ler → prévia → validar → contar válidos/inválidos →
 // só então permitir confirmar. Nunca duplica um registro já importado.
+// Auto-criação: registros faltantes são criados automaticamente sem perguntar.
 
 const STATUS_PARA_SITUACAO = {
   previsto: "Previsto", "em aberto": "Em aberto", realizado: "Realizado", vencido: "Em aberto", cancelado: "Cancelado",
 };
 
+function gerarId(prefixo, lista) {
+  const nrs = lista.map((i) => {
+    const match = (i.id || "").match(new RegExp(`^${prefixo}(\\d+)$`));
+    return match ? parseInt(match[1]) : 0;
+  });
+  const max = Math.max(...nrs, 0);
+  return `${prefixo}${max + 1}`;
+}
+
+function criarEmpresa(nome, entidades) {
+  const empresa = { id: gerarId("emp", entidades.empresas), nome, ativo: true };
+  entidades.empresas.push(empresa);
+  return empresa;
+}
+
+function criarContaGerencial(descricao, entidades) {
+  const conta = {
+    id: gerarId("pc", entidades.planoDeContas),
+    descricao,
+    tipo: "Analítica",
+    contaPaiId: null,
+    classificacaoDRE: "Não classificado",
+    classificacaoDFC: "Operacional",
+    aceitaOrcamento: false,
+    centroCustoObrigatorio: false,
+  };
+  entidades.planoDeContas.push(conta);
+  return conta;
+}
+
+function criarCentroDeCusto(nome, entidades) {
+  const centro = {
+    id: gerarId("cc", entidades.centrosCusto),
+    nome,
+    centroPaiId: null,
+    ativo: true,
+  };
+  entidades.centrosCusto.push(centro);
+  return centro;
+}
+
+function criarClienteFornecedor(nome, tipo, entidades) {
+  const lista = tipo === "Cliente" ? entidades.clientes : entidades.fornecedores;
+  const id = gerarId(tipo === "Cliente" ? "cli" : "for", lista);
+  const registro = { id, nome, ativo: true };
+  lista.push(registro);
+  return { id, tipo };
+}
+
 export function normalizarLinha(row, entidades) {
   const erros = [];
+  const avisos = [];
   const buscarPorNome = (lista, nome, campo = "nome") => lista.find((i) => (i[campo] || "").trim().toLowerCase() === (nome || "").trim().toLowerCase());
 
-  const empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
-  if (!empresa) erros.push(`Empresa "${row["Empresa"]}" não encontrada`);
+  let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
+  if (!empresa) {
+    empresa = criarEmpresa(row["Empresa"], entidades);
+    avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente`);
+  }
 
   const unidade = row["Filial"] ? buscarPorNome(entidades.unidades.filter((u) => u.empresaId === empresa?.id), row["Filial"]) : null;
 
   const tipo = (row["Tipo"] || "").trim();
   if (tipo !== "Entrada" && tipo !== "Saída") erros.push(`Tipo deve ser "Entrada" ou "Saída" (veio "${row["Tipo"]}")`);
 
-  const conta = buscarPorNome(entidades.planoDeContas, row["Conta Gerencial"], "descricao");
-  if (!conta) erros.push(`Conta Gerencial "${row["Conta Gerencial"]}" não encontrada`);
-  else if (conta.tipo !== "Analítica") erros.push(`Conta "${conta.descricao}" é Sintética — não recebe lançamento`);
+  let conta = buscarPorNome(entidades.planoDeContas, row["Conta Gerencial"], "descricao");
+  if (!conta) {
+    conta = criarContaGerencial(row["Conta Gerencial"], entidades);
+    avisos.push(`Conta Gerencial "${row["Conta Gerencial"]}" criada como Analítica/Operacional`);
+  } else if (conta.tipo !== "Analítica") erros.push(`Conta "${conta.descricao}" é Sintética — não recebe lançamento`);
 
-  const centro = row["Centro de Custo"] ? buscarPorNome(entidades.centrosCusto, row["Centro de Custo"], "nome") : null;
+  let centro = row["Centro de Custo"] ? buscarPorNome(entidades.centrosCusto, row["Centro de Custo"], "nome") : null;
+  if (row["Centro de Custo"] && !centro) {
+    centro = criarCentroDeCusto(row["Centro de Custo"], entidades);
+    avisos.push(`Centro de Custo "${row["Centro de Custo"]}" criado automaticamente`);
+  }
   if (conta?.centroCustoObrigatorio && !centro) erros.push(`Conta "${conta?.descricao}" exige Centro de Custo`);
 
   const projeto = row["Projeto"] ? buscarPorNome(entidades.projetos, row["Projeto"]) : null;
@@ -30,11 +90,22 @@ export function normalizarLinha(row, entidades) {
 
   let clienteFornecedorId = null, tipoParceiro = null;
   if (row["Cliente/Fornecedor"]) {
-    const cliente = buscarPorNome(entidades.clientes, row["Cliente/Fornecedor"]);
-    const fornecedor = buscarPorNome(entidades.fornecedores, row["Cliente/Fornecedor"]);
-    if (cliente) { clienteFornecedorId = cliente.id; tipoParceiro = "Cliente"; }
-    else if (fornecedor) { clienteFornecedorId = fornecedor.id; tipoParceiro = "Fornecedor"; }
-    else erros.push(`Cliente/Fornecedor "${row["Cliente/Fornecedor"]}" não encontrado`);
+    let cliente = buscarPorNome(entidades.clientes, row["Cliente/Fornecedor"]);
+    let fornecedor = buscarPorNome(entidades.fornecedores, row["Cliente/Fornecedor"]);
+
+    if (cliente) {
+      clienteFornecedorId = cliente.id;
+      tipoParceiro = "Cliente";
+    } else if (fornecedor) {
+      clienteFornecedorId = fornecedor.id;
+      tipoParceiro = "Fornecedor";
+    } else {
+      const tipoParceiroAuto = tipo === "Entrada" ? "Cliente" : "Fornecedor";
+      const { id, tipo: tipoAtual } = criarClienteFornecedor(row["Cliente/Fornecedor"], tipoParceiroAuto, entidades);
+      clienteFornecedorId = id;
+      tipoParceiro = tipoAtual;
+      avisos.push(`${tipoParceiroAuto} "${row["Cliente/Fornecedor"]}" criado automaticamente`);
+    }
   }
 
   const valor = Number(String(row["Valor"] || "").replace(",", "."));
@@ -56,7 +127,7 @@ export function normalizarLinha(row, entidades) {
     tipo, situacao, valor, observacao: row["Observação"] || "", transferencia: false,
   } : null;
 
-  return { linhaOriginal: row, erros, lancamento };
+  return { linhaOriginal: row, erros, avisos, lancamento };
 }
 
 /** Evita duplicar um lançamento já existente (mesma empresa + documento + vencimento + valor). */
