@@ -16,6 +16,13 @@ export const addDaysISO = (iso, n) => { const d = parseISO(iso); d.setDate(d.get
 export const addMonthsISO = (iso, n) => { const d = parseISO(iso); d.setMonth(d.getMonth() + n); return toISO(d); };
 export const diffDaysISO = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 86400000);
 
+// Comparação unificada: uma data está vencida se anterior à data de referência.
+// Usa diffDaysISO para robustez contra diferentes formatos internos.
+export const isDataVencida = (dataVencimento, dataReferencia) => {
+  if (!dataVencimento) return false;
+  return diffDaysISO(dataVencimento, dataReferencia) > 0;
+};
+
 /**
  * Resolve o intervalo [inicio, fim] em ISO para um tipo de período,
  * dado o ano de referência, mês de referência (0-11) e data de referência.

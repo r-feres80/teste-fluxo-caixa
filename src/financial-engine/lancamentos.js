@@ -2,6 +2,8 @@
 // reimplementar estas regras — Tesouraria, AP, AR, Fluxo de Caixa, DFC e DRE
 // todos chamam estas funções.
 
+import { isDataVencida } from "../utils/dateUtils.js";
+
 /** Valor com sinal: Entrada é positivo, Saída é negativo. */
 export function valorComSinal(l) {
   return l.tipo === "Entrada" ? l.valor : -l.valor;
@@ -15,7 +17,7 @@ export function valorComSinal(l) {
  */
 export function situacaoEfetiva(l, dataReferencia) {
   if (l.situacao === "Realizado" || l.situacao === "Cancelado") return l.situacao;
-  if (l.dataVencimento && l.dataVencimento < dataReferencia) return "Vencido";
+  if (isDataVencida(l.dataVencimento, dataReferencia)) return "Vencido";
   return l.situacao; // Previsto | Em aberto
 }
 
