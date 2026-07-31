@@ -1,0 +1,151 @@
+import React, { useState } from "react";
+import { Info, AlertTriangle, X } from "lucide-react";
+
+export function Panel({ title, subtitle, right, children, className = "" }) {
+  return (
+    <div className={`bg-white border border-slate-200 rounded-lg shadow-sm ${className}`}>
+      {(title || right) && (
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-200">
+          <div>
+            {title && <h3 className="text-slate-800 font-semibold text-sm tracking-wide uppercase">{title}</h3>}
+            {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
+          </div>
+          {right}
+        </div>
+      )}
+      <div className="p-5">{children}</div>
+    </div>
+  );
+}
+
+export function KPI({ label, value, sub, tone = "neutral", icon: Icon }) {
+  const toneColor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-800";
+  return (
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">{label}</span>
+        {Icon && <Icon size={16} className="text-slate-400" />}
+      </div>
+      <span className={`font-mono tabular-nums text-2xl font-semibold ${toneColor}`}>{value}</span>
+      {sub && <span className="text-xs text-slate-500">{sub}</span>}
+    </div>
+  );
+}
+
+export function Badge({ children, tone = "slate" }) {
+  const map = {
+    emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    amber: "bg-amber-50 text-amber-700 border-amber-200",
+    rose: "bg-rose-50 text-rose-700 border-rose-200",
+    slate: "bg-slate-100 text-slate-600 border-slate-200",
+    indigo: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  };
+  return <span className={`text-[11px] px-2 py-0.5 rounded border font-medium ${map[tone]}`}>{children}</span>;
+}
+
+export function IconBtn({ onClick, title, children, tone = "slate", disabled = false }) {
+  const map = {
+    slate: "hover:bg-slate-100 text-slate-400 hover:text-slate-800",
+    rose: "hover:bg-rose-50 text-slate-500 hover:text-rose-600",
+    emerald: "hover:bg-emerald-50 text-slate-500 hover:text-emerald-600",
+  };
+  return (
+    <button onClick={onClick} title={title} disabled={disabled}
+      className={`p-1.5 rounded transition-colors ${disabled ? "opacity-30 cursor-not-allowed" : map[tone]}`}>
+      {children}
+    </button>
+  );
+}
+
+export function InfoNote({ children, tone = "slate" }) {
+  const cls = tone === "amber" ? "text-amber-700 border-amber-200 bg-amber-50" : "text-slate-500 border-slate-200 bg-slate-50";
+  return (
+    <div className={`flex items-start gap-2 text-xs rounded px-3 py-2 border ${cls}`}>
+      <Info size={13} className="mt-0.5 shrink-0" />
+      <span>{children}</span>
+    </div>
+  );
+}
+
+export const inputCls = "w-full bg-white border border-slate-300 rounded px-2.5 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500";
+export const selectCls = inputCls;
+
+export function Field({ label, children, className = "" }) {
+  return (
+    <div className={className}>
+      <label className="block text-slate-500 text-[11px] uppercase tracking-wide mb-1">{label}</label>
+      {children}
+    </div>
+  );
+}
+
+export function EmptyState({ titulo, descricao, acao }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center py-12 gap-2">
+      <div className="text-slate-800 font-medium text-sm">{titulo}</div>
+      {descricao && <div className="text-slate-500 text-xs max-w-sm">{descricao}</div>}
+      {acao && <div className="mt-2">{acao}</div>}
+    </div>
+  );
+}
+
+/** Diálogo de confirmação — usado antes de qualquer exclusão (item 22). */
+export function ConfirmDialog({ open, titulo, mensagem, onConfirm, onCancel, tone = "rose" }) {
+  if (!open) return null;
+  const toneBtn = tone === "rose" ? "bg-rose-600 hover:bg-rose-500" : "bg-emerald-600 hover:bg-emerald-500";
+  return (
+    <div className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50" onClick={onCancel}>
+      <div className="bg-white rounded-lg shadow-xl border border-slate-200 w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start gap-3">
+          <AlertTriangle size={20} className="text-rose-500 shrink-0 mt-0.5" />
+          <div>
+            <div className="text-slate-800 font-semibold text-sm">{titulo}</div>
+            <div className="text-slate-500 text-xs mt-1">{mensagem}</div>
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 mt-5">
+          <button onClick={onCancel} className="px-3 py-1.5 rounded text-sm text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button onClick={onConfirm} className={`px-3 py-1.5 rounded text-sm text-white font-medium ${toneBtn}`}>Confirmar</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Hook simples para controlar um ConfirmDialog a partir de qualquer página. */
+export function useConfirm() {
+  const [state, setState] = useState({ open: false, titulo: "", mensagem: "", onConfirm: null });
+  const pedirConfirmacao = (titulo, mensagem, onConfirm) => setState({ open: true, titulo, mensagem, onConfirm });
+  const fechar = () => setState((s) => ({ ...s, open: false }));
+  const confirmar = () => { state.onConfirm?.(); fechar(); };
+  const Dialog = () => <ConfirmDialog open={state.open} titulo={state.titulo} mensagem={state.mensagem} onConfirm={confirmar} onCancel={fechar} />;
+  return { pedirConfirmacao, ConfirmDialogSlot: Dialog };
+}
+
+export function Toggle({ value, onChange, onLabel = "Ativo", offLabel = "Inativo" }) {
+  return (
+    <button onClick={() => onChange(!value)}
+      className={`text-[11px] px-2 py-0.5 rounded border font-medium ${value ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-slate-100 text-slate-500 border-slate-200"}`}>
+      {value ? onLabel : offLabel}
+    </button>
+  );
+}
+
+export function EditableCell({ value, onChange }) {
+  const [editing, setEditing] = useState(false);
+  const [temp, setTemp] = useState(String(value));
+  if (editing) {
+    return (
+      <input autoFocus type="number" value={temp} onChange={(e) => setTemp(e.target.value)}
+        onBlur={() => { onChange(Number(temp) || 0); setEditing(false); }}
+        onKeyDown={(e) => { if (e.key === "Enter") { onChange(Number(temp) || 0); setEditing(false); } }}
+        className="w-20 bg-white border border-emerald-600 rounded px-1 py-0.5 text-right font-mono tabular-nums text-xs text-slate-800 focus:outline-none" />
+    );
+  }
+  return (
+    <button onClick={() => { setTemp(String(value)); setEditing(true); }}
+      className={`w-20 text-right font-mono tabular-nums text-xs px-1 py-0.5 rounded hover:bg-slate-100 ${value < 0 ? "text-rose-600" : "text-slate-700"}`}>
+      {value === 0 ? "—" : value.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}
+    </button>
+  );
+}
