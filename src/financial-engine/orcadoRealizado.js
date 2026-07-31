@@ -29,10 +29,10 @@ export function construirOrcadoRealizado({ planoDeContas, orcamentoItens, lancam
     const real = doConta.filter((l) => l.situacao === "Realizado").reduce((s, l) => s + valorComSinal(l), 0);
 
     const realizadoAteHoje = excluirTransferencias(lancamentos)
-      .filter((l) => l.contaGerencialId === conta.id && l.situacao === "Realizado" && (!l.dataPagamento || l.dataPagamento <= (dataReferencia || new Date().toISOString().split("T")[0])))
+      .filter((l) => l.contaGerencialId === conta.id && l.situacao === "Realizado" && l.dataPagamento && l.dataPagamento >= dataInicio && l.dataPagamento <= (dataReferencia || new Date().toISOString().split("T")[0]))
       .reduce((s, l) => s + valorComSinal(l), 0);
 
-    const previsto_ajustes = doConta.filter((l) => (l.situacao === "Previsto" || l.situacao === "Em aberto") && l.dataVencimento && l.dataVencimento >= dataInicio && l.dataVencimento <= dataFim)
+    const previsto_ajustes = doConta.filter((l) => (l.situacao === "Previsto" || l.situacao === "Em aberto") && l.ajusteManual !== true && l.dataVencimento && l.dataVencimento >= dataInicio && l.dataVencimento <= dataFim)
       .reduce((s, l) => s + valorComSinal(l), 0);
 
     const ajustesManual = doConta.filter((l) => l.ajusteManual === true).reduce((s, l) => s + valorComSinal(l), 0);
