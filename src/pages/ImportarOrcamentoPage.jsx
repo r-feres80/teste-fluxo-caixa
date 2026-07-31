@@ -25,9 +25,11 @@ export default function ImportarOrcamentoPage({ data }) {
     setImportado(false);
     const reader = new FileReader();
     reader.onload = (evt) => {
-      const wb = XLSX.read(evt.target.result, { type: "binary" });
+      // Ver comentário equivalente em ImportarDadosPage.jsx: raw:true evita a
+      // reconversão de texto-para-data do SheetJS que desloca o dia pelo fuso local.
+      const wb = XLSX.read(evt.target.result, { type: "binary", raw: true, cellDates: true });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: false });
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: true });
       const normalizadas = rows.map((r) => normalizarLinhaOrcamento(r, entidades));
       const finais = marcarDuplicadosOrcamento(normalizadas, entidades.orcamentoItens || []);
       setLinhas(finais);

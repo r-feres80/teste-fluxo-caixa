@@ -43,6 +43,40 @@ export default function DREPage({ data }) {
   const linhasForecast = linhasDRE(forecast);
   const linhasOrc = linhasDRE(orcado);
 
+  // Visão Comparativa Mensal: últimos 10 meses lado a lado, sempre Realizado.
+  // Reaproveita calcularDRE (mesma função da tabela acima) — só muda a
+  // apresentação de 1 coluna (mês corrente) para N colunas (uma por mês).
+  const mesAtualIdx = hoje.getMonth();
+  const mesesComparativo = useMemo(() => {
+    const arr = [];
+    for (let i = 9; i >= 0; i--) {
+      const d = new Date(anoRef, mesAtualIdx - i, 1);
+      arr.push({ ano: d.getFullYear(), mes: d.getMonth() });
+    }
+    return arr;
+  }, [anoRef, mesAtualIdx]);
+
+  const comparativoMensal = useMemo(() => mesesComparativo.map(({ ano, mes }) => {
+    const competenciaDoMes = `${ano}-${String(mes + 1).padStart(2, "0")}`;
+    const lancamentosDoMes = excluirTransferencias(entidades.lancamentos).filter((l) =>
+      (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId) &&
+      l.competencia === competenciaDoMes && l.situacao === "Realizado"
+    );
+    return {
+      label: new Date(ano, mes, 1).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }).replace(".", ""),
+      ...calcularDRE(lancamentosDoMes, entidades.planoDeContas),
+    };
+  }), [mesesComparativo, entidades.lancamentos, entidades.planoDeContas, filtros.empresaId]);
+
+  const LINHAS_COMPARATIVO = [
+    { label: "Receita Bruta", campo: "receitaBruta", destaque: true },
+    { label: "(-) Despesas com Pessoal", campo: "despesasPessoal" },
+    { label: "(-) Despesas Administrativas", campo: "despesasAdministrativas" },
+    { label: "(-) Despesas Comerciais", campo: "despesasComerciais" },
+    { label: "(-) Outras Despesas Operacionais", campo: "outrasDespesasOperacionais" },
+    { label: "= EBITDA", campo: "ebitda", destaque: true },
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       <Panel title="DRE Gerencial" subtitle="Realizado x Forecast (Realizado + Previsto) x Orçado, por Competência">
@@ -63,6 +97,29 @@ export default function DREPage({ data }) {
             })}
           </tbody>
         </table>
+      </Panel>
+
+      <Panel title="Visão Comparativa Mensal" subtitle="Realizado — últimos 10 meses lado a lado">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+                <th className="py-2 pr-4 sticky left-0 bg-white">Conta</th>
+                {comparativoMensal.map((m) => <th key={m.label} className="py-2 px-3 text-right whitespace-nowrap">{m.label}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {LINHAS_COMPARATIVO.map((linha) => (
+                <tr key={linha.campo} className={`border-b border-slate-100 ${linha.destaque ? "font-semibold bg-slate-50" : ""}`}>
+                  <td className="py-2 pr-4 text-slate-700 sticky left-0 bg-white whitespace-nowrap">{linha.label}</td>
+                  {comparativoMensal.map((m) => (
+                    <td key={m.label} className="py-2 px-3 text-right font-mono tabular-nums whitespace-nowrap">{fmtBRL(m[linha.campo])}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Panel>
     </div>
   );

@@ -25,9 +25,15 @@ export default function ImportarDadosPage({ data }) {
     setImportado(false);
     const reader = new FileReader();
     reader.onload = (evt) => {
-      const wb = XLSX.read(evt.target.result, { type: "binary" });
+      // raw:true em ambos evita que o SheetJS "adivinhe" que um texto como
+      // "2026-01-04" é uma data e o reconverta para serial numérico — essa
+      // reconversão soma o fuso local (Brasil, UTC-3) sobre um valor calculado
+      // em UTC e desloca o dia para trás (ex.: 2026-01-04 virava 1/3/26).
+      // cellDates:true garante que células de data nativas do Excel (.xlsx)
+      // cheguem como Date/ISO em UTC, nunca como serial ambíguo.
+      const wb = XLSX.read(evt.target.result, { type: "binary", raw: true, cellDates: true });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: false });
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: true });
       const normalizadas = rows.map((r) => normalizarLinha(r, entidades));
       const finais = marcarDuplicados(normalizadas, entidades.lancamentos);
       setLinhas(finais);

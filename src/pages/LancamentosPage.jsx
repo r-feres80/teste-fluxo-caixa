@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Plus, Check, X, Pencil, Trash2 } from "lucide-react";
-import { Panel, Field, Badge, IconBtn, inputCls, selectCls, EmptyState, useConfirm } from "../components/ui/Primitives.jsx";
+import { Panel, Field, Badge, IconBtn, inputCls, selectCls, EmptyState, useConfirm, DateInputBR } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtData } from "../utils/formatUtils.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { SITUACOES_LANCAMENTO } from "../config/appConfig.js";
@@ -129,10 +129,10 @@ export default function LancamentosPage({ data }) {
             </select>
           </Field>
 
-          <Field label="Data de Emissão" className="col-span-1"><input type="date" value={form.dataEmissao} onChange={(e) => setForm({ ...form, dataEmissao: e.target.value })} className={inputCls} /></Field>
+          <Field label="Data de Emissão" className="col-span-1"><DateInputBR value={form.dataEmissao} onChange={(v) => setForm({ ...form, dataEmissao: v })} className={inputCls} /></Field>
           <Field label="Competência (mês)" className="col-span-1"><input type="month" value={form.competencia} onChange={(e) => setForm({ ...form, competencia: e.target.value })} className={inputCls} /></Field>
-          <Field label="Data de Vencimento" className="col-span-1"><input type="date" value={form.dataVencimento} onChange={(e) => setForm({ ...form, dataVencimento: e.target.value })} className={inputCls} /></Field>
-          <Field label="Data de Pagamento/Recebimento" className="col-span-1"><input type="date" value={form.dataPagamento} onChange={(e) => setForm({ ...form, dataPagamento: e.target.value })} className={inputCls} /></Field>
+          <Field label="Data de Vencimento" className="col-span-1"><DateInputBR value={form.dataVencimento} onChange={(v) => setForm({ ...form, dataVencimento: v })} className={inputCls} /></Field>
+          <Field label="Data de Pagamento/Recebimento" className="col-span-1"><DateInputBR value={form.dataPagamento} onChange={(v) => setForm({ ...form, dataPagamento: v })} className={inputCls} /></Field>
           <Field label="Observação" className="col-span-2"><input value={form.observacao} onChange={(e) => setForm({ ...form, observacao: e.target.value })} className={inputCls} /></Field>
 
           <div className="col-span-6 flex justify-end gap-2 mt-2">

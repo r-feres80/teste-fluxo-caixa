@@ -1,6 +1,6 @@
 import React from "react";
 import { Database, Trash2, Sparkles } from "lucide-react";
-import { Panel, Field, inputCls, InfoNote, useConfirm } from "../components/ui/Primitives.jsx";
+import { Panel, Field, inputCls, InfoNote, useConfirm, DateInputBR } from "../components/ui/Primitives.jsx";
 import { fmtDataHora } from "../utils/formatUtils.js";
 import { APP_DISCLAIMER } from "../config/appConfig.js";
 
@@ -44,7 +44,7 @@ export default function GovernancaPage({ data }) {
 
       <Panel title="Parâmetros Centrais">
         <div className="grid grid-cols-3 gap-4">
-          <Field label="Data de Referência (hoje)"><input type="date" value={filtros.dataReferencia} onChange={(e) => updateFiltros({ dataReferencia: e.target.value })} className={inputCls} /></Field>
+          <Field label="Data de Referência (hoje)"><DateInputBR value={filtros.dataReferencia} onChange={(v) => updateFiltros({ dataReferencia: v })} className={inputCls} /></Field>
           <Field label="Caixa Mínimo Operacional (opcional)">
             <input type="number" placeholder="Não configurado" value={parametros.caixaMinimo ?? ""} onChange={(e) => updateParametros({ caixaMinimo: e.target.value === "" ? null : Number(e.target.value) })} className={inputCls} />
           </Field>

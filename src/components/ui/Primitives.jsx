@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Info, AlertTriangle, X } from "lucide-react";
 
 export function Panel({ title, subtitle, right, children, className = "" }) {
@@ -69,6 +69,45 @@ export function InfoNote({ children, tone = "slate" }) {
 
 export const inputCls = "w-full bg-white border border-slate-300 rounded px-2.5 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500";
 export const selectCls = inputCls;
+
+const isoParaBR = (iso) => {
+  if (!iso) return "";
+  const [a, m, d] = iso.split("-");
+  return a && m && d ? `${d}/${m}/${a}` : "";
+};
+
+/**
+ * Substitui <input type="date"> nativo: o widget nativo do navegador exibe
+ * a data no formato do locale do SISTEMA OPERACIONAL/navegador (en-US vira
+ * MM/DD/AAAA), não no formato da aplicação — HTML5 não dá controle sobre
+ * isso via CSS/JS. Este componente é um texto mascarado DD/MM/AAAA que
+ * nunca muda de formato, e converte para ISO ("YYYY-MM-DD") só na saída
+ * via onChange, mantendo o mesmo contrato de um input de data controlado.
+ */
+export function DateInputBR({ value, onChange, className = "" }) {
+  const [texto, setTexto] = useState(isoParaBR(value));
+
+  useEffect(() => { setTexto(isoParaBR(value)); }, [value]);
+
+  const handleChange = (e) => {
+    const digitos = e.target.value.replace(/\D/g, "").slice(0, 8);
+    let formatado = digitos;
+    if (digitos.length > 4) formatado = `${digitos.slice(0, 2)}/${digitos.slice(2, 4)}/${digitos.slice(4)}`;
+    else if (digitos.length > 2) formatado = `${digitos.slice(0, 2)}/${digitos.slice(2)}`;
+    setTexto(formatado);
+    if (digitos.length === 8) {
+      const dd = digitos.slice(0, 2), mm = digitos.slice(2, 4), aaaa = digitos.slice(4, 8);
+      onChange(`${aaaa}-${mm}-${dd}`);
+    } else if (digitos.length === 0) {
+      onChange("");
+    }
+  };
+
+  return (
+    <input type="text" inputMode="numeric" placeholder="DD/MM/AAAA" value={texto} onChange={handleChange}
+      maxLength={10} className={className} />
+  );
+}
 
 export function Field({ label, children, className = "" }) {
   return (

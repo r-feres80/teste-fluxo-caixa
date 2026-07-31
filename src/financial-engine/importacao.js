@@ -75,6 +75,17 @@ function criarClienteFornecedor(nome, tipo, entidades) {
 // de acentuação divergente entre planilhas.
 const normalizarTexto = (s) => (s || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+// Campo de data vindo da planilha: no CSV puro (com XLSX.read raw:true) chega
+// como texto "YYYY-MM-DD" sem alteracao -- nunca passa por new Date(), entao
+// nao ha round-trip de fuso horario para corromper o dia. Se vier de uma
+// celula de data nativa do Excel (.xlsx, lida com cellDates:true), chega como
+// um ISO completo em UTC ("YYYY-MM-DDTHH:mm:ss.sssZ"); aqui so cortamos a
+// parte da data (primeiros caracteres), sem reconverter com getMonth()/
+// getDate() locais -- e essa reconversao local que deslocava o dia no fuso
+// do Brasil (UTC-3).
+const limparData = (v) => (v == null ? "" : String(v)).slice(0, 10);
+const limparCompetencia = (v) => (v == null ? "" : String(v)).slice(0, 7);
+
 export function normalizarLinha(row, entidades) {
   const erros = [];
   const avisos = [];
@@ -147,16 +158,16 @@ export function normalizarLinha(row, entidades) {
   const situacao = STATUS_PARA_SITUACAO[(row["Status"] || "").trim().toLowerCase()];
   if (!situacao) erros.push(`Status "${row["Status"]}" não reconhecido (use Previsto/Em aberto/Realizado/Cancelado)`);
 
-  const dataVencimento = row["Vencimento"] || "";
-  const dataEmissao = row["Data"] || dataVencimento;
-  const competencia = row["Competência"] || dataEmissao?.slice(0, 7) || "";
+  const dataVencimento = limparData(row["Vencimento"]);
+  const dataEmissao = limparData(row["Data"]) || dataVencimento;
+  const competencia = limparCompetencia(row["Competência"]) || dataEmissao?.slice(0, 7) || "";
   if (!dataVencimento) erros.push("Data de Vencimento não informada");
   if (!competencia) erros.push("Competência não informada");
 
   const lancamento = erros.length === 0 ? {
     empresaId: empresa.id, unidadeId: unidade?.id ?? null, contaGerencialId: conta.id, centroCustoId: centro?.id ?? null,
     projetoId: projeto?.id ?? null, tipoParceiro, clienteFornecedorId, bancoId: banco?.id ?? null, contaBancariaId: contaBancaria?.id ?? null,
-    documento: row["Documento"] || "", dataEmissao, competencia, dataVencimento, dataPagamento: row["Data de baixa"] || null,
+    documento: row["Documento"] || "", dataEmissao, competencia, dataVencimento, dataPagamento: limparData(row["Data de baixa"]) || null,
     tipo, situacao, valor, observacao: row["Observação"] || "", transferencia: false,
   } : null;
 

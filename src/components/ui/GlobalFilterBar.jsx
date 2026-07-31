@@ -1,5 +1,5 @@
 import React from "react";
-import { selectCls, inputCls, Field } from "./Primitives.jsx";
+import { selectCls, inputCls, Field, DateInputBR } from "./Primitives.jsx";
 import { MESES, TIPOS_PERIODO } from "../../config/appConfig.js";
 import { parseISO } from "../../utils/dateUtils.js";
 
@@ -16,8 +16,7 @@ export function GlobalFilterBar({ filtros, empresas, unidades, updateFiltros, mo
 
   // Ao trocar a Data de Referência, o filtro de Mês/Ano é realinhado junto —
   // evita telas mostrando um mês diferente do que a Data de Referência indica.
-  const onChangeDataReferencia = (e) => {
-    const novaData = e.target.value;
+  const onChangeDataReferencia = (novaData) => {
     if (!novaData) { updateFiltros({ dataReferencia: novaData }); return; }
     const d = parseISO(novaData);
     updateFiltros({ dataReferencia: novaData, anoRef: d.getFullYear(), mesRef: d.getMonth() });
@@ -27,7 +26,7 @@ export function GlobalFilterBar({ filtros, empresas, unidades, updateFiltros, mo
     <div className="flex items-center gap-3 flex-wrap">
       {mostrarPeriodo && (
         <Field label="Data de Referência" className="w-36">
-          <input type="date" value={filtros.dataReferencia} onChange={onChangeDataReferencia} className={inputCls} />
+          <DateInputBR value={filtros.dataReferencia} onChange={onChangeDataReferencia} className={inputCls} />
         </Field>
       )}
       <Field label="Empresa" className="w-44">
