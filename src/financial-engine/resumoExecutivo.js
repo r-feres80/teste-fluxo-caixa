@@ -60,7 +60,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
 
   const arvoreMes = construirOrcadoRealizado({
     planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens, lancamentos: entidades.lancamentos,
-    ano: filtros.anoRef, meses: mesesDoPeriodo(filtros), empresaId: filtros.empresaId,
+    ano: filtros.anoRef, meses: mesesDoPeriodo(filtros), empresaId: filtros.empresaId, dataReferencia: filtros.dataReferencia,
   });
   const desviosOrcamentarios = achatarOrcado(arvoreMes).filter((n) => n.temOrcamento);
   const desvioTotalVsOrcamento = arvoreMes.reduce((s, n) => s + n.deltaForecast, 0);
@@ -115,6 +115,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     },
     orcadoRealizado: {
       desvioTotalVsOrcamento,
+      previstoTotalPeriodo: arvoreMes.reduce((s, n) => s + n.previsto, 0),
       principaisDesvios: desviosOrcamentarios
         .slice()
         .sort((a, b) => Math.abs(b.deltaForecast) - Math.abs(a.deltaForecast))
