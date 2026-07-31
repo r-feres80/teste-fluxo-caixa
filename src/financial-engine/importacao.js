@@ -27,7 +27,8 @@ function criarEmpresa(nome, entidades, numeroConta) {
       apelido: "Conta Movimento",
       numero: numeroConta,
       saldoInicial: 100000,
-      banco: null,
+      ativo: true,
+      bancoId: null,
     };
     entidades.contasBancarias.push(contaBancaria);
   }
@@ -86,7 +87,8 @@ export function normalizarLinha(row, entidades) {
       apelido: "Conta Movimento",
       numero: row["Conta Bancária"],
       saldoInicial: 100000,
-      banco: null,
+      ativo: true,
+      bancoId: null,
     };
     entidades.contasBancarias.push(contaBancaria);
     avisos.push(`Conta Bancária criada para "${row["Empresa"]}"`);

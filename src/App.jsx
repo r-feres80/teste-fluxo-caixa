@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
-  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, FolderCog, Settings2, Sparkles, Save,
-  Building2, Building, Users, Truck, University, CreditCard, Network, FolderKanban, ChevronDown, ChevronRight,
+  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -54,30 +53,16 @@ const NAV = [
   { id: "importar-orcamento", label: "Importar Orçamento", icon: Upload, Page: ImportarOrcamentoPage },
 ];
 
-const CADASTROS = [
-  { id: "cad-empresas", label: "Empresas", icon: Building2, Page: EmpresasPage },
-  { id: "cad-unidades", label: "Unidades", icon: Building, Page: UnidadesPage },
-  { id: "cad-clientes", label: "Clientes", icon: Users, Page: ClientesPage },
-  { id: "cad-fornecedores", label: "Fornecedores", icon: Truck, Page: FornecedoresPage },
-  { id: "cad-bancos", label: "Bancos", icon: University, Page: BancosPage },
-  { id: "cad-contas-bancarias", label: "Contas Bancárias", icon: CreditCard, Page: ContasBancariasPage },
-  { id: "cad-plano-contas", label: "Plano de Contas", icon: Network, Page: PlanoDeContasPage },
-  { id: "cad-centros-custo", label: "Centros de Custo", icon: FolderCog, Page: CentrosCustoPage },
-  { id: "cad-projetos", label: "Projetos", icon: FolderKanban, Page: ProjetosPage },
-];
-
 export default function App() {
   const [view, setView] = useState("dashboard");
-  const [cadastrosAbertos, setCadastrosAbertos] = useState(true);
   const appData = useAppData();
 
   if (!appData.loaded) {
     return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">Carregando…</div>;
   }
 
-  const cadastroAtivo = CADASTROS.find((c) => c.id === view);
   const navAtivo = NAV.find((n) => n.id === view);
-  const tituloAtual = cadastroAtivo?.label ?? navAtivo?.label ?? "Governança";
+  const tituloAtual = navAtivo?.label ?? "Governança";
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex">
@@ -105,20 +90,6 @@ export default function App() {
             );
           })}
 
-          <button onClick={() => setCadastrosAbertos((v) => !v)} className="w-full flex items-center justify-between gap-2 px-5 py-2.5 text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50">
-            <span className="flex items-center gap-3">{cadastrosAbertos ? <ChevronDown size={16} /> : <ChevronRight size={16} />}Cadastros</span>
-          </button>
-          {cadastrosAbertos && CADASTROS.map((c) => {
-            const Icon = c.icon;
-            const active = view === c.id;
-            return (
-              <button key={c.id} onClick={() => setView(c.id)}
-                className={`w-full flex items-center gap-3 pl-11 pr-5 py-2 text-sm transition-colors ${active ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
-                <Icon size={14} />{c.label}
-              </button>
-            );
-          })}
-
           <button onClick={() => setView("governanca")}
             className={`w-full flex items-center gap-3 px-5 py-2.5 text-sm mt-1 border-t border-slate-100 transition-colors ${view === "governanca" ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
             <Settings2 size={16} />Governança
@@ -141,7 +112,6 @@ export default function App() {
         </header>
 
         <div className="p-8">
-          {cadastroAtivo && <cadastroAtivo.Page data={appData} />}
           {view === "governanca" && <GovernancaPage data={appData} />}
           {navAtivo && <navAtivo.Page data={appData} />}
         </div>

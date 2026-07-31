@@ -12,10 +12,15 @@ export const fmtBRLShort = (v) => {
 };
 
 // Exibição sempre DD/MM/AAAA (item 21), a partir de uma data ISO armazenada.
-export const fmtData = (iso) => {
-  if (!iso) return "—";
-  const [a, m, d] = iso.split("-");
-  return `${d}/${m}/${a}`;
+// Suporta ambos os formatos: YYYY-MM-DD e DD/MM/YYYY para robustez
+export const fmtData = (data) => {
+  if (!data) return "—";
+  // Se já está em formato DD/MM/YYYY, retorna como está
+  if (data.includes("/")) return data;
+  // Se está em formato ISO YYYY-MM-DD, converte
+  const [a, m, d] = data.split("-");
+  if (a && m && d) return `${d}/${m}/${a}`;
+  return "—";
 };
 
 export const fmtDataHora = (iso) => {
