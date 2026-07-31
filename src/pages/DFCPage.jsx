@@ -63,10 +63,10 @@ export default function DFCPage({ data }) {
         <KPI label="Saldo Inicial" value={fmtBRL(dfc.caixaInicial)} />
         <KPI label="Saldo Final" value={fmtBRL(dfc.caixaFinal)} tone={dfc.variacaoCaixa >= 0 ? "positive" : "negative"} sub={dfc.variacaoCaixa >= 0 ? "▲ crescimento" : "▼ queda"} />
         <KPI label="FCO" value={fmtBRL(dfc.Operacional)} tone={dfc.Operacional >= 0 ? "positive" : "negative"} sub="Geração operacional" />
-        <KPI label="FCI" value={fmtBRL(dfc.Investimento)} tone={dfc.Investimento >= 0 ? "positive" : "negative"} sub="Investimentos" />
+        <KPI label="FCI" value={fmtBRL(dfc.Investimento)} tone="neutral" sub="Investimentos" />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <KPI label="FCF" value={fmtBRL(dfc.Financiamento)} tone={dfc.Financiamento >= 0 ? "positive" : "negative"} sub="Financiamentos" />
+        <KPI label="FCF" value={fmtBRL(dfc.Financiamento)} tone="neutral" sub="Financiamentos" />
         <KPI label="DSO / PMR" value={dso != null ? `${dso.toFixed(0)} dias` : "—"} sub="Prazo médio de recebimento" />
         <KPI label="DPO / PMP" value={dpo != null ? `${dpo.toFixed(0)} dias` : "—"} sub="Prazo médio de pagamento" />
         <KPI label="Cobertura de Caixa" value={coberturaCaixaDias != null ? `${coberturaCaixaDias.toFixed(0)} dias` : "—"} sub="Caixa ÷ saída operacional diária" />
