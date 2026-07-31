@@ -6,17 +6,21 @@ import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie, HORIZONTES_DIAS } from "../financial-engine/fluxoCaixa.js";
 import { aggregateSerie } from "../financial-engine/projecaoAgregada.js";
+import { getDataAtualSistema } from "../utils/dateUtils.js";
 
+// Fluxo de Caixa é módulo de FATO: a projeção sempre parte de "hoje" real,
+// nunca da Data de Referência editável — ver getDataAtualSistema.
 export default function FluxoCaixaPage({ data }) {
   const { entidades, filtros, parametros } = data;
   const [horizonte, setHorizonte] = useState(30);
   const [granularidade, setGranularidade] = useState("diaria");
+  const hoje = getDataAtualSistema();
 
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
   const lancamentosFiltrados = entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId);
 
-  const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, filtros.dataReferencia), [contasFiltradas, lancamentosFiltrados, filtros.dataReferencia]);
-  const serieDiaria = useMemo(() => buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.total, dataReferencia: filtros.dataReferencia, diasHorizonte: horizonte }), [lancamentosFiltrados, posicao.total, filtros.dataReferencia, horizonte]);
+  const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, hoje), [contasFiltradas, lancamentosFiltrados, hoje]);
+  const serieDiaria = useMemo(() => buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.total, dataReferencia: hoje, diasHorizonte: horizonte }), [lancamentosFiltrados, posicao.total, hoje, horizonte]);
   const agregada = useMemo(() => aggregateSerie(serieDiaria, granularidade), [serieDiaria, granularidade]);
   const menor = useMemo(() => menorPontoDaSerie(serieDiaria), [serieDiaria]);
   const fim = serieDiaria[serieDiaria.length - 1];

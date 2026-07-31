@@ -53,6 +53,11 @@ const NAV = [
   { id: "importar-orcamento", label: "Importar Orçamento", icon: Upload, Page: ImportarOrcamentoPage },
 ];
 
+// Módulos de FATO: sempre a data real do sistema (getDataAtualSistema), sem
+// Data de Referência/Período/Mês/Ano editáveis — nada aqui pode dessincronizar
+// porque não existe mais estado de período para esses módulos lerem.
+const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "contas-pagar", "contas-receber", "dre"]);
+
 export default function App() {
   const [view, setView] = useState("dashboard");
   const appData = useAppData();
@@ -108,7 +113,7 @@ export default function App() {
       <main className="flex-1 min-w-0">
         <header className="border-b border-slate-200 bg-white px-8 py-4 flex flex-col gap-3">
           <h1 className="text-slate-900 font-semibold text-lg tracking-tight">{tituloAtual}</h1>
-          <GlobalFilterBar filtros={appData.filtros} empresas={appData.entidades.empresas} unidades={appData.entidades.unidades} updateFiltros={appData.updateFiltros} />
+          <GlobalFilterBar filtros={appData.filtros} empresas={appData.entidades.empresas} unidades={appData.entidades.unidades} updateFiltros={appData.updateFiltros} mostrarPeriodo={!NAV_FATO.has(view)} />
         </header>
 
         <div className="p-8">

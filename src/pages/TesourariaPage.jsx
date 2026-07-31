@@ -3,15 +3,19 @@ import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle } from "luci
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
+import { getDataAtualSistema } from "../utils/dateUtils.js";
 
+// Tesouraria é módulo de FATO: saldo é sempre "hoje" real, nunca a Data de
+// Referência editável — ver getDataAtualSistema.
 export default function TesourariaPage({ data }) {
   const { entidades, filtros } = data;
+  const hoje = getDataAtualSistema();
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
 
-  const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, filtros.dataReferencia), [contasFiltradas, entidades.lancamentos, filtros.dataReferencia]);
-  const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, filtros.dataReferencia), [contasFiltradas, entidades.lancamentos, filtros.dataReferencia]);
-  const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, filtros.dataReferencia), [contasFiltradas, entidades.lancamentos, filtros.dataReferencia]);
-  const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), filtros.dataReferencia), [entidades.lancamentos, filtros.empresaId, filtros.dataReferencia]);
+  const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
+  const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
+  const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
+  const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), hoje), [entidades.lancamentos, filtros.empresaId, hoje]);
   const transferencias = useMemo(() => listarTransferencias(entidades.lancamentos), [entidades.lancamentos]);
 
   if (contasFiltradas.length === 0) {

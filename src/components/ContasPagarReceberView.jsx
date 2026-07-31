@@ -4,10 +4,14 @@ import { Panel, KPI, InfoNote } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, vencimentosProximos } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
-import { addDaysISO, diffDaysISO } from "../utils/dateUtils.js";
+import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
 
+// Contas a Pagar/Receber são módulos de FATO: aging e vencimentos sempre
+// contam a partir de "hoje" real, nunca da Data de Referência editável —
+// ver getDataAtualSistema.
 export function ContasPagarReceberView({ data, tipo }) {
   const { entidades, filtros, parametros } = data;
+  const hoje = getDataAtualSistema();
   const listaParceiros = tipo === "Entrada" ? entidades.clientes : entidades.fornecedores;
   const rotuloParceiro = tipo === "Entrada" ? "Cliente" : "Fornecedor";
 
@@ -16,18 +20,18 @@ export function ContasPagarReceberView({ data, tipo }) {
   ), [entidades.lancamentos, tipo, filtros.empresaId]);
 
   const { abertos, buckets, totalVencido, totalCarteira, aVencer } = useMemo(
-    () => calcularCarteiraEAging(lancamentosDoTipo, filtros.dataReferencia), [lancamentosDoTipo, filtros.dataReferencia]
+    () => calcularCarteiraEAging(lancamentosDoTipo, hoje), [lancamentosDoTipo, hoje]
   );
   const concentracao = useMemo(() => calcularConcentracaoPorParceiro(abertos, 5), [abertos]);
-  const proximos7 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, parametros.diasParaAlertas), [abertos, filtros.dataReferencia, parametros.diasParaAlertas]);
-  const proximos15 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, 15), [abertos, filtros.dataReferencia]);
-  const proximos30 = useMemo(() => vencimentosProximos(abertos, filtros.dataReferencia, 30), [abertos, filtros.dataReferencia]);
-  const vencimentosHoje = abertos.filter((l) => diffDaysISO(filtros.dataReferencia, l.dataVencimento) === 0);
+  const proximos7 = useMemo(() => vencimentosProximos(abertos, hoje, parametros.diasParaAlertas), [abertos, hoje, parametros.diasParaAlertas]);
+  const proximos15 = useMemo(() => vencimentosProximos(abertos, hoje, 15), [abertos, hoje]);
+  const proximos30 = useMemo(() => vencimentosProximos(abertos, hoje, 30), [abertos, hoje]);
+  const vencimentosHoje = abertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
 
   const realizadoNoMes = useMemo(() => {
-    const [ano, mes] = filtros.dataReferencia.slice(0, 7).split("-").map(Number);
+    const [ano, mes] = hoje.slice(0, 7).split("-").map(Number);
     return lancamentosDoTipo.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(`${ano}-${String(mes).padStart(2, "0")}`)).reduce((s, l) => s + l.valor, 0);
-  }, [lancamentosDoTipo, filtros.dataReferencia]);
+  }, [lancamentosDoTipo, hoje]);
 
   const inadimplenciaPct = totalCarteira > 0 ? (totalVencido / totalCarteira) * 100 : 0;
 
@@ -91,7 +95,7 @@ export function ContasPagarReceberView({ data, tipo }) {
                     <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
                     <td className="py-2 pr-4 text-slate-700">{listaParceiros.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
                     <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>
-                    <td className="py-2 pr-4 text-xs">{situacaoEfetiva(l, filtros.dataReferencia)}</td>
+                    <td className="py-2 pr-4 text-xs">{situacaoEfetiva(l, hoje)}</td>
                     <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
                   </tr>
                 ))}

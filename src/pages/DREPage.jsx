@@ -1,21 +1,25 @@
 import React, { useMemo } from "react";
 import { Panel, Badge } from "../components/ui/Primitives.jsx";
 import { fmtBRL } from "../utils/formatUtils.js";
-import { mesesDoPeriodo } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO } from "../utils/dateUtils.js";
 import { calcularDRE, linhasDRE } from "../financial-engine/dre.js";
 import { excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getValorOrcadoPeriodo } from "../financial-engine/orcamento.js";
 import { CLASSIFICACAO_DRE } from "../config/appConfig.js";
 
+// DRE Gerencial é módulo de FATO: sempre o mês corrente real do sistema —
+// nunca Período/Mês/Ano editáveis — ver getDataAtualSistema.
 export default function DREPage({ data }) {
   const { entidades, filtros } = data;
-  const meses = mesesDoPeriodo(filtros);
+  const hoje = parseISO(getDataAtualSistema());
+  const anoRef = hoje.getFullYear();
+  const meses = [hoje.getMonth()];
 
   const lancamentosPeriodo = useMemo(() => excluirTransferencias(entidades.lancamentos).filter((l) => {
     if (filtros.empresaId !== "TODAS" && l.empresaId !== filtros.empresaId) return false;
     const [ano, mes] = l.competencia.split("-").map(Number);
-    return ano === filtros.anoRef && meses.includes(mes - 1);
-  }), [entidades.lancamentos, filtros.empresaId, filtros.anoRef, meses]);
+    return ano === anoRef && meses.includes(mes - 1);
+  }), [entidades.lancamentos, filtros.empresaId, anoRef, meses]);
 
   const realizado = useMemo(() => calcularDRE(lancamentosPeriodo.filter((l) => l.situacao === "Realizado"), entidades.planoDeContas), [lancamentosPeriodo, entidades.planoDeContas]);
   const forecastLanc = useMemo(() => lancamentosPeriodo.filter((l) => l.situacao === "Realizado" || l.situacao === "Previsto" || l.situacao === "Em aberto"), [lancamentosPeriodo]);
@@ -25,7 +29,7 @@ export default function DREPage({ data }) {
     const buckets = {};
     CLASSIFICACAO_DRE.forEach((c) => { buckets[c] = 0; });
     entidades.planoDeContas.filter((c) => c.tipo === "Analítica" && c.aceitaOrcamento).forEach((conta) => {
-      const v = getValorOrcadoPeriodo(entidades.orcamentoItens, { ano: filtros.anoRef, meses, contaGerencialId: conta.id, empresaId: filtros.empresaId !== "TODAS" ? filtros.empresaId : undefined });
+      const v = getValorOrcadoPeriodo(entidades.orcamentoItens, { ano: anoRef, meses, contaGerencialId: conta.id, empresaId: filtros.empresaId !== "TODAS" ? filtros.empresaId : undefined });
       buckets[conta.classificacaoDRE] += v;
     });
     const receitaLiquida = buckets["Receita Bruta"] + buckets["Deduções"];
@@ -33,7 +37,7 @@ export default function DREPage({ data }) {
     const ebitda = margemBruta + buckets["Despesas com Pessoal"] + buckets["Despesas Administrativas"] + buckets["Despesas Comerciais"] + buckets["Outras Despesas Operacionais"];
     const resultadoFinanceiro = buckets["Receitas Financeiras"] + buckets["Despesas Financeiras"];
     return { receitaBruta: buckets["Receita Bruta"], deducoes: buckets["Deduções"], receitaLiquida, custos: buckets["Custos"], margemBruta, despesasPessoal: buckets["Despesas com Pessoal"], despesasAdministrativas: buckets["Despesas Administrativas"], despesasComerciais: buckets["Despesas Comerciais"], outrasDespesasOperacionais: buckets["Outras Despesas Operacionais"], ebitda, receitasFinanceiras: buckets["Receitas Financeiras"], despesasFinanceiras: buckets["Despesas Financeiras"], resultadoFinanceiro, resultadoGerencial: ebitda + resultadoFinanceiro };
-  }, [entidades.planoDeContas, entidades.orcamentoItens, filtros.anoRef, filtros.empresaId, meses]);
+  }, [entidades.planoDeContas, entidades.orcamentoItens, anoRef, filtros.empresaId, meses]);
 
   const linhasReal = linhasDRE(realizado);
   const linhasForecast = linhasDRE(forecast);

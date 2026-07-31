@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { ComposedChart, Bar, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { KPI, Panel, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
-import { resolverIntervaloPeriodo, diffDaysISO } from "../utils/dateUtils.js";
+import { diffDaysISO, getDataAtualSistema, startOfMonthISO, endOfMonthISO, parseISO } from "../utils/dateUtils.js";
 import { calcularDFC, calcularDFCPorConta } from "../financial-engine/dfc.js";
 import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
 import { calcularCarteiraEAging, calcularDSOouDPO } from "../financial-engine/aging.js";
@@ -10,9 +10,16 @@ import { calcularCoberturaCaixaDias, calcularIndiceLiquidezCaixa, buildFluxoCaix
 
 const CLASSIF_LABEL = { Operacional: "Atividades Operacionais", Investimento: "Atividades de Investimento", Financiamento: "Atividades de Financiamento" };
 
+// DFC Gerencial é módulo de FATO: sempre o mês corrente real do sistema —
+// nunca Período/Mês/Ano editáveis — ver getDataAtualSistema.
 export default function DFCPage({ data }) {
   const { entidades, filtros } = data;
-  const { inicio, fim } = resolverIntervaloPeriodo(filtros);
+  const dataReferencia = getDataAtualSistema();
+  const hoje = parseISO(dataReferencia);
+  const anoRef = hoje.getFullYear();
+  const mesRef = hoje.getMonth();
+  const inicio = startOfMonthISO(anoRef, mesRef);
+  const fim = endOfMonthISO(anoRef, mesRef);
   const diasPeriodo = Math.max(1, diffDaysISO(inicio, fim) + 1);
 
   const lancamentosNoPeriodo = useMemo(() => entidades.lancamentos.filter((l) => {
@@ -29,18 +36,18 @@ export default function DFCPage({ data }) {
     return calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, iso).total;
   }, [contasFiltradas, entidades.lancamentos, inicio]);
 
-  const posicaoAtual = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, filtros.dataReferencia), [contasFiltradas, entidades.lancamentos, filtros.dataReferencia]);
+  const posicaoAtual = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, dataReferencia), [contasFiltradas, entidades.lancamentos, dataReferencia]);
 
   const dfc = useMemo(() => calcularDFC({ lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, caixaInicial }), [lancamentosNoPeriodo, entidades.planoDeContas, caixaInicial]);
 
   const dfcPorConta = useMemo(() => calcularDFCPorConta({
     lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens,
-    ano: filtros.anoRef, meses: [filtros.mesRef], empresaId: filtros.empresaId,
-  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, filtros.anoRef, filtros.mesRef, filtros.empresaId]);
+    ano: anoRef, meses: [mesRef], empresaId: filtros.empresaId,
+  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoRef, mesRef, filtros.empresaId]);
 
   const lancamentosGlobaisFiltrados = useMemo(() => entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), [entidades.lancamentos, filtros.empresaId]);
-  const agingAR = useMemo(() => calcularCarteiraEAging(lancamentosGlobaisFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), filtros.dataReferencia), [lancamentosGlobaisFiltrados, filtros.dataReferencia]);
-  const agingAP = useMemo(() => calcularCarteiraEAging(lancamentosGlobaisFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), filtros.dataReferencia), [lancamentosGlobaisFiltrados, filtros.dataReferencia]);
+  const agingAR = useMemo(() => calcularCarteiraEAging(lancamentosGlobaisFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), dataReferencia), [lancamentosGlobaisFiltrados, dataReferencia]);
+  const agingAP = useMemo(() => calcularCarteiraEAging(lancamentosGlobaisFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), dataReferencia), [lancamentosGlobaisFiltrados, dataReferencia]);
 
   const totalRecebidoPeriodo = lancamentosNoPeriodo.filter((l) => l.tipo === "Entrada" && !l.transferencia).reduce((s, l) => s + l.valor, 0);
   const totalPagoPeriodo = lancamentosNoPeriodo.filter((l) => l.tipo === "Saída" && !l.transferencia).reduce((s, l) => s + l.valor, 0);
@@ -51,8 +58,8 @@ export default function DFCPage({ data }) {
   const indiceLiquidezCaixa = calcularIndiceLiquidezCaixa(posicaoAtual.disponivel, agingAP.totalCarteira);
 
   const evolucaoMensal = useMemo(() => buildFluxoCaixaMensal({
-    lancamentos: entidades.lancamentos, empresaId: filtros.empresaId, anoRef: filtros.anoRef, mesRef: filtros.mesRef, quantidadeMeses: 6,
-  }), [entidades.lancamentos, filtros.empresaId, filtros.anoRef, filtros.mesRef]);
+    lancamentos: entidades.lancamentos, empresaId: filtros.empresaId, anoRef, mesRef, quantidadeMeses: 6,
+  }), [entidades.lancamentos, filtros.empresaId, anoRef, mesRef]);
 
   const porClassificacao = { Operacional: [], Investimento: [], Financiamento: [] };
   dfcPorConta.forEach((l) => porClassificacao[l.classificacaoDFC]?.push(l));

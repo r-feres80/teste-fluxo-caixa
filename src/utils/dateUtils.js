@@ -7,6 +7,15 @@ export const toISO = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2
 export const parseISO = (s) => new Date(s + "T00:00:00");
 export const todayISO = () => toISO(new Date());
 
+// Módulos de FATO (o que já aconteceu — Dashboard, Tesouraria, Fluxo de Caixa,
+// DFC, Contas a Pagar/Receber, DRE) nunca leem filtros.dataReferencia/mesRef/
+// anoRef do estado editável: sempre a data real do dispositivo, sem exceção.
+// Isso elimina de raiz qualquer dessincronia entre "Data de Referência" e
+// "Mês/Ano" — não existe mais estado para dessincronizar nesses módulos.
+// Módulos de PROJEÇÃO (Forecast, Cenários, Orçado x Realizado, Orçamento)
+// continuam usando filtros.dataReferencia/mesRef/anoRef normalmente.
+export const getDataAtualSistema = () => todayISO();
+
 export const endOfMonthISO = (ano, mesIdx) => toISO(new Date(ano, mesIdx + 1, 0));
 export const startOfMonthISO = (ano, mesIdx) => toISO(new Date(ano, mesIdx, 1));
 export const startOfYearISO = (ano) => `${ano}-01-01`;

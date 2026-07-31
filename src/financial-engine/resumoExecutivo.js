@@ -2,8 +2,7 @@
 // Mantém o "modelo canônico": os mesmos números, calculados uma única vez, alimentam tanto a
 // visualização quanto a interpretação da IA — nunca a IA recalcula por conta própria.
 
-import { parseISO } from "../utils/dateUtils.js";
-import { mesesDoPeriodo } from "../utils/dateUtils.js";
+import { parseISO, getDataAtualSistema } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "./tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "./fluxoCaixa.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, vencimentosProximos } from "./aging.js";
@@ -27,7 +26,11 @@ function achatarOrcado(nos) {
  * número diferente do que está na tela.
  */
 export function construirResumoExecutivo({ entidades, filtros, parametros }) {
-  const hoje = parseISO(filtros.dataReferencia);
+  // Dashboard/Copilot são módulos de FATO: a data nunca vem de filtros
+  // (editável), sempre da data real do sistema — ver getDataAtualSistema.
+  const dataReferencia = getDataAtualSistema();
+  const hoje = parseISO(dataReferencia);
+  const anoRef = hoje.getFullYear();
   const mesesYTD = Array.from({ length: hoje.getMonth() + 1 }, (_, i) => i);
 
   const contasFiltradas = entidades.contasBancarias.filter(
@@ -37,30 +40,30 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     (l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId
   );
 
-  const posicao = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, filtros.dataReferencia);
+  const posicao = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, dataReferencia);
   const serie30 = buildFluxoCaixaDiario({
     lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.total,
-    dataReferencia: filtros.dataReferencia, diasHorizonte: 30,
+    dataReferencia, diasHorizonte: 30,
   });
   const menor30 = menorPontoDaSerie(serie30);
   const caixaProjetado30 = serie30[serie30.length - 1]?.saldo ?? posicao.total;
 
-  const agingAR = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), filtros.dataReferencia);
-  const agingAP = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), filtros.dataReferencia);
+  const agingAR = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), dataReferencia);
+  const agingAP = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), dataReferencia);
   const concentracaoClientes = calcularConcentracaoPorParceiro(agingAR.abertos, 5);
   const concentracaoFornecedores = calcularConcentracaoPorParceiro(agingAP.abertos, 5);
-  const vencAP = vencimentosProximos(agingAP.abertos, filtros.dataReferencia, parametros.diasParaAlertas);
-  const vencAR = vencimentosProximos(agingAR.abertos, filtros.dataReferencia, parametros.diasParaAlertas);
+  const vencAP = vencimentosProximos(agingAP.abertos, dataReferencia, parametros.diasParaAlertas);
+  const vencAR = vencimentosProximos(agingAR.abertos, dataReferencia, parametros.diasParaAlertas);
 
   const lancamentosYTD = excluirTransferencias(lancamentosFiltrados).filter((l) => {
     const [ano, mes] = l.competencia.split("-").map(Number);
-    return ano === filtros.anoRef && mesesYTD.includes(mes - 1) && l.situacao === "Realizado";
+    return ano === anoRef && mesesYTD.includes(mes - 1) && l.situacao === "Realizado";
   });
   const dreYTD = calcularDRE(lancamentosYTD, entidades.planoDeContas);
 
   const arvoreMes = construirOrcadoRealizado({
     planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens, lancamentos: entidades.lancamentos,
-    ano: filtros.anoRef, meses: mesesDoPeriodo(filtros), empresaId: filtros.empresaId, dataReferencia: filtros.dataReferencia,
+    ano: anoRef, meses: [hoje.getMonth()], empresaId: filtros.empresaId, dataReferencia,
   });
   const desviosOrcamentarios = achatarOrcado(arvoreMes).filter((n) => n.temOrcamento);
   const desvioTotalVsOrcamento = arvoreMes.reduce((s, n) => s + n.deltaForecast, 0);
@@ -87,7 +90,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   });
 
   return {
-    dataReferencia: filtros.dataReferencia,
+    dataReferencia,
     empresaFiltro: filtros.empresaId,
     caixa: {
       disponivel: posicao.disponivel,
