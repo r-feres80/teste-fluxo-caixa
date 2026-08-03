@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
   Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, Users, FolderTree,
+  Table2, PieChart,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -16,6 +17,8 @@ import ContasAPagarPage from "./pages/ContasAPagarPage.jsx";
 import ContasAReceberPage from "./pages/ContasAReceberPage.jsx";
 import FluxoCaixaPage from "./pages/FluxoCaixaPage.jsx";
 import DFCPage from "./pages/DFCPage.jsx";
+import DFCDiretoPage from "./pages/DFCDiretoPage.jsx";
+import ComposicaoCaixaPage from "./pages/ComposicaoCaixaPage.jsx";
 import DREPage from "./pages/DREPage.jsx";
 import OrcadoRealizadoPage from "./pages/OrcadoRealizadoPage.jsx";
 import OrcamentoPage from "./pages/OrcamentoPage.jsx";
@@ -45,6 +48,8 @@ const NAV = [
   { id: "plano-de-contas", label: "Plano de Contas", icon: FolderTree, Page: PlanoDeContasPage },
   { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
   { id: "dfc", label: "DFC Gerencial", icon: FileBarChart, Page: DFCPage },
+  { id: "dfc-direto", label: "DFC Direto", icon: Table2, Page: DFCDiretoPage },
+  { id: "composicao-caixa", label: "Composição do Caixa", icon: PieChart, Page: ComposicaoCaixaPage },
   { id: "dre", label: "DRE Gerencial", icon: FileText, Page: DREPage },
   { id: "orcado-realizado", label: "Orçado x Realizado", icon: Scale, Page: OrcadoRealizadoPage },
   { id: "orcamento", label: "Orçamento", icon: Wallet, Page: OrcamentoPage },
@@ -58,7 +63,7 @@ const NAV = [
 // Módulos de FATO: sempre a data real do sistema (getDataAtualSistema), sem
 // Data de Referência/Período/Mês/Ano editáveis — nada aqui pode dessincronizar
 // porque não existe mais estado de período para esses módulos lerem.
-const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "contas-pagar", "contas-receber", "dre"]);
+const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "dfc-direto", "composicao-caixa", "contas-pagar", "contas-receber", "dre"]);
 
 export default function App() {
   const [view, setView] = useState("dashboard");

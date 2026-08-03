@@ -2,7 +2,7 @@ import React from "react";
 import { Database, Trash2, Sparkles } from "lucide-react";
 import { Panel, Field, inputCls, InfoNote, useConfirm, DateInputBR } from "../components/ui/Primitives.jsx";
 import { fmtDataHora } from "../utils/formatUtils.js";
-import { APP_DISCLAIMER } from "../config/appConfig.js";
+import { APP_DISCLAIMER, PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
 
 export default function GovernancaPage({ data }) {
   const { parametros, updateParametros, filtros, updateFiltros, lastUpdated, carregarDemo, limparBase, entidades } = data;
@@ -52,6 +52,20 @@ export default function GovernancaPage({ data }) {
           <Field label="Materialidade — Δ R$ mínimo"><input type="number" value={parametros.materialidadeValor} onChange={(e) => updateParametros({ materialidadeValor: Number(e.target.value) || 0 })} className={inputCls} /></Field>
           <Field label="Dias para alertas de vencimento"><input type="number" value={parametros.diasParaAlertas} onChange={(e) => updateParametros({ diasParaAlertas: Number(e.target.value) || 0 })} className={inputCls} /></Field>
           <Field label="Limite de concentração (%)"><input type="number" value={parametros.limiteConcentracaoPct} onChange={(e) => updateParametros({ limiteConcentracaoPct: Number(e.target.value) || 0 })} className={inputCls} /></Field>
+        </div>
+      </Panel>
+
+      <Panel title="PDD — Provisão para Devedores Duvidosos" subtitle="Percentual de provisão aplicado ao saldo vencido de Contas a Receber, por faixa de dias de atraso">
+        <div className="grid grid-cols-6 gap-4">
+          {(parametros.pddFaixas || PDD_FAIXAS_PADRAO).map((f, i) => (
+            <Field key={f.key} label={`${f.label} dias (%)`}>
+              <input type="number" value={f.pct} onChange={(e) => {
+                const atuais = parametros.pddFaixas || PDD_FAIXAS_PADRAO;
+                const novo = atuais.map((x, j) => (j === i ? { ...x, pct: Number(e.target.value) || 0 } : x));
+                updateParametros({ pddFaixas: novo });
+              }} className={inputCls} />
+            </Field>
+          ))}
         </div>
       </Panel>
 

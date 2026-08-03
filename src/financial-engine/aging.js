@@ -1,4 +1,4 @@
-import { diffDaysISO, parseISO } from "../utils/dateUtils.js";
+import { diffDaysISO, parseISO, addDaysISO } from "../utils/dateUtils.js";
 import { situacaoEfetiva } from "./lancamentos.js";
 
 /** Régua de aging estendida (9 faixas de vencido, + "a vencer"). Substitui a
@@ -140,5 +140,81 @@ export function vencimentosProximos(abertos, dataReferencia, dias) {
   return abertos.filter((l) => {
     const diasAteVencer = diffDaysISO(dataReferencia, l.dataVencimento);
     return diasAteVencer >= 0 && diasAteVencer <= dias;
+  });
+}
+
+/** Régua de aging para títulos já liquidados com atraso (distinta de
+ * FAIXAS_AGING, que mede carteira ainda em aberto): 8 faixas terminando em
+ * "180+" em vez de duas faixas de cauda (181-360/361+). */
+export const FAIXAS_AGING_RECEBIDOS = [
+  { key: "d1a15", label: "1-15", max: 15 },
+  { key: "d16a30", label: "16-30", max: 30 },
+  { key: "d31a60", label: "31-60", max: 60 },
+  { key: "d61a90", label: "61-90", max: 90 },
+  { key: "d91a120", label: "91-120", max: 120 },
+  { key: "d121a150", label: "121-150", max: 150 },
+  { key: "d151a180", label: "151-180", max: 180 },
+  { key: "d180mais", label: "180+", max: 999999 },
+];
+
+/**
+ * Aging de títulos Realizados liquidados com atraso — dias_atraso = Data de
+ * baixa − Vencimento, considerando só dias_atraso > 0 (título pago/recebido
+ * antes ou no vencimento não entra). Aplica-se tanto a AR quanto a AP (o
+ * chamador filtra por tipo). Diferente de calcularCarteiraEAging: aqui o
+ * atraso é medido contra a Data de baixa (histórico de liquidação), não
+ * contra a Data de Referência (carteira ainda aberta).
+ */
+export function calcularAgingVencidosRecebidos(lancamentos) {
+  const buckets = {};
+  FAIXAS_AGING_RECEBIDOS.forEach((f) => { buckets[f.key] = 0; });
+  let total = 0;
+  lancamentos.filter((l) => l.situacao === "Realizado" && l.dataPagamento && l.dataVencimento).forEach((l) => {
+    const dias = diffDaysISO(l.dataVencimento, l.dataPagamento);
+    if (dias <= 0) return;
+    total += l.valor;
+    const faixa = FAIXAS_AGING_RECEBIDOS.find((f) => dias <= f.max) || FAIXAS_AGING_RECEBIDOS[FAIXAS_AGING_RECEBIDOS.length - 1];
+    buckets[faixa.key] += l.valor;
+  });
+  return { buckets, total };
+}
+
+/**
+ * PDD (Provisão para Devedores Duvidosos) sobre o saldo vencido de Contas a
+ * Receber ainda em aberto — aplica o percentual de cada faixa de atraso
+ * (parametros.pddFaixas, configurável em Governança, nunca hardcoded aqui)
+ * sobre o saldo daquela faixa.
+ */
+export function calcularPDD(lancamentosAR, dataReferencia, faixasPDD) {
+  const porFaixa = faixasPDD.map((f) => ({ ...f, saldo: 0, provisao: 0 }));
+  let saldoVencido = 0, provisaoTotal = 0;
+  lancamentosAR.forEach((l) => {
+    if (situacaoEfetiva(l, dataReferencia) !== "Vencido") return;
+    const dias = diffDaysISO(l.dataVencimento, dataReferencia);
+    saldoVencido += l.valor;
+    const faixa = porFaixa.find((f) => dias <= f.max) || porFaixa[porFaixa.length - 1];
+    const provisao = l.valor * (faixa.pct / 100);
+    faixa.saldo += l.valor;
+    faixa.provisao += provisao;
+    provisaoTotal += provisao;
+  });
+  return { saldoVencido, provisaoTotal, porFaixa };
+}
+
+/**
+ * Previsto x Recebido, série diária dos últimos "quantidadeDias" dias até
+ * dataFim: "A Receber no Dia" soma os títulos de AR com Vencimento naquele
+ * dia (qualquer situação, exceto Cancelado); "Recebido no Dia" soma os
+ * títulos Realizados com Data de baixa naquele dia. % aderência = Recebido
+ * no Dia ÷ A Receber no Dia (null quando não havia nada a receber no dia).
+ */
+export function calcularPrevistoRecebidoDiario(lancamentosAR, dataFim, quantidadeDias) {
+  const validos = lancamentosAR.filter((l) => l.situacao !== "Cancelado");
+  const dias = [];
+  for (let i = quantidadeDias - 1; i >= 0; i--) dias.push(addDaysISO(dataFim, -i));
+  return dias.map((dia) => {
+    const aReceber = validos.filter((l) => l.dataVencimento === dia).reduce((s, l) => s + l.valor, 0);
+    const recebido = validos.filter((l) => l.situacao === "Realizado" && l.dataPagamento === dia).reduce((s, l) => s + l.valor, 0);
+    return { data: dia, aReceber, recebido, aderenciaPct: aReceber > 0 ? (recebido / aReceber) * 100 : null };
   });
 }

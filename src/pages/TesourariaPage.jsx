@@ -1,9 +1,14 @@
 import React, { useMemo } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle } from "lucide-react";
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
-import { fmtBRL } from "../utils/formatUtils.js";
+import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
+import { calcularComposicaoDiaria } from "../financial-engine/composicaoCaixa.js";
+import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getDataAtualSistema } from "../utils/dateUtils.js";
+
+const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
 
 // Tesouraria é módulo de FATO: saldo é sempre "hoje" real, nunca a Data de
 // Referência editável — ver getDataAtualSistema.
@@ -17,6 +22,11 @@ export default function TesourariaPage({ data }) {
   const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), hoje), [entidades.lancamentos, filtros.empresaId, hoje]);
   const transferencias = useMemo(() => listarTransferencias(entidades.lancamentos), [entidades.lancamentos]);
+
+  const realizados = useMemo(() => excluirTransferencias(entidades.lancamentos)
+    .filter((l) => estaRealizado(l) && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)),
+    [entidades.lancamentos, filtros.empresaId]);
+  const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizados, hoje, 30), [realizados, hoje]);
 
   if (contasFiltradas.length === 0) {
     return <InfoNote tone="amber">Nenhuma conta bancária ativa para os filtros atuais. Cadastre em Cadastros → Contas Bancárias.</InfoNote>;
@@ -67,6 +77,20 @@ export default function TesourariaPage({ data }) {
           </div>
         </Panel>
       </div>
+
+      <Panel title="Composição do Caixa — Últimos 30 dias" subtitle="Antecipado / Em dia / Atrasado, por Data de baixa (Entradas e Saídas Realizadas)">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={composicao30dias}>
+            <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+            <Legend wrapperStyle={{ fontSize: 11 }} />
+            <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
+            <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
+            <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </Panel>
 
       <Panel title="Transferências Internas" subtitle="Movimentos entre contas próprias — não entram em Entradas/Saídas operacionais">
         {transferencias.length === 0 ? <span className="text-sm text-slate-400">Nenhuma transferência registrada.</span> : (

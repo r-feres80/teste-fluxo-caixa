@@ -43,3 +43,46 @@ export function calcularDFCPorConta({ lancamentosNoPeriodo, planoDeContas, orcam
     .filter((l) => l.real !== 0 || l.orcado !== 0)
     .sort((a, b) => Math.abs(b.real) - Math.abs(a.real));
 }
+
+/**
+ * DFC Direto: árvore Grupo (classificacaoDFC) → Subgrupo (subgrupoDFC) →
+ * Conta, com uma coluna por dia do período (soma de valorComSinal dos
+ * Realizados daquele dia) + Total Realizado (soma do período) + Total
+ * Previsto (Orçamento do período, getValorOrcadoPeriodo). Grupo e Subgrupo
+ * são somas (rollup) das linhas abaixo — nunca recalculados a partir dos
+ * lançamentos diretamente, para nunca divergir do detalhe por conta.
+ */
+export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, orcamentoItens, ano, meses, empresaId, dias }) {
+  const realizados = excluirTransferencias(lancamentosNoPeriodo).filter((l) => estaRealizado(l));
+  const contasComMovimento = planoDeContas.filter((c) => c.tipo === "Analítica" && c.classificacaoDFC && c.classificacaoDFC !== "Fora do DFC");
+
+  const somarLinhas = (linhas) => ({
+    porDia: dias.map((_, i) => linhas.reduce((s, l) => s + l.porDia[i], 0)),
+    totalRealizado: linhas.reduce((s, l) => s + l.totalRealizado, 0),
+    totalPrevisto: linhas.reduce((s, l) => s + l.totalPrevisto, 0),
+  });
+
+  const linhaConta = (conta) => {
+    const doConta = realizados.filter((l) => l.contaGerencialId === conta.id);
+    const porDia = dias.map((d) => doConta.filter((l) => l.dataPagamento === d).reduce((s, l) => s + valorComSinal(l), 0));
+    const totalPrevisto = conta.aceitaOrcamento
+      ? getValorOrcadoPeriodo(orcamentoItens, { ano, meses, contaGerencialId: conta.id, empresaId: empresaId && empresaId !== "TODAS" ? empresaId : undefined })
+      : 0;
+    return { id: conta.id, nome: conta.descricao, porDia, totalRealizado: porDia.reduce((s, v) => s + v, 0), totalPrevisto };
+  };
+
+  return ["Operacional", "Investimento", "Financiamento"].map((grupo) => {
+    const contasDoGrupo = contasComMovimento.filter((c) => c.classificacaoDFC === grupo);
+    const subgrupoNomes = Array.from(new Set(contasDoGrupo.map((c) => c.subgrupoDFC || "(Sem subgrupo)")));
+    const subgrupos = subgrupoNomes
+      .map((sub) => {
+        const contas = contasDoGrupo
+          .filter((c) => (c.subgrupoDFC || "(Sem subgrupo)") === sub)
+          .map(linhaConta)
+          .filter((l) => l.totalRealizado !== 0 || l.totalPrevisto !== 0);
+        return { nome: sub, contas, ...somarLinhas(contas) };
+      })
+      .filter((s) => s.contas.length > 0);
+    return { nome: grupo, subgrupos, ...somarLinhas(subgrupos) };
+  }).filter((g) => g.subgrupos.length > 0);
+}
