@@ -7,7 +7,12 @@ export default function OrcamentoPage({ data }) {
   const { entidades, filtros, addItem, updateItem } = data;
   const [empresaSel, setEmpresaSel] = useState(filtros.empresaId !== "TODAS" ? filtros.empresaId : entidades.empresas[0]?.id ?? "");
 
-  const contasOrcaveis = entidades.planoDeContas.filter((c) => c.tipo === "Analítica" && c.aceitaOrcamento && c.ativo);
+  // c.ativo !== false (não c.ativo estrito): unifica com DRE/Orçado x Realizado,
+  // que nunca checam "ativo" e sempre reconheceram essas contas. Contas
+  // criadas automaticamente na importação não tinham o campo "ativo" setado
+  // (undefined), então a checagem estrita as escondia aqui mesmo já em uso
+  // no DRE — a causa raiz era a ausência do campo, corrigida em importacao.js.
+  const contasOrcaveis = entidades.planoDeContas.filter((c) => c.tipo === "Analítica" && c.aceitaOrcamento && c.ativo !== false);
 
   const atualizarValor = (contaId, mes, valor) => {
     const existente = entidades.orcamentoItens.find((o) => o.ano === filtros.anoRef && o.empresaId === empresaSel && o.contaGerencialId === contaId && o.mes === mes && !o.centroCustoId);

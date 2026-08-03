@@ -46,6 +46,7 @@ function criarContaGerencial(descricao, entidades, classificacaoDRE, classificac
     classificacaoDFC: classificacaoDFC || "Operacional",
     aceitaOrcamento: true,
     centroCustoObrigatorio: false,
+    ativo: true,
   };
   entidades.planoDeContas.push(conta);
   return conta;

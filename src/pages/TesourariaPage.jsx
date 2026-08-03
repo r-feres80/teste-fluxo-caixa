@@ -28,7 +28,9 @@ export default function TesourariaPage({ data }) {
         <KPI label="Saldo Consolidado" value={fmtBRL(posicao.total)} tone={posicao.total >= 0 ? "positive" : "negative"} icon={Wallet} />
         <KPI label="Saldo Disponível (Livre)" value={fmtBRL(posicao.disponivel)} tone="neutral" icon={Landmark} />
         <KPI label="Aplicações Financeiras" value={fmtBRL(posicao.aplicacoes)} tone="neutral" icon={PiggyBank} />
-        <KPI label="Movimento de Hoje" value={`${fmtBRL(movimentoHoje.entradas)} / ${fmtBRL(movimentoHoje.saidas)}`} sub="Entradas / Saídas (exclui transferências)" tone="neutral" icon={ArrowUpRight} />
+        <KPI label="Movimento de Hoje"
+          value={<span className="flex items-baseline gap-1.5 text-lg"><span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span><span className="text-slate-300 text-sm">/</span><span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>}
+          sub="Entradas / Saídas (exclui transferências)" tone="neutral" icon={ArrowUpRight} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

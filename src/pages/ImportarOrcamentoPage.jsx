@@ -26,15 +26,16 @@ export default function ImportarOrcamentoPage({ data }) {
     const reader = new FileReader();
     reader.onload = (evt) => {
       // Ver comentário equivalente em ImportarDadosPage.jsx: raw:true evita a
-      // reconversão de texto-para-data do SheetJS que desloca o dia pelo fuso local.
-      const wb = XLSX.read(evt.target.result, { type: "binary", raw: true, cellDates: true });
+      // reconversão de texto-para-data do SheetJS que desloca o dia pelo fuso
+      // local, e codepage:65001 evita mojibake em texto acentuado.
+      const wb = XLSX.read(evt.target.result, { type: "array", raw: true, cellDates: true, codepage: 65001 });
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: true });
       const normalizadas = rows.map((r) => normalizarLinhaOrcamento(r, entidades));
       const finais = marcarDuplicadosOrcamento(normalizadas, entidades.orcamentoItens || []);
       setLinhas(finais);
     };
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
   };
 
   const validos = linhas?.filter((l) => l.orcamentoItem) ?? [];

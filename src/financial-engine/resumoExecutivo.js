@@ -5,7 +5,7 @@
 import { parseISO, getDataAtualSistema } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "./tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "./fluxoCaixa.js";
-import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, vencimentosProximos } from "./aging.js";
+import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "./aging.js";
 import { calcularDRE } from "./dre.js";
 import { excluirTransferencias } from "./lancamentos.js";
 import { construirOrcadoRealizado } from "./orcadoRealizado.js";
@@ -52,6 +52,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   const agingAP = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), dataReferencia);
   const concentracaoClientes = calcularConcentracaoPorParceiro(agingAR.abertos, 5);
   const concentracaoFornecedores = calcularConcentracaoPorParceiro(agingAP.abertos, 5);
+  const despesasInternasFornecedores = calcularDespesasInternas(agingAP.abertos);
   const vencAP = vencimentosProximos(agingAP.abertos, dataReferencia, parametros.diasParaAlertas);
   const vencAR = vencimentosProximos(agingAR.abertos, dataReferencia, parametros.diasParaAlertas);
 
@@ -110,6 +111,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
       totalEmAberto: agingAP.totalCarteira,
       totalVencido: agingAP.totalVencido,
       concentracaoTop5: topFornecedores,
+      despesasInternas: despesasInternasFornecedores,
       vencimentosProximos: vencAP,
     },
     dreYTD: {

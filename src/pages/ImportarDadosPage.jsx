@@ -30,15 +30,17 @@ export default function ImportarDadosPage({ data }) {
       // reconversão soma o fuso local (Brasil, UTC-3) sobre um valor calculado
       // em UTC e desloca o dia para trás (ex.: 2026-01-04 virava 1/3/26).
       // cellDates:true garante que células de data nativas do Excel (.xlsx)
-      // cheguem como Date/ISO em UTC, nunca como serial ambíguo.
-      const wb = XLSX.read(evt.target.result, { type: "binary", raw: true, cellDates: true });
+      // cheguem como Date/ISO em UTC, nunca como serial ambíguo. codepage:65001
+      // (UTF-8) evita mojibake em texto acentuado ("Saída" virando "SaÃ­da")
+      // que readAsBinaryString produzia por tratar o arquivo como Latin-1.
+      const wb = XLSX.read(evt.target.result, { type: "array", raw: true, cellDates: true, codepage: 65001 });
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(ws, { defval: "", raw: true });
       const normalizadas = rows.map((r) => normalizarLinha(r, entidades));
       const finais = marcarDuplicados(normalizadas, entidades.lancamentos);
       setLinhas(finais);
     };
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
   };
 
   const validos = linhas?.filter((l) => l.lancamento) ?? [];

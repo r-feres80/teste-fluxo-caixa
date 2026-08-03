@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { Panel, KPI, InfoNote } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
-import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, vencimentosProximos } from "../financial-engine/aging.js";
+import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
 
@@ -23,6 +23,7 @@ export function ContasPagarReceberView({ data, tipo }) {
     () => calcularCarteiraEAging(lancamentosDoTipo, hoje), [lancamentosDoTipo, hoje]
   );
   const concentracao = useMemo(() => calcularConcentracaoPorParceiro(abertos, 5), [abertos]);
+  const despesasInternas = useMemo(() => calcularDespesasInternas(abertos), [abertos]);
   const proximos7 = useMemo(() => vencimentosProximos(abertos, hoje, parametros.diasParaAlertas), [abertos, hoje, parametros.diasParaAlertas]);
   const proximos15 = useMemo(() => vencimentosProximos(abertos, hoje, 15), [abertos, hoje]);
   const proximos30 = useMemo(() => vencimentosProximos(abertos, hoje, 30), [abertos, hoje]);
@@ -49,7 +50,7 @@ export function ContasPagarReceberView({ data, tipo }) {
         <KPI label="Total da Carteira (em aberto)" value={fmtBRL(totalCarteira)} tone="neutral" />
         <KPI label="Vencido" value={fmtBRL(totalVencido)} tone={totalVencido > 0 ? "negative" : "neutral"} />
         <KPI label={`Realizado no mês`} value={fmtBRL(realizadoNoMes)} tone="positive" />
-        <KPI label="Inadimplência" value={`${inadimplenciaPct.toFixed(1)}%`} tone={inadimplenciaPct > 10 ? "negative" : "neutral"} />
+        <KPI label={tipo === "Entrada" ? "Inadimplência" : "Atraso de Pagamento"} value={`${inadimplenciaPct.toFixed(1)}%`} tone={inadimplenciaPct > 10 ? "negative" : "neutral"} />
       </div>
       <div className="grid grid-cols-4 gap-4">
         <KPI label="Vencimentos Hoje" value={fmtBRL(vencimentosHoje.reduce((s, l) => s + l.valor, 0))} sub={`${vencimentosHoje.length} título(s)`} />
@@ -79,6 +80,12 @@ export function ContasPagarReceberView({ data, tipo }) {
                   <span className={`font-mono tabular-nums ${c.pct >= parametros.limiteConcentracaoPct ? "text-rose-600" : "text-slate-700"}`}>{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
                 </div>
               ))}
+            </div>
+          )}
+          {despesasInternas > 0 && (
+            <div className="flex items-center justify-between text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100">
+              <span>Despesas internas (sem {rotuloParceiro.toLowerCase()} vinculado)</span>
+              <span className="font-mono tabular-nums">{fmtBRL(despesasInternas)}</span>
             </div>
           )}
         </Panel>

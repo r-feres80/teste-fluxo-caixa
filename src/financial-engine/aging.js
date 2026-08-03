@@ -31,15 +31,25 @@ export function calcularCarteiraEAging(lancamentos, dataReferencia) {
   return { abertos, buckets, totalVencido, totalCarteira, aVencer: buckets.aVencer };
 }
 
-/** Concentração por parceiro (cliente ou fornecedor) — top N por valor em aberto. */
+/** Concentração por parceiro (cliente ou fornecedor) — top N por valor em aberto.
+ * Lançamentos sem Cliente/Fornecedor vinculado (contas internas como Salários,
+ * Impostos, Encargos) são excluídos: não representam risco de dependência de
+ * fornecedor/cliente e não devem competir por uma posição no ranking. Ver
+ * calcularDespesasInternas para o total desse grupo, exibido à parte. */
 export function calcularConcentracaoPorParceiro(abertos, top = 5) {
   const porParceiro = new Map();
-  abertos.forEach((l) => porParceiro.set(l.clienteFornecedorId, (porParceiro.get(l.clienteFornecedorId) || 0) + l.valor));
+  abertos.filter((l) => l.clienteFornecedorId).forEach((l) => porParceiro.set(l.clienteFornecedorId, (porParceiro.get(l.clienteFornecedorId) || 0) + l.valor));
   const total = Array.from(porParceiro.values()).reduce((s, v) => s + v, 0);
   return Array.from(porParceiro.entries())
     .map(([id, valor]) => ({ id, valor, pct: total > 0 ? (valor / total) * 100 : 0 }))
     .sort((a, b) => b.valor - a.valor)
     .slice(0, top);
+}
+
+/** Total em aberto sem Cliente/Fornecedor vinculado (contas internas: Salários,
+ * Impostos, Encargos etc.) — exibido à parte, fora do ranking de concentração. */
+export function calcularDespesasInternas(abertos) {
+  return abertos.filter((l) => !l.clienteFornecedorId).reduce((s, l) => s + l.valor, 0);
 }
 
 /** DSO/DPO — Days Sales/Payable Outstanding: (saldo em aberto / valor do período) * dias do período. */

@@ -107,6 +107,11 @@ export default function DashboardPage({ data }) {
           {resumo.contasPagar.concentracaoTop5.map((c) => (
             <div key={c.id} className="flex justify-between text-sm py-1 border-b border-slate-100"><span className="text-slate-600">{c.nome}</span><span className="font-mono">{fmtBRL(c.valor)}</span></div>
           ))}
+          {resumo.contasPagar.despesasInternas > 0 && (
+            <div className="flex justify-between text-xs text-slate-400 pt-2 mt-1">
+              <span>Despesas internas (sem fornecedor vinculado)</span><span className="font-mono">{fmtBRL(resumo.contasPagar.despesasInternas)}</span>
+            </div>
+          )}
         </Panel>
       </div>
     </div>
