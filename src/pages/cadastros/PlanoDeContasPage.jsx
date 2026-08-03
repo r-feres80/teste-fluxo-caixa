@@ -15,16 +15,17 @@ export default function PlanoDeContasPage({ data }) {
   const { entidades, addItem, updateItem, removeItem } = data;
   const contas = entidades.planoDeContas;
   const [form, setForm] = useState(null); // null = fechado; {} = novo; {...item} = edição
+  const [erro, setErro] = useState("");
 
   const { pedirConfirmacao, ConfirmDialogSlot } = useConfirm();
 
   const abrirNovaRaiz = () => setForm({ ...VAZIO, contaPaiId: null });
   const abrirNovoFilho = (pai) => setForm({ ...VAZIO, contaPaiId: pai.id, tipo: "Analítica" });
-  const abrirEdicao = (item) => setForm({ ...item });
-  const fechar = () => setForm(null);
+  const abrirEdicao = (item) => { setForm({ ...item }); setErro(""); };
+  const fechar = () => { setForm(null); setErro(""); };
 
   const salvar = () => {
-    if (!form.codigo || !form.descricao) return;
+    if (!form.codigo || !form.descricao) { setErro("Preencha Código e Descrição antes de salvar."); return; }
     if (form.id) { updateItem("planoDeContas", form.id, form); } else { addItem("planoDeContas", form); }
     fechar();
   };
@@ -76,6 +77,7 @@ export default function PlanoDeContasPage({ data }) {
                 <option value="false">Não</option><option value="true">Sim</option>
               </select>
             </Field>
+            {erro && <div className="col-span-6 text-sm text-rose-600">{erro}</div>}
             <div className="col-span-6 flex justify-end gap-2 mt-2">
               <button onClick={fechar} className="px-3 py-1.5 rounded text-sm text-slate-500 hover:text-slate-800 flex items-center gap-1"><X size={14} /> Cancelar</button>
               <button onClick={salvar} className="px-4 py-1.5 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1.5"><Check size={14} /> Salvar</button>

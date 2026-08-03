@@ -39,8 +39,13 @@ function criarEmpresa(nome, entidades, numeroConta) {
 }
 
 function criarContaGerencial(descricao, entidades, classificacaoDRE, classificacaoDFC, subgrupoDFC) {
+  const id = gerarId("pc", entidades.planoDeContas);
   const conta = {
-    id: gerarId("pc", entidades.planoDeContas),
+    id,
+    // Toda conta precisa de código não-vazio para poder ser salva depois via
+    // Plano de Contas (a tela exige form.codigo preenchido) -- sem isso, uma
+    // conta auto-criada pela importação nunca mais conseguiria ser editada.
+    codigo: `AUTO.${id.replace(/\D/g, "")}`,
     descricao,
     tipo: "Analítica",
     contaPaiId: null,
