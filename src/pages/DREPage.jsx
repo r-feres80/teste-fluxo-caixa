@@ -36,7 +36,8 @@ export default function DREPage({ data }) {
     const margemBruta = receitaLiquida + buckets["Custos"];
     const ebitda = margemBruta + buckets["Despesas com Pessoal"] + buckets["Despesas Administrativas"] + buckets["Despesas Comerciais"] + buckets["Outras Despesas Operacionais"];
     const resultadoFinanceiro = buckets["Receitas Financeiras"] + buckets["Despesas Financeiras"];
-    return { receitaBruta: buckets["Receita Bruta"], deducoes: buckets["Deduções"], receitaLiquida, custos: buckets["Custos"], margemBruta, despesasPessoal: buckets["Despesas com Pessoal"], despesasAdministrativas: buckets["Despesas Administrativas"], despesasComerciais: buckets["Despesas Comerciais"], outrasDespesasOperacionais: buckets["Outras Despesas Operacionais"], ebitda, receitasFinanceiras: buckets["Receitas Financeiras"], despesasFinanceiras: buckets["Despesas Financeiras"], resultadoFinanceiro, resultadoGerencial: ebitda + resultadoFinanceiro };
+    const impostosSobreLucro = buckets["Impostos sobre o Lucro"];
+    return { receitaBruta: buckets["Receita Bruta"], deducoes: buckets["Deduções"], receitaLiquida, custos: buckets["Custos"], margemBruta, despesasPessoal: buckets["Despesas com Pessoal"], despesasAdministrativas: buckets["Despesas Administrativas"], despesasComerciais: buckets["Despesas Comerciais"], outrasDespesasOperacionais: buckets["Outras Despesas Operacionais"], ebitda, receitasFinanceiras: buckets["Receitas Financeiras"], despesasFinanceiras: buckets["Despesas Financeiras"], resultadoFinanceiro, impostosSobreLucro, resultadoGerencial: ebitda + resultadoFinanceiro + impostosSobreLucro };
   }, [entidades.planoDeContas, entidades.orcamentoItens, anoRef, filtros.empresaId, meses]);
 
   const linhasReal = linhasDRE(realizado);

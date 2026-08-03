@@ -30,12 +30,15 @@ export function calcularDRE(lancamentos, planoDeContas) {
   const receitasFinanceiras = buckets["Receitas Financeiras"];
   const despesasFinanceiras = buckets["Despesas Financeiras"];
   const resultadoFinanceiro = receitasFinanceiras + despesasFinanceiras;
-  const resultadoGerencial = ebitda + resultadoFinanceiro;
+  // IRPJ/CSLL vivem aqui, não em Deduções (que fica só com ICMS ST/PIS/
+  // COFINS/ISS — tributos sobre a receita, não sobre o lucro).
+  const impostosSobreLucro = buckets["Impostos sobre o Lucro"];
+  const resultadoGerencial = ebitda + resultadoFinanceiro + impostosSobreLucro;
 
   return {
     receitaBruta, deducoes, receitaLiquida, custos, margemBruta,
     despesasPessoal, despesasAdministrativas, despesasComerciais, outrasDespesasOperacionais,
-    ebitda, receitasFinanceiras, despesasFinanceiras, resultadoFinanceiro, resultadoGerencial,
+    ebitda, receitasFinanceiras, despesasFinanceiras, resultadoFinanceiro, impostosSobreLucro, resultadoGerencial,
   };
 }
 
@@ -53,6 +56,7 @@ export function linhasDRE(dre) {
     { label: "(-) Outras Despesas Operacionais", valor: dre.outrasDespesasOperacionais, nivel: 0 },
     { label: "= EBITDA", valor: dre.ebitda, nivel: 0, destaque: true },
     { label: "(+/-) Resultado Financeiro", valor: dre.resultadoFinanceiro, nivel: 0 },
+    { label: "(-) Impostos sobre o Lucro", valor: dre.impostosSobreLucro, nivel: 0 },
     { label: "= Resultado Gerencial", valor: dre.resultadoGerencial, nivel: 0, destaque: true },
   ];
 }

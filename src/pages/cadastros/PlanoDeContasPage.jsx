@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Check, X } from "lucide-react";
 import { Panel, Field, inputCls, selectCls, InfoNote, useConfirm } from "../../components/ui/Primitives.jsx";
 import { TreeView } from "../../components/ui/TreeView.jsx";
-import { TIPO_CONTA, NATUREZA_CONTA, ENTRADA_SAIDA, CLASSIFICACAO_DRE, CLASSIFICACAO_DFC } from "../../config/appConfig.js";
+import { TIPO_CONTA, NATUREZA_CONTA, ENTRADA_SAIDA, CLASSIFICACAO_DRE, CLASSIFICACAO_DFC, SUBGRUPOS_POR_GRUPO_DFC } from "../../config/appConfig.js";
 import { temFilhos, candidatosAPai } from "../../financial-engine/treeUtils.js";
 
 const VAZIO = {
   codigo: "", descricao: "", contaPaiId: "", tipo: "Analítica", natureza: "Devedora",
-  classificacaoDRE: "Fora do DRE", classificacaoDFC: "Fora do DFC", entradaSaida: "Saída",
+  classificacaoDRE: "Fora do DRE", classificacaoDFC: "Fora do DFC", subgrupoDFC: "", entradaSaida: "Saída",
   centroCustoObrigatorio: false, aceitaOrcamento: true, ativo: true,
 };
 
@@ -55,7 +55,17 @@ export default function PlanoDeContasPage({ data }) {
             <Field label="Natureza" className="col-span-1"><select value={form.natureza} onChange={(e) => setForm({ ...form, natureza: e.target.value })} className={selectCls}>{NATUREZA_CONTA.map((t) => <option key={t} value={t}>{t}</option>)}</select></Field>
             <Field label="Entrada/Saída" className="col-span-1"><select value={form.entradaSaida} onChange={(e) => setForm({ ...form, entradaSaida: e.target.value })} className={selectCls}>{ENTRADA_SAIDA.map((t) => <option key={t} value={t}>{t}</option>)}</select></Field>
             <Field label="Classificação DRE" className="col-span-2"><select value={form.classificacaoDRE} onChange={(e) => setForm({ ...form, classificacaoDRE: e.target.value })} className={selectCls}>{CLASSIFICACAO_DRE.map((t) => <option key={t} value={t}>{t}</option>)}</select></Field>
-            <Field label="Classificação DFC" className="col-span-2"><select value={form.classificacaoDFC} onChange={(e) => setForm({ ...form, classificacaoDFC: e.target.value })} className={selectCls}>{CLASSIFICACAO_DFC.map((t) => <option key={t} value={t}>{t}</option>)}</select></Field>
+            <Field label="Classificação DFC (Grupo)" className="col-span-2">
+              <select value={form.classificacaoDFC} onChange={(e) => setForm({ ...form, classificacaoDFC: e.target.value, subgrupoDFC: "" })} className={selectCls}>
+                {CLASSIFICACAO_DFC.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </Field>
+            <Field label="Subgrupo" className="col-span-2">
+              <select value={form.subgrupoDFC || ""} onChange={(e) => setForm({ ...form, subgrupoDFC: e.target.value })} className={selectCls} disabled={(SUBGRUPOS_POR_GRUPO_DFC[form.classificacaoDFC] || []).length === 0}>
+                <option value="">(Nenhum)</option>
+                {(SUBGRUPOS_POR_GRUPO_DFC[form.classificacaoDFC] || []).map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </Field>
             <Field label="Centro de Custo Obrigatório?" className="col-span-2">
               <select value={String(form.centroCustoObrigatorio)} onChange={(e) => setForm({ ...form, centroCustoObrigatorio: e.target.value === "true" })} className={selectCls}>
                 <option value="false">Não</option><option value="true">Sim</option>
@@ -81,6 +91,7 @@ export default function PlanoDeContasPage({ data }) {
             { key: "tipo", render: (c) => c.tipo },
             { key: "dre", render: (c) => c.classificacaoDRE },
             { key: "dfc", render: (c) => c.classificacaoDFC },
+            { key: "subgrupo", render: (c) => c.subgrupoDFC || "—" },
           ]}
           onAddRoot={abrirNovaRaiz} onAddChild={abrirNovoFilho} onEdit={abrirEdicao}
           onToggleAtivo={(item) => updateItem("planoDeContas", item.id, { ativo: !item.ativo })}

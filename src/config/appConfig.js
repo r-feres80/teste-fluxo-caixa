@@ -27,10 +27,25 @@ export const CLASSIFICACAO_DRE = [
   "Outras Despesas Operacionais",
   "Receitas Financeiras",
   "Despesas Financeiras",
+  "Impostos sobre o Lucro", // IRPJ/CSLL — não Deduções (que é só ICMS ST/PIS/COFINS/ISS)
   "Fora do DRE",
 ];
 
 export const CLASSIFICACAO_DFC = ["Operacional", "Investimento", "Financiamento", "Fora do DFC"];
+
+// Subgrupo: novo nível entre Grupo (Classificação DFC) e Conta Gerencial.
+// Cada subgrupo pertence a exatamente um Grupo DFC — a UI só oferece os
+// subgrupos válidos para o grupo já selecionado na conta.
+export const SUBGRUPOS_POR_GRUPO_DFC = {
+  Operacional: [
+    "Entradas", "Saídas Diretas", "Pessoal", "Benefícios", "Impostos de Folha",
+    "Impostos", "Terceiros e Consultorias", "Marketing e Publicidade",
+    "Real Estate e Facilities", "Outros Operacionais",
+  ],
+  Investimento: ["Investimentos"],
+  Financiamento: ["Captações", "Receitas Financeiras"],
+  "Fora do DFC": [],
+};
 
 // ---- Situações de lançamento (usadas a partir da Fase 2) ----
 

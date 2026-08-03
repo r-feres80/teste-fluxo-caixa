@@ -2,6 +2,8 @@
 // só então permitir confirmar. Nunca duplica um registro já importado.
 // Auto-criação: registros faltantes são criados automaticamente sem perguntar.
 
+import { SUBGRUPOS_POR_GRUPO_DFC } from "../config/appConfig.js";
+
 const STATUS_PARA_SITUACAO = {
   previsto: "Previsto", "em aberto": "Em aberto", realizado: "Realizado", vencido: "Em aberto", cancelado: "Cancelado",
 };
@@ -36,7 +38,7 @@ function criarEmpresa(nome, entidades, numeroConta) {
   return empresa;
 }
 
-function criarContaGerencial(descricao, entidades, classificacaoDRE, classificacaoDFC) {
+function criarContaGerencial(descricao, entidades, classificacaoDRE, classificacaoDFC, subgrupoDFC) {
   const conta = {
     id: gerarId("pc", entidades.planoDeContas),
     descricao,
@@ -44,6 +46,7 @@ function criarContaGerencial(descricao, entidades, classificacaoDRE, classificac
     contaPaiId: null,
     classificacaoDRE: classificacaoDRE || "Não classificado",
     classificacaoDFC: classificacaoDFC || "Operacional",
+    subgrupoDFC: subgrupoDFC || "",
     aceitaOrcamento: true,
     centroCustoObrigatorio: false,
     ativo: true,
@@ -116,9 +119,17 @@ export function normalizarLinha(row, entidades) {
   const tipo = (row["Tipo"] || "").trim();
   if (tipo !== "Entrada" && tipo !== "Saída") erros.push(`Tipo deve ser "Entrada" ou "Saída" (veio "${row["Tipo"]}")`);
 
+  // "Grupo DFC" é o nome atual da coluna; "Classificação DFC" aceito por
+  // compatibilidade com planilhas de rodadas anteriores.
+  const grupoDFC = row["Grupo DFC"] || row["Classificação DFC"] || "";
+  const subgrupoDFC = row["Subgrupo"] || "";
+  if (subgrupoDFC && grupoDFC && !(SUBGRUPOS_POR_GRUPO_DFC[grupoDFC] || []).includes(subgrupoDFC)) {
+    erros.push(`Subgrupo "${subgrupoDFC}" não pertence ao Grupo DFC "${grupoDFC}" (use ${(SUBGRUPOS_POR_GRUPO_DFC[grupoDFC] || []).join("/") || "nenhum subgrupo válido para esse grupo"})`);
+  }
+
   let conta = buscarPorNome(entidades.planoDeContas, row["Conta Gerencial"], "descricao");
   if (!conta) {
-    conta = criarContaGerencial(row["Conta Gerencial"], entidades, row["Classificação DRE"], row["Classificação DFC"]);
+    conta = criarContaGerencial(row["Conta Gerencial"], entidades, row["Classificação DRE"], grupoDFC, subgrupoDFC);
     avisos.push(`Conta Gerencial "${row["Conta Gerencial"]}" criada automaticamente`);
   } else if (conta.tipo !== "Analítica") erros.push(`Conta "${conta.descricao}" é Sintética — não recebe lançamento`);
 
