@@ -36,6 +36,10 @@ export const CLASSIFICACAO_DFC = ["Operacional", "Investimento", "Financiamento"
 
 export const SITUACOES_LANCAMENTO = ["Previsto", "Em aberto", "Realizado", "Vencido", "Cancelado"];
 
+// ---- Região do Cliente (usada em Contas a Receber) ----
+
+export const REGIOES = ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"];
+
 // ---- Filtros globais: tipos de período ----
 
 export const TIPOS_PERIODO = [

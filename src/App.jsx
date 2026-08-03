@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
-  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save,
+  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, Users,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -41,6 +41,7 @@ const NAV = [
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
   { id: "contas-receber", label: "Contas a Receber", icon: ArrowUpCircle, Page: ContasAReceberPage },
+  { id: "clientes", label: "Clientes", icon: Users, Page: ClientesPage },
   { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
   { id: "dfc", label: "DFC Gerencial", icon: FileBarChart, Page: DFCPage },
   { id: "dre", label: "DRE Gerencial", icon: FileText, Page: DREPage },

@@ -1,8 +1,11 @@
 import React, { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, CartesianGrid } from "recharts";
 import { Panel, KPI, InfoNote } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
-import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "../financial-engine/aging.js";
+import {
+  calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos,
+  FAIXAS_AGING, calcularComposicaoRecebido, calcularEvolucaoInadimplencia,
+} from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
 
@@ -36,13 +39,17 @@ export function ContasPagarReceberView({ data, tipo }) {
 
   const inadimplenciaPct = totalCarteira > 0 ? (totalVencido / totalCarteira) * 100 : 0;
 
+  // Régua de aging estendida (9 faixas de vencido) — ver FAIXAS_AGING em aging.js.
   const chartData = [
     { faixa: "A vencer", valor: aVencer },
-    { faixa: "1-30", valor: buckets.vencido1a30 },
-    { faixa: "31-60", valor: buckets.vencido31a60 },
-    { faixa: "61-90", valor: buckets.vencido61a90 },
-    { faixa: "+90", valor: buckets.vencidoMais90 },
+    ...FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] })),
   ];
+
+  // Composição do Recebido / Evolução de Inadimplência: só em Contas a Receber
+  // (tipo === "Entrada") — ver item 9, escopo explícito de AR.
+  const lancamentosRealizados = useMemo(() => lancamentosDoTipo.filter((l) => l.situacao === "Realizado"), [lancamentosDoTipo]);
+  const composicaoRecebido = useMemo(() => tipo === "Entrada" ? calcularComposicaoRecebido(lancamentosRealizados) : null, [tipo, lancamentosRealizados]);
+  const evolucaoInadimplencia = useMemo(() => tipo === "Entrada" ? calcularEvolucaoInadimplencia(lancamentosDoTipo, hoje, 6) : null, [tipo, lancamentosDoTipo, hoje]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,7 +70,7 @@ export function ContasPagarReceberView({ data, tipo }) {
         <Panel title="Aging">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={chartData}>
-              <XAxis dataKey="faixa" stroke="#64748b" fontSize={11} tickLine={false} />
+              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
               <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
@@ -90,6 +97,39 @@ export function ContasPagarReceberView({ data, tipo }) {
           )}
         </Panel>
       </div>
+
+      {tipo === "Entrada" && (
+        <div className="grid grid-cols-2 gap-4">
+          <Panel title="Composição do Recebido" subtitle="Antecipado / Em dia / Atrasado — baixa (recebimento) vs. vencimento, títulos Realizados">
+            {composicaoRecebido.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado no momento.</span> : (
+              <div className="flex flex-col gap-3">
+                <div className="w-full h-6 rounded overflow-hidden flex">
+                  {composicaoRecebido.antecipadoPct > 0 && <div className="bg-emerald-500" style={{ width: `${composicaoRecebido.antecipadoPct}%` }} title="Antecipado" />}
+                  {composicaoRecebido.emDiaPct > 0 && <div className="bg-indigo-400" style={{ width: `${composicaoRecebido.emDiaPct}%` }} title="Em dia" />}
+                  {composicaoRecebido.atrasadoPct > 0 && <div className="bg-rose-500" style={{ width: `${composicaoRecebido.atrasadoPct}%` }} title="Atrasado" />}
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />Antecipado <span className="font-mono">{composicaoRecebido.antecipadoPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-indigo-400 inline-block" />Em dia <span className="font-mono">{composicaoRecebido.emDiaPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block" />Atrasado <span className="font-mono">{composicaoRecebido.atrasadoPct.toFixed(0)}%</span></span>
+                </div>
+              </div>
+            )}
+          </Panel>
+
+          <Panel title="Evolução Mensal de Inadimplência (%)" subtitle="Últimos 6 meses, por Data de Vencimento">
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={evolucaoInadimplencia}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => `${v.toFixed(1)}%`} />
+                <Line type="monotone" dataKey="pct" name="Inadimplência" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </Panel>
+        </div>
+      )}
 
       <Panel title={`Títulos em Aberto — ${rotuloParceiro}`}>
         {abertos.length === 0 ? <InfoNote>Nenhum título em aberto para os filtros atuais.</InfoNote> : (
