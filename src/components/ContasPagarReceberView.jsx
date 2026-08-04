@@ -78,7 +78,7 @@ export function ContasPagarReceberView({ data, tipo }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Panel title="Aging">
+        <Panel title={tipo === "Entrada" ? "Aging AR" : "Aging AP"}>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={chartData}>
               <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
