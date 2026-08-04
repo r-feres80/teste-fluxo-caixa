@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign } from "lucide-react";
+import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
@@ -10,6 +10,34 @@ import { getDataAtualSistema } from "../utils/dateUtils.js";
 import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
+
+// Sparkline compacto: só a forma da linha + linha pontilhada da média —
+// sem eixos numéricos. Cada ponto é colorido pela variação em relação ao
+// pregão anterior da própria série (verde subiu, vermelho desceu, cinza
+// para o primeiro ponto, que não tem "anterior" dentro da janela mostrada).
+function SparklineCambio({ dias }) {
+  if (!dias || dias.length === 0) return null;
+  const media = dias.reduce((s, p) => s + p.valor, 0) / dias.length;
+  const CorDot = (props) => {
+    const { cx, cy, index } = props;
+    const anterior = index > 0 ? dias[index - 1].valor : null;
+    const cor = anterior == null ? "#94a3b8" : dias[index].valor >= anterior ? "#10b981" : "#f43f5e";
+    return <circle key={`dot-${index}`} cx={cx} cy={cy} r={2.5} fill={cor} stroke="none" />;
+  };
+  return (
+    <ResponsiveContainer width={84} height={36}>
+      <LineChart data={dias} margin={{ top: 4, right: 3, bottom: 4, left: 3 }}>
+        {/* Sem isso o Recharts assume domínio [0, max] — com cotações ~5,40
+            a variação real (poucos centavos) fica espremida perto do topo
+            e a linha parece achatada. domain "dataMin/dataMax" ajusta o
+            eixo à própria faixa de valores da janela de 5 dias. */}
+        <YAxis hide domain={["dataMin", "dataMax"]} />
+        <ReferenceLine y={media} stroke="#cbd5e1" strokeDasharray="2 2" />
+        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} isAnimationActive={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
 
 // Card de uma moeda dentro do painel de Câmbio — nunca mostra undefined/NaN:
 // sem dado ou API fora do ar, mostra "indisponível" e segue em frente.
@@ -23,8 +51,9 @@ function CambioMoeda({ nome, d }) {
     );
   }
   const alta = d.variacaoPct != null && d.variacaoPct >= 0;
+  const tituloEMA5 = `Estimativa estatística de curtíssimo prazo (média móvel exponencial de 5 pregões) — não é cotação futura oficial nem previsão de mercado.${d.ema5AmostraReduzida ? ` Amostra reduzida: ${d.ema5AmostraTamanho} dia(s).` : ""}`;
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-0.5">
       <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
       <div className="flex items-baseline gap-2">
         <span className="font-mono tabular-nums text-lg font-semibold text-slate-800">{fmtTaxaCambio(d.hoje)}</span>
@@ -33,21 +62,21 @@ function CambioMoeda({ nome, d }) {
         )}
       </div>
       <span className="text-[11px] text-slate-400">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
-      <span className="text-[11px] text-slate-500 pt-1 mt-1 border-t border-slate-100">
+      <span className="text-[11px] text-slate-500 flex items-center gap-1">
         {nome.split(" ")[0]} — projeção próximo dia útil (EMA5): <span className="font-mono">{fmtTaxaCambio(d.ema5)}</span>
-        {d.ema5AmostraReduzida && <span className="text-amber-600"> · amostra reduzida ({d.ema5AmostraTamanho} dia(s))</span>}
+        <Info size={10} className="text-slate-300 shrink-0 cursor-help" title={tituloEMA5} />
       </span>
       {d.ultimosDias && d.ultimosDias.length > 0 && (
-        <div className="pt-1 mt-1 border-t border-slate-100">
-          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {d.ultimosDias.length} pregões</span>
-          <table className="w-full text-[11px] mt-1">
+        <div className="flex items-center gap-2 pt-1 mt-1 border-t border-slate-100">
+          <SparklineCambio dias={d.ultimosDias} />
+          <table className="w-auto text-[11px]">
             <tbody>
               {d.ultimosDias.map((p, i) => {
                 const maisRecente = i === d.ultimosDias.length - 1;
                 return (
                   <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
-                    <td className="py-0.5">{fmtData(p.data)}</td>
-                    <td className="py-0.5 text-right font-mono tabular-nums">{fmtTaxaCambio(p.valor)}</td>
+                    <td className="pr-2 leading-tight">{fmtData(p.data)}</td>
+                    <td className="text-right font-mono tabular-nums leading-tight">{fmtTaxaCambio(p.valor)}</td>
                   </tr>
                 );
               })}
@@ -100,9 +129,6 @@ export default function TesourariaPage({ data }) {
             <CambioMoeda nome="Euro (EUR)" d={cambioDados?.EUR} />
           </div>
         )}
-        <p className="text-[11px] text-slate-400 mt-3 pt-3 border-t border-slate-100">
-          EMA5 é uma estimativa estatística de curtíssimo prazo (média móvel exponencial de 5 pregões) — não é cotação futura oficial nem previsão de mercado.
-        </p>
       </Panel>
 
       <div className="grid grid-cols-2 gap-4">
