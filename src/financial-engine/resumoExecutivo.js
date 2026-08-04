@@ -2,12 +2,13 @@
 // Mantém o "modelo canônico": os mesmos números, calculados uma única vez, alimentam tanto a
 // visualização quanto a interpretação da IA — nunca a IA recalcula por conta própria.
 
-import { parseISO, getDataAtualSistema } from "../utils/dateUtils.js";
+import { parseISO, getDataAtualSistema, startOfMonthISO, endOfMonthISO, addDaysISO } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "./tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "./fluxoCaixa.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "./aging.js";
 import { calcularIndiceLiquidezCaixa } from "./indicadoresCaixa.js";
 import { calcularDRE } from "./dre.js";
+import { calcularDFC } from "./dfc.js";
 import { excluirTransferencias } from "./lancamentos.js";
 import { construirOrcadoRealizado } from "./orcadoRealizado.js";
 import { calcularAlertasExecutivos } from "./alertas.js";
@@ -48,6 +49,14 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   });
   const menor30 = menorPontoDaSerie(serie30);
   const caixaProjetado30 = serie30[serie30.length - 1]?.saldo ?? posicao.total;
+
+  // DFC do mês corrente, para o waterfall executivo — mesmo cálculo/período
+  // do DFC Gerencial (calcularDFC), nunca duplicado com lógica própria.
+  const inicioMes = startOfMonthISO(anoRef, hoje.getMonth());
+  const fimMes = endOfMonthISO(anoRef, hoje.getMonth());
+  const caixaInicioMes = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, addDaysISO(inicioMes, -1)).total;
+  const lancamentosDoMes = lancamentosFiltrados.filter((l) => l.dataPagamento && l.dataPagamento >= inicioMes && l.dataPagamento <= fimMes);
+  const dfcMesAtual = calcularDFC({ lancamentosNoPeriodo: lancamentosDoMes, planoDeContas: entidades.planoDeContas, caixaInicial: caixaInicioMes });
 
   const agingAR = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), dataReferencia);
   const agingAP = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), dataReferencia);
@@ -129,6 +138,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
         .slice(0, 8),
     },
     despesasPorCentroCusto: despesasPorCC,
+    dfcMesAtual,
     alertas,
   };
 }

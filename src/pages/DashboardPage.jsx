@@ -1,9 +1,35 @@
 import React, { useMemo } from "react";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar } from "recharts";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar, Cell, LabelList } from "recharts";
 import { AlertTriangle } from "lucide-react";
 import { Panel, Badge, BasisHint, Gauge } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
+
+const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5e" };
+
+// Transforma o DFC do mês (Caixa Inicial + FCO + FCI + FCF = Caixa Final) em
+// dados de waterfall: cada barra intermediária "flutua" a partir do saldo
+// acumulado até então (base invisível + delta visível); as barras de total
+// (Caixa Inicial/Final) partem sempre de zero.
+function construirWaterfall(dfc) {
+  const passos = [
+    { label: "Caixa Inicial", valor: dfc.caixaInicial, total: true },
+    { label: "FCO", valor: dfc.Operacional },
+    { label: "FCI", valor: dfc.Investimento },
+    { label: "FCF", valor: dfc.Financiamento },
+    { label: "Caixa Final", valor: dfc.caixaFinal, total: true },
+  ];
+  let acumulado = 0;
+  return passos.map((p) => {
+    if (p.total) {
+      acumulado = p.valor;
+      return { label: p.label, base: 0, delta: Math.abs(p.valor), valorReal: p.valor, cor: "total" };
+    }
+    const antes = acumulado;
+    acumulado += p.valor;
+    return { label: p.label, base: Math.min(antes, acumulado), delta: Math.abs(p.valor), valorReal: p.valor, cor: p.valor >= 0 ? "positivo" : "negativo" };
+  });
+}
 
 function KpiCard({ label, value, sub, tone = "neutral", basis }) {
   const cor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-900";
@@ -42,6 +68,7 @@ export default function DashboardPage({ data }) {
   );
 
   const sparkData = resumo.caixa.serieDiaria30dias.map((p) => ({ data: p.data.slice(8, 10), saldo: p.saldo }));
+  const waterfallData = useMemo(() => construirWaterfall(resumo.dfcMesAtual), [resumo.dfcMesAtual]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -76,6 +103,21 @@ export default function DashboardPage({ data }) {
           sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
         />
       </div>
+
+      <Panel title="Waterfall Executivo (DFC do mês)" subtitle="Caixa Inicial → Atividades Operacionais/Investimento/Financiamento → Caixa Final">
+        <ResponsiveContainer width="100%" height={240}>
+          <BarChart data={waterfallData} margin={{ top: 20 }}>
+            <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
+            <Bar dataKey="base" stackId="wf" fill="transparent" />
+            <Bar dataKey="delta" stackId="wf" radius={[3, 3, 3, 3]}>
+              {waterfallData.map((d, i) => <Cell key={i} fill={COR_WATERFALL[d.cor]} />)}
+              <LabelList dataKey="valorReal" position="top" formatter={fmtBRLShort} style={{ fontSize: 11, fill: "#475569" }} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </Panel>
 
       <Panel title="Alertas Executivos" subtitle={resumo.alertas.length === 0 ? "Nenhum alerta sustentado pelos dados atuais" : `${resumo.alertas.length} ponto(s) de atenção`}>
         {resumo.alertas.length === 0 ? <span className="text-sm text-slate-400">Sem alertas no momento.</span> : (
