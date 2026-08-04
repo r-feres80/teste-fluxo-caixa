@@ -41,5 +41,10 @@ export function calcularIndicadoresCambio(serieCronologica) {
     ema5: ema5 ? ema5.ema : null,
     ema5AmostraReduzida: ema5 ? ema5.amostraReduzida : false,
     ema5AmostraTamanho: ema5 ? ema5.amostraTamanho : 0,
+    // Últimos 5 pregões (mais antigo -> mais recente) — mesma série já
+    // buscada para o EMA5, sem nova chamada à API. "Desliza" sozinha: a
+    // cada novo pregão que entra na série, o slice(-5) automaticamente
+    // deixa o mais antigo de fora.
+    ultimosDias: serieCronologica.slice(-5),
   };
 }

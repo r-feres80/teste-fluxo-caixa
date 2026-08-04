@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign } from "lucide-react";
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
-import { fmtBRL, fmtBRLShort, fmtTaxaCambio } from "../utils/formatUtils.js";
+import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
 import { calcularComposicaoDiaria } from "../financial-engine/composicaoCaixa.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
@@ -37,6 +37,24 @@ function CambioMoeda({ nome, d }) {
         {nome.split(" ")[0]} — projeção próximo dia útil (EMA5): <span className="font-mono">{fmtTaxaCambio(d.ema5)}</span>
         {d.ema5AmostraReduzida && <span className="text-amber-600"> · amostra reduzida ({d.ema5AmostraTamanho} dia(s))</span>}
       </span>
+      {d.ultimosDias && d.ultimosDias.length > 0 && (
+        <div className="pt-1 mt-1 border-t border-slate-100">
+          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {d.ultimosDias.length} pregões</span>
+          <table className="w-full text-[11px] mt-1">
+            <tbody>
+              {d.ultimosDias.map((p, i) => {
+                const maisRecente = i === d.ultimosDias.length - 1;
+                return (
+                  <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
+                    <td className="py-0.5">{fmtData(p.data)}</td>
+                    <td className="py-0.5 text-right font-mono tabular-nums">{fmtTaxaCambio(p.valor)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
