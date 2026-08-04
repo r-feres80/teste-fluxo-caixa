@@ -52,8 +52,8 @@ export default function FluxoCaixaPage({ data }) {
       </Panel>
 
       <Panel title={`Evolução do Caixa (${granularidade})`} subtitle={`Menor posição no horizonte: ${fmtBRL(menor.saldo)} em ${fmtData(menor.data)}`}>
-        <ResponsiveContainer width="100%" height={340}>
-          <ComposedChart data={agregada}>
+        <ResponsiveContainer width="100%" height={380}>
+          <ComposedChart data={agregada} margin={{ top: 5, right: 28, left: 4, bottom: 0 }}>
             <XAxis dataKey="label" stroke="#64748b" fontSize={10} tickLine={false} interval={Math.max(0, Math.floor(agregada.length / 14))} />
             <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
             <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
