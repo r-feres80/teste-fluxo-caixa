@@ -70,37 +70,55 @@ function CambioMoeda({ nome, d }) {
   }
   const alta = d.variacaoPct != null && d.variacaoPct >= 0;
   const tituloEMA5 = `Estimativa estatística de curtíssimo prazo (média móvel exponencial de 5 pregões) — não é cotação futura oficial nem previsão de mercado.${d.ema5AmostraReduzida ? ` Amostra reduzida: ${d.ema5AmostraTamanho} dia(s).` : ""}`;
+  const temHistorico = d.ultimosDias && d.ultimosDias.length > 0;
+  const blocoCls = "rounded border border-slate-200 bg-slate-50/60 p-2.5";
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-2">
       <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono tabular-nums text-lg font-semibold text-slate-800">{fmtTaxaCambio(d.hoje)}</span>
-        {d.variacaoPct != null && (
-          <span className={`text-xs font-mono ${alta ? "text-emerald-600" : "text-rose-600"}`}>{alta ? "+" : ""}{d.variacaoPct.toFixed(2)}%</span>
-        )}
+
+      {/* Linha 1: dois quadrados lado a lado — cotação do dia | últimos 5 pregões */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className={`${blocoCls} flex flex-col gap-1`}>
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono tabular-nums text-lg font-semibold text-slate-800">{fmtTaxaCambio(d.hoje)}</span>
+            {d.variacaoPct != null && (
+              <span className={`text-xs font-mono ${alta ? "text-emerald-600" : "text-rose-600"}`}>{alta ? "+" : ""}{d.variacaoPct.toFixed(2)}%</span>
+            )}
+          </div>
+          <span className="text-[11px] text-slate-400">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
+          <span className="text-[11px] text-slate-500 leading-snug">
+            {nome.split(" ")[0]} — projeção próximo dia útil (EMA5):{" "}
+            <span className="font-mono whitespace-nowrap">{fmtTaxaCambio(d.ema5)}</span>
+            <Info size={10} className="inline-block text-slate-300 align-middle ml-1 cursor-help" title={tituloEMA5} />
+          </span>
+        </div>
+
+        <div className={`${blocoCls} flex flex-col gap-1.5`}>
+          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {temHistorico ? d.ultimosDias.length : 0} pregões</span>
+          {temHistorico ? (
+            <table className="w-auto self-start text-[11px]">
+              <tbody>
+                {d.ultimosDias.map((p, i) => {
+                  const maisRecente = i === d.ultimosDias.length - 1;
+                  return (
+                    <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
+                      <td className="pr-3 leading-tight">{fmtData(p.data)}</td>
+                      <td className="text-right font-mono tabular-nums leading-tight">{fmtTaxaCambio(p.valor)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <span className="text-[11px] text-slate-400">Sem histórico.</span>
+          )}
+        </div>
       </div>
-      <span className="text-[11px] text-slate-400">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
-      <span className="text-[11px] text-slate-500 flex items-center gap-1">
-        {nome.split(" ")[0]} — projeção próximo dia útil (EMA5): <span className="font-mono">{fmtTaxaCambio(d.ema5)}</span>
-        <Info size={10} className="text-slate-300 shrink-0 cursor-help" title={tituloEMA5} />
-      </span>
-      {d.ultimosDias && d.ultimosDias.length > 0 && (
-        <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-slate-100">
-          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {d.ultimosDias.length} pregões</span>
+
+      {/* Linha 2: retângulo largura total — sparkline de síntese */}
+      {temHistorico && (
+        <div className={blocoCls}>
           <SparklineCambio dias={d.ultimosDias} />
-          <table className="w-auto self-start text-[11px] mt-1">
-            <tbody>
-              {d.ultimosDias.map((p, i) => {
-                const maisRecente = i === d.ultimosDias.length - 1;
-                return (
-                  <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
-                    <td className="pr-3 leading-tight">{fmtData(p.data)}</td>
-                    <td className="text-right font-mono tabular-nums leading-tight">{fmtTaxaCambio(p.valor)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
         </div>
       )}
     </div>
