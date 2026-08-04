@@ -11,9 +11,25 @@ import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
 
+// Tooltip do sparkline — mesma informação (Data + Valor) já disponível na
+// tabela ao lado, só que sob hover no gráfico. Conteúdo customizado (em vez
+// de formatter/labelFormatter) porque sem <XAxis dataKey> explícito o
+// "label" padrão do Recharts é o índice, não a data.
+function TooltipSparklineCambio({ active, payload }) {
+  if (!active || !payload || !payload.length) return null;
+  const p = payload[0].payload;
+  return (
+    <div className="bg-white border border-slate-200 rounded shadow-sm px-2 py-1 text-[11px] leading-tight">
+      <div className="text-slate-500">{fmtData(p.data)}</div>
+      <div className="font-mono font-semibold text-slate-800">{fmtTaxaCambio(p.valor)}</div>
+    </div>
+  );
+}
+
 // Sparkline compacto: só a forma da linha + linha pontilhada da média —
-// sem eixos numéricos. Cada ponto é colorido pela variação em relação ao
-// pregão anterior da própria série (verde subiu, vermelho desceu, cinza
+// sem eixos numéricos visíveis (o YAxis existe só para corrigir o domínio,
+// ver comentário abaixo). Cada ponto é colorido pela variação em relação
+// ao pregão anterior da própria série (verde subiu, vermelho desceu, cinza
 // para o primeiro ponto, que não tem "anterior" dentro da janela mostrada).
 function SparklineCambio({ dias }) {
   if (!dias || dias.length === 0) return null;
@@ -22,18 +38,20 @@ function SparklineCambio({ dias }) {
     const { cx, cy, index } = props;
     const anterior = index > 0 ? dias[index - 1].valor : null;
     const cor = anterior == null ? "#94a3b8" : dias[index].valor >= anterior ? "#10b981" : "#f43f5e";
-    return <circle key={`dot-${index}`} cx={cx} cy={cy} r={2.5} fill={cor} stroke="none" />;
+    return <circle key={`dot-${index}`} cx={cx} cy={cy} r={3} fill={cor} stroke="none" />;
   };
   return (
-    <ResponsiveContainer width={84} height={36}>
-      <LineChart data={dias} margin={{ top: 4, right: 3, bottom: 4, left: 3 }}>
-        {/* Sem isso o Recharts assume domínio [0, max] — com cotações ~5,40
-            a variação real (poucos centavos) fica espremida perto do topo
-            e a linha parece achatada. domain "dataMin/dataMax" ajusta o
-            eixo à própria faixa de valores da janela de 5 dias. */}
+    <ResponsiveContainer width="100%" height={52}>
+      <LineChart data={dias} margin={{ top: 6, right: 8, bottom: 6, left: 8 }}>
+        <XAxis dataKey="data" hide />
+        {/* Sem domain explícito o Recharts assume [0, max] — com cotações
+            ~5,40 a variação real (poucos centavos) fica espremida perto do
+            topo e a linha parece achatada. "dataMin/dataMax" ajusta o eixo
+            à própria faixa de valores da janela de 5 dias. */}
         <YAxis hide domain={["dataMin", "dataMax"]} />
         <ReferenceLine y={media} stroke="#cbd5e1" strokeDasharray="2 2" />
-        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} isAnimationActive={false} />
+        <Tooltip content={<TooltipSparklineCambio />} cursor={{ stroke: "#cbd5e1", strokeDasharray: "2 2" }} />
+        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} activeDot={{ r: 4 }} isAnimationActive={false} />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -67,15 +85,16 @@ function CambioMoeda({ nome, d }) {
         <Info size={10} className="text-slate-300 shrink-0 cursor-help" title={tituloEMA5} />
       </span>
       {d.ultimosDias && d.ultimosDias.length > 0 && (
-        <div className="flex items-center gap-2 pt-1 mt-1 border-t border-slate-100">
+        <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-slate-100">
+          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {d.ultimosDias.length} pregões</span>
           <SparklineCambio dias={d.ultimosDias} />
-          <table className="w-auto text-[11px]">
+          <table className="w-auto self-start text-[11px] mt-1">
             <tbody>
               {d.ultimosDias.map((p, i) => {
                 const maisRecente = i === d.ultimosDias.length - 1;
                 return (
                   <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
-                    <td className="pr-2 leading-tight">{fmtData(p.data)}</td>
+                    <td className="pr-3 leading-tight">{fmtData(p.data)}</td>
                     <td className="text-right font-mono tabular-nums leading-tight">{fmtTaxaCambio(p.valor)}</td>
                   </tr>
                 );
@@ -124,9 +143,9 @@ export default function TesourariaPage({ data }) {
 
       <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
         {cambioCarregando ? <span className="text-sm text-slate-400">Carregando cotações…</span> : (
-          <div className="grid grid-cols-2 gap-8">
-            <CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} />
-            <CambioMoeda nome="Euro (EUR)" d={cambioDados?.EUR} />
+          <div className="grid grid-cols-2 gap-x-10">
+            <div className="pr-5 border-r border-slate-100"><CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} /></div>
+            <div className="pl-5"><CambioMoeda nome="Euro (EUR)" d={cambioDados?.EUR} /></div>
           </div>
         )}
       </Panel>
