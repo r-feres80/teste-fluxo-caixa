@@ -13,7 +13,7 @@ export default function GovernancaPage({ data }) {
   const confirmarLimpeza = () => {
     pedirConfirmacao(
       "Limpar toda a base?",
-      `Isso removerá TODOS os ${totalRegistros} registros cadastrados (empresas, unidades, clientes, fornecedores, bancos, contas, plano de contas, centros de custo e projetos). Esta ação não pode ser desfeita.`,
+      `Isso removerá TODOS os ${totalRegistros} registros cadastrados (empresas, unidades, clientes, fornecedores, bancos, contas bancárias, plano de contas, centros de custo, projetos, lançamentos e itens de orçamento). Esta ação não pode ser desfeita.`,
       limparBase
     );
   };
@@ -69,15 +69,24 @@ export default function GovernancaPage({ data }) {
         </div>
       </Panel>
 
-      <Panel title="Reconciliações" subtitle="Ficam disponíveis conforme os módulos financeiros entram em operação">
-        <InfoNote tone="amber">
-          Ainda não há reconciliações a exibir nesta fase — Tesouraria, Fluxo de Caixa e DRE (Fases 2 a 5) ainda não foram construídos.
-          Quando estiverem prontos, esta seção mostrará: Saldo Inicial + Entradas − Saídas = Caixa Final · Realizado + Projeção = Forecast · Forecast − Orçamento = Desvio.
+      <Panel title="Reconciliações" subtitle="Onde cada identidade contábil é exibida na prática">
+        <InfoNote>
+          Saldo Inicial + Entradas − Saídas = Caixa Final → Tesouraria e Fluxo de Caixa (regime de Caixa) e DFC Gerencial/DFC Direto.
+          Realizado + Previsto = Forecast → Orçado x Realizado e Forecast.
+          Forecast − Orçamento = Desvio → Orçado x Realizado e o KPI "Desvio vs. Orçamento" no Dashboard Executivo (regime de Competência).
         </InfoNote>
       </Panel>
 
-      <Panel title="Dicionário de KPIs" subtitle="Populado conforme os KPIs entram em operação">
-        <InfoNote tone="amber">Nenhum KPI calculado ainda nesta fase. Última atualização de dados: {lastUpdated ? fmtDataHora(lastUpdated) : "—"}.</InfoNote>
+      <Panel title="Dicionário de KPIs" subtitle="Onde cada indicador é calculado, e em qual regime">
+        <InfoNote>
+          A maioria dos KPIs monetários indica o próprio regime ao passar o mouse sobre o ícone <span className="italic">i</span> ao lado do rótulo
+          (Regime de Caixa = Data de Baixa/Pagamento; Regime de Competência = Data de Competência). Principais indicadores por módulo:
+          Dashboard Executivo (Caixa Disponível, Receita Bruta/EBITDA no ano, velocímetros de Liquidez e Inadimplência, Waterfall do DFC do mês) ·
+          Tesouraria (Saldo Consolidado/Disponível, Aplicações, Câmbio) · Fluxo de Caixa (projeção diária/semanal/mensal) ·
+          DFC Gerencial/DFC Direto (FCO/FCI/FCF, DSO/DPO, Cobertura de Caixa, Índice de Liquidez) ·
+          Contas a Pagar/Receber e Inadimplência (Aging, PDD, DSO) · DRE Gerencial e Orçado x Realizado (Competência).
+          Última atualização de dados: {lastUpdated ? fmtDataHora(lastUpdated) : "—"}.
+        </InfoNote>
       </Panel>
 
       <ConfirmDialogSlot />
