@@ -43,10 +43,10 @@ export default function FluxoCaixaPage({ data }) {
           </div>
         }>
         <div className="grid grid-cols-4 gap-4">
-          <KPI label="Saldo Inicial" value={fmtBRL(posicao.total)} icon={Wallet} />
-          <KPI label="Entradas no Período" value={fmtBRL(entradasPeriodo)} tone="positive" icon={ArrowUpRight} />
-          <KPI label="Saídas no Período" value={fmtBRL(saidasPeriodo)} tone="negative" icon={ArrowDownRight} />
-          <KPI label="Saldo Final" value={fmtBRL(fim?.saldo ?? posicao.total)} tone={(fim?.saldo ?? 0) < 0 ? "negative" : "neutral"} icon={TrendingUp} />
+          <KPI label="Saldo Inicial" value={fmtBRL(posicao.total)} icon={Wallet} basis="caixa" />
+          <KPI label="Entradas no Período" value={fmtBRL(entradasPeriodo)} tone="positive" icon={ArrowUpRight} basis="caixa" />
+          <KPI label="Saídas no Período" value={fmtBRL(saidasPeriodo)} tone="negative" icon={ArrowDownRight} basis="caixa" />
+          <KPI label="Saldo Final" value={fmtBRL(fim?.saldo ?? posicao.total)} tone={(fim?.saldo ?? 0) < 0 ? "negative" : "neutral"} icon={TrendingUp} basis="caixa" />
         </div>
         {necessidade > 0 && <div className="mt-3"><InfoNote tone="amber">Necessidade de caixa: {fmtBRL(necessidade)} em {fmtData(menor.data)}.</InfoNote></div>}
       </Panel>

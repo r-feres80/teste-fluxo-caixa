@@ -1,15 +1,15 @@
 import React, { useMemo } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar } from "recharts";
 import { AlertTriangle } from "lucide-react";
-import { Panel, Badge } from "../components/ui/Primitives.jsx";
+import { Panel, Badge, BasisHint } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 
-function KpiCard({ label, value, sub, tone = "neutral" }) {
+function KpiCard({ label, value, sub, tone = "neutral", basis }) {
   const cor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-900";
   return (
     <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 flex flex-col gap-1">
-      <span className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</span>
+      <span className="text-[11px] text-slate-500 uppercase tracking-wide flex items-center gap-1">{label}<BasisHint basis={basis} /></span>
       <span className={`font-mono tabular-nums text-xl font-semibold ${cor}`}>{value}</span>
       {sub && <span className="text-[11px] text-slate-400">{sub}</span>}
     </div>
@@ -46,15 +46,15 @@ export default function DashboardPage({ data }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Caixa Disponível" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} />
+        <KpiCard label="Caixa Disponível" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} basis="caixa" />
         <KpiCard label="Contas a Receber (aberto)" value={fmtBRL(resumo.contasReceber.totalEmAberto)} />
         <KpiCard label="Contas a Pagar (aberto)" value={fmtBRL(resumo.contasPagar.totalEmAberto)} />
-        <KpiCard label="Caixa Projetado 30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} />
+        <KpiCard label="Caixa Projetado 30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} basis="caixa" />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Receita Bruta no ano" value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" />
-        <KpiCard label="EBITDA no ano" value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} />
-        <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} />
+        <KpiCard label="Receita Bruta no ano" value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia" />
+        <KpiCard label="EBITDA no ano" value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} basis="competencia" />
+        <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia" />
         <KpiCard label="Inadimplência (Receber)" value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
       </div>
 

@@ -63,9 +63,9 @@ export default function ComposicaoCaixaPage({ data }) {
       </InfoNote>
 
       <div className="grid grid-cols-3 gap-4">
-        <KPI label="Antecipado" value={fmtBRL(geral.antecipado)} sub={`${geral.antecipadoPct.toFixed(0)}% do total`} tone="positive" />
-        <KPI label="Em dia" value={fmtBRL(geral.emDia)} sub={`${geral.emDiaPct.toFixed(0)}% do total`} tone="neutral" />
-        <KPI label="Atrasado" value={fmtBRL(geral.atrasado)} sub={`${geral.atrasadoPct.toFixed(0)}% do total`} tone={geral.atrasadoPct > 20 ? "negative" : "neutral"} />
+        <KPI label="Antecipado" value={fmtBRL(geral.antecipado)} sub={`${geral.antecipadoPct.toFixed(0)}% do total`} tone="positive" basis="caixa" />
+        <KPI label="Em dia" value={fmtBRL(geral.emDia)} sub={`${geral.emDiaPct.toFixed(0)}% do total`} tone="neutral" basis="caixa" />
+        <KPI label="Atrasado" value={fmtBRL(geral.atrasado)} sub={`${geral.atrasadoPct.toFixed(0)}% do total`} tone={geral.atrasadoPct > 20 ? "negative" : "neutral"} basis="caixa" />
       </div>
 
       <Panel title="Composição Diária" subtitle="Últimos 30 dias, por Data de baixa">

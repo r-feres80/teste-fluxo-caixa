@@ -67,7 +67,7 @@ export function ContasPagarReceberView({ data, tipo }) {
       <div className="grid grid-cols-4 gap-4">
         <KPI label="Total da Carteira (em aberto)" value={fmtBRL(totalCarteira)} tone="neutral" />
         <KPI label="Vencido" value={fmtBRL(totalVencido)} tone={totalVencido > 0 ? "negative" : "neutral"} />
-        <KPI label={`Realizado no mês`} value={fmtBRL(realizadoNoMes)} tone="positive" />
+        <KPI label={`Realizado no mês`} value={fmtBRL(realizadoNoMes)} tone="positive" basis="caixa" />
         <KPI label={tipo === "Entrada" ? "Inadimplência" : "Atraso de Pagamento"} value={`${inadimplenciaPct.toFixed(1)}%`} tone={inadimplenciaPct > 10 ? "negative" : "neutral"} />
       </div>
       <div className="grid grid-cols-4 gap-4">
