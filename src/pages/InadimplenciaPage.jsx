@@ -1,0 +1,124 @@
+import React, { useMemo } from "react";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, CartesianGrid } from "recharts";
+import { Panel, KPI, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
+import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
+import {
+  calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularEvolucaoInadimplencia, calcularPDD,
+  FAIXAS_AGING, calcularDSOouDPO,
+} from "../financial-engine/aging.js";
+import { diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
+import { PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
+
+// Inadimplência é módulo de FATO (mesma base de Contas a Receber): aging e
+// vencimentos sempre a partir de "hoje" real — ver getDataAtualSistema.
+export default function InadimplenciaPage({ data }) {
+  const { entidades, filtros, parametros } = data;
+  const hoje = getDataAtualSistema();
+
+  const lancamentosAR = useMemo(() => entidades.lancamentos.filter((l) =>
+    l.tipo === "Entrada" && !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
+  ), [entidades.lancamentos, filtros.empresaId]);
+
+  const { abertos, buckets, totalVencido, totalCarteira, aVencer } = useMemo(
+    () => calcularCarteiraEAging(lancamentosAR, hoje), [lancamentosAR, hoje]
+  );
+  const inadimplenciaPct = totalCarteira > 0 ? (totalVencido / totalCarteira) * 100 : 0;
+
+  const vencidos = useMemo(() => abertos.filter((l) => diffDaysISO(l.dataVencimento, hoje) > 0), [abertos, hoje]);
+  const concentracaoVencidos = useMemo(() => calcularConcentracaoPorParceiro(vencidos, 5), [vencidos]);
+  const evolucaoInadimplencia = useMemo(() => calcularEvolucaoInadimplencia(lancamentosAR, hoje, 6), [lancamentosAR, hoje]);
+  const pdd = useMemo(() => calcularPDD(lancamentosAR, hoje, parametros.pddFaixas || PDD_FAIXAS_PADRAO), [lancamentosAR, hoje, parametros.pddFaixas]);
+
+  const realizadoNoMes = useMemo(() => {
+    const [ano, mes] = hoje.slice(0, 7).split("-").map(Number);
+    return lancamentosAR.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(`${ano}-${String(mes).padStart(2, "0")}`)).reduce((s, l) => s + l.valor, 0);
+  }, [lancamentosAR, hoje]);
+  const dso = calcularDSOouDPO(totalCarteira, realizadoNoMes, 30);
+
+  const chartData = [{ faixa: "A vencer", valor: aVencer }, ...FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] }))];
+
+  return (
+    <div className="flex flex-col gap-6">
+      <InfoNote>
+        Inadimplência de Contas a Receber: títulos com Vencimento já passado em relação a hoje (situação "Vencido"),
+        ainda sem baixa. Para o histórico de atraso já liquidado, veja "Aging de Vencidos Recebidos" em Contas a Receber.
+      </InfoNote>
+
+      <div className="grid grid-cols-4 gap-4">
+        <KPI label="Total Vencido" value={fmtBRL(totalVencido)} tone={totalVencido > 0 ? "negative" : "neutral"} />
+        <KPI label="Total da Carteira" value={fmtBRL(totalCarteira)} tone="neutral" />
+        <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} />
+        <KPI label="DSO / PMR (aprox.)" value={dso != null ? `${dso.toFixed(0)} dias` : "—"} sub="Carteira ÷ Realizado no mês × 30" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Gauge
+          label="Inadimplência"
+          value={inadimplenciaPct}
+          min={0} max={20}
+          bands={[{ upTo: 5, color: "#10b981" }, { upTo: 10, color: "#f59e0b" }, { upTo: 20, color: "#f43f5e" }]}
+          formatValue={(v) => `${v.toFixed(1)}%`}
+          sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
+        />
+        <Panel title="Evolução Mensal de Inadimplência (%)" subtitle="Últimos 6 meses, por Data de Vencimento">
+          <ResponsiveContainer width="100%" height={180}>
+            <LineChart data={evolucaoInadimplencia}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
+              <YAxis stroke="#64748b" fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => `${v.toFixed(1)}%`} />
+              <Line type="monotone" dataKey="pct" name="Inadimplência" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </Panel>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Panel title="Aging da Carteira" subtitle="Vencido em aberto, por faixa de dias">
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={chartData}>
+              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
+              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+
+        <Panel title="Top 5 Devedores (Vencido)" subtitle="Concentração só sobre títulos vencidos em aberto">
+          {concentracaoVencidos.length === 0 ? <span className="text-sm text-slate-400">Nenhum título vencido em aberto.</span> : (
+            <div className="flex flex-col gap-2">
+              {concentracaoVencidos.map((c) => (
+                <div key={c.id} className="flex items-center justify-between text-sm">
+                  <span className="text-slate-600">{entidades.clientes.find((p) => p.id === c.id)?.nome ?? "—"}</span>
+                  <span className="font-mono tabular-nums text-slate-700">{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Panel>
+      </div>
+
+      <Panel title="Títulos Vencidos em Aberto">
+        {vencidos.length === 0 ? <InfoNote>Nenhum título vencido para os filtros atuais.</InfoNote> : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">Cliente</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4 text-right">Dias em Atraso</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
+              <tbody>
+                {vencidos.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
+                  <tr key={l.id} className="border-b border-slate-100">
+                    <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
+                    <td className="py-2 pr-4 text-slate-700">{entidades.clientes.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
+                    <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>
+                    <td className="py-2 pr-4 text-right font-mono tabular-nums text-rose-600">{diffDaysISO(l.dataVencimento, hoje)}</td>
+                    <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Panel>
+    </div>
+  );
+}

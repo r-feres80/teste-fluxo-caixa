@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
-  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, Users, FolderTree,
-  Table2, PieChart,
+  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
+  Table2, PieChart, AlertOctagon,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -20,6 +20,7 @@ import DFCPage from "./pages/DFCPage.jsx";
 import DFCDiretoPage from "./pages/DFCDiretoPage.jsx";
 import ComposicaoCaixaPage from "./pages/ComposicaoCaixaPage.jsx";
 import DREPage from "./pages/DREPage.jsx";
+import InadimplenciaPage from "./pages/InadimplenciaPage.jsx";
 import OrcadoRealizadoPage from "./pages/OrcadoRealizadoPage.jsx";
 import OrcamentoPage from "./pages/OrcamentoPage.jsx";
 import ForecastPage from "./pages/ForecastPage.jsx";
@@ -29,7 +30,6 @@ import ImportarDadosPage from "./pages/ImportarDadosPage.jsx";
 import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
 import EmpresasPage from "./pages/cadastros/EmpresasPage.jsx";
 import UnidadesPage from "./pages/cadastros/UnidadesPage.jsx";
-import ClientesPage from "./pages/cadastros/ClientesPage.jsx";
 import FornecedoresPage from "./pages/cadastros/FornecedoresPage.jsx";
 import BancosPage from "./pages/cadastros/BancosPage.jsx";
 import ContasBancariasPage from "./pages/cadastros/ContasBancariasPage.jsx";
@@ -44,7 +44,7 @@ const NAV = [
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
   { id: "contas-receber", label: "Contas a Receber", icon: ArrowUpCircle, Page: ContasAReceberPage },
-  { id: "clientes", label: "Clientes", icon: Users, Page: ClientesPage },
+  { id: "inadimplencia", label: "Inadimplência", icon: AlertOctagon, Page: InadimplenciaPage },
   { id: "plano-de-contas", label: "Plano de Contas", icon: FolderTree, Page: PlanoDeContasPage },
   { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
   { id: "dfc", label: "DFC Gerencial", icon: FileBarChart, Page: DFCPage },
@@ -63,7 +63,7 @@ const NAV = [
 // Módulos de FATO: sempre a data real do sistema (getDataAtualSistema), sem
 // Data de Referência/Período/Mês/Ano editáveis — nada aqui pode dessincronizar
 // porque não existe mais estado de período para esses módulos lerem.
-const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "dfc-direto", "composicao-caixa", "contas-pagar", "contas-receber", "dre"]);
+const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "dfc-direto", "composicao-caixa", "contas-pagar", "contas-receber", "dre", "inadimplencia"]);
 
 export default function App() {
   const [view, setView] = useState("dashboard");
