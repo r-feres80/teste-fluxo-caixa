@@ -46,6 +46,58 @@ export function KPI({ label, value, sub, tone = "neutral", icon: Icon, basis }) 
   );
 }
 
+// Ponto no arco do velocímetro para um ângulo t em [0,180] (0 = extremo
+// esquerdo/mínimo, 180 = extremo direito/máximo), passando pelo topo em 90.
+function pontoVelocimetro(cx, cy, r, t) {
+  const anguloPadrao = 180 - t;
+  const rad = (anguloPadrao * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
+}
+
+/**
+ * Velocímetro (gauge) semicircular com faixas verde/amarelo/vermelho.
+ * `bands`: lista ascendente [{ upTo, color }] cobrindo de `min` até `max`.
+ * O valor é sempre exibido por extenso (formatValue), mesmo quando excede
+ * `max` — só o ponteiro fica "preso" no extremo do arco.
+ */
+export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub }) {
+  const cx = 110, cy = 100, r = 82, espessura = 18;
+  if (value == null) {
+    return (
+      <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-1">
+        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start">{label}</span>
+        <div className="h-[110px] flex items-center justify-center text-slate-300 text-sm">Sem dados</div>
+      </div>
+    );
+  }
+  const clamped = Math.max(min, Math.min(value, max));
+  const paraAngulo = (v) => ((v - min) / (max - min)) * 180;
+  const ponteiro = pontoVelocimetro(cx, cy, r - espessura / 2 - 8, paraAngulo(clamped));
+
+  let anterior = min;
+  const segmentos = bands.map((b, i) => {
+    const t1 = paraAngulo(anterior);
+    const t2 = paraAngulo(Math.min(b.upTo, max));
+    anterior = b.upTo;
+    const p1 = pontoVelocimetro(cx, cy, r, t1);
+    const p2 = pontoVelocimetro(cx, cy, r, t2);
+    return <path key={i} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`} stroke={b.color} strokeWidth={espessura} fill="none" />;
+  });
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-0.5">
+      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start">{label}</span>
+      <svg viewBox="0 0 220 112" width="100%" height="112">
+        {segmentos}
+        <line x1={cx} y1={cy} x2={ponteiro.x} y2={ponteiro.y} stroke="#1e293b" strokeWidth={3} strokeLinecap="round" />
+        <circle cx={cx} cy={cy} r={5} fill="#1e293b" />
+      </svg>
+      <span className="font-mono tabular-nums text-xl font-semibold text-slate-800 -mt-3">{formatValue(value)}</span>
+      {sub && <span className="text-xs text-slate-500">{sub}</span>}
+    </div>
+  );
+}
+
 export function Badge({ children, tone = "slate" }) {
   const map = {
     emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",

@@ -6,6 +6,7 @@ import { parseISO, getDataAtualSistema } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "./tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "./fluxoCaixa.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "./aging.js";
+import { calcularIndiceLiquidezCaixa } from "./indicadoresCaixa.js";
 import { calcularDRE } from "./dre.js";
 import { excluirTransferencias } from "./lancamentos.js";
 import { construirOrcadoRealizado } from "./orcadoRealizado.js";
@@ -99,6 +100,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
       projetado30dias: caixaProjetado30,
       menorPontoProjetado30dias: menor30 ?? null,
       serieDiaria30dias: serie30,
+      indiceLiquidezCaixa: calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira),
     },
     contasReceber: {
       totalEmAberto: agingAR.totalCarteira,

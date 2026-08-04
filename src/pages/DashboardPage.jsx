@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar } from "recharts";
 import { AlertTriangle } from "lucide-react";
-import { Panel, Badge, BasisHint } from "../components/ui/Primitives.jsx";
+import { Panel, Badge, BasisHint, Gauge } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 
@@ -56,6 +56,25 @@ export default function DashboardPage({ data }) {
         <KpiCard label="EBITDA no ano" value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} basis="competencia" />
         <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia" />
         <KpiCard label="Inadimplência (Receber)" value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Gauge
+          label="Liquidez"
+          value={resumo.caixa.indiceLiquidezCaixa}
+          min={0} max={3}
+          bands={[{ upTo: 1, color: "#f43f5e" }, { upTo: 1.5, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          formatValue={(v) => `${v.toFixed(2)}x`}
+          sub="Caixa Disponível ÷ Contas a Pagar em aberto — <1,0x vermelho, 1,0-1,5x amarelo, >1,5x verde"
+        />
+        <Gauge
+          label="Inadimplência"
+          value={resumo.contasReceber.inadimplenciaPct}
+          min={0} max={20}
+          bands={[{ upTo: 5, color: "#10b981" }, { upTo: 10, color: "#f59e0b" }, { upTo: 20, color: "#f43f5e" }]}
+          formatValue={(v) => `${v.toFixed(1)}%`}
+          sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
+        />
       </div>
 
       <Panel title="Alertas Executivos" subtitle={resumo.alertas.length === 0 ? "Nenhum alerta sustentado pelos dados atuais" : `${resumo.alertas.length} ponto(s) de atenção`}>
