@@ -1,14 +1,45 @@
 import React, { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle } from "lucide-react";
+import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign } from "lucide-react";
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
-import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
+import { fmtBRL, fmtBRLShort, fmtTaxaCambio } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
 import { calcularComposicaoDiaria } from "../financial-engine/composicaoCaixa.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getDataAtualSistema } from "../utils/dateUtils.js";
+import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
+
+// Card de uma moeda dentro do painel de Câmbio — nunca mostra undefined/NaN:
+// sem dado ou API fora do ar, mostra "indisponível" e segue em frente.
+function CambioMoeda({ nome, d }) {
+  if (!d || d.indisponivel) {
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
+        <span className="text-sm text-slate-400">indisponível</span>
+      </div>
+    );
+  }
+  const alta = d.variacaoPct != null && d.variacaoPct >= 0;
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono tabular-nums text-lg font-semibold text-slate-800">{fmtTaxaCambio(d.hoje)}</span>
+        {d.variacaoPct != null && (
+          <span className={`text-xs font-mono ${alta ? "text-emerald-600" : "text-rose-600"}`}>{alta ? "+" : ""}{d.variacaoPct.toFixed(2)}%</span>
+        )}
+      </div>
+      <span className="text-[11px] text-slate-400">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
+      <span className="text-[11px] text-slate-500 pt-1 mt-1 border-t border-slate-100">
+        {nome.split(" ")[0]} — projeção próximo dia útil (EMA5): <span className="font-mono">{fmtTaxaCambio(d.ema5)}</span>
+        {d.ema5AmostraReduzida && <span className="text-amber-600"> · amostra reduzida ({d.ema5AmostraTamanho} dia(s))</span>}
+      </span>
+    </div>
+  );
+}
 
 // Tesouraria é módulo de FATO: saldo é sempre "hoje" real, nunca a Data de
 // Referência editável — ver getDataAtualSistema.
@@ -16,6 +47,7 @@ export default function TesourariaPage({ data }) {
   const { entidades, filtros } = data;
   const hoje = getDataAtualSistema();
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
+  const { carregando: cambioCarregando, dados: cambioDados } = useCambio();
 
   const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
@@ -42,6 +74,18 @@ export default function TesourariaPage({ data }) {
           value={<span className="flex items-baseline gap-1.5 text-lg"><span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span><span className="text-slate-300 text-sm">/</span><span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>}
           sub="Entradas / Saídas (exclui transferências)" tone="neutral" icon={ArrowUpRight} basis="caixa" />
       </div>
+
+      <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
+        {cambioCarregando ? <span className="text-sm text-slate-400">Carregando cotações…</span> : (
+          <div className="grid grid-cols-2 gap-8">
+            <CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} />
+            <CambioMoeda nome="Euro (EUR)" d={cambioDados?.EUR} />
+          </div>
+        )}
+        <p className="text-[11px] text-slate-400 mt-3 pt-3 border-t border-slate-100">
+          EMA5 é uma estimativa estatística de curtíssimo prazo (média móvel exponencial de 5 pregões) — não é cotação futura oficial nem previsão de mercado.
+        </p>
+      </Panel>
 
       <div className="grid grid-cols-2 gap-4">
         <Panel title="Saldo por Conta">

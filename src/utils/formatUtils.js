@@ -11,6 +11,12 @@ export const fmtBRLShort = (v) => {
   return `${sign}R$ ${abs.toFixed(0)}`;
 };
 
+// Cotação de câmbio (4 casas decimais, padrão PTAX) — nunca lança para
+// valores nulos/NaN, sempre retorna "indisponível" nesse caso.
+export const fmtTaxaCambio = (v) =>
+  v == null || isNaN(v) ? "indisponível" : "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+
+
 // Exibição sempre DD/MM/AAAA (item 21), a partir de uma data ISO armazenada.
 // Suporta ambos os formatos: YYYY-MM-DD e DD/MM/YYYY para robustez
 export const fmtData = (data) => {
