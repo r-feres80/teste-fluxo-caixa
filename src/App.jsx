@@ -129,11 +129,12 @@ const INSIGHT_TONE = {
 // componente). Guarda a última ordem exibida por grupo para detectar mudança.
 const ultimaOrdemPorGrupo = {};
 
-// Grade de ícones de um grupo, com reordenação por uso (mais acessado primeiro
+// Grade interna de um bloco/categoria da landing — 2-3 ícones por linha
+// dentro do próprio card, com reordenação por uso (mais acessado primeiro
 // dentro do grupo). Quando a ordem muda em relação à última vez que a landing
 // foi mostrada, os ícones entram com uma pequena transição (fade + leve slide,
 // em cascata) para o usuário perceber o reposicionamento.
-function IconGroupGrid({ group, usage, saude, onSelect, size = "landing" }) {
+function IconGroupGrid({ group, usage, saude, onSelect }) {
   const idsOrdenados = useMemo(
     () => [...group.ids].sort((a, b) => (usage[b] || 0) - (usage[a] || 0)),
     [group.ids, usage]
@@ -146,15 +147,8 @@ function IconGroupGrid({ group, usage, saude, onSelect, size = "landing" }) {
   });
   useEffect(() => { ultimaOrdemPorGrupo[group.title] = chaveOrdem; }, [group.title, chaveOrdem]);
 
-  const tileCls = size === "landing"
-    ? "flex flex-col items-center justify-center gap-2 w-28 p-4 rounded-xl border border-transparent text-center transition-colors hover:bg-white hover:border-slate-200 hover:shadow-sm"
-    : "flex flex-col items-center justify-center gap-1.5 w-24 h-20 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800";
-  const badgeCls = size === "landing"
-    ? `w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`
-    : "";
-
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="grid grid-cols-3 gap-1.5">
       {idsOrdenados.map((id, idx) => {
         const item = ALL_NAV_ITEMS.find((n) => n.id === id);
         if (!item) return null;
@@ -162,20 +156,13 @@ function IconGroupGrid({ group, usage, saude, onSelect, size = "landing" }) {
         const status = saude?.[id];
         return (
           <button key={id} onClick={() => onSelect(id)} title={item.label}
-            className={`${tileCls}${ordemMudou ? " landing-tile-reorder" : ""}`}
+            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-transparent text-center transition-colors hover:bg-slate-50 hover:border-slate-200${ordemMudou ? " landing-tile-reorder" : ""}`}
             style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
-            {size === "landing" ? (
-              <div className="relative">
-                <div className={badgeCls}><Icon size={24} /></div>
-                {status && <span className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-slate-50 ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
-              </div>
-            ) : (
-              <div className="relative">
-                <Icon size={20} />
-                {status && <span className={`absolute -top-1.5 -right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white ${STATUS_DOT[status]}`} />}
-              </div>
-            )}
-            <span className={size === "landing" ? "text-xs leading-tight text-slate-600" : "text-[11px] leading-tight px-1"}>{item.label}</span>
+            <div className="relative">
+              <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={19} /></div>
+              {status && <span className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
+            </div>
+            <span className="text-[11px] leading-tight text-slate-600">{item.label}</span>
           </button>
         );
       })}
@@ -202,8 +189,8 @@ function LandingPage({ onSelect, onVerComoLista, resumo, saude, usage }) {
   const insightTone = saude.dashboard ?? "green";
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-12">
-      <div className="w-full max-w-4xl flex flex-col gap-8">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-10">
+      <div className="w-full max-w-6xl flex flex-col gap-6">
         <div className="flex flex-col items-center text-center gap-3">
           <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
           <div>
@@ -218,11 +205,11 @@ function LandingPage({ onSelect, onVerComoLista, resumo, saude, usage }) {
 
         <InsightDoDia texto={insight} tone={insightTone} />
 
-        <div className="flex flex-col gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {ICON_GROUPS.map((group) => (
-            <div key={group.title}>
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">{group.title}</div>
-              <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} size="landing" />
+            <div key={group.title} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{group.title}</div>
+              <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} />
             </div>
           ))}
         </div>
