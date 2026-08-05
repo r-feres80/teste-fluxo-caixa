@@ -37,6 +37,18 @@ function marcarDesbloqueado() {
   }
 }
 
+// Usado pelo botão "Sair" em App.jsx — encerra a sessão autenticada. Quem
+// chama ainda precisa recarregar a página (window.location.reload()) pra
+// PasswordGate remontar e voltar a pedir a senha; só limpar a chave não
+// tira a tela atual, já que o estado "desbloqueado" vive no componente.
+export function limparSessaoDesbloqueio() {
+  try {
+    window.sessionStorage.removeItem(CHAVE_SESSAO);
+  } catch {
+    // Sem sessionStorage não há sessão pra limpar.
+  }
+}
+
 export default function PasswordGate({ children }) {
   const [desbloqueado, setDesbloqueado] = useState(jaDesbloqueadoNestaSessao);
   const [senha, setSenha] = useState("");

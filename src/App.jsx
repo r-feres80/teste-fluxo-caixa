@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
   Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
-  Table2, PieChart, AlertOctagon, PanelLeft, List, Lightbulb,
+  Table2, PieChart, AlertOctagon, PanelLeft, List, Lightbulb, LogOut,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -10,6 +10,7 @@ import { GlobalFilterBar } from "./components/ui/GlobalFilterBar.jsx";
 import { fmtDataHora } from "./utils/formatUtils.js";
 import { construirResumoExecutivo } from "./financial-engine/resumoExecutivo.js";
 import { calcularSaudeModulos, gerarInsightDoDia } from "./utils/moduleHealth.js";
+import { limparSessaoDesbloqueio } from "./components/PasswordGate.jsx";
 import FinanceCopilotWidget from "./components/copilot/FinanceCopilotWidget.jsx";
 
 import GovernancaPage from "./pages/GovernancaPage.jsx";
@@ -184,12 +185,13 @@ function InsightDoDia({ texto, tone }) {
 
 // Tela de entrada (landing) estilo Omie — launcher em grade colorida por
 // categoria, mostrada ao abrir o app pela primeira vez ou ao clicar no logo.
-function LandingPage({ onSelect, onVerComoLista, resumo, saude, usage }) {
+function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage }) {
   const insight = useMemo(() => gerarInsightDoDia(resumo), [resumo]);
   const insightTone = saude.dashboard ?? "green";
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-10">
+      <LogoutButton onLogout={onLogout} />
       <div className="w-full max-w-6xl flex flex-col gap-6">
         <div className="flex flex-col items-center text-center gap-3">
           <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
@@ -245,13 +247,26 @@ function IconGridNav({ view, setView }) {
   );
 }
 
-function NavModeToggle({ navMode, setNavMode }) {
+function NavModeToggle({ navMode, setNavMode, onLogout }) {
   const pill = (active) => `flex items-center justify-center w-8 h-8 rounded-md transition-colors ${active ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
   return (
     <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
       <button onClick={() => setNavMode("sidebar")} title="Barra lateral" className={pill(navMode === "sidebar")}><PanelLeft size={15} /></button>
       <button onClick={() => setNavMode("icons")} title="Ícones" className={pill(navMode === "icons")}><LayoutGrid size={15} /></button>
+      <span className="w-px h-5 bg-slate-200 mx-0.5" />
+      <button onClick={onLogout} title="Sair" className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
     </div>
+  );
+}
+
+// Mesmo controle de "Sair" da NavModeToggle, mas sozinho — usado na landing,
+// que não tem o toggle sidebar/ícones (não existe tela ativa lá).
+function LogoutButton({ onLogout }) {
+  return (
+    <button onClick={onLogout} title="Sair"
+      className="fixed top-4 right-4 z-50 flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors">
+      <LogOut size={15} />
+    </button>
   );
 }
 
@@ -282,6 +297,14 @@ export default function App() {
     setView(id);
   };
 
+  // Encerra a sessão autenticada (PasswordGate) e recarrega — mais simples e
+  // robusto que tentar repropagar "trancado de novo" por props/estado: a
+  // recarga garante que nenhum estado da sessão anterior sobra na tela.
+  const sair = () => {
+    limparSessaoDesbloqueio();
+    window.location.reload();
+  };
+
   if (!appData.loaded) {
     return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">Carregando…</div>;
   }
@@ -294,6 +317,7 @@ export default function App() {
         usage={usage}
         onSelect={(id) => { irPara(id); setNavMode("sidebar"); }}
         onVerComoLista={() => { irPara("dashboard"); setNavMode("sidebar"); }}
+        onLogout={sair}
       />
     );
   }
@@ -317,7 +341,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex">
-      <NavModeToggle navMode={navMode} setNavMode={setNavMode} />
+      <NavModeToggle navMode={navMode} setNavMode={setNavMode} onLogout={sair} />
 
       {navMode === "sidebar" && (
         <aside className="w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col">
