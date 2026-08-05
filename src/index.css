@@ -4,3 +4,10 @@
 
 html, body, #root { height: 100%; }
 body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+
+/* Landing page: pequena transição quando a ordenação por uso muda (App.jsx, IconGroupGrid). */
+@keyframes landingTileReorder {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.landing-tile-reorder { animation: landingTileReorder 380ms ease both; }

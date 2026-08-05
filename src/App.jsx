@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
   Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
-  Table2, PieChart, AlertOctagon, PanelLeft, List,
+  Table2, PieChart, AlertOctagon, PanelLeft, List, Lightbulb,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
 import { GlobalFilterBar } from "./components/ui/GlobalFilterBar.jsx";
 import { fmtDataHora } from "./utils/formatUtils.js";
+import { construirResumoExecutivo } from "./financial-engine/resumoExecutivo.js";
+import { calcularSaudeModulos, gerarInsightDoDia } from "./utils/moduleHealth.js";
 import FinanceCopilotWidget from "./components/copilot/FinanceCopilotWidget.jsx";
 
 import GovernancaPage from "./pages/GovernancaPage.jsx";
@@ -90,12 +92,118 @@ const GROUP_ACCENT = {
   "Controladoria": "bg-slate-500",
 };
 
+// Contagem de acesso por módulo (item 3 — ordenação adaptativa da landing).
+// Puramente local: nunca sai do navegador, não é dado de negócio nem é
+// persistido junto do estado financeiro (chave própria no localStorage).
+const USAGE_STORAGE_KEY = "cfo-fi-v2-module-usage";
+
+function lerUsoModulos() {
+  try {
+    return JSON.parse(window.localStorage.getItem(USAGE_STORAGE_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function gravarUsoModulos(usage) {
+  try {
+    window.localStorage.setItem(USAGE_STORAGE_KEY, JSON.stringify(usage));
+  } catch {
+    // localStorage indisponível — a ordenação simplesmente não persiste entre sessões.
+  }
+}
+
+// Classes literais (não interpoladas) para o Tailwind JIT — cor do pontinho
+// de saúde por trás dos cortes de calcularSaudeModulos().
+const STATUS_DOT = { red: "bg-rose-500", amber: "bg-amber-500", green: "bg-emerald-500" };
+
+const INSIGHT_TONE = {
+  red: { wrap: "bg-rose-50 border-rose-200 text-rose-700", icon: "text-rose-500" },
+  amber: { wrap: "bg-amber-50 border-amber-200 text-amber-700", icon: "text-amber-500" },
+  green: { wrap: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "text-emerald-500" },
+};
+
+// Memória entre montagens da LandingPage (ela desmonta a cada navegação, então
+// um "antes/depois" de posição em DOM não sobrevive entre uma visita e outra —
+// por isso a comparação de ordem fica aqui fora, no módulo, não em ref de
+// componente). Guarda a última ordem exibida por grupo para detectar mudança.
+const ultimaOrdemPorGrupo = {};
+
+// Grade de ícones de um grupo, com reordenação por uso (mais acessado primeiro
+// dentro do grupo). Quando a ordem muda em relação à última vez que a landing
+// foi mostrada, os ícones entram com uma pequena transição (fade + leve slide,
+// em cascata) para o usuário perceber o reposicionamento.
+function IconGroupGrid({ group, usage, saude, onSelect, size = "landing" }) {
+  const idsOrdenados = useMemo(
+    () => [...group.ids].sort((a, b) => (usage[b] || 0) - (usage[a] || 0)),
+    [group.ids, usage]
+  );
+  const chaveOrdem = idsOrdenados.join(",");
+
+  const [ordemMudou] = useState(() => {
+    const anterior = ultimaOrdemPorGrupo[group.title];
+    return anterior != null && anterior !== chaveOrdem;
+  });
+  useEffect(() => { ultimaOrdemPorGrupo[group.title] = chaveOrdem; }, [group.title, chaveOrdem]);
+
+  const tileCls = size === "landing"
+    ? "flex flex-col items-center justify-center gap-2 w-28 p-4 rounded-xl border border-transparent text-center transition-colors hover:bg-white hover:border-slate-200 hover:shadow-sm"
+    : "flex flex-col items-center justify-center gap-1.5 w-24 h-20 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800";
+  const badgeCls = size === "landing"
+    ? `w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`
+    : "";
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      {idsOrdenados.map((id, idx) => {
+        const item = ALL_NAV_ITEMS.find((n) => n.id === id);
+        if (!item) return null;
+        const Icon = item.icon;
+        const status = saude?.[id];
+        return (
+          <button key={id} onClick={() => onSelect(id)} title={item.label}
+            className={`${tileCls}${ordemMudou ? " landing-tile-reorder" : ""}`}
+            style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
+            {size === "landing" ? (
+              <div className="relative">
+                <div className={badgeCls}><Icon size={24} /></div>
+                {status && <span className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-slate-50 ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
+              </div>
+            ) : (
+              <div className="relative">
+                <Icon size={20} />
+                {status && <span className={`absolute -top-1.5 -right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white ${STATUS_DOT[status]}`} />}
+              </div>
+            )}
+            <span className={size === "landing" ? "text-xs leading-tight text-slate-600" : "text-[11px] leading-tight px-1"}>{item.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// Faixa "Insight do dia" — frase curta derivada localmente do Resumo
+// Executivo (mesmos alertas do Dashboard), sem chamada externa.
+function InsightDoDia({ texto, tone }) {
+  const cores = INSIGHT_TONE[tone] ?? INSIGHT_TONE.green;
+  return (
+    <div className={`flex items-center gap-2.5 border rounded-lg px-4 py-2.5 text-sm ${cores.wrap}`}>
+      <Lightbulb size={16} className={`shrink-0 ${cores.icon}`} />
+      <span>{texto}</span>
+    </div>
+  );
+}
+
 // Tela de entrada (landing) estilo Omie — launcher em grade colorida por
 // categoria, mostrada ao abrir o app pela primeira vez ou ao clicar no logo.
-function LandingPage({ onSelect, onVerComoLista }) {
+function LandingPage({ onSelect, onVerComoLista, resumo, saude, usage }) {
+  const insight = useMemo(() => gerarInsightDoDia(resumo), [resumo]);
+  const insightTone = saude.dashboard ?? "green";
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-12">
-      <div className="w-full max-w-4xl flex flex-col gap-10">
+      <div className="w-full max-w-4xl flex flex-col gap-8">
         <div className="flex flex-col items-center text-center gap-3">
           <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
           <div>
@@ -108,26 +216,13 @@ function LandingPage({ onSelect, onVerComoLista }) {
           </button>
         </div>
 
+        <InsightDoDia texto={insight} tone={insightTone} />
+
         <div className="flex flex-col gap-8">
           {ICON_GROUPS.map((group) => (
             <div key={group.title}>
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">{group.title}</div>
-              <div className="flex flex-wrap gap-3">
-                {group.ids.map((id) => {
-                  const item = ALL_NAV_ITEMS.find((n) => n.id === id);
-                  if (!item) return null;
-                  const Icon = item.icon;
-                  return (
-                    <button key={id} onClick={() => onSelect(id)}
-                      className="flex flex-col items-center justify-center gap-2 w-28 p-4 rounded-xl border border-transparent text-center transition-colors hover:bg-white hover:border-slate-200 hover:shadow-sm">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}>
-                        <Icon size={24} />
-                      </div>
-                      <span className="text-xs leading-tight text-slate-600">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} size="landing" />
             </div>
           ))}
         </div>
@@ -178,7 +273,27 @@ export default function App() {
   // clicar no logo/"Início". Selecionar qualquer tela sai da landing.
   const [view, setView] = useState(null);
   const [navMode, setNavMode] = useState("sidebar");
+  const [usage, setUsage] = useState(lerUsoModulos);
   const appData = useAppData();
+
+  // Mesma fonte usada pelo Dashboard/Finance Copilot — a landing não
+  // recalcula indicador nenhum, só lê o Resumo Executivo já existente.
+  const resumo = useMemo(
+    () => construirResumoExecutivo({ entidades: appData.entidades, filtros: appData.filtros, parametros: appData.parametros }),
+    [appData.entidades, appData.filtros, appData.parametros]
+  );
+  const saude = useMemo(() => calcularSaudeModulos(resumo), [resumo]);
+
+  // Navegação instrumentada: toda troca de tela (landing, sidebar ou modo
+  // ícones) conta como acesso ao módulo, para a ordenação adaptativa da landing.
+  const irPara = (id) => {
+    setUsage((atual) => {
+      const proximo = { ...atual, [id]: (atual[id] || 0) + 1 };
+      gravarUsoModulos(proximo);
+      return proximo;
+    });
+    setView(id);
+  };
 
   if (!appData.loaded) {
     return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">Carregando…</div>;
@@ -187,8 +302,11 @@ export default function App() {
   if (view === null) {
     return (
       <LandingPage
-        onSelect={(id) => { setView(id); setNavMode("sidebar"); }}
-        onVerComoLista={() => { setView("dashboard"); setNavMode("sidebar"); }}
+        resumo={resumo}
+        saude={saude}
+        usage={usage}
+        onSelect={(id) => { irPara(id); setNavMode("sidebar"); }}
+        onVerComoLista={() => { irPara("dashboard"); setNavMode("sidebar"); }}
       />
     );
   }
@@ -232,14 +350,14 @@ export default function App() {
               const Icon = n.icon;
               const active = view === n.id;
               return (
-                <button key={n.id} onClick={() => setView(n.id)}
+                <button key={n.id} onClick={() => irPara(n.id)}
                   className={`w-full flex items-center justify-between gap-2 px-5 py-2.5 text-sm transition-colors ${active ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
                   <span className="flex items-center gap-3"><Icon size={16} />{n.label}</span>
                 </button>
               );
             })}
 
-            <button onClick={() => setView("governanca")}
+            <button onClick={() => irPara("governanca")}
               className={`w-full flex items-center gap-3 px-5 py-2.5 text-sm mt-1 border-t border-slate-100 transition-colors ${view === "governanca" ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
               <Settings2 size={16} />Governança
             </button>
@@ -268,7 +386,7 @@ export default function App() {
           </div>
         )}
 
-        {navMode === "icons" && <IconGridNav view={view} setView={setView} />}
+        {navMode === "icons" && <IconGridNav view={view} setView={irPara} />}
 
         {conteudo}
       </main>
