@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
   Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
-  Table2, PieChart, AlertOctagon, PanelLeft,
+  Table2, PieChart, AlertOctagon, PanelLeft, List,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -80,6 +80,62 @@ const ICON_GROUPS = [
   { title: "Controladoria", ids: ["dre", "plano-de-contas", "lancamentos", "importar", "importar-orcamento", "governanca"] },
 ];
 
+// Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
+const GROUP_ACCENT = {
+  "Visão Geral": "bg-emerald-500",
+  "Tesouraria": "bg-blue-500",
+  "AP/AR": "bg-amber-500",
+  "Fluxo de Caixa": "bg-teal-500",
+  "Planejamento (FP&A)": "bg-violet-500",
+  "Controladoria": "bg-slate-500",
+};
+
+// Tela de entrada (landing) estilo Omie — launcher em grade colorida por
+// categoria, mostrada ao abrir o app pela primeira vez ou ao clicar no logo.
+function LandingPage({ onSelect, onVerComoLista }) {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-12">
+      <div className="w-full max-w-4xl flex flex-col gap-10">
+        <div className="flex flex-col items-center text-center gap-3">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
+          <div>
+            <div className="text-slate-900 font-semibold text-2xl leading-tight">{APP_NAME}</div>
+            <div className="text-slate-400 text-sm mt-1">{APP_TAGLINE}</div>
+          </div>
+          <button onClick={onVerComoLista}
+            className="mt-2 flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-700 transition-colors">
+            <List size={14} />Ver como lista
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          {ICON_GROUPS.map((group) => (
+            <div key={group.title}>
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">{group.title}</div>
+              <div className="flex flex-wrap gap-3">
+                {group.ids.map((id) => {
+                  const item = ALL_NAV_ITEMS.find((n) => n.id === id);
+                  if (!item) return null;
+                  const Icon = item.icon;
+                  return (
+                    <button key={id} onClick={() => onSelect(id)}
+                      className="flex flex-col items-center justify-center gap-2 w-28 p-4 rounded-xl border border-transparent text-center transition-colors hover:bg-white hover:border-slate-200 hover:shadow-sm">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}>
+                        <Icon size={24} />
+                      </div>
+                      <span className="text-xs leading-tight text-slate-600">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function IconGridNav({ view, setView }) {
   return (
     <div className="bg-white border-b border-slate-200 px-8 py-5 flex flex-col gap-5">
@@ -118,12 +174,23 @@ function NavModeToggle({ navMode, setNavMode }) {
 }
 
 export default function App() {
-  const [view, setView] = useState("dashboard");
+  // view=null é a tela de entrada (landing) — mostrada ao abrir o app e ao
+  // clicar no logo/"Início". Selecionar qualquer tela sai da landing.
+  const [view, setView] = useState(null);
   const [navMode, setNavMode] = useState("sidebar");
   const appData = useAppData();
 
   if (!appData.loaded) {
     return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">Carregando…</div>;
+  }
+
+  if (view === null) {
+    return (
+      <LandingPage
+        onSelect={(id) => { setView(id); setNavMode("sidebar"); }}
+        onVerComoLista={() => { setView("dashboard"); setNavMode("sidebar"); }}
+      />
+    );
   }
 
   const navAtivo = NAV.find((n) => n.id === view);
@@ -150,13 +217,13 @@ export default function App() {
       {navMode === "sidebar" && (
         <aside className="w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col">
           <div className="px-5 py-5 border-b border-slate-200">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center"><Sparkles size={15} className="text-slate-950" /></div>
+            <button onClick={() => setView(null)} title="Início" className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
               <div>
                 <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
                 <div className="text-slate-600 text-[11px] mt-0.5">Gestão Financeira Gerencial</div>
               </div>
-            </div>
+            </button>
             <div className="text-slate-400 text-[10px] mt-3 leading-snug">{APP_TAGLINE}</div>
           </div>
 
@@ -191,11 +258,13 @@ export default function App() {
       <main className="flex-1 min-w-0">
         {navMode === "icons" && (
           <div className="bg-white border-b border-slate-200 px-8 py-3 flex items-center gap-2">
-            <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
-            <div>
-              <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
-              <div className="text-slate-400 text-[10px] mt-0.5">{APP_TAGLINE}</div>
-            </div>
+            <button onClick={() => setView(null)} title="Início" className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
+              <div>
+                <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
+                <div className="text-slate-400 text-[10px] mt-0.5">{APP_TAGLINE}</div>
+              </div>
+            </button>
           </div>
         )}
 
