@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
   Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
-  Table2, PieChart, AlertOctagon, PanelLeft, List, Lightbulb, LogOut,
+  Table2, PieChart, AlertOctagon, PanelLeft, List, Lightbulb, LogOut, ChevronRight, ChevronDown,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useAppData } from "./hooks/useAppData.js";
@@ -130,12 +130,15 @@ const INSIGHT_TONE = {
 // componente). Guarda a última ordem exibida por grupo para detectar mudança.
 const ultimaOrdemPorGrupo = {};
 
-// Grade interna de um bloco/categoria da landing — 2-3 ícones por linha
-// dentro do próprio card, com reordenação por uso (mais acessado primeiro
-// dentro do grupo). Quando a ordem muda em relação à última vez que a landing
-// foi mostrada, os ícones entram com uma pequena transição (fade + leve slide,
-// em cascata) para o usuário perceber o reposicionamento.
-function IconGroupGrid({ group, usage, saude, onSelect }) {
+// Grade interna de um bloco/categoria — mesmo componente visual usado na
+// Landing (cores por categoria, badge de saúde, reordenação por uso) e no
+// modo ícones compacto dentro de uma tela (toggle sidebar↔ícones) — só muda
+// a densidade (`compact`) e, no modo compacto, qual item está ativo
+// (`activeId`, sem efeito na Landing, que nunca passa essa prop). 2-3 ícones
+// por linha dentro do próprio bloco, com reordenação por uso (mais acessado
+// primeiro no grupo); quando a ordem muda em relação à última vez que esse
+// grid foi mostrado, os ícones entram com uma pequena transição em cascata.
+function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = false }) {
   const idsOrdenados = useMemo(
     () => [...group.ids].sort((a, b) => (usage[b] || 0) - (usage[a] || 0)),
     [group.ids, usage]
@@ -148,6 +151,9 @@ function IconGroupGrid({ group, usage, saude, onSelect }) {
   });
   useEffect(() => { ultimaOrdemPorGrupo[group.title] = chaveOrdem; }, [group.title, chaveOrdem]);
 
+  const badgeSize = compact ? "w-9 h-9 rounded-lg" : "w-11 h-11 rounded-xl";
+  const iconSize = compact ? 16 : 19;
+
   return (
     <div className="grid grid-cols-3 gap-1.5">
       {idsOrdenados.map((id, idx) => {
@@ -155,15 +161,16 @@ function IconGroupGrid({ group, usage, saude, onSelect }) {
         if (!item) return null;
         const Icon = item.icon;
         const status = saude?.[id];
+        const ativo = activeId === id;
         return (
           <button key={id} onClick={() => onSelect(id)} title={item.label}
-            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-transparent text-center transition-colors hover:bg-slate-50 hover:border-slate-200${ordemMudou ? " landing-tile-reorder" : ""}`}
+            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border text-center transition-colors ${ativo ? "border-emerald-300 bg-emerald-50" : "border-transparent hover:bg-slate-50 hover:border-slate-200"}${ordemMudou ? " landing-tile-reorder" : ""}`}
             style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
             <div className="relative">
-              <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={19} /></div>
+              <div className={`${badgeSize} flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={iconSize} /></div>
               {status && <span className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
             </div>
-            <span className="text-[11px] leading-tight text-slate-600">{item.label}</span>
+            <span className={`text-[11px] leading-tight ${ativo ? "text-emerald-700 font-medium" : "text-slate-600"}`}>{item.label}</span>
           </button>
         );
       })}
@@ -220,30 +227,85 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
   );
 }
 
-function IconGridNav({ view, setView }) {
+// Modo ícones compacto (toggle sidebar↔ícones dentro de uma tela) — mesmo
+// visual da Landing (blocos por categoria, cores, badge de saúde), só mais
+// denso, pra caber acima do conteúdo da página em vez de ocupar a tela toda.
+function IconGridNav({ view, setView, saude, usage }) {
   return (
-    <div className="bg-white border-b border-slate-200 px-8 py-5 flex flex-col gap-5">
+    <div className="bg-white border-b border-slate-200 px-8 py-4 flex flex-wrap gap-3">
       {ICON_GROUPS.map((group) => (
-        <div key={group.title}>
-          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-2">{group.title}</div>
-          <div className="flex flex-wrap gap-2">
-            {group.ids.map((id) => {
+        <div key={group.title} className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex flex-col gap-2">
+          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{group.title}</div>
+          <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={setView} activeId={view} compact />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function grupoDoId(id) {
+  return ICON_GROUPS.find((g) => g.ids.includes(id))?.title;
+}
+
+// Barra lateral em árvore Categoria → tela, mesmo padrão de expand/colapso já
+// usado em DFC Direto (Grupo → Subgrupo → Conta): cada categoria é um item
+// recolhível: clicar no cabeçalho abre/fecha, clicar numa tela dentro navega
+// direto. O grupo da tela ativa abre automaticamente ao navegar (sem fechar
+// grupos que o usuário tenha aberto manualmente) — sempre fica visível qual
+// categoria está "corrente", mesmo que o usuário tenha recolhido outras.
+function SidebarNav({ view, irPara, saude }) {
+  const [gruposAbertos, setGruposAbertos] = useState(() => {
+    const grupo = grupoDoId(view);
+    return new Set(grupo ? [grupo] : []);
+  });
+
+  useEffect(() => {
+    const grupo = grupoDoId(view);
+    if (!grupo) return;
+    setGruposAbertos((atual) => (atual.has(grupo) ? atual : new Set(atual).add(grupo)));
+  }, [view]);
+
+  const toggleGrupo = (title) => setGruposAbertos((atual) => {
+    const novo = new Set(atual);
+    if (novo.has(title)) novo.delete(title); else novo.add(title);
+    return novo;
+  });
+
+  return (
+    <nav className="flex-1 py-2 overflow-y-auto">
+      {ICON_GROUPS.map((group) => {
+        const aberto = gruposAbertos.has(group.title);
+        const grupoAtivo = grupoDoId(view) === group.title;
+        return (
+          <div key={group.title}>
+            <button onClick={() => toggleGrupo(group.title)}
+              className={`w-full flex items-center gap-2 px-5 py-2 text-[11px] font-semibold uppercase tracking-wide transition-colors ${grupoAtivo ? "text-emerald-700" : "text-slate-400 hover:text-slate-600"}`}>
+              {aberto ? <ChevronDown size={13} className="shrink-0" /> : <ChevronRight size={13} className="shrink-0" />}
+              <span className={`w-2 h-2 rounded-full shrink-0 ${GROUP_ACCENT[group.title]}`} />
+              <span className="flex-1 text-left truncate">{group.title}</span>
+            </button>
+
+            {aberto && group.ids.map((id) => {
               const item = ALL_NAV_ITEMS.find((n) => n.id === id);
               if (!item) return null;
               const Icon = item.icon;
               const active = view === id;
+              const status = saude?.[id];
               return (
-                <button key={id} onClick={() => setView(id)} title={item.label}
-                  className={`flex flex-col items-center justify-center gap-1.5 w-24 h-20 rounded-lg border text-center transition-colors ${active ? "bg-emerald-50 border-emerald-300 text-emerald-700" : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800"}`}>
-                  <Icon size={20} />
-                  <span className="text-[11px] leading-tight px-1">{item.label}</span>
+                <button key={id} onClick={() => irPara(id)}
+                  className={`w-full flex items-center gap-3 pl-11 pr-5 py-2 text-sm transition-colors ${active ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
+                  <span className="relative shrink-0">
+                    <Icon size={15} />
+                    {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
+                  </span>
+                  <span className="truncate">{item.label}</span>
                 </button>
               );
             })}
           </div>
-        </div>
-      ))}
-    </div>
+        );
+      })}
+    </nav>
   );
 }
 
@@ -356,23 +418,7 @@ export default function App() {
             <div className="text-slate-400 text-[10px] mt-3 leading-snug">{APP_TAGLINE}</div>
           </div>
 
-          <nav className="flex-1 py-3 overflow-y-auto">
-            {NAV.map((n) => {
-              const Icon = n.icon;
-              const active = view === n.id;
-              return (
-                <button key={n.id} onClick={() => irPara(n.id)}
-                  className={`w-full flex items-center justify-between gap-2 px-5 py-2.5 text-sm transition-colors ${active ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
-                  <span className="flex items-center gap-3"><Icon size={16} />{n.label}</span>
-                </button>
-              );
-            })}
-
-            <button onClick={() => irPara("governanca")}
-              className={`w-full flex items-center gap-3 px-5 py-2.5 text-sm mt-1 border-t border-slate-100 transition-colors ${view === "governanca" ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
-              <Settings2 size={16} />Governança
-            </button>
-          </nav>
+          <SidebarNav view={view} irPara={irPara} saude={saude} />
 
           <div className="px-5 py-4 border-t border-slate-200 flex flex-col gap-2">
             <div className="flex items-center gap-2 text-[11px] text-slate-500">
@@ -397,7 +443,7 @@ export default function App() {
           </div>
         )}
 
-        {navMode === "icons" && <IconGridNav view={view} setView={irPara} />}
+        {navMode === "icons" && <IconGridNav view={view} setView={irPara} saude={saude} usage={usage} />}
 
         {conteudo}
       </main>
