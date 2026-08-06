@@ -25,6 +25,7 @@ import { todayISO, diffDaysISO, startOfMonthISO, endOfMonthISO, addDaysISO } fro
 const AP_ABERTO_MIN = 380000, AP_ABERTO_MAX = 470000;
 const AR_ABERTO_MIN = 550000, AR_ABERTO_MAX = 660000;
 const LIQUIDEZ_MIN = 1.5, LIQUIDEZ_MAX = 1.7;
+// Margem EBITDA-alvo (checkpoint seguinte): 10-15% da Receita Bruta no ano.
 
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -91,8 +92,10 @@ const lancamentosYTD = demoLancamentos.filter((l) => {
   return ano === anoRefYTD && (mes - 1) <= mesAtualIdx;
 });
 const dreYTD = calcularDRE(lancamentosYTD, demoPlanoDeContas);
+const margemEbitda = dreYTD.receitaBruta > 0 ? (dreYTD.ebitda / dreYTD.receitaBruta) * 100 : null;
 console.log("Receita Bruta no ano:", fmt(dreYTD.receitaBruta));
-console.log("EBITDA no ano:", fmt(dreYTD.ebitda), dreYTD.ebitda >= 0 ? "positivo" : "NEGATIVO (fora de escopo nesta rodada — decisão do usuário, ver checkpoint Leva 3)");
+console.log("EBITDA no ano:", fmt(dreYTD.ebitda), "| margem:", margemEbitda == null ? "—" : margemEbitda.toFixed(1) + "%",
+  margemEbitda != null && margemEbitda >= 10 && margemEbitda <= 15 ? "OK (10%-15% da Receita Bruta)" : "FORA DA FAIXA");
 
 console.log("\n=== DFC do mês corrente (Waterfall) ===");
 const anoRef = Number(HOJE.slice(0, 4)), mesRef = Number(HOJE.slice(5, 7)) - 1;
