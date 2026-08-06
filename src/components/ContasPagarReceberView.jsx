@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, CartesianGrid, ComposedChart, Legend } from "recharts";
-import { Panel, KPI, InfoNote } from "./ui/Primitives.jsx";
+import { Panel, KPI, InfoNote, selectCls } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos,
@@ -32,6 +32,21 @@ export function ContasPagarReceberView({ data, tipo }) {
   const proximos15 = useMemo(() => vencimentosProximos(abertos, hoje, 15), [abertos, hoje]);
   const proximos30 = useMemo(() => vencimentosProximos(abertos, hoje, 30), [abertos, hoje]);
   const vencimentosHoje = abertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
+
+  // Filtro de "Títulos em Aberto": vencimento (faixa) + status, com totalizador
+  // do resultado filtrado — ver item 8/Etapa 3.
+  const [fVencimento, setFVencimento] = useState("todos");
+  const [fSituacao, setFSituacao] = useState("TODAS");
+  const abertosFiltrados = useMemo(() => abertos.filter((l) => {
+    const sit = situacaoEfetiva(l, hoje);
+    if (fSituacao !== "TODAS" && sit !== fSituacao) return false;
+    if (fVencimento === "todos") return true;
+    const diasAteVencer = diffDaysISO(hoje, l.dataVencimento);
+    if (fVencimento === "vencidos") return diasAteVencer < 0;
+    if (fVencimento === "hoje") return diasAteVencer === 0;
+    return diasAteVencer >= 0 && diasAteVencer <= Number(fVencimento);
+  }), [abertos, fSituacao, fVencimento, hoje]);
+  const totalFiltrado = abertosFiltrados.reduce((s, l) => s + l.valor, 0);
 
   const realizadoNoMes = useMemo(() => {
     const [ano, mes] = hoje.slice(0, 7).split("-").map(Number);
@@ -180,13 +195,33 @@ export function ContasPagarReceberView({ data, tipo }) {
           — é o módulo dedicado a risco de recebíveis vencidos, PDD não
           precisa ser duplicado aqui em Contas a Receber. */}
 
-      <Panel title={`Títulos em Aberto — ${rotuloParceiro}`}>
-        {abertos.length === 0 ? <InfoNote>Nenhum título em aberto para os filtros atuais.</InfoNote> : (
+      <Panel
+        title={`Títulos em Aberto — ${rotuloParceiro}`}
+        right={
+          <div className="flex items-center gap-2">
+            <select value={fVencimento} onChange={(e) => setFVencimento(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="todos">Todos vencimentos</option>
+              <option value="vencidos">Vencidos</option>
+              <option value="hoje">Hoje</option>
+              <option value="7">Próximos 7 dias</option>
+              <option value="15">Próximos 15 dias</option>
+              <option value="30">Próximos 30 dias</option>
+            </select>
+            <select value={fSituacao} onChange={(e) => setFSituacao(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="TODAS">Todas situações</option>
+              <option value="Previsto">Previsto</option>
+              <option value="Em aberto">Em aberto</option>
+              <option value="Vencido">Vencido</option>
+            </select>
+          </div>
+        }
+      >
+        {abertosFiltrados.length === 0 ? <InfoNote>Nenhum título em aberto para os filtros atuais.</InfoNote> : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">{rotuloParceiro}</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4">Situação</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
-                {abertos.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
+                {abertosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
                   <tr key={l.id} className="border-b border-slate-100">
                     <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
                     <td className="py-2 pr-4 text-slate-700">{listaParceiros.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
@@ -197,6 +232,10 @@ export function ContasPagarReceberView({ data, tipo }) {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-between items-center text-sm font-medium text-slate-600 mt-3 pt-3 border-t border-slate-200">
+              <span>{abertosFiltrados.length} título(s)</span>
+              <span className="font-mono tabular-nums">{fmtBRL(totalFiltrado)}</span>
+            </div>
           </div>
         )}
       </Panel>
