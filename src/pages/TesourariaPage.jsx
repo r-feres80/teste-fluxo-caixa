@@ -283,7 +283,10 @@ export default function TesourariaPage({ data }) {
             </ResponsiveContainer>
           </Panel>
 
-          <Panel title="Quebra por Conta Bancária">
+          <Panel
+            title="Quebra por Conta Bancária"
+            right={<Info size={13} className="text-slate-300 shrink-0 cursor-help" title="% de cada conta bancária que teve baixa Antecipada, Em dia ou Atrasada em relação ao vencimento — mesmo critério da Composição do Caixa acima, quebrado por conta em vez do consolidado." />}
+          >
             {composicaoPorContaBancaria.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado.</span> : (
               <table className="w-full text-sm">
                 <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
@@ -304,6 +307,12 @@ export default function TesourariaPage({ data }) {
           </Panel>
         </div>
 
+        {/* Decisão item 5/Etapa 4: manter a separação Cliente/Fornecedor —
+            é o único lugar do app que mostra pontualidade (Antecipado/Em
+            dia/Atrasado) por parceiro individual; "Quebra por Conta
+            Bancária" acima é a mesma métrica por conta, e Contas a Pagar/
+            Receber mostra concentração por parceiro em R$, não pontualidade.
+            Cortes diferentes do mesmo dado, não duplicidade. */}
         <Panel title="Composição por Cliente/Fornecedor" subtitle="Top 6 por volume Realizado">
           {composicaoPorParceiro.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado com parceiro vinculado.</span> : (
             <div className="flex flex-wrap gap-6 justify-around">
