@@ -32,6 +32,19 @@ const DEFAULT_FILTROS = {
   tipoPeriodo: "mes",
 };
 
+// Snapshot da massa demo pronta pra usar — os arrays demo* já são gerados
+// (gerarMassaSintetica) com HOJE real desta carga de página, então isto é
+// sempre "fresco" no momento em que o módulo é avaliado.
+const demoFresco = () => ({
+  entidades: {
+    empresas: [...demoEmpresas], unidades: [...demoUnidades], clientes: [...demoClientes], fornecedores: [...demoFornecedores],
+    bancos: [...demoBancos], contasBancarias: [...demoContasBancarias], projetos: [...demoProjetos],
+    planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
+    lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens],
+  },
+  origemBase: "demo", demoGeradoEm: HOJE_ISO,
+});
+
 export function useAppData() {
   const [loaded, setLoaded] = useState(false);
   const [entidades, setEntidades] = useState(criarEntidadesVazias);
@@ -39,13 +52,33 @@ export function useAppData() {
   const [parametros, setParametros] = useState(DEFAULT_PARAMETROS);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [savedFlash, setSavedFlash] = useState(false);
+  // origemBase rastreia se a base atual é "demo" (auto-gerada) ou "usuario"
+  // (qualquer addItem/updateItem/removeItem já marca "usuario", pra nunca
+  // sobrescrever dado real). Só serve pra decidir se é seguro auto-atualizar
+  // a base ao detectar que ela ficou de um dia anterior — ver useEffect abaixo.
+  const origemBaseRef = useRef(null);
   const initialLoad = useRef(true);
 
   useEffect(() => {
     (async () => {
       const s = await storageService.getItem(STORAGE_KEY);
       if (s) {
-        setEntidades(s.entidades ?? criarEntidadesVazias());
+        // Base demo persistida de um dia anterior ("hoje" real já mudou):
+        // módulos de FATO (Tesouraria, Dashboard, ...) leem sempre a data
+        // real do sistema, então lançamentos com datas relativas ao HOJE de
+        // ontem (ex.: "Movimento de Hoje") ficam permanentemente zerados até
+        // alguém clicar "Carregar Dados Demonstrativos" de novo. Como é
+        // 100% dado fictício (nunca real do usuário), é seguro regenerar
+        // silenciosamente aqui — nunca faríamos isso se origemBase for
+        // "usuario".
+        if (s.origemBase === "demo" && s.demoGeradoEm !== HOJE_ISO) {
+          const fresco = demoFresco();
+          origemBaseRef.current = fresco.origemBase;
+          setEntidades(fresco.entidades);
+        } else {
+          origemBaseRef.current = s.origemBase ?? null;
+          setEntidades(s.entidades ?? criarEntidadesVazias());
+        }
         setFiltros(s.filtros ?? DEFAULT_FILTROS);
         setParametros(s.parametros ?? DEFAULT_PARAMETROS);
         setLastUpdated(s.lastUpdated ?? null);
@@ -59,7 +92,10 @@ export function useAppData() {
     if (!loaded) return;
     const t = setTimeout(async () => {
       const now = new Date().toISOString();
-      await storageService.setItem(STORAGE_KEY, { entidades, filtros, parametros, lastUpdated: now });
+      await storageService.setItem(STORAGE_KEY, {
+        entidades, filtros, parametros, lastUpdated: now,
+        origemBase: origemBaseRef.current, demoGeradoEm: origemBaseRef.current === "demo" ? HOJE_ISO : undefined,
+      });
       setLastUpdated(now);
       setSavedFlash(true);
       setTimeout(() => setSavedFlash(false), 1200);
@@ -84,33 +120,34 @@ export function useAppData() {
   }, []);
 
   // ---- CRUD genérico por entidade ----
+  // Qualquer edição manual marca a base como "usuario" — a partir daqui o
+  // auto-refresh de base demo obsoleta (ver useEffect de carga) nunca mais
+  // se aplica a esta base, mesmo que ela tenha começado como demo.
 
   const addItem = useCallback((entidade, item) => {
+    origemBaseRef.current = "usuario";
     setEntidades((prev) => ({ ...prev, [entidade]: [...prev[entidade], { ...item, id: uid() }] }));
   }, []);
   const updateItem = useCallback((entidade, id, patch) => {
+    origemBaseRef.current = "usuario";
     setEntidades((prev) => ({ ...prev, [entidade]: prev[entidade].map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
   }, []);
   const removeItem = useCallback((entidade, id) => {
+    origemBaseRef.current = "usuario";
     setEntidades((prev) => ({ ...prev, [entidade]: prev[entidade].filter((i) => i.id !== id) }));
   }, []);
 
   // ---- Dados: Carregar Demonstrativo / Limpar Base ----
 
   const carregarDemo = useCallback(() => {
-    // Cópia rasa de cada array demo — pelo mesmo motivo do criarEntidadesVazias:
-    // o importador muta arrays de entidades por referência, e os arrays demo*
-    // são constantes de módulo que não podem ser contaminadas.
-    setEntidades({
-      empresas: [...demoEmpresas], unidades: [...demoUnidades], clientes: [...demoClientes], fornecedores: [...demoFornecedores],
-      bancos: [...demoBancos], contasBancarias: [...demoContasBancarias], projetos: [...demoProjetos],
-      planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
-      lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens],
-    });
+    const fresco = demoFresco();
+    origemBaseRef.current = fresco.origemBase;
+    setEntidades(fresco.entidades);
     sincronizarPeriodoComReferencia();
   }, [sincronizarPeriodoComReferencia]);
 
   const limparBase = useCallback(() => {
+    origemBaseRef.current = null;
     setEntidades(criarEntidadesVazias());
     sincronizarPeriodoComReferencia();
   }, [sincronizarPeriodoComReferencia]);
