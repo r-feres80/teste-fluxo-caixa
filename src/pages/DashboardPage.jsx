@@ -77,10 +77,10 @@ export default function DashboardPage({ data }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Caixa Disponível" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} basis="caixa" />
+        <KpiCard label="Caixa Disponível" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)}`} basis="caixa" />
         <KpiCard label="Contas a Receber (aberto)" value={fmtBRL(resumo.contasReceber.totalEmAberto)} />
         <KpiCard label="Contas a Pagar (aberto)" value={fmtBRL(resumo.contasPagar.totalEmAberto)} />
-        <KpiCard label="Caixa Projetado 30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} basis="caixa" />
+        <KpiCard label="Caixa Projetado 30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa" />
       </div>
       <div className="grid grid-cols-4 gap-4">
         <KpiCard label="Receita Bruta no ano" value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia" />
@@ -110,7 +110,7 @@ export default function DashboardPage({ data }) {
         />
       </div>
 
-      <Panel title="Waterfall Executivo (DFC do mês)" subtitle="Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final">
+      <Panel title="Waterfall Executivo (DFC do mês)" subtitle={`Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final — Data-base: ${fmtData(resumo.dataReferencia)}`}>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={waterfallData} margin={{ top: 20 }}>
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
