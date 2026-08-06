@@ -184,7 +184,7 @@ export default function TesourariaPage({ data }) {
   const nomeContaBancaria = (id) => entidades.contasBancarias.find((c) => c.id === id)?.apelido ?? "—";
 
   if (contasFiltradas.length === 0) {
-    return <InfoNote tone="amber">Nenhuma conta bancária ativa para os filtros atuais. Cadastre em Cadastros → Contas Bancárias.</InfoNote>;
+    return <InfoNote tone="amber">Nenhuma conta bancária ativa para os filtros atuais. Contas Bancárias são criadas automaticamente ao importar Lançamentos (Controladoria → Importar Dados) ou ao carregar os Dados Demonstrativos em Governança.</InfoNote>;
   }
 
   return (

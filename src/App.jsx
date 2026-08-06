@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
-  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save, FolderTree,
+  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save,
   Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut, ChevronRight, ChevronDown,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
@@ -30,24 +30,19 @@ import CenariosPage from "./pages/CenariosPage.jsx";
 import LancamentosPage from "./pages/LancamentosPage.jsx";
 import ImportarDadosPage from "./pages/ImportarDadosPage.jsx";
 import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
-import EmpresasPage from "./pages/cadastros/EmpresasPage.jsx";
-import UnidadesPage from "./pages/cadastros/UnidadesPage.jsx";
-import FornecedoresPage from "./pages/cadastros/FornecedoresPage.jsx";
-import BancosPage from "./pages/cadastros/BancosPage.jsx";
-import ContasBancariasPage from "./pages/cadastros/ContasBancariasPage.jsx";
-import PlanoDeContasPage from "./pages/cadastros/PlanoDeContasPage.jsx";
-import CentrosCustoPage from "./pages/cadastros/CentrosCustoPage.jsx";
-import ProjetosPage from "./pages/cadastros/ProjetosPage.jsx";
-
-// Item 23 — menu completo combinado. Só "Cadastros" e "Governança" estão
-// Todos os módulos do item 23 já estão implementados nesta versão.
+// Produto é camada de indicadores/analytics sobre dado de origem, nunca um
+// sistema transacional com cadastro manual — toda base mestre (Empresas,
+// Unidades, Clientes, Fornecedores, Bancos, Contas Bancárias, Centros de
+// Custo, Projetos, Plano de Contas) chega pronta via upload de planilha
+// (ImportarDadosPage cria automaticamente o que faltar). Único dado editável
+// na UI é o Orçamento (OrcamentoPage). Ver item 12/Etapa 4: as antigas telas
+// de cadastro manual (inclusive Plano de Contas) foram removidas do produto.
 const NAV = [
   { id: "dashboard", label: "Dashboard Executivo", icon: LayoutGrid, Page: DashboardPage },
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
   { id: "contas-receber", label: "Contas a Receber", icon: ArrowUpCircle, Page: ContasAReceberPage },
   { id: "inadimplencia", label: "Inadimplência", icon: AlertOctagon, Page: InadimplenciaPage },
-  { id: "plano-de-contas", label: "Plano de Contas", icon: FolderTree, Page: PlanoDeContasPage },
   { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
   { id: "dfc", label: "DFC Gerencial", icon: FileBarChart, Page: DFCPage },
   { id: "dfc-direto", label: "DFC Direto", icon: Table2, Page: DFCDiretoPage },
@@ -78,7 +73,7 @@ const ICON_GROUPS = [
   { title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
   { title: "Fluxo de Caixa", ids: ["fluxo-caixa", "dfc", "dfc-direto"] },
   { title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios"] },
-  { title: "Controladoria", ids: ["dre", "plano-de-contas", "lancamentos", "importar", "importar-orcamento", "governanca"] },
+  { title: "Controladoria", ids: ["dre", "lancamentos", "importar", "importar-orcamento", "governanca"] },
 ];
 
 // Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
