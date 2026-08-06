@@ -68,12 +68,36 @@ export default function DFCPage({ data }) {
     <div className="flex flex-col gap-6">
       {/* Saldo Inicial/Final, FCO/FCI/FCF já aparecem, com o mesmo valor, na
           "Demonstração de Fluxo de Caixa Gerencial (síntese)" abaixo — o KPI
-          de topo aqui traz só o que a síntese não cobre (índices derivados). */}
+          de topo aqui traz só o que a síntese não cobre (índices derivados).
+          Tone reflete a meta de cada indicador (item 3/Etapa 4), não recalcula
+          nada — só compara o valor já calculado com a meta configurada. */}
       <div className="grid grid-cols-4 gap-4">
-        <KPI label="DSO / PMR" value={dso != null ? `${dso.toFixed(0)} dias` : "—"} sub="Prazo médio de recebimento" />
-        <KPI label="DPO / PMP" value={dpo != null ? `${dpo.toFixed(0)} dias` : "—"} sub="Prazo médio de pagamento" />
-        <KPI label="Cobertura de Caixa" value={coberturaCaixaDias != null ? `${coberturaCaixaDias.toFixed(0)} dias` : "—"} sub="Caixa ÷ saída operacional diária" basis="caixa" />
-        <KPI label="Índice de Liquidez de Caixa" value={indiceLiquidezCaixa != null ? `${indiceLiquidezCaixa.toFixed(2)}x` : "—"} tone={indiceLiquidezCaixa != null && indiceLiquidezCaixa >= 1 ? "positive" : "negative"} sub="Caixa ÷ Contas a Pagar em aberto (proxy)" basis="caixa" />
+        <KPI
+          label="DSO / PMR"
+          value={dso != null ? `${dso.toFixed(0)} dias` : "—"}
+          tone={dso == null ? "neutral" : dso <= 24 ? "positive" : "negative"}
+          sub="Prazo médio de recebimento — meta: 24 dias"
+        />
+        <KPI
+          label="DPO / PMP"
+          value={dpo != null ? `${dpo.toFixed(0)} dias` : "—"}
+          tone={dpo == null ? "neutral" : dpo <= 31 ? "positive" : "negative"}
+          sub="Prazo médio de pagamento — meta: 31 dias"
+        />
+        <KPI
+          label="Cobertura de Caixa"
+          value={coberturaCaixaDias != null ? `${coberturaCaixaDias.toFixed(0)} dias` : "—"}
+          tone={coberturaCaixaDias == null ? "neutral" : coberturaCaixaDias > 0 ? "positive" : "negative"}
+          sub="Caixa ÷ saída operacional diária — meta: positiva"
+          basis="caixa"
+        />
+        <KPI
+          label="Índice de Liquidez de Caixa"
+          value={indiceLiquidezCaixa != null ? `${indiceLiquidezCaixa.toFixed(2)}x` : "—"}
+          tone={indiceLiquidezCaixa != null && indiceLiquidezCaixa >= 1.5 && indiceLiquidezCaixa <= 1.7 ? "positive" : "negative"}
+          sub="Caixa ÷ Contas a Pagar em aberto (proxy) — meta: 1,5x-1,7x"
+          basis="caixa"
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-4">
