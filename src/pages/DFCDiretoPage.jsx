@@ -1,29 +1,44 @@
 import React, { useMemo, useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
-import { Panel, InfoNote } from "../components/ui/Primitives.jsx";
+import { Panel, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
 import { getDataAtualSistema, parseISO, startOfMonthISO, endOfMonthISO, diffDaysISO, addDaysISO } from "../utils/dateUtils.js";
 import { calcularDFCDiretoArvore } from "../financial-engine/dfc.js";
 
 const GRUPO_LABEL = { Operacional: "Atividades Operacionais", Investimento: "Atividades de Investimento", Financiamento: "Atividades de Financiamento" };
+const NOMES_MES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
 function Valor({ v }) {
   if (v === 0) return <span className="text-slate-300">—</span>;
   return <span className={v < 0 ? "text-rose-600" : "text-slate-700"} title={fmtBRL(v)}>{fmtBRLShort(v)}</span>;
 }
 
-// DFC Direto é módulo de FATO: sempre o mês corrente real do sistema — nunca
-// Período/Mês/Ano editáveis — ver getDataAtualSistema, mesmo padrão do DFCPage.
+// DFC Direto é módulo de FATO (Realizado sempre por Data de baixa, nunca por
+// Data de Referência editável), mas — diferente dos demais módulos de FATO —
+// tem filtro local de Mês/Ano (item 4/Etapa 4): olhar só o mês corrente fazia
+// a tabela aparecer "zerada" nos primeiros dias do mês (poucos dias já
+// realizados) e não dava pra conferir um mês passado inteiro. O padrão
+// getDataAtualSistema/NAV_FATO continua intacto — isso é navegação de
+// período dentro da própria página, não a Data de Referência global.
 export default function DFCDiretoPage({ data }) {
   const { entidades, filtros } = data;
   const dataReferencia = getDataAtualSistema();
   const hoje = parseISO(dataReferencia);
-  const anoRef = hoje.getFullYear();
-  const mesRef = hoje.getMonth();
-  const inicio = startOfMonthISO(anoRef, mesRef);
-  const fim = endOfMonthISO(anoRef, mesRef);
+  const anoAtual = hoje.getFullYear();
+  const mesAtual = hoje.getMonth();
+  const [anoSel, setAnoSel] = useState(anoAtual);
+  const [mesSel, setMesSel] = useState(mesAtual);
+  const inicio = startOfMonthISO(anoSel, mesSel);
+  const fim = endOfMonthISO(anoSel, mesSel);
   const totalDias = diffDaysISO(inicio, fim) + 1;
   const dias = useMemo(() => Array.from({ length: totalDias }, (_, i) => addDaysISO(inicio, i)), [inicio, totalDias]);
+  const mesEhCorrente = anoSel === anoAtual && mesSel === mesAtual;
+
+  const irParaMes = (deltaMeses) => {
+    const d = new Date(anoAtual, mesAtual + deltaMeses, 1);
+    setAnoSel(d.getFullYear());
+    setMesSel(d.getMonth());
+  };
 
   const lancamentosNoPeriodo = useMemo(() => entidades.lancamentos.filter((l) => {
     if (filtros.empresaId !== "TODAS" && l.empresaId !== filtros.empresaId) return false;
@@ -33,8 +48,8 @@ export default function DFCDiretoPage({ data }) {
 
   const arvore = useMemo(() => calcularDFCDiretoArvore({
     lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens,
-    ano: anoRef, meses: [mesRef], empresaId: filtros.empresaId, dias,
-  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoRef, mesRef, filtros.empresaId, dias]);
+    ano: anoSel, meses: [mesSel], empresaId: filtros.empresaId, dias,
+  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoSel, mesSel, filtros.empresaId, dias]);
 
   // Recolhidos (não expandidos) — por padrão tudo aberto, como no TreeView do
   // Plano de Contas: guardamos só as chaves que o usuário fechou.
@@ -47,12 +62,27 @@ export default function DFCDiretoPage({ data }) {
       <InfoNote>
         Movimento Realizado (Data de baixa) de {inicio.split("-").reverse().join("/")} a {fim.split("-").reverse().join("/")},
         organizado por Grupo → Subgrupo → Conta (campos "Classificação DFC" e "Subgrupo" do Plano de Contas).
-        "Total Previsto" vem do Orçamento do mês corrente.
+        "Total Previsto" vem do Orçamento do mês selecionado.
       </InfoNote>
 
-      <Panel title="DFC Direto">
+      <Panel
+        title="DFC Direto"
+        right={
+          <div className="flex items-center gap-2">
+            <button onClick={() => irParaMes(-1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Mês Passado</button>
+            <button onClick={() => irParaMes(0)} disabled={mesEhCorrente} className={`px-2.5 py-1.5 rounded text-xs border ${mesEhCorrente ? "border-emerald-300 bg-emerald-50 text-emerald-700" : "border-slate-300 text-slate-600 hover:bg-slate-50"}`}>Mês Atual</button>
+            <button onClick={() => irParaMes(1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Próximo Mês</button>
+            <select value={mesSel} onChange={(e) => setMesSel(Number(e.target.value))} className={selectCls + " w-auto"}>
+              {NOMES_MES.map((nome, i) => <option key={nome} value={i}>{nome}</option>)}
+            </select>
+            <select value={anoSel} onChange={(e) => setAnoSel(Number(e.target.value))} className={selectCls + " w-auto"}>
+              {[anoAtual - 2, anoAtual - 1, anoAtual, anoAtual + 1].map((ano) => <option key={ano} value={ano}>{ano}</option>)}
+            </select>
+          </div>
+        }
+      >
         {arvore.length === 0 ? (
-          <span className="text-sm text-slate-400">Sem movimento Realizado no mês corrente para os filtros atuais.</span>
+          <span className="text-sm text-slate-400">Sem movimento Realizado em {NOMES_MES[mesSel]}/{anoSel} para os filtros atuais.</span>
         ) : (
           <div className="overflow-x-auto">
             <table className="text-xs border-collapse w-full">
