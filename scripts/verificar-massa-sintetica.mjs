@@ -14,7 +14,17 @@ import { calcularCarteiraEAging } from "../src/financial-engine/aging.js";
 import { calcularDRE } from "../src/financial-engine/dre.js";
 import { calcularDFC } from "../src/financial-engine/dfc.js";
 import { construirOrcadoRealizado } from "../src/financial-engine/orcadoRealizado.js";
+import { calcularIndiceLiquidezCaixa } from "../src/financial-engine/indicadoresCaixa.js";
 import { todayISO, diffDaysISO, startOfMonthISO, endOfMonthISO, addDaysISO } from "../src/utils/dateUtils.js";
+
+// Faixas-alvo — Leva 3 (checkpoint de regressão AP/AR/Liquidez/EBITDA):
+// AP/AR "em aberto" não é mais calibrado por fluxo acumulado do período
+// (isso gerava um AP/AR proporcional aos meses de janela Previsto, não ao
+// saldo em aberto real); o alvo de AP agora vem da própria fórmula de
+// Liquidez com Caixa Disponível fixo — ver decisão do usuário no checkpoint.
+const AP_ABERTO_MIN = 380000, AP_ABERTO_MAX = 470000;
+const AR_ABERTO_MIN = 550000, AR_ABERTO_MAX = 660000;
+const LIQUIDEZ_MIN = 1.5, LIQUIDEZ_MAX = 1.7;
 
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -39,8 +49,14 @@ console.log("Menor ponto projetado 30d:", fmt(menor30.saldo), "em", menor30.data
 console.log("\n=== AP/AR EM ABERTO ===");
 const agingAR = calcularCarteiraEAging(demoLancamentos.filter((l) => l.tipo === "Entrada" && !l.transferencia), HOJE);
 const agingAP = calcularCarteiraEAging(demoLancamentos.filter((l) => l.tipo === "Saída" && !l.transferencia), HOJE);
-console.log("AR total em aberto:", fmt(agingAR.totalCarteira), "| vencido:", fmt(agingAR.totalVencido));
-console.log("AP total em aberto:", fmt(agingAP.totalCarteira), "| vencido:", fmt(agingAP.totalVencido));
+console.log("AR total em aberto:", fmt(agingAR.totalCarteira), "| vencido:", fmt(agingAR.totalVencido),
+  agingAR.totalCarteira >= AR_ABERTO_MIN && agingAR.totalCarteira <= AR_ABERTO_MAX ? `OK (${fmt(AR_ABERTO_MIN)}-${fmt(AR_ABERTO_MAX)})` : "FORA DA FAIXA");
+console.log("AP total em aberto:", fmt(agingAP.totalCarteira), "| vencido:", fmt(agingAP.totalVencido),
+  agingAP.totalCarteira >= AP_ABERTO_MIN && agingAP.totalCarteira <= AP_ABERTO_MAX ? `OK (${fmt(AP_ABERTO_MIN)}-${fmt(AP_ABERTO_MAX)})` : "FORA DA FAIXA");
+
+const liquidez = calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira);
+console.log("Índice de Liquidez de Caixa:", liquidez.toFixed(2) + "x",
+  liquidez >= LIQUIDEZ_MIN && liquidez <= LIQUIDEZ_MAX ? `OK (${LIQUIDEZ_MIN}x-${LIQUIDEZ_MAX}x)` : "FORA DA FAIXA");
 
 function mixVencimento(abertos, label) {
   let antecipado = 0, emDia = 0, atrasado = 0;
@@ -66,6 +82,17 @@ for (let i = 11; i >= 0; i--) {
   const dre = calcularDRE(doMes, demoPlanoDeContas);
   console.log(`${ini.slice(0, 7)}: Receita Bruta ${fmt(dre.receitaBruta)} | EBITDA ${fmt(dre.ebitda)}`);
 }
+
+console.log("\n=== EBITDA no ano (YTD, só Realizado — mesmo filtro de resumoExecutivo.js) ===");
+const anoRefYTD = Number(HOJE.slice(0, 4)), mesAtualIdx = Number(HOJE.slice(5, 7)) - 1;
+const lancamentosYTD = demoLancamentos.filter((l) => {
+  if (!l.dataPagamento || l.situacao !== "Realizado") return false;
+  const [ano, mes] = l.dataPagamento.split("-").map(Number);
+  return ano === anoRefYTD && (mes - 1) <= mesAtualIdx;
+});
+const dreYTD = calcularDRE(lancamentosYTD, demoPlanoDeContas);
+console.log("Receita Bruta no ano:", fmt(dreYTD.receitaBruta));
+console.log("EBITDA no ano:", fmt(dreYTD.ebitda), dreYTD.ebitda >= 0 ? "positivo" : "NEGATIVO (fora de escopo nesta rodada — decisão do usuário, ver checkpoint Leva 3)");
 
 console.log("\n=== DFC do mês corrente (Waterfall) ===");
 const anoRef = Number(HOJE.slice(0, 4)), mesRef = Number(HOJE.slice(5, 7)) - 1;
