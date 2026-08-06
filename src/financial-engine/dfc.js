@@ -1,5 +1,6 @@
 import { valorComSinal, estaRealizado, excluirTransferencias } from "./lancamentos.js";
 import { getValorOrcadoPeriodo } from "./orcamento.js";
+import { calcularVariacaoPct } from "./variacao.js";
 
 /**
  * DFC Gerencial: Caixa Inicial + Fluxo Operacional + Fluxo de Investimentos +
@@ -37,7 +38,7 @@ export function calcularDFCPorConta({ lancamentosNoPeriodo, planoDeContas, orcam
       const orcado = conta.aceitaOrcamento
         ? getValorOrcadoPeriodo(orcamentoItens, { ano, meses, contaGerencialId: conta.id, empresaId: empresaId && empresaId !== "TODAS" ? empresaId : undefined })
         : 0;
-      const varPct = orcado !== 0 ? ((real - orcado) / Math.abs(orcado)) * 100 : (real !== 0 ? 100 : 0);
+      const varPct = calcularVariacaoPct(real - orcado, orcado);
       return { id: conta.id, descricao: conta.descricao, classificacaoDFC: conta.classificacaoDFC, real, orcado, varPct };
     })
     .filter((l) => l.real !== 0 || l.orcado !== 0)

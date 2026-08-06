@@ -2,6 +2,7 @@ import { parseISO } from "../utils/dateUtils.js";
 import { valorComSinal, excluirTransferencias } from "./lancamentos.js";
 import { getValorOrcadoPeriodo } from "./orcamento.js";
 import { montarArvore } from "./treeUtils.js";
+import { calcularVariacaoPct } from "./variacao.js";
 
 /**
  * Para cada conta Analítica: Real (Realizado), Previsto (curto prazo: realizado até data de referência
@@ -53,7 +54,9 @@ export function construirOrcadoRealizado({ planoDeContas, orcamentoItens, lancam
       { ...proprio }
     );
     const deltaForecast = soma.forecast - soma.orcado;
-    const deltaForecastPct = soma.orcado !== 0 ? (deltaForecast / Math.abs(soma.orcado)) * 100 : (soma.forecast !== 0 ? 100 : 0);
+    // null (não 0/100) quando |orçado| é pequeno demais pra dividir sem
+    // gerar um "%" sem sentido — quem exibe trata null como "não comparável".
+    const deltaForecastPct = calcularVariacaoPct(deltaForecast, soma.orcado);
     return { ...no, ...soma, deltaForecast, deltaForecastPct, filhos: filhosAgregados };
   }
 

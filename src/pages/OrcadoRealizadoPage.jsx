@@ -6,7 +6,10 @@ import { mesesDoPeriodo } from "../utils/dateUtils.js";
 import { construirOrcadoRealizado } from "../financial-engine/orcadoRealizado.js";
 
 function LinhaArvore({ no, profundidade, expandidos, toggle, parametros }) {
-  const material = no.temOrcamento && (Math.abs(no.deltaForecastPct) >= parametros.materialidadePct || Math.abs(no.deltaForecast) >= parametros.materialidadeValor);
+  // deltaForecastPct é null quando |orçado| é baixo demais pra comparar em %
+  // (ver calcularVariacaoPct) — nesse caso a materialidade só considera R$.
+  const materialPorPct = no.deltaForecastPct != null && Math.abs(no.deltaForecastPct) >= parametros.materialidadePct;
+  const material = no.temOrcamento && (materialPorPct || Math.abs(no.deltaForecast) >= parametros.materialidadeValor);
   const aberto = expandidos.has(no.id);
   return (
     <>
@@ -22,7 +25,9 @@ function LinhaArvore({ no, profundidade, expandidos, toggle, parametros }) {
         <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-500">{no.temOrcamento ? fmtBRL(no.orcado) : "—"}</td>
         <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-600">{fmtBRL(no.forecast)}</td>
         <td className={`py-2 pr-4 text-right font-mono tabular-nums ${no.deltaForecast >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{no.temOrcamento ? fmtBRL(no.deltaForecast) : "—"}</td>
-        <td className="py-2 pr-4 text-right font-mono tabular-nums">{no.temOrcamento ? `${no.deltaForecastPct.toFixed(0)}%` : "—"}</td>
+        <td className="py-2 pr-4 text-right font-mono tabular-nums">
+          {!no.temOrcamento ? "—" : no.deltaForecastPct != null ? `${no.deltaForecastPct.toFixed(0)}%` : <span className="text-slate-400 font-sans normal-case text-[11px]">não comparável</span>}
+        </td>
       </tr>
       {aberto && no.filhos.map((f) => <LinhaArvore key={f.id} no={f} profundidade={profundidade + 1} expandidos={expandidos} toggle={toggle} parametros={parametros} />)}
     </>

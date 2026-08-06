@@ -27,7 +27,11 @@ export function calcularAlertasExecutivos({
     alertas.push({ tipo: "recebimentos_atraso_relevantes", severidade: "Média", valor: total, qtd: vencimentosProximosAR.length });
   }
   (desviosOrcamentarios || []).forEach((d) => {
-    if (Math.abs(d.deltaForecastPct) >= parametros.materialidadePct || Math.abs(d.deltaForecast) >= parametros.materialidadeValor) {
+    // deltaForecastPct é null quando |orçado| é baixo demais pra comparar em
+    // % (ver calcularVariacaoPct) — nesse caso o gatilho de materialidade
+    // vale só pelo R$ absoluto, nunca por um "%" sem sentido.
+    const materialPorPct = d.deltaForecastPct != null && Math.abs(d.deltaForecastPct) >= parametros.materialidadePct;
+    if (materialPorPct || Math.abs(d.deltaForecast) >= parametros.materialidadeValor) {
       alertas.push({ tipo: "desvio_orcamentario", severidade: "Média", nome: d.descricao, valor: d.deltaForecast, pct: d.deltaForecastPct });
     }
   });

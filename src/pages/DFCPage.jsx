@@ -108,7 +108,9 @@ export default function DFCPage({ data }) {
                       <tr key={l.id} className="border-b border-slate-100">
                         <td className="py-1.5 pr-2 text-slate-600">{l.descricao}</td>
                         <td className="py-1.5 text-right font-mono tabular-nums text-slate-800">{fmtBRL(l.real)}</td>
-                        <td className={`py-1.5 pl-2 text-right font-mono tabular-nums text-[11px] ${l.varPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{l.varPct >= 0 ? "+" : ""}{l.varPct.toFixed(1)}%</td>
+                        <td className={`py-1.5 pl-2 text-right font-mono tabular-nums text-[11px] ${l.varPct == null ? "text-slate-400" : l.varPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                          {l.varPct == null ? "não comparável" : `${l.varPct >= 0 ? "+" : ""}${l.varPct.toFixed(1)}%`}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
