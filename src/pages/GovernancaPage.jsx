@@ -1,5 +1,5 @@
 import React from "react";
-import { Database, Trash2, Sparkles } from "lucide-react";
+import { Database, Trash2, Sparkles, Download } from "lucide-react";
 import { Panel, Field, inputCls, InfoNote, useConfirm, DateInputBR } from "../components/ui/Primitives.jsx";
 import { fmtDataHora } from "../utils/formatUtils.js";
 import { APP_DISCLAIMER, PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
@@ -9,6 +9,24 @@ export default function GovernancaPage({ data }) {
   const { pedirConfirmacao, ConfirmDialogSlot } = useConfirm();
 
   const totalRegistros = Object.values(entidades).reduce((s, arr) => s + arr.length, 0);
+  const totalLancamentos = entidades.lancamentos?.length ?? 0;
+
+  // Backup local -> arquivo, fora do localStorage: gera e baixa um .json com
+  // toda a base (inclui lançamentos) direto no navegador, sem passar por
+  // servidor nenhum. É o único jeito de tirar a cópia da base real de quem
+  // está usando o app pra fora do ambiente único do navegador dela.
+  const exportarBackup = () => {
+    const payload = { exportadoEm: new Date().toISOString(), totalRegistros, totalLancamentos, entidades, parametros, filtros };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup-cfo-fi-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const confirmarLimpeza = () => {
     pedirConfirmacao(
@@ -30,15 +48,19 @@ export default function GovernancaPage({ data }) {
     <div className="flex flex-col gap-6">
       <InfoNote>{APP_DISCLAIMER}</InfoNote>
 
-      <Panel title="Dados" subtitle="Carregue o cenário demonstrativo para explorar a aplicação, ou comece com uma base vazia">
-        <div className="flex items-center gap-4">
+      <Panel title="Dados" subtitle="Carregue o cenário demonstrativo, exporte um backup da base atual, ou comece do zero">
+        <div className="flex items-center gap-4 flex-wrap">
           <button onClick={confirmarCargaDemo} className="px-4 py-2 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2">
             <Sparkles size={15} /> Carregar Dados Demonstrativos
+          </button>
+          <button onClick={exportarBackup} disabled={totalRegistros === 0}
+            className="px-4 py-2 rounded text-sm bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white">
+            <Download size={15} /> Exportar Backup (JSON)
           </button>
           <button onClick={confirmarLimpeza} className="px-4 py-2 rounded text-sm bg-white border border-rose-300 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2">
             <Trash2 size={15} /> Limpar Base
           </button>
-          <div className="text-xs text-slate-500 flex items-center gap-1.5"><Database size={13} /> {totalRegistros} registro(s) na base atual</div>
+          <div className="text-xs text-slate-500 flex items-center gap-1.5"><Database size={13} /> {totalRegistros} registro(s) na base atual ({totalLancamentos} lançamento(s))</div>
         </div>
       </Panel>
 
