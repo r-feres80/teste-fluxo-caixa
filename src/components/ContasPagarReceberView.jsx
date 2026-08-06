@@ -5,11 +5,10 @@ import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos,
   FAIXAS_AGING, calcularComposicaoRecebido, calcularEvolucaoInadimplencia,
-  FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos, calcularPDD, calcularPrevistoRecebidoDiario,
+  FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos, calcularPrevistoRecebidoDiario,
 } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
-import { PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
 
 // Contas a Pagar/Receber são módulos de FATO: aging e vencimentos sempre
 // contam a partir de "hoje" real, nunca da Data de Referência editável —
@@ -58,9 +57,9 @@ export function ContasPagarReceberView({ data, tipo }) {
   const agingVencidosRecebidos = useMemo(() => calcularAgingVencidosRecebidos(lancamentosDoTipo), [lancamentosDoTipo]);
   const chartAgingRecebidos = FAIXAS_AGING_RECEBIDOS.map((f) => ({ faixa: f.label, valor: agingVencidosRecebidos.buckets[f.key] }));
 
-  // Previsto x Recebido e PDD: escopo exclusivo de AR (item 9/Leva 2).
+  // Previsto x Recebido: escopo exclusivo de AR (item 9/Leva 2). PDD mora em
+  // InadimplenciaPage.jsx (Etapa 2 item 3) — não recalcular aqui.
   const previstoRecebido = useMemo(() => tipo === "Entrada" ? calcularPrevistoRecebidoDiario(lancamentosDoTipo, hoje, 30) : null, [tipo, lancamentosDoTipo, hoje]);
-  const pdd = useMemo(() => tipo === "Entrada" ? calcularPDD(lancamentosDoTipo, hoje, parametros.pddFaixas || PDD_FAIXAS_PADRAO) : null, [tipo, lancamentosDoTipo, hoje, parametros.pddFaixas]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -109,18 +108,22 @@ export function ContasPagarReceberView({ data, tipo }) {
         </Panel>
       </div>
 
-      <Panel title="Aging de Vencidos Recebidos" subtitle="Títulos Realizados liquidados com atraso — dias_atraso = Data de baixa − Vencimento">
-        {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={chartAgingRecebidos}>
-              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-      </Panel>
+      {/* "Aging de Vencidos Recebidos" é conceito de AR (histórico de atraso
+          no recebimento) — não faz sentido em Contas a Pagar. */}
+      {tipo === "Entrada" && (
+        <Panel title="Aging de Vencidos Recebidos" subtitle="Títulos Realizados liquidados com atraso — dias_atraso = Data de baixa − Vencimento">
+          {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={chartAgingRecebidos}>
+                <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
+                <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+                <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Panel>
+      )}
 
       {tipo === "Entrada" && (
         <div className="grid grid-cols-2 gap-4">
@@ -173,23 +176,9 @@ export function ContasPagarReceberView({ data, tipo }) {
         </Panel>
       )}
 
-      {tipo === "Entrada" && (
-        <div className="grid grid-cols-3 gap-4">
-          <KPI label="Contas a Receber Líquido de PDD" value={fmtBRL(totalCarteira - pdd.provisaoTotal)} tone="neutral" />
-          <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} sub={`${pdd.saldoVencido > 0 ? ((pdd.provisaoTotal / pdd.saldoVencido) * 100).toFixed(1) : "0.0"}% do saldo vencido`} />
-          <Panel title="PDD por Faixa de Atraso" subtitle="Percentuais configuráveis em Governança">
-            <div className="flex flex-col gap-1 text-xs">
-              {pdd.porFaixa.filter((f) => f.saldo > 0).map((f) => (
-                <div key={f.key} className="flex justify-between text-slate-600">
-                  <span>{f.label} dias ({f.pct}%)</span>
-                  <span className="font-mono tabular-nums">{fmtBRL(f.provisao)}</span>
-                </div>
-              ))}
-              {pdd.porFaixa.every((f) => f.saldo === 0) && <span className="text-slate-400">Nenhum título vencido em aberto.</span>}
-            </div>
-          </Panel>
-        </div>
-      )}
+      {/* PDD (Provisão para Devedores Duvidosos) mora em Inadimplência agora
+          — é o módulo dedicado a risco de recebíveis vencidos, PDD não
+          precisa ser duplicado aqui em Contas a Receber. */}
 
       <Panel title={`Títulos em Aberto — ${rotuloParceiro}`}>
         {abertos.length === 0 ? <InfoNote>Nenhum título em aberto para os filtros atuais.</InfoNote> : (

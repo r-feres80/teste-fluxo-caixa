@@ -44,11 +44,26 @@ export default function InadimplenciaPage({ data }) {
         ainda sem baixa. Para o histórico de atraso já liquidado, veja "Aging de Vencidos Recebidos" em Contas a Receber.
       </InfoNote>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <KPI label="Total Vencido" value={fmtBRL(totalVencido)} tone={totalVencido > 0 ? "negative" : "neutral"} />
         <KPI label="Total da Carteira" value={fmtBRL(totalCarteira)} tone="neutral" />
-        <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} />
         <KPI label="DSO / PMR (aprox.)" value={dso != null ? `${dso.toFixed(0)} dias` : "—"} sub="Carteira ÷ Realizado no mês × 30" />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <KPI label="Contas a Receber Líquido de PDD" value={fmtBRL(totalCarteira - pdd.provisaoTotal)} tone="neutral" />
+        <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} sub={`${pdd.saldoVencido > 0 ? ((pdd.provisaoTotal / pdd.saldoVencido) * 100).toFixed(1) : "0.0"}% do saldo vencido`} />
+        <Panel title="PDD por Faixa de Atraso" subtitle="Percentuais configuráveis em Governança">
+          <div className="flex flex-col gap-1 text-xs">
+            {pdd.porFaixa.filter((f) => f.saldo > 0).map((f) => (
+              <div key={f.key} className="flex justify-between text-slate-600">
+                <span>{f.label} dias ({f.pct}%)</span>
+                <span className="font-mono tabular-nums">{fmtBRL(f.provisao)}</span>
+              </div>
+            ))}
+            {pdd.porFaixa.every((f) => f.saldo === 0) && <span className="text-slate-400">Nenhum título vencido em aberto.</span>}
+          </div>
+        </Panel>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
