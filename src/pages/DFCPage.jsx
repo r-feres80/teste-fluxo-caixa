@@ -66,19 +66,13 @@ export default function DFCPage({ data }) {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Saldo Inicial/Final, FCO/FCI/FCF já aparecem, com o mesmo valor, na
+          "Demonstração de Fluxo de Caixa Gerencial (síntese)" abaixo — o KPI
+          de topo aqui traz só o que a síntese não cobre (índices derivados). */}
       <div className="grid grid-cols-4 gap-4">
-        <KPI label="Saldo Inicial" value={fmtBRL(dfc.caixaInicial)} basis="caixa" />
-        <KPI label="Saldo Final" value={fmtBRL(dfc.caixaFinal)} tone={dfc.variacaoCaixa >= 0 ? "positive" : "negative"} sub={dfc.variacaoCaixa >= 0 ? "▲ crescimento" : "▼ queda"} basis="caixa" />
-        <KPI label="FCO" value={fmtBRL(dfc.Operacional)} tone={dfc.Operacional >= 0 ? "positive" : "negative"} sub="Geração operacional" basis="caixa" />
-        <KPI label="FCI" value={fmtBRL(dfc.Investimento)} tone="neutral" sub="Investimentos" basis="caixa" />
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        <KPI label="FCF" value={fmtBRL(dfc.Financiamento)} tone="neutral" sub="Financiamentos" basis="caixa" />
         <KPI label="DSO / PMR" value={dso != null ? `${dso.toFixed(0)} dias` : "—"} sub="Prazo médio de recebimento" />
         <KPI label="DPO / PMP" value={dpo != null ? `${dpo.toFixed(0)} dias` : "—"} sub="Prazo médio de pagamento" />
         <KPI label="Cobertura de Caixa" value={coberturaCaixaDias != null ? `${coberturaCaixaDias.toFixed(0)} dias` : "—"} sub="Caixa ÷ saída operacional diária" basis="caixa" />
-      </div>
-      <div className="grid grid-cols-4 gap-4">
         <KPI label="Índice de Liquidez de Caixa" value={indiceLiquidezCaixa != null ? `${indiceLiquidezCaixa.toFixed(2)}x` : "—"} tone={indiceLiquidezCaixa != null && indiceLiquidezCaixa >= 1 ? "positive" : "negative"} sub="Caixa ÷ Contas a Pagar em aberto (proxy)" basis="caixa" />
       </div>
 
