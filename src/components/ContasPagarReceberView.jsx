@@ -5,7 +5,7 @@ import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos,
   FAIXAS_AGING, calcularComposicaoRecebido, calcularEvolucaoInadimplencia,
-  FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos, calcularPrevistoRecebidoDiario,
+  FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos, calcularPrevistoRecebidoDiario, construirReguaDiasUteis,
 } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
@@ -32,6 +32,7 @@ export function ContasPagarReceberView({ data, tipo }) {
   const proximos15 = useMemo(() => vencimentosProximos(abertos, hoje, 15), [abertos, hoje]);
   const proximos30 = useMemo(() => vencimentosProximos(abertos, hoje, 30), [abertos, hoje]);
   const vencimentosHoje = abertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
+  const regua = useMemo(() => construirReguaDiasUteis(abertos, hoje, 10), [abertos, hoje]);
 
   // Filtro de "Títulos em Aberto": vencimento (faixa) + status, com totalizador
   // do resultado filtrado — ver item 8/Etapa 3.
@@ -90,6 +91,20 @@ export function ContasPagarReceberView({ data, tipo }) {
         <KPI label="Próximos 15 dias" value={fmtBRL(proximos15.reduce((s, l) => s + l.valor, 0))} sub={`${proximos15.length} título(s)`} />
         <KPI label="Próximos 30 dias" value={fmtBRL(proximos30.reduce((s, l) => s + l.valor, 0))} sub={`${proximos30.length} título(s)`} />
       </div>
+
+      <Panel
+        title={tipo === "Entrada" ? "Régua de Próximos Recebimentos (dias úteis)" : "Régua de Próximos Pagamentos (dias úteis)"}
+        subtitle="Próximos 10 dias úteis — vencimentos de fim de semana somados ao próximo dia útil"
+      >
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={regua}>
+            <XAxis dataKey="data" tickFormatter={(d) => fmtData(d).slice(0, 5)} stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
+            <Tooltip labelFormatter={(d) => fmtData(d)} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+            <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
+          </BarChart>
+        </ResponsiveContainer>
+      </Panel>
 
       <div className="grid grid-cols-2 gap-4">
         <Panel title={tipo === "Entrada" ? "Aging AR" : "Aging AP"}>

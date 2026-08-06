@@ -1,4 +1,4 @@
-import { diffDaysISO, parseISO, addDaysISO } from "../utils/dateUtils.js";
+import { diffDaysISO, parseISO, addDaysISO, isDiaUtil, proximoDiaUtil } from "../utils/dateUtils.js";
 import { situacaoEfetiva } from "./lancamentos.js";
 
 /** Régua de aging estendida (9 faixas de vencido, + "a vencer"). Substitui a
@@ -199,6 +199,32 @@ export function calcularPDD(lancamentosAR, dataReferencia, faixasPDD) {
     provisaoTotal += provisao;
   });
   return { saldoVencido, provisaoTotal, porFaixa };
+}
+
+/**
+ * Régua dos próximos "quantidadeDiasUteis" dias úteis a partir de
+ * dataReferencia (inclusive, se dataReferencia já for dia útil): soma o
+ * valor em aberto com Vencimento em cada dia. Vencimentos em fim de semana
+ * são rolados para o próximo dia útil (mercado não processa pagamento em
+ * sáb/dom) — evita que a régua mostre um dia útil "vazio" quando na prática
+ * ele concentra o volume que venceria no fim de semana anterior. Títulos com
+ * vencimento fora da janela de dias úteis (passado ou além do último dia da
+ * régua) não entram.
+ */
+export function construirReguaDiasUteis(abertos, dataReferencia, quantidadeDiasUteis = 10) {
+  const diasUteis = [];
+  let cursor = dataReferencia;
+  while (diasUteis.length < quantidadeDiasUteis) {
+    if (isDiaUtil(cursor)) diasUteis.push(cursor);
+    cursor = addDaysISO(cursor, 1);
+  }
+  const porDia = new Map(diasUteis.map((d) => [d, 0]));
+  abertos.forEach((l) => {
+    if (diffDaysISO(dataReferencia, l.dataVencimento) < 0) return;
+    const diaEfetivo = isDiaUtil(l.dataVencimento) ? l.dataVencimento : proximoDiaUtil(l.dataVencimento);
+    if (porDia.has(diaEfetivo)) porDia.set(diaEfetivo, porDia.get(diaEfetivo) + l.valor);
+  });
+  return diasUteis.map((d) => ({ data: d, valor: porDia.get(d) }));
 }
 
 /**

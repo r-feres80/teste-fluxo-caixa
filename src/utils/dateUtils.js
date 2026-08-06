@@ -22,6 +22,11 @@ export const startOfYearISO = (ano) => `${ano}-01-01`;
 export const endOfYearISO = (ano) => `${ano}-12-31`;
 
 export const addDaysISO = (iso, n) => { const d = parseISO(iso); d.setDate(d.getDate() + n); return toISO(d); };
+
+// Dia útil = não sábado/domingo (não modela feriados — não há calendário de
+// feriados nacional/municipal no schema atual).
+export const isDiaUtil = (iso) => { const dow = parseISO(iso).getDay(); return dow !== 0 && dow !== 6; };
+export const proximoDiaUtil = (iso) => { let d = iso; while (!isDiaUtil(d)) d = addDaysISO(d, 1); return d; };
 export const addMonthsISO = (iso, n) => { const d = parseISO(iso); d.setMonth(d.getMonth() + n); return toISO(d); };
 export const diffDaysISO = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 86400000);
 
