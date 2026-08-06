@@ -1,0 +1,102 @@
+[
+  {
+    "id": "c1",
+    "nome": "Mercado Central Ltda",
+    "documento": "12.345.678/0001-90",
+    "ativo": true,
+    "regiao": "Sudeste"
+  },
+  {
+    "id": "c2",
+    "nome": "Distribuidora Sul Comércio",
+    "documento": "23.456.789/0001-11",
+    "ativo": true,
+    "regiao": "Sul"
+  },
+  {
+    "id": "c3",
+    "nome": "Construtora Horizonte Ltda",
+    "documento": "34.567.890/0001-22",
+    "ativo": true,
+    "regiao": "Sudeste"
+  },
+  {
+    "id": "c4",
+    "nome": "Farmácia Vida Saudável",
+    "documento": "45.678.901/0001-33",
+    "ativo": true,
+    "regiao": "Sudeste"
+  },
+  {
+    "id": "c5",
+    "nome": "Supermercados Bom Preço",
+    "documento": "56.789.012/0001-44",
+    "ativo": true,
+    "regiao": "Nordeste"
+  },
+  {
+    "id": "c6",
+    "nome": "Auto Peças Cruzeiro",
+    "documento": "67.890.123/0001-55",
+    "ativo": true,
+    "regiao": "Sul"
+  },
+  {
+    "id": "c7",
+    "nome": "Rede Confiança de Farmácias",
+    "documento": "78.901.234/0001-66",
+    "ativo": true,
+    "regiao": "Centro-Oeste"
+  },
+  {
+    "id": "c8",
+    "nome": "Papelaria Universo",
+    "documento": "89.012.345/0001-77",
+    "ativo": true,
+    "regiao": "Sudeste"
+  },
+  {
+    "id": "c9",
+    "nome": "Móveis Planejados Cedro",
+    "documento": "90.123.456/0001-88",
+    "ativo": true,
+    "regiao": "Sul"
+  },
+  {
+    "id": "c10",
+    "nome": "Comercial Nordeste Alimentos",
+    "documento": "01.234.567/0001-99",
+    "ativo": true,
+    "regiao": "Nordeste"
+  },
+  {
+    "id": "cli1",
+    "nome": "Mercantil Amazônia",
+    "ativo": true
+  },
+  {
+    "id": "cli2",
+    "nome": "Atacadão Serra Gaúcha",
+    "ativo": true
+  },
+  {
+    "id": "cli3",
+    "nome": "Comercial Cerrado Ltda",
+    "ativo": true
+  },
+  {
+    "id": "cli4",
+    "nome": "Distribuidora Litoral",
+    "ativo": true
+  },
+  {
+    "id": "cli5",
+    "nome": "Comercial Paulista Sul",
+    "ativo": true
+  },
+  {
+    "id": "cli6",
+    "nome": "Comércio Norte Atacado",
+    "ativo": true
+  }
+]

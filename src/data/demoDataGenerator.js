@@ -357,3 +357,117 @@ function gerarOrcamentoCoerente(lancamentos) {
   });
   return itens;
 }
+
+// ---------------------------------------------------------------------
+// Leva 3 (dado real importado): mesma técnica de calibração de saldoInicial
+// usada por gerarMassaSintetica (ver "Calibração do saldo inicial" acima),
+// mas exposta como função pura reutilizável — o dado real vem pronto de
+// fora (planilha), não precisa da geração de lançamentos, só da calibração
+// de contas bancárias sobre o líquido Realizado que a planilha trouxe.
+//
+// Calibração POR EMPRESA e POR CONTA (não um pote único global): duas
+// correções sobre a técnica original de gerarMassaSintetica, necessárias
+// porque o dado real (Leva 3) não distribui movimento uniformemente como a
+// massa sintética distribuía por construção:
+//
+// 1) Por empresa: o alvo agregado é repartido entre empresas (proporcional
+//    ao peso-base das contas líquidas de cada uma) antes de repartir entre
+//    contas — senão duas empresas de perfil de caixa muito diferente podem
+//    ver uma delas inteira negativa mesmo com o agregado batendo a faixa.
+//
+// 2) Por conta, saldoFinal (não saldoInicial) proporcional ao peso: a
+//    planilha real concentra 100% do movimento de cada empresa numa única
+//    conta bancária (a única "Conta Bancária" que aparece no CSV daquela
+//    empresa) — as demais contas da empresa ficam com movimento zero.
+//    Repartir o saldoInicial-NECESSÁRIO-TOTAL por peso (como antes) deixa a
+//    conta que concentra o movimento subfinanciada: seu peso-base (ex.: 36%
+//    do pote) não cobre um movimento que é 100% dela. A fórmula certa é
+//    saldoInicial_i = (peso_i/pesoTotal × alvo) − movimento_i — cada conta
+//    TERMINA (saldoInicial+movimento) com sua fração de peso do alvo,
+//    sempre positiva, não importa onde o movimento real se concentrou.
+// ---------------------------------------------------------------------
+export function calibrarContasBancarias(lancamentos, contasBancariasBase, alvoCaixaDisponivel = ALVO_CAIXA_DISPONIVEL, alvoAplicacao = ALVO_APLICACAO) {
+  const HOJE = todayISO();
+  const movimentoLiquido = (contaId) => lancamentos
+    .filter((l) => l.contaBancariaId === contaId && l.situacao === "Realizado" && l.dataPagamento && l.dataPagamento <= HOJE)
+    .reduce((s, l) => s + (l.tipo === "Entrada" ? l.valor : -l.valor), 0);
+
+  const calibrarGrupo = (contas, alvoTotal) => {
+    const pesoTotal = contas.reduce((s, c) => s + c.saldoInicial, 0);
+    return new Map(contas.map((c) => {
+      const peso = pesoTotal > 0 ? c.saldoInicial / pesoTotal : 1 / contas.length;
+      const alvoConta = alvoTotal * peso;
+      return [c.id, Math.round(alvoConta - movimentoLiquido(c.id))];
+    }));
+  };
+
+  const contasLiquidas = contasBancariasBase.filter((c) => c.semLiquidez !== "true");
+  const pesoLiquidoTotal = contasLiquidas.reduce((s, c) => s + c.saldoInicial, 0);
+  const empresaIds = [...new Set(contasLiquidas.map((c) => c.empresaId))];
+  const saldosLiquidos = new Map();
+  empresaIds.forEach((empresaId) => {
+    const contasDaEmpresa = contasLiquidas.filter((c) => c.empresaId === empresaId);
+    const pesoEmpresa = contasDaEmpresa.reduce((s, c) => s + c.saldoInicial, 0);
+    const alvoEmpresa = pesoLiquidoTotal > 0 ? alvoCaixaDisponivel * (pesoEmpresa / pesoLiquidoTotal) : alvoCaixaDisponivel / empresaIds.length;
+    calibrarGrupo(contasDaEmpresa, alvoEmpresa).forEach((v, k) => saldosLiquidos.set(k, v));
+  });
+
+  // Aplicação (semLiquidez="true") calibrada à parte, também por empresa —
+  // hoje só a1 tem, mas a função fica genérica se isso mudar.
+  const contasAplicacao = contasBancariasBase.filter((c) => c.semLiquidez === "true");
+  const pesoAplicacaoTotal = contasAplicacao.reduce((s, c) => s + c.saldoInicial, 0);
+  const empresaIdsAplicacao = [...new Set(contasAplicacao.map((c) => c.empresaId))];
+  const saldosAplicacao = new Map();
+  empresaIdsAplicacao.forEach((empresaId) => {
+    const contasDaEmpresa = contasAplicacao.filter((c) => c.empresaId === empresaId);
+    const pesoEmpresa = contasDaEmpresa.reduce((s, c) => s + c.saldoInicial, 0);
+    const alvoEmpresa = pesoAplicacaoTotal > 0 ? alvoAplicacao * (pesoEmpresa / pesoAplicacaoTotal) : alvoAplicacao / empresaIdsAplicacao.length;
+    calibrarGrupo(contasDaEmpresa, alvoEmpresa).forEach((v, k) => saldosAplicacao.set(k, v));
+  });
+
+  return contasBancariasBase.map((c) => ({
+    ...c,
+    saldoInicial: c.semLiquidez === "true" ? saldosAplicacao.get(c.id) : saldosLiquidos.get(c.id),
+  }));
+}
+
+// ---------------------------------------------------------------------
+// Leva 3 (dado real importado): mesma técnica de "Orçamento coerente com o
+// Realizado" (±10-15%, ver gerarOrcamentoCoerente acima), mas com a lista de
+// contas orçáveis derivada automaticamente do próprio dado real (toda conta
+// Analítica com aceitaOrcamento=true que teve Realizado nos últimos 12
+// meses), em vez de uma lista fixa amarrada à massa sintética antiga.
+// ---------------------------------------------------------------------
+export function gerarOrcamentoAutomatico(lancamentos, planoDeContas) {
+  const { uniforme } = criarFerramentasAleatorias(SEED + 1);
+  const HOJE = todayISO();
+  const anoAtual = Number(HOJE.slice(0, 4));
+  const doze_meses_atras = addMonthsISO(HOJE, -12);
+  const contasOrcaveisPorId = new Map(planoDeContas.filter((c) => c.tipo === "Analítica" && c.aceitaOrcamento).map((c) => [c.id, c]));
+
+  const paresUsados = new Set();
+  lancamentos.forEach((l) => {
+    if (l.situacao !== "Realizado" || l.transferencia) return;
+    if (!contasOrcaveisPorId.has(l.contaGerencialId)) return;
+    if (l.dataPagamento < doze_meses_atras || l.dataPagamento > HOJE) return;
+    paresUsados.add(`${l.contaGerencialId}::${l.empresaId}`);
+  });
+
+  const itens = [];
+  [...paresUsados].sort().forEach((chave) => {
+    const [contaGerencialId, empresaId] = chave.split("::");
+    const doConta = lancamentos.filter((l) =>
+      l.contaGerencialId === contaGerencialId && l.empresaId === empresaId &&
+      l.situacao === "Realizado" && !l.transferencia && l.dataPagamento >= doze_meses_atras && l.dataPagamento <= HOJE
+    );
+    const total = doConta.reduce((s, l) => s + (l.tipo === "Entrada" ? l.valor : -l.valor), 0);
+    const mediaMensal = total / 12;
+    if (mediaMensal === 0) return;
+    const variacao = uniforme(0.85, 1.15);
+    const valorMensal = Math.round(mediaMensal * variacao);
+    for (let mes = 0; mes < 12; mes++) {
+      itens.push({ id: `orc-${empresaId}-${contaGerencialId}-${anoAtual}-${mes}`, ano: anoAtual, empresaId, contaGerencialId, centroCustoId: null, projetoId: null, mes, valor: valorMensal });
+    }
+  });
+  return itens;
+}

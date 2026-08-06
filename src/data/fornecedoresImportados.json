@@ -1,0 +1,80 @@
+[
+  {
+    "id": "f1",
+    "nome": "Fornecedor Atacadista Nacional",
+    "documento": "11.222.333/0001-44",
+    "ativo": true
+  },
+  {
+    "id": "f2",
+    "nome": "Transportadora Rápido Brasil",
+    "documento": "22.333.444/0001-55",
+    "ativo": true
+  },
+  {
+    "id": "f3",
+    "nome": "Gráfica Impressão Total",
+    "documento": "33.444.555/0001-66",
+    "ativo": true
+  },
+  {
+    "id": "f4",
+    "nome": "Escritório Contábil Confiança",
+    "documento": "44.555.666/0001-77",
+    "ativo": true
+  },
+  {
+    "id": "f5",
+    "nome": "Indústria de Embalagens Sul",
+    "documento": "55.666.777/0001-88",
+    "ativo": true
+  },
+  {
+    "id": "f6",
+    "nome": "Distribuidora de Matéria-Prima Rocha",
+    "documento": "66.777.888/0001-99",
+    "ativo": true
+  },
+  {
+    "id": "f7",
+    "nome": "Logística Expressa Brasil",
+    "documento": "77.888.999/0001-00",
+    "ativo": true
+  },
+  {
+    "id": "f8",
+    "nome": "Manutenção Predial Ágil",
+    "documento": "88.999.000/0001-11",
+    "ativo": true
+  },
+  {
+    "id": "for1",
+    "nome": "Fornecedor de Matéria-Prima C",
+    "ativo": true
+  },
+  {
+    "id": "for2",
+    "nome": "Fornecedor de Matéria-Prima A",
+    "ativo": true
+  },
+  {
+    "id": "for3",
+    "nome": "Fornecedor de Matéria-Prima B",
+    "ativo": true
+  },
+  {
+    "id": "for4",
+    "nome": "Consultoria Jurídica Almeida",
+    "ativo": true
+  },
+  {
+    "id": "for5",
+    "nome": "Fornecedor de Matéria-Prima D",
+    "ativo": true
+  },
+  {
+    "id": "for6",
+    "nome": "Fornecedor de Matéria-Prima E",
+    "ativo": true
+  }
+]
