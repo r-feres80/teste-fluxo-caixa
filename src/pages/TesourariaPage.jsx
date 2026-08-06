@@ -1,15 +1,41 @@
 import React, { useMemo } from "react";
-import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
-import { calcularComposicaoDiaria } from "../financial-engine/composicaoCaixa.js";
+import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorParceiro, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
+import { calcularComposicaoRecebido } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
-import { getDataAtualSistema } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO } from "../utils/dateUtils.js";
 import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
+
+// Mini-donut de composição (Antecipado/Em dia/Atrasado) por Cliente/Fornecedor
+// — igual ao que existia na página standalone de Composição do Caixa, agora
+// consolidada aqui dentro de Tesouraria (Etapa 2 item 4).
+function MiniDonutComposicao({ item, nome }) {
+  const partes = [
+    { key: "antecipado", label: "Antecipado", valor: item.antecipado },
+    { key: "emDia", label: "Em dia", valor: item.emDia },
+    { key: "atrasado", label: "Atrasado", valor: item.atrasado },
+  ].filter((p) => p.valor > 0);
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <ResponsiveContainer width={92} height={92}>
+        <PieChart>
+          <Pie data={partes} dataKey="valor" nameKey="label" innerRadius={26} outerRadius={40} paddingAngle={2}>
+            {partes.map((p) => <Cell key={p.key} fill={CORES_COMPOSICAO[p.key]} />)}
+          </Pie>
+          <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ fontSize: 11 }} />
+        </PieChart>
+      </ResponsiveContainer>
+      <div className="text-xs text-slate-600 text-center truncate w-24" title={nome}>{nome}</div>
+      <div className="text-[11px] text-slate-400 font-mono">{fmtBRLShort(item.total)}</div>
+    </div>
+  );
+}
 
 // Tooltip do sparkline — mesma informação (Data + Valor) já disponível na
 // tabela ao lado, só que sob hover no gráfico. Conteúdo customizado (em vez
@@ -144,6 +170,19 @@ export default function TesourariaPage({ data }) {
     [entidades.lancamentos, filtros.empresaId]);
   const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizados, hoje, 30), [realizados, hoje]);
 
+  // Composição do Caixa consolidada aqui (Etapa 2 item 4) — antes também
+  // vivia numa página standalone (composicao-caixa), removida do menu.
+  const agora = parseISO(hoje);
+  const composicaoGeral = useMemo(() => calcularComposicaoRecebido(realizados), [realizados]);
+  const composicaoMensal = useMemo(() => calcularComposicaoMensal(realizados, agora.getFullYear(), agora.getMonth(), 6), [realizados, agora]);
+  const composicaoPorParceiro = useMemo(() => calcularComposicaoPorParceiro(realizados, 6), [realizados]);
+  const composicaoPorContaBancaria = useMemo(() => calcularComposicaoPorContaBancaria(realizados), [realizados]);
+  const nomeParceiroComposicao = (item) => {
+    const lista = item.tipoParceiro === "Cliente" ? entidades.clientes : entidades.fornecedores;
+    return lista.find((p) => p.id === item.id)?.nome ?? "—";
+  };
+  const nomeContaBancaria = (id) => entidades.contasBancarias.find((c) => c.id === id)?.apelido ?? "—";
+
   if (contasFiltradas.length === 0) {
     return <InfoNote tone="amber">Nenhuma conta bancária ativa para os filtros atuais. Cadastre em Cadastros → Contas Bancárias.</InfoNote>;
   }
@@ -203,19 +242,76 @@ export default function TesourariaPage({ data }) {
         </Panel>
       </div>
 
-      <Panel title="Composição do Caixa — Últimos 30 dias" subtitle="Antecipado / Em dia / Atrasado, por Data de baixa (Entradas e Saídas Realizadas)">
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={composicao30dias}>
-            <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
-            <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
-            <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
-            <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </Panel>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-slate-800 font-semibold text-sm">Composição do Caixa</h2>
+          <span className="text-xs text-slate-400">Antecipado (baixa antes do vencimento) / Em dia (no vencimento) / Atrasado (depois) — Entradas e Saídas Realizadas, exclui transferências</span>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4">
+          <KPI label="Antecipado" value={fmtBRL(composicaoGeral.antecipado)} sub={`${composicaoGeral.antecipadoPct.toFixed(0)}% do total`} tone="positive" basis="caixa" />
+          <KPI label="Em dia" value={fmtBRL(composicaoGeral.emDia)} sub={`${composicaoGeral.emDiaPct.toFixed(0)}% do total`} tone="neutral" basis="caixa" />
+          <KPI label="Atrasado" value={fmtBRL(composicaoGeral.atrasado)} sub={`${composicaoGeral.atrasadoPct.toFixed(0)}% do total`} tone={composicaoGeral.atrasadoPct > 20 ? "negative" : "neutral"} basis="caixa" />
+        </div>
+
+        <Panel title="Composição Diária" subtitle="Últimos 30 dias, por Data de baixa">
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={composicao30dias}>
+              <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+              <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
+              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
+              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Panel title="Composição Mensal" subtitle="Últimos 6 meses">
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={composicaoMensal}>
+                <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+                <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
+                <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
+                <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </Panel>
+
+          <Panel title="Quebra por Conta Bancária">
+            {composicaoPorContaBancaria.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado.</span> : (
+              <table className="w-full text-sm">
+                <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+                  <th className="py-2 pr-4">Conta</th><th className="py-2 pr-4 text-right">Antecipado</th><th className="py-2 pr-4 text-right">Em dia</th><th className="py-2 text-right">Atrasado</th>
+                </tr></thead>
+                <tbody>
+                  {composicaoPorContaBancaria.map((c) => (
+                    <tr key={c.id} className="border-b border-slate-100">
+                      <td className="py-2 pr-4 text-slate-700">{nomeContaBancaria(c.id)}</td>
+                      <td className="py-2 pr-4 text-right font-mono tabular-nums text-emerald-600">{c.antecipadoPct.toFixed(0)}%</td>
+                      <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-500">{c.emDiaPct.toFixed(0)}%</td>
+                      <td className="py-2 text-right font-mono tabular-nums text-rose-600">{c.atrasadoPct.toFixed(0)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </Panel>
+        </div>
+
+        <Panel title="Composição por Cliente/Fornecedor" subtitle="Top 6 por volume Realizado">
+          {composicaoPorParceiro.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado com parceiro vinculado.</span> : (
+            <div className="flex flex-wrap gap-6 justify-around">
+              {composicaoPorParceiro.map((item) => <MiniDonutComposicao key={item.id} item={item} nome={nomeParceiroComposicao(item)} />)}
+            </div>
+          )}
+        </Panel>
+      </div>
 
       <Panel title="Transferências Internas" subtitle="Movimentos entre contas próprias — não entram em Entradas/Saídas operacionais">
         {transferencias.length === 0 ? <span className="text-sm text-slate-400">Nenhuma transferência registrada.</span> : (
