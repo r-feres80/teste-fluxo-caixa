@@ -1,10 +1,11 @@
-// Verificação da massa de dados sintética (Bloco B, Etapa 1) — roda os
-// mesmos cálculos reais do app (financial-engine, nunca uma versão
-// paralela) sobre o dataset gerado, e imprime os números que importam pra
-// calibração: Caixa Disponível/Projetado 30d, AP/AR em aberto, mix de
-// vencimento, receita mensal do DRE e Orçado x Realizado. Use pra recalibrar
-// src/data/demoDataGenerator.js sempre que os parâmetros de geração
-// mudarem — nunca ajuste um número aqui, ajuste o parâmetro de entrada lá.
+// Verificação da massa de dados (Bloco B, Etapa 1 + Leva 3 dado real) — roda
+// os mesmos cálculos reais do app (financial-engine, nunca uma versão
+// paralela) sobre o dataset, e imprime os números que importam pra
+// calibração: Caixa/Projetado 30d (informativos, sem faixa-alvo desde a
+// correção completa de EBITDA), AP/AR em aberto (critério), mix de
+// vencimento, receita mensal do DRE, EBITDA (critério) e Orçado x Realizado.
+// Nunca ajuste um número aqui — ajuste o parâmetro de entrada em
+// src/data/lancamentosImportados.json ou demoDataGenerator.js.
 //
 // Rodar: node scripts/verificar-massa-sintetica.mjs
 import { demoLancamentos, demoOrcamentoItens, demoContasBancarias, demoPlanoDeContas, demoClientes, demoFornecedores } from "../src/data/demoData.js";
@@ -24,24 +25,24 @@ import { todayISO, diffDaysISO, startOfMonthISO, endOfMonthISO, addDaysISO } fro
 // Liquidez com Caixa Disponível fixo — ver decisão do usuário no checkpoint.
 const AP_ABERTO_MIN = 380000, AP_ABERTO_MAX = 470000;
 const AR_ABERTO_MIN = 550000, AR_ABERTO_MAX = 660000;
-const LIQUIDEZ_MIN = 1.5, LIQUIDEZ_MAX = 1.7;
-// Margem EBITDA-alvo (checkpoint seguinte): 10-15% da Receita Bruta no ano.
+const EBITDA_MARGEM_MIN = 10, EBITDA_MARGEM_MAX = 15;
 //
-// Decisão do usuário (checkpoint EBITDA parcial): mover a margem pra faixa
-// 10-15% exigiria encolher Custos/Despesas Realizado em ~84%, o que joga o
-// fluxo de caixa Realizado positivo o bastante pra exigir saldoInicial
-// NEGATIVO em cb1/cb4 pra ainda bater Caixa Disponível 600-850k — mesmo
-// problema de "contas nascendo no vermelho" já corrigido antes. Opção 3
-// escolhida: aplicar só o teto matemático de redução (~47%, fator 0.53 em
-// src/data/lancamentosImportados.json, só Realizado+Saída+pc2.*/pc3.*) que
-// mantém TODAS as contas com saldoInicial >= 0 — leva a margem de -191%
-// para ~-77%. EBITDA CONTINUA NEGATIVO: isso é mitigado, não resolvido.
-// A correção completa exige regenerar as linhas Realizado com proporção
-// custo/receita correta DESDE A ORIGEM (mesmo método da Etapa 1 — gerador
-// sintético calibrado pelo parâmetro de entrada), não reescala pós-hoc como
-// esta. Fica pendente para uma rodada futura dedicada, fora do escopo deste
-// checkpoint.
-const EBITDA_MARGEM_MIN_ATUAL = -80, EBITDA_MARGEM_MAX_ATUAL = -70; // faixa mitigada (não-alvo final)
+// Correção completa de EBITDA (checkpoint pós-Leva 3, decisão do usuário):
+// os valores das linhas Realizado de Custos/Despesas Operacionais foram
+// REGENERADOS na origem (lancamentosImportados.json, técnica de
+// gerarCarteiraAberta + busca binária real contra calcularDRE), não
+// reescalados por fator fixo — resolve o problema estrutural das duas
+// tentativas anteriores (fator único e otimização por empresa, ambas
+// tetadas bem abaixo de 10-15% por causa do alvo fixo de Caixa Disponível).
+//
+// Trade-off aceito conscientemente: isso torna o Realizado do período
+// fortemente positivo em caixa, então Caixa Disponível e o Índice de
+// Liquidez de Caixa DEIXARAM DE TER faixa-alvo — são reportados como
+// RESULTADO do cálculo, não mais validados contra um número fixo (o antigo
+// alvo de 600-850k só existia pra caber num Caixa artificialmente pequeno;
+// mantê-lo exigiria saldoInicial negativo, o problema original). Só EBITDA
+// (10-15%) e AP/AR em aberto (intocados, devem continuar batendo a mesma
+// faixa de sempre) são critério de aceite agora.
 
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -54,13 +55,14 @@ console.log("\n=== CAIXA (Tesouraria/Dashboard) ===");
 const posicao = calcularPosicaoConsolidada(demoContasBancarias.filter((c) => c.ativo), demoLancamentos, HOJE);
 console.log("Total consolidado:", fmt(posicao.total));
 console.log("Aplicações (sem liquidez):", fmt(posicao.aplicacoes));
-console.log("Disponível:", fmt(posicao.disponivel), posicao.disponivel >= 600000 && posicao.disponivel <= 850000 ? "OK (600-850k)" : "FORA DA FAIXA");
-demoContasBancarias.forEach((c) => console.log(`  ${c.id} (${c.semLiquidez === "true" ? "aplicação" : "líquida"}): saldoInicial=${fmt(c.saldoInicial)}`));
+console.log("Disponível:", fmt(posicao.disponivel), "(sem faixa-alvo — resultado do fluxo, não mais critério de aceite)");
+console.log("Nenhum saldoInicial negativo:", demoContasBancarias.every((c) => c.saldoInicial >= 0) ? "OK" : "FALHOU");
+demoContasBancarias.forEach((c) => console.log(`  ${c.id} (${c.empresaId}, ${c.semLiquidez === "true" ? "aplicação" : "líquida"}): saldoInicial=${fmt(c.saldoInicial)}`));
 
 const serie30 = buildFluxoCaixaDiario({ lancamentos: demoLancamentos, saldoInicialConsolidado: posicao.total, dataReferencia: HOJE, diasHorizonte: 30 });
 const menor30 = menorPontoDaSerie(serie30);
 const projetado30 = serie30[serie30.length - 1].saldo;
-console.log("Projetado 30 dias (saldo final):", fmt(projetado30), projetado30 >= 600000 && projetado30 <= 850000 ? "OK (600-850k)" : "FORA DA FAIXA");
+console.log("Projetado 30 dias (saldo final):", fmt(projetado30), "(sem faixa-alvo)");
 console.log("Menor ponto projetado 30d:", fmt(menor30.saldo), "em", menor30.data);
 
 console.log("\n=== AP/AR EM ABERTO ===");
@@ -72,8 +74,7 @@ console.log("AP total em aberto:", fmt(agingAP.totalCarteira), "| vencido:", fmt
   agingAP.totalCarteira >= AP_ABERTO_MIN && agingAP.totalCarteira <= AP_ABERTO_MAX ? `OK (${fmt(AP_ABERTO_MIN)}-${fmt(AP_ABERTO_MAX)})` : "FORA DA FAIXA");
 
 const liquidez = calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira);
-console.log("Índice de Liquidez de Caixa:", liquidez.toFixed(2) + "x",
-  liquidez >= LIQUIDEZ_MIN && liquidez <= LIQUIDEZ_MAX ? `OK (${LIQUIDEZ_MIN}x-${LIQUIDEZ_MAX}x)` : "FORA DA FAIXA");
+console.log("Índice de Liquidez de Caixa:", liquidez.toFixed(2) + "x", "(sem faixa-alvo — decorre de Caixa Disponível, que também não tem mais faixa-alvo)");
 
 function mixVencimento(abertos, label) {
   let antecipado = 0, emDia = 0, atrasado = 0;
@@ -110,12 +111,8 @@ const lancamentosYTD = demoLancamentos.filter((l) => {
 const dreYTD = calcularDRE(lancamentosYTD, demoPlanoDeContas);
 const margemEbitda = dreYTD.receitaBruta > 0 ? (dreYTD.ebitda / dreYTD.receitaBruta) * 100 : null;
 console.log("Receita Bruta no ano:", fmt(dreYTD.receitaBruta));
-const dentroFaixaFinal = margemEbitda != null && margemEbitda >= 10 && margemEbitda <= 15;
-const dentroTetoMitigado = margemEbitda != null && margemEbitda >= EBITDA_MARGEM_MIN_ATUAL && margemEbitda <= EBITDA_MARGEM_MAX_ATUAL;
 console.log("EBITDA no ano:", fmt(dreYTD.ebitda), "| margem:", margemEbitda == null ? "—" : margemEbitda.toFixed(1) + "%",
-  dentroFaixaFinal ? "OK (10%-15% da Receita Bruta)"
-    : dentroTetoMitigado ? "FORA DA FAIXA-ALVO (mitigado — dentro do teto matemático ~-77%, correção completa pendente)"
-    : "FORA DA FAIXA");
+  margemEbitda != null && margemEbitda >= EBITDA_MARGEM_MIN && margemEbitda <= EBITDA_MARGEM_MAX ? `OK (${EBITDA_MARGEM_MIN}%-${EBITDA_MARGEM_MAX}% da Receita Bruta)` : "FORA DA FAIXA");
 
 console.log("\n=== DFC do mês corrente (Waterfall) ===");
 const anoRef = Number(HOJE.slice(0, 4)), mesRef = Number(HOJE.slice(5, 7)) - 1;

@@ -94,8 +94,8 @@ export default function DFCPage({ data }) {
         <KPI
           label="Índice de Liquidez de Caixa"
           value={indiceLiquidezCaixa != null ? `${indiceLiquidezCaixa.toFixed(2)}x` : "—"}
-          tone={indiceLiquidezCaixa != null && indiceLiquidezCaixa >= 1.5 && indiceLiquidezCaixa <= 1.7 ? "positive" : "negative"}
-          sub="Caixa ÷ Contas a Pagar em aberto (proxy) — meta: 1,5x-1,7x"
+          tone={indiceLiquidezCaixa == null ? "neutral" : indiceLiquidezCaixa >= 1.5 ? "positive" : indiceLiquidezCaixa >= 1.0 ? "neutral" : "negative"}
+          sub="Caixa ÷ Contas a Pagar em aberto (proxy) — meta: ≥1,5x (sem teto — quanto maior, mais líquido)"
           basis="caixa"
         />
       </div>

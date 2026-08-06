@@ -2,7 +2,7 @@
 // Construído para exercitar toda a hierarquia de Plano de Contas e Centro
 // de Custo desde a Fase 1. Lançamentos reais de movimento entram na Fase 2.
 
-import { calibrarContasBancarias, gerarOrcamentoAutomatico } from "./demoDataGenerator.js";
+import { gerarOrcamentoAutomatico } from "./demoDataGenerator.js";
 import lancamentosImportadosRaw from "./lancamentosImportados.json" with { type: "json" };
 import clientesImportados from "./clientesImportados.json" with { type: "json" };
 import fornecedoresImportados from "./fornecedoresImportados.json" with { type: "json" };
@@ -64,12 +64,16 @@ export const demoBancos = [
   { id: "b5", nome: "Santander", codigo: "033", ativo: true },
 ];
 
-// Base pré-calibração: o saldoInicial das contas líquidas (semLiquidez !==
-// "true") é recalculado por gerarMassaSintetica pra Caixa Disponível bater
-// a faixa-alvo — o peso relativo abaixo é preservado, só a escala muda (ver
-// "Calibração do saldo inicial" em demoDataGenerator.js). 5 contas líquidas
-// com pesos próximos (em vez de concentradas em 1-2 contas) — Composição do
-// Caixa em Tesouraria fica mais distribuída (item 2/Etapa 4).
+// Saldo inicial USADO DIRETO, sem calibração (decisão da correção completa
+// de EBITDA — ver comentário grande perto de demoLancamentos abaixo): Caixa
+// Disponível deixou de ser um alvo fixo (600-850k, Etapa 1) pra virar um
+// RESULTADO do fluxo de caixa real, então não há mais nada a calibrar aqui
+// — calibrarContasBancarias (ainda em demoDataGenerator.js, só não chamada
+// mais) forçava o saldoInicial pra fechar num alvo artificial, o que exigia
+// saldo NEGATIVO quando o fluxo Realizado ficava fortemente positivo (caso
+// de EBITDA positivo). 5 contas líquidas com pesos próximos (em vez de
+// concentradas em 1-2 contas) — Composição do Caixa em Tesouraria fica mais
+// distribuída (item 2/Etapa 4).
 const demoContasBancariasBase = [
   { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 45000, semLiquidez: "false", ativo: true },
   { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 42000, semLiquidez: "false", ativo: true },
@@ -191,6 +195,25 @@ export const demoCentrosCusto = [
 // 1 (gerarMassaSintetica ainda existe em demoDataGenerator.js, só não é mais
 // chamada aqui). Datas são FIXAS (maio-novembro/2026, não evergreen) — dado
 // real de teste, não sintético relativo a HOJE.
+//
+// Correção completa de EBITDA (checkpoint pós-Leva 3, decisão do usuário):
+// os VALORES das 617 linhas Realizado de Custos/Despesas Operacionais
+// (pc2.*/pc3.*) foram REGENERADOS na origem (lancamentosImportados.json),
+// não reescalados por fator fixo — mesma técnica de redistribuição por peso
+// aleatório de gerarCarteiraAberta (Etapa 1), com o TOTAL-ALVO encontrado
+// por busca binária real (gera -> roda calcularDRE de verdade -> ajusta ->
+// repete) até a margem EBITDA YTD cair em 10-15% da Receita Bruta Realizada
+// (fechou em 12,5%). Quantidade de linhas, Vencimento, Competência e todas
+// as Entradas/Em aberto/Previsto (AP/AR) ficaram intocados.
+//
+// Isso tornou o fluxo de caixa Realizado do período fortemente positivo —
+// consequência esperada e aceita, não um efeito colateral: forçar Caixa
+// Disponível de volta a 600-850k exigiria saldoInicial negativo em cb1/cb4
+// (mesmo problema já corrigido antes), então esse alvo foi abandonado por
+// decisão explícita. Caixa Disponível e o Índice de Liquidez de Caixa agora
+// são RESULTADOS do cálculo (não há mais faixa-alvo pra eles) — só EBITDA
+// (10-15%) e AP/AR em aberto (já validados, intocados) continuam sendo
+// critério de aceite. Ver scripts/verificar-massa-sintetica.mjs.
 export const demoLancamentos = lancamentosImportadosRaw;
-export const demoContasBancarias = calibrarContasBancarias(demoLancamentos, demoContasBancariasBase);
+export const demoContasBancarias = demoContasBancariasBase;
 export const demoOrcamentoItens = gerarOrcamentoAutomatico(demoLancamentos, demoPlanoDeContas);
