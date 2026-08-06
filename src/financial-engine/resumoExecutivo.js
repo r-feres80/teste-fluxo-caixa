@@ -76,7 +76,17 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens, lancamentos: entidades.lancamentos,
     ano: anoRef, meses: [hoje.getMonth()], empresaId: filtros.empresaId, dataReferencia,
   });
+  // Granular (todos os níveis da árvore) — só para o Copilot/"principais
+  // desvios" explicar causa-raiz por conta. NUNCA usar pra gerar Alertas
+  // Executivos: como cada nó Sintética soma os descendentes, um desvio real
+  // cascateia (Grupo + Subgrupo + Conta todos "materiais" ao mesmo tempo) —
+  // gerar um alerta por nó da árvore inteira é o que produzia dezenas de
+  // linhas quase idênticas no painel de alertas.
   const desviosOrcamentarios = achatarOrcado(arvoreMes).filter((n) => n.temOrcamento);
+  // Só os 6 grupos de topo (Receitas/Custos/Despesas Operacionais/Resultado
+  // Financeiro/Investimentos/Impostos) — um resumo agregado por grupo já
+  // comunica "onde" está o desvio sem repetir linha por subconta.
+  const desviosPorGrupo = arvoreMes.filter((n) => n.temOrcamento);
   const desvioTotalVsOrcamento = arvoreMes.reduce((s, n) => s + n.deltaForecast, 0);
 
   const mapaCC = new Map();
@@ -97,7 +107,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
 
   const alertas = calcularAlertasExecutivos({
     caixaConsolidado: posicao.total, menorProjetado: menor30, parametros, agingAR, agingAP,
-    concentracaoClientes, concentracaoFornecedores, desviosOrcamentarios, vencimentosProximosAP: vencAP, vencimentosProximosAR: vencAR,
+    concentracaoClientes, concentracaoFornecedores, desviosOrcamentarios: desviosPorGrupo, vencimentosProximosAP: vencAP, vencimentosProximosAR: vencAR,
   });
 
   return {

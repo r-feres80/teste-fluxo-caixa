@@ -42,10 +42,14 @@ function KpiCard({ label, value, sub, tone = "neutral", basis }) {
   );
 }
 
+// Estes 3 tipos avisam sobre uma queda projetada de caixa — a mesma
+// informação (em R$) já está nos cards "Caixa Disponível"/"Caixa Projetado
+// 30 dias" acima; o alerta aqui vira uma linha de destaque que aponta pro
+// card em vez de repetir o número.
 const TEXTO_ALERTA = {
-  liquidez: (a) => `Risco de liquidez: caixa projetado negativo (${fmtBRL(a.saldo)}) em ${fmtData(a.data)}.`,
-  caixa_abaixo_minimo: (a) => `Caixa (${fmtBRL(a.valor)}) abaixo do mínimo configurado.`,
-  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado fica abaixo do mínimo (${fmtBRL(a.valor)}) em ${fmtData(a.data)}.`,
+  liquidez: (a) => `Caixa projetado fica negativo em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias" e Fluxo de Caixa.`,
+  caixa_abaixo_minimo: () => `Caixa consolidado abaixo do mínimo configurado — ver card "Caixa Disponível".`,
+  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado cai abaixo do mínimo em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias".`,
   titulos_vencidos_receber: (a) => `Títulos vencidos a receber: ${fmtBRL(a.valor)}.`,
   titulos_vencidos_pagar: (a) => `Títulos vencidos a pagar: ${fmtBRL(a.valor)}.`,
   pagamentos_proximos: (a) => `${a.qtd} pagamento(s) relevante(s) nos próximos ${a.dias} dias (${fmtBRL(a.valor)}).`,
