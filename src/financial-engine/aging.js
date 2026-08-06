@@ -228,19 +228,20 @@ export function construirReguaDiasUteis(abertos, dataReferencia, quantidadeDiasU
 }
 
 /**
- * Previsto x Recebido, série diária dos últimos "quantidadeDias" dias até
- * dataFim: "A Receber no Dia" soma os títulos de AR com Vencimento naquele
- * dia (qualquer situação, exceto Cancelado); "Recebido no Dia" soma os
- * títulos Realizados com Data de baixa naquele dia. % aderência = Recebido
- * no Dia ÷ A Receber no Dia (null quando não havia nada a receber no dia).
+ * Previsto x Realizado, série diária dos últimos "quantidadeDias" dias até
+ * dataFim — mesma visualização para AP e AR (item 10/Etapa 3: antes só
+ * existia para AR): "previsto" soma os títulos com Vencimento naquele dia
+ * (qualquer situação, exceto Cancelado); "realizado" soma os títulos
+ * Realizados com Data de baixa naquele dia. % aderência = realizado ÷
+ * previsto (null quando não havia nada previsto no dia).
  */
-export function calcularPrevistoRecebidoDiario(lancamentosAR, dataFim, quantidadeDias) {
-  const validos = lancamentosAR.filter((l) => l.situacao !== "Cancelado");
+export function calcularPrevistoRealizadoDiario(lancamentos, dataFim, quantidadeDias) {
+  const validos = lancamentos.filter((l) => l.situacao !== "Cancelado");
   const dias = [];
   for (let i = quantidadeDias - 1; i >= 0; i--) dias.push(addDaysISO(dataFim, -i));
   return dias.map((dia) => {
-    const aReceber = validos.filter((l) => l.dataVencimento === dia).reduce((s, l) => s + l.valor, 0);
-    const recebido = validos.filter((l) => l.situacao === "Realizado" && l.dataPagamento === dia).reduce((s, l) => s + l.valor, 0);
-    return { data: dia, aReceber, recebido, aderenciaPct: aReceber > 0 ? (recebido / aReceber) * 100 : null };
+    const previsto = validos.filter((l) => l.dataVencimento === dia).reduce((s, l) => s + l.valor, 0);
+    const realizado = validos.filter((l) => l.situacao === "Realizado" && l.dataPagamento === dia).reduce((s, l) => s + l.valor, 0);
+    return { data: dia, previsto, realizado, aderenciaPct: previsto > 0 ? (realizado / previsto) * 100 : null };
   });
 }
