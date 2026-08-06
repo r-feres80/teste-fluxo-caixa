@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, CartesianGrid } from "recharts";
-import { Panel, KPI, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
+import { Panel, KPI, Gauge, InfoNote, selectCls, DateInputBR } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularEvolucaoInadimplencia, calcularPDD,
@@ -19,12 +19,35 @@ export default function InadimplenciaPage({ data }) {
     l.tipo === "Entrada" && !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
   ), [entidades.lancamentos, filtros.empresaId]);
 
-  const { abertos, buckets, totalVencido, totalCarteira, aVencer } = useMemo(
+  const { abertos, buckets, totalVencido, totalCarteira } = useMemo(
     () => calcularCarteiraEAging(lancamentosAR, hoje), [lancamentosAR, hoje]
   );
   const inadimplenciaPct = totalCarteira > 0 ? (totalVencido / totalCarteira) * 100 : 0;
 
   const vencidos = useMemo(() => abertos.filter((l) => diffDaysISO(l.dataVencimento, hoje) > 0), [abertos, hoje]);
+
+  // Filtro de "Títulos Vencidos em Aberto": data (vencimento), cliente e
+  // faixa de atraso, com totalizador — ver item 9/Etapa 3.
+  const faixaDoAtraso = (l) => {
+    const dias = diffDaysISO(l.dataVencimento, hoje);
+    return (FAIXAS_AGING.find((f) => dias <= f.max) ?? FAIXAS_AGING[FAIXAS_AGING.length - 1]).key;
+  };
+  const [fDataDe, setFDataDe] = useState("");
+  const [fDataAte, setFDataAte] = useState("");
+  const [fClienteId, setFClienteId] = useState("TODOS");
+  const [fFaixa, setFFaixa] = useState("TODAS");
+  const clientesComVencido = useMemo(() => {
+    const ids = new Set(vencidos.map((l) => l.clienteFornecedorId).filter(Boolean));
+    return entidades.clientes.filter((c) => ids.has(c.id)).sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [vencidos, entidades.clientes]);
+  const vencidosFiltrados = useMemo(() => vencidos.filter((l) => {
+    if (fClienteId !== "TODOS" && l.clienteFornecedorId !== fClienteId) return false;
+    if (fFaixa !== "TODAS" && faixaDoAtraso(l) !== fFaixa) return false;
+    if (fDataDe && l.dataVencimento < fDataDe) return false;
+    if (fDataAte && l.dataVencimento > fDataAte) return false;
+    return true;
+  }), [vencidos, fClienteId, fFaixa, fDataDe, fDataAte, hoje]);
+  const totalFiltrado = vencidosFiltrados.reduce((s, l) => s + l.valor, 0);
   const concentracaoVencidos = useMemo(() => calcularConcentracaoPorParceiro(vencidos, 5), [vencidos]);
   const evolucaoInadimplencia = useMemo(() => calcularEvolucaoInadimplencia(lancamentosAR, hoje, 6), [lancamentosAR, hoje]);
   const pdd = useMemo(() => calcularPDD(lancamentosAR, hoje, parametros.pddFaixas || PDD_FAIXAS_PADRAO), [lancamentosAR, hoje, parametros.pddFaixas]);
@@ -35,7 +58,10 @@ export default function InadimplenciaPage({ data }) {
   }, [lancamentosAR, hoje]);
   const dso = calcularDSOouDPO(totalCarteira, realizadoNoMes, 30);
 
-  const chartData = [{ faixa: "A vencer", valor: aVencer }, ...FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] }))];
+  // Aging da Carteira aqui é escopo exclusivo de vencidos (Inadimplência não
+  // é sobre o que ainda vai vencer) — sem a barra "A vencer", que já aparece
+  // em Contas a Receber.
+  const chartData = FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -114,13 +140,30 @@ export default function InadimplenciaPage({ data }) {
         </Panel>
       </div>
 
-      <Panel title="Títulos Vencidos em Aberto">
-        {vencidos.length === 0 ? <InfoNote>Nenhum título vencido para os filtros atuais.</InfoNote> : (
+      <Panel
+        title="Títulos Vencidos em Aberto"
+        right={
+          <div className="flex items-center gap-2">
+            <DateInputBR value={fDataDe} onChange={setFDataDe} className={selectCls + " w-auto"} />
+            <span className="text-slate-400 text-xs">até</span>
+            <DateInputBR value={fDataAte} onChange={setFDataAte} className={selectCls + " w-auto"} />
+            <select value={fClienteId} onChange={(e) => setFClienteId(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="TODOS">Todos os clientes</option>
+              {clientesComVencido.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
+            </select>
+            <select value={fFaixa} onChange={(e) => setFFaixa(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="TODAS">Todas faixas</option>
+              {FAIXAS_AGING.map((f) => <option key={f.key} value={f.key}>{f.label} dias</option>)}
+            </select>
+          </div>
+        }
+      >
+        {vencidosFiltrados.length === 0 ? <InfoNote>Nenhum título vencido para os filtros atuais.</InfoNote> : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">Cliente</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4 text-right">Dias em Atraso</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
-                {vencidos.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
+                {vencidosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
                   <tr key={l.id} className="border-b border-slate-100">
                     <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
                     <td className="py-2 pr-4 text-slate-700">{entidades.clientes.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
@@ -131,6 +174,10 @@ export default function InadimplenciaPage({ data }) {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-between items-center text-sm font-medium text-slate-600 mt-3 pt-3 border-t border-slate-200">
+              <span>{vencidosFiltrados.length} título(s)</span>
+              <span className="font-mono tabular-nums">{fmtBRL(totalFiltrado)}</span>
+            </div>
           </div>
         )}
       </Panel>
