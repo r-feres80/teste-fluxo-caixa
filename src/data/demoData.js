@@ -52,17 +52,22 @@ export const demoBancos = [
   { id: "b2", nome: "Itaú Unibanco", codigo: "341", ativo: true },
   { id: "b3", nome: "Bradesco", codigo: "237", ativo: true },
   { id: "b4", nome: "Caixa Econômica Federal", codigo: "104", ativo: true },
+  { id: "b5", nome: "Santander", codigo: "033", ativo: true },
 ];
 
 // Base pré-calibração: o saldoInicial das contas líquidas (semLiquidez !==
 // "true") é recalculado por gerarMassaSintetica pra Caixa Disponível bater
-// a faixa-alvo — o peso relativo abaixo (cb1 > cb2 > cb4) é preservado, só
-// a escala muda. Ver "Calibração do saldo inicial" em demoDataGenerator.js.
+// a faixa-alvo — o peso relativo abaixo é preservado, só a escala muda (ver
+// "Calibração do saldo inicial" em demoDataGenerator.js). 5 contas líquidas
+// com pesos próximos (em vez de concentradas em 1-2 contas) — Composição do
+// Caixa em Tesouraria fica mais distribuída (item 2/Etapa 4).
 const demoContasBancariasBase = [
-  { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 85000, semLiquidez: "false", ativo: true },
+  { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 45000, semLiquidez: "false", ativo: true },
   { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 42000, semLiquidez: "false", ativo: true },
   { id: "cb3", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB", agencia: "1234", numero: "99887-1", saldoInicial: 150000, semLiquidez: "true", ativo: true },
-  { id: "cb4", bancoId: "b3", empresaId: "e2", apelido: "Conta Movimento", agencia: "4321", numero: "65432-1", saldoInicial: 60000, semLiquidez: "false", ativo: true },
+  { id: "cb4", bancoId: "b3", empresaId: "e2", apelido: "Conta Movimento", agencia: "4321", numero: "65432-1", saldoInicial: 40000, semLiquidez: "false", ativo: true },
+  { id: "cb5", bancoId: "b4", empresaId: "e1", apelido: "Conta Movimento", agencia: "9012", numero: "34567-8", saldoInicial: 38000, semLiquidez: "false", ativo: true },
+  { id: "cb6", bancoId: "b5", empresaId: "e2", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
 ];
 
 export const demoProjetos = [

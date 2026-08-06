@@ -80,7 +80,7 @@ const arvore = construirOrcadoRealizado({ planoDeContas: demoPlanoDeContas, orca
 console.log("Total itens de orçamento:", demoOrcamentoItens.length);
 function achatar(nos, nivel = 0) { return nos.flatMap((n) => [{ ...n, nivel }, ...achatar(n.filhos, nivel + 1)]); }
 achatar(arvore).filter((n) => n.temOrcamento).forEach((n) => {
-  console.log(`  ${"  ".repeat(n.nivel)}${n.codigo} ${n.descricao}: Real=${fmt(n.real)} Orçado=${fmt(n.orcado)} Forecast=${fmt(n.forecast)} Δ%=${n.deltaForecastPct.toFixed(0)}%`);
+  console.log(`  ${"  ".repeat(n.nivel)}${n.codigo} ${n.descricao}: Real=${fmt(n.real)} Orçado=${fmt(n.orcado)} Forecast=${fmt(n.forecast)} Δ%=${n.deltaForecastPct == null ? "não comparável" : n.deltaForecastPct.toFixed(0) + "%"}`);
 });
 
 console.log("\n=== Clientes/Fornecedores ===");
