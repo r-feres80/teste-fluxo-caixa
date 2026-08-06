@@ -60,7 +60,7 @@ function pontoVelocimetro(cx, cy, r, t) {
  * O valor é sempre exibido por extenso (formatValue), mesmo quando excede
  * `max` — só o ponteiro fica "preso" no extremo do arco.
  */
-export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub }) {
+export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub, meta }) {
   const cx = 110, cy = 100, r = 82, espessura = 18;
   if (value == null) {
     return (
@@ -84,15 +84,24 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
     return <path key={i} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`} stroke={b.color} strokeWidth={espessura} fill="none" />;
   });
 
+  // Marcador de meta: traço radial curto sobre o arco, na posição do valor-alvo
+  // — não recalcula nada, só indica visualmente onde a meta cai na régua.
+  const metaClamped = meta != null ? Math.max(min, Math.min(meta, max)) : null;
+  const metaAngulo = metaClamped != null ? paraAngulo(metaClamped) : null;
+  const metaP1 = metaAngulo != null ? pontoVelocimetro(cx, cy, r - espessura - 3, metaAngulo) : null;
+  const metaP2 = metaAngulo != null ? pontoVelocimetro(cx, cy, r + 3, metaAngulo) : null;
+
   return (
     <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-0.5">
       <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start">{label}</span>
       <svg viewBox="0 0 220 112" width="100%" height="112">
         {segmentos}
+        {metaP1 && metaP2 && <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y} stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />}
         <line x1={cx} y1={cy} x2={ponteiro.x} y2={ponteiro.y} stroke="#1e293b" strokeWidth={3} strokeLinecap="round" />
         <circle cx={cx} cy={cy} r={5} fill="#1e293b" />
       </svg>
       <span className="font-mono tabular-nums text-xl font-semibold text-slate-800 -mt-3">{formatValue(value)}</span>
+      {meta != null && <span className="text-[11px] text-slate-400">Meta: {formatValue(meta)}</span>}
       {sub && <span className="text-xs text-slate-500">{sub}</span>}
     </div>
   );

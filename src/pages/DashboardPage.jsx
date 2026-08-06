@@ -14,9 +14,9 @@ const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5
 function construirWaterfall(dfc) {
   const passos = [
     { label: "Caixa Inicial", valor: dfc.caixaInicial, total: true },
-    { label: "FCO", valor: dfc.Operacional },
-    { label: "FCI", valor: dfc.Investimento },
-    { label: "FCF", valor: dfc.Financiamento },
+    { label: "Operacional", valor: dfc.Operacional },
+    { label: "Investimentos", valor: dfc.Investimento },
+    { label: "Financiamentos", valor: dfc.Financiamento },
     { label: "Caixa Final", valor: dfc.caixaFinal, total: true },
   ];
   let acumulado = 0;
@@ -91,9 +91,10 @@ export default function DashboardPage({ data }) {
 
       <div className="grid grid-cols-2 gap-4">
         <Gauge
-          label="Liquidez"
+          label="Liquidez (Giro de Caixa)"
           value={resumo.caixa.indiceLiquidezCaixa}
           min={0} max={3}
+          meta={1.5}
           bands={[{ upTo: 1, color: "#f43f5e" }, { upTo: 1.5, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
           sub="Caixa Disponível ÷ Contas a Pagar em aberto — <1,0x vermelho, 1,0-1,5x amarelo, >1,5x verde"
@@ -102,13 +103,14 @@ export default function DashboardPage({ data }) {
           label="Inadimplência"
           value={resumo.contasReceber.inadimplenciaPct}
           min={0} max={20}
+          meta={16}
           bands={[{ upTo: 5, color: "#10b981" }, { upTo: 10, color: "#f59e0b" }, { upTo: 20, color: "#f43f5e" }]}
           formatValue={(v) => `${v.toFixed(1)}%`}
           sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
         />
       </div>
 
-      <Panel title="Waterfall Executivo (DFC do mês)" subtitle="Caixa Inicial → Atividades Operacionais/Investimento/Financiamento → Caixa Final">
+      <Panel title="Waterfall Executivo (DFC do mês)" subtitle="Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final">
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={waterfallData} margin={{ top: 20 }}>
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
