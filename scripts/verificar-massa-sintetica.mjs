@@ -26,6 +26,22 @@ const AP_ABERTO_MIN = 380000, AP_ABERTO_MAX = 470000;
 const AR_ABERTO_MIN = 550000, AR_ABERTO_MAX = 660000;
 const LIQUIDEZ_MIN = 1.5, LIQUIDEZ_MAX = 1.7;
 // Margem EBITDA-alvo (checkpoint seguinte): 10-15% da Receita Bruta no ano.
+//
+// Decisão do usuário (checkpoint EBITDA parcial): mover a margem pra faixa
+// 10-15% exigiria encolher Custos/Despesas Realizado em ~84%, o que joga o
+// fluxo de caixa Realizado positivo o bastante pra exigir saldoInicial
+// NEGATIVO em cb1/cb4 pra ainda bater Caixa Disponível 600-850k — mesmo
+// problema de "contas nascendo no vermelho" já corrigido antes. Opção 3
+// escolhida: aplicar só o teto matemático de redução (~47%, fator 0.53 em
+// src/data/lancamentosImportados.json, só Realizado+Saída+pc2.*/pc3.*) que
+// mantém TODAS as contas com saldoInicial >= 0 — leva a margem de -191%
+// para ~-77%. EBITDA CONTINUA NEGATIVO: isso é mitigado, não resolvido.
+// A correção completa exige regenerar as linhas Realizado com proporção
+// custo/receita correta DESDE A ORIGEM (mesmo método da Etapa 1 — gerador
+// sintético calibrado pelo parâmetro de entrada), não reescala pós-hoc como
+// esta. Fica pendente para uma rodada futura dedicada, fora do escopo deste
+// checkpoint.
+const EBITDA_MARGEM_MIN_ATUAL = -80, EBITDA_MARGEM_MAX_ATUAL = -70; // faixa mitigada (não-alvo final)
 
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -94,8 +110,12 @@ const lancamentosYTD = demoLancamentos.filter((l) => {
 const dreYTD = calcularDRE(lancamentosYTD, demoPlanoDeContas);
 const margemEbitda = dreYTD.receitaBruta > 0 ? (dreYTD.ebitda / dreYTD.receitaBruta) * 100 : null;
 console.log("Receita Bruta no ano:", fmt(dreYTD.receitaBruta));
+const dentroFaixaFinal = margemEbitda != null && margemEbitda >= 10 && margemEbitda <= 15;
+const dentroTetoMitigado = margemEbitda != null && margemEbitda >= EBITDA_MARGEM_MIN_ATUAL && margemEbitda <= EBITDA_MARGEM_MAX_ATUAL;
 console.log("EBITDA no ano:", fmt(dreYTD.ebitda), "| margem:", margemEbitda == null ? "—" : margemEbitda.toFixed(1) + "%",
-  margemEbitda != null && margemEbitda >= 10 && margemEbitda <= 15 ? "OK (10%-15% da Receita Bruta)" : "FORA DA FAIXA");
+  dentroFaixaFinal ? "OK (10%-15% da Receita Bruta)"
+    : dentroTetoMitigado ? "FORA DA FAIXA-ALVO (mitigado — dentro do teto matemático ~-77%, correção completa pendente)"
+    : "FORA DA FAIXA");
 
 console.log("\n=== DFC do mês corrente (Waterfall) ===");
 const anoRef = Number(HOJE.slice(0, 4)), mesRef = Number(HOJE.slice(5, 7)) - 1;
