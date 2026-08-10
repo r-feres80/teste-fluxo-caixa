@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar, Cell, LabelList } from "recharts";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Info } from "lucide-react";
 import { Panel, Badge, BasisHint, Gauge } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
@@ -31,11 +31,14 @@ function construirWaterfall(dfc) {
   });
 }
 
-function KpiCard({ label, value, sub, tone = "neutral", basis }) {
+function KpiCard({ label, value, sub, tone = "neutral", basis, tooltip }) {
   const cor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-900";
   return (
     <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 flex flex-col gap-1">
-      <span className="text-[11px] text-slate-500 uppercase tracking-wide flex items-center gap-1">{label}<BasisHint basis={basis} /></span>
+      <span className="text-[11px] text-slate-500 uppercase tracking-wide flex items-center gap-1">
+        {label}<BasisHint basis={basis} />
+        {tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+      </span>
       <span className={`font-mono tabular-nums text-xl font-semibold ${cor}`}>{value}</span>
       {sub && <span className="text-[11px] text-slate-400">{sub}</span>}
     </div>
@@ -85,7 +88,8 @@ export default function DashboardPage({ data }) {
       <div className="grid grid-cols-4 gap-4">
         <KpiCard label="Receita Bruta no ano" value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia" />
         <KpiCard label="EBITDA no ano" value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} basis="competencia" />
-        <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia" />
+        <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia"
+          tooltip="Número LÍQUIDO: soma o desvio (favorável menos desfavorável) dos 6 grupos do DRE. Grupos favoráveis podem mascarar grupos desfavoráveis — um total pequeno aqui não significa que todo grupo está dentro do orçado. Ver 'Alertas Executivos' abaixo para a composição por grupo." />
         <KpiCard label="Inadimplência (Receber)" value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
       </div>
 
