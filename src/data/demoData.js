@@ -64,14 +64,15 @@ export const demoBancos = [
   { id: "b5", nome: "Santander", codigo: "033", ativo: true },
 ];
 
-// Saldo inicial USADO DIRETO, sem calibração (decisão da correção completa
-// de EBITDA — ver comentário grande perto de demoLancamentos abaixo): Caixa
-// Disponível deixou de ser um alvo fixo (600-850k, Etapa 1) pra virar um
-// RESULTADO do fluxo de caixa real, então não há mais nada a calibrar aqui
-// — calibrarContasBancarias (ainda em demoDataGenerator.js, só não chamada
-// mais) forçava o saldoInicial pra fechar num alvo artificial, o que exigia
-// saldo NEGATIVO quando o fluxo Realizado ficava fortemente positivo (caso
-// de EBITDA positivo). 5 contas líquidas com pesos próximos (em vez de
+// Saldo inicial USADO DIRETO, sem calibração/residual (ver comentário grande
+// perto de demoLancamentos abaixo): calibrarContasBancarias (ainda em
+// demoDataGenerator.js, só não chamada mais) forçava o saldoInicial pra
+// fechar num alvo artificial de Caixa Disponível, o que exigia saldo
+// NEGATIVO sempre que o fluxo Realizado ficasse forte demais — problema
+// resolvido regenerando os VALORES dos lançamentos na origem (Custos/
+// Despesas + pool de Receitas Financeiras) até Caixa Disponível/Liquidez
+// caírem na faixa-alvo organicamente, sem precisar de nenhum ajuste de
+// saldoInicial. 5 contas líquidas com pesos próximos (em vez de
 // concentradas em 1-2 contas) — Composição do Caixa em Tesouraria fica mais
 // distribuída (item 2/Etapa 4).
 const demoContasBancariasBase = [
@@ -202,24 +203,33 @@ export const demoCentrosCusto = [
 // chamada aqui). Datas são FIXAS (maio-novembro/2026, não evergreen) — dado
 // real de teste, não sintético relativo a HOJE.
 //
-// Correção completa de EBITDA (checkpoint pós-Leva 3, decisão do usuário):
-// os VALORES das 617 linhas Realizado de Custos/Despesas Operacionais
-// (pc2.*/pc3.*) foram REGENERADOS na origem (lancamentosImportados.json),
-// não reescalados por fator fixo — mesma técnica de redistribuição por peso
-// aleatório de gerarCarteiraAberta (Etapa 1), com o TOTAL-ALVO encontrado
-// por busca binária real (gera -> roda calcularDRE de verdade -> ajusta ->
-// repete) até a margem EBITDA YTD cair em 10-15% da Receita Bruta Realizada
-// (fechou em 12,5%). Quantidade de linhas, Vencimento, Competência e todas
-// as Entradas/Em aberto/Previsto (AP/AR) ficaram intocados.
+// Correção completa de EBITDA (checkpoint pós-Leva 3): os VALORES das 617
+// linhas Realizado de Custos/Despesas Operacionais (pc2.*/pc3.*) foram
+// REGENERADOS na origem (lancamentosImportados.json), não reescalados por
+// fator fixo — técnica de redistribuição por peso aleatório de
+// gerarCarteiraAberta (Etapa 1), com o TOTAL-ALVO encontrado por busca
+// binária real (gera -> roda calcularDRE de verdade -> ajusta -> repete)
+// até a margem EBITDA YTD cair em 10-15% da Receita Bruta Realizada (fechou
+// em 12,5%, ficou intocado desde então). Isso tornou o fluxo de caixa
+// Realizado fortemente positivo, jogando Caixa Disponível/Liquidez bem
+// acima de qualquer faixa razoável — nessa rodada isso tinha sido aceito
+// como trade-off (Caixa/Liquidez "sem faixa-alvo").
 //
-// Isso tornou o fluxo de caixa Realizado do período fortemente positivo —
-// consequência esperada e aceita, não um efeito colateral: forçar Caixa
-// Disponível de volta a 600-850k exigiria saldoInicial negativo em cb1/cb4
-// (mesmo problema já corrigido antes), então esse alvo foi abandonado por
-// decisão explícita. Caixa Disponível e o Índice de Liquidez de Caixa agora
-// são RESULTADOS do cálculo (não há mais faixa-alvo pra eles) — só EBITDA
-// (10-15%) e AP/AR em aberto (já validados, intocados) continuam sendo
-// critério de aceite. Ver scripts/verificar-massa-sintetica.mjs.
+// Comando consolidado, Bloco 1 (decisão do usuário — reabre esse trade-off):
+// investigando por que Liquidez não descia mesmo weakening Custos/Despesas,
+// achamos a causa real: um pool de Receitas Financeiras Realizado
+// (Aplicações Financeiras/pc4.04 + Captações/pc4.05 + Recuperação de
+// Créditos/pc4.06) somando R$3,15M — 80% do tamanho da própria Receita
+// Bruta, mesmo tipo de valor de teste desproporcional dos Custos originais,
+// só que do lado de Entrada, por isso nunca tinha sido tocado (regra era
+// "não mexer em Entradas/Receita", mas esse pool não é Receita Bruta/
+// Vendas). Regenerado com a MESMA técnica (peso aleatório + busca binária,
+// agora contra calcularIndiceLiquidezCaixa/calcularPosicaoConsolidada reais)
+// até a Liquidez cair em 1,5x-1,9x — fechou em 1,70x, Caixa Disponível
+// R$722.500, sem tocar em Custos/Despesas (EBITDA já estava em 12,5%,
+// dentro da faixa, ficou exatamente igual) nem em AP/AR/saldoInicial. Caixa
+// Disponível e Liquidez voltam a ter faixa-alvo, agora DERIVADA da
+// Liquidez-alvo × AP em aberto. Ver scripts/verificar-massa-sintetica.mjs.
 export const demoLancamentos = lancamentosImportadosRaw;
 export const demoContasBancarias = demoContasBancariasBase;
 export const demoOrcamentoItens = gerarOrcamentoAutomatico(demoLancamentos, demoPlanoDeContas);

@@ -1,10 +1,9 @@
 // Verificação da massa de dados (Bloco B, Etapa 1 + Leva 3 dado real) — roda
 // os mesmos cálculos reais do app (financial-engine, nunca uma versão
 // paralela) sobre o dataset, e imprime os números que importam pra
-// calibração: Caixa/Projetado 30d (informativos, sem faixa-alvo desde a
-// correção completa de EBITDA), AP/AR em aberto (critério), mix de
-// vencimento, receita mensal do DRE, EBITDA (critério) e Orçado x Realizado.
-// Nunca ajuste um número aqui — ajuste o parâmetro de entrada em
+// calibração: Caixa/Projetado 30d, AP/AR em aberto, Liquidez, EBITDA (todos
+// critério de aceite), mix de vencimento, receita mensal do DRE e Orçado x
+// Realizado. Nunca ajuste um número aqui — ajuste o parâmetro de entrada em
 // src/data/lancamentosImportados.json ou demoDataGenerator.js.
 //
 // Rodar: node scripts/verificar-massa-sintetica.mjs
@@ -18,31 +17,24 @@ import { construirOrcadoRealizado } from "../src/financial-engine/orcadoRealizad
 import { calcularIndiceLiquidezCaixa } from "../src/financial-engine/indicadoresCaixa.js";
 import { todayISO, diffDaysISO, startOfMonthISO, endOfMonthISO, addDaysISO } from "../src/utils/dateUtils.js";
 
-// Faixas-alvo — Leva 3 (checkpoint de regressão AP/AR/Liquidez/EBITDA):
-// AP/AR "em aberto" não é mais calibrado por fluxo acumulado do período
-// (isso gerava um AP/AR proporcional aos meses de janela Previsto, não ao
-// saldo em aberto real); o alvo de AP agora vem da própria fórmula de
-// Liquidez com Caixa Disponível fixo — ver decisão do usuário no checkpoint.
+// Faixas-alvo — Comando consolidado, Bloco 1 (Liquidez 1,5x-1,9x + EBITDA
+// 10-15% simultâneos, zero saldo negativo): as duas rodadas anteriores
+// (fator único, depois otimização por empresa) mostraram que regenerar só
+// Custos/Despesas Operacionais Realizado NUNCA traria a Liquidez pra
+// 1,5x-1,9x — quem inflava o Caixa Disponível (~R$2,46M, Liquidez 5,80x) era
+// o pool de Receitas Financeiras Realizado (Aplicações Financeiras +
+// Captações + Recuperação de Créditos, pc4.04/4.05/4.06), R$3,15M, 80% do
+// tamanho da própria Receita Bruta — mesmo tipo de valor de teste
+// desproporcional já visto nos Custos, só que do lado de Entrada. Decisão do
+// usuário: ampliar o escopo da regeneração pra esse pool também (Custos/
+// Despesas ficaram como estavam — EBITDA já batia 12,5%, dentro da faixa).
+// Caixa Disponível volta a ter faixa-alvo, agora DERIVADA da Liquidez-alvo
+// (Disponível = Liquidez × AP em aberto): 1,5x×425k a 1,9x×425k.
 const AP_ABERTO_MIN = 380000, AP_ABERTO_MAX = 470000;
 const AR_ABERTO_MIN = 550000, AR_ABERTO_MAX = 660000;
 const EBITDA_MARGEM_MIN = 10, EBITDA_MARGEM_MAX = 15;
-//
-// Correção completa de EBITDA (checkpoint pós-Leva 3, decisão do usuário):
-// os valores das linhas Realizado de Custos/Despesas Operacionais foram
-// REGENERADOS na origem (lancamentosImportados.json, técnica de
-// gerarCarteiraAberta + busca binária real contra calcularDRE), não
-// reescalados por fator fixo — resolve o problema estrutural das duas
-// tentativas anteriores (fator único e otimização por empresa, ambas
-// tetadas bem abaixo de 10-15% por causa do alvo fixo de Caixa Disponível).
-//
-// Trade-off aceito conscientemente: isso torna o Realizado do período
-// fortemente positivo em caixa, então Caixa Disponível e o Índice de
-// Liquidez de Caixa DEIXARAM DE TER faixa-alvo — são reportados como
-// RESULTADO do cálculo, não mais validados contra um número fixo (o antigo
-// alvo de 600-850k só existia pra caber num Caixa artificialmente pequeno;
-// mantê-lo exigiria saldoInicial negativo, o problema original). Só EBITDA
-// (10-15%) e AP/AR em aberto (intocados, devem continuar batendo a mesma
-// faixa de sempre) são critério de aceite agora.
+const LIQUIDEZ_MIN = 1.5, LIQUIDEZ_MAX = 1.9;
+const CAIXA_DISPONIVEL_MIN = 637500, CAIXA_DISPONIVEL_MAX = 807500; // = Liquidez-alvo × AP ~425k
 
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
@@ -55,7 +47,8 @@ console.log("\n=== CAIXA (Tesouraria/Dashboard) ===");
 const posicao = calcularPosicaoConsolidada(demoContasBancarias.filter((c) => c.ativo), demoLancamentos, HOJE);
 console.log("Total consolidado:", fmt(posicao.total));
 console.log("Aplicações (sem liquidez):", fmt(posicao.aplicacoes));
-console.log("Disponível:", fmt(posicao.disponivel), "(sem faixa-alvo — resultado do fluxo, não mais critério de aceite)");
+console.log("Disponível:", fmt(posicao.disponivel),
+  posicao.disponivel >= CAIXA_DISPONIVEL_MIN && posicao.disponivel <= CAIXA_DISPONIVEL_MAX ? `OK (${fmt(CAIXA_DISPONIVEL_MIN)}-${fmt(CAIXA_DISPONIVEL_MAX)})` : "FORA DA FAIXA");
 console.log("Nenhum saldoInicial negativo:", demoContasBancarias.every((c) => c.saldoInicial >= 0) ? "OK" : "FALHOU");
 demoContasBancarias.forEach((c) => console.log(`  ${c.id} (${c.empresaId}, ${c.semLiquidez === "true" ? "aplicação" : "líquida"}): saldoInicial=${fmt(c.saldoInicial)}`));
 
@@ -74,7 +67,8 @@ console.log("AP total em aberto:", fmt(agingAP.totalCarteira), "| vencido:", fmt
   agingAP.totalCarteira >= AP_ABERTO_MIN && agingAP.totalCarteira <= AP_ABERTO_MAX ? `OK (${fmt(AP_ABERTO_MIN)}-${fmt(AP_ABERTO_MAX)})` : "FORA DA FAIXA");
 
 const liquidez = calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira);
-console.log("Índice de Liquidez de Caixa:", liquidez.toFixed(2) + "x", "(sem faixa-alvo — decorre de Caixa Disponível, que também não tem mais faixa-alvo)");
+console.log("Índice de Liquidez de Caixa:", liquidez.toFixed(2) + "x",
+  liquidez >= LIQUIDEZ_MIN && liquidez <= LIQUIDEZ_MAX ? `OK (${LIQUIDEZ_MIN}x-${LIQUIDEZ_MAX}x)` : "FORA DA FAIXA");
 
 function mixVencimento(abertos, label) {
   let antecipado = 0, emDia = 0, atrasado = 0;
