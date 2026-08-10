@@ -29,16 +29,19 @@ export function construirOrcadoRealizado({ planoDeContas, orcamentoItens, lancam
     const doConta = semTransferencia.filter((l) => l.contaGerencialId === conta.id);
     const real = doConta.filter((l) => l.situacao === "Realizado").reduce((s, l) => s + valorComSinal(l), 0);
 
-    const realizadoAteHoje = excluirTransferencias(lancamentos)
-      .filter((l) => l.contaGerencialId === conta.id && l.situacao === "Realizado" && l.dataPagamento && l.dataPagamento >= dataInicio && l.dataPagamento <= (dataReferencia || new Date().toISOString().split("T")[0]))
-      .reduce((s, l) => s + valorComSinal(l), 0);
-
+    // Bug corrigido (validado em verificar-massa-sintetica.mjs): existia aqui
+    // um "realizadoAteHoje" que refiltrava o mesmo Realizado por
+    // dataPagamento e somava de novo dentro de `previsto` — para qualquer
+    // período já fechado, isso duplicava o Real inteiro dentro do Forecast
+    // (Forecast ≈ 2x Real em todos os 6 grupos do DRE). `previsto` agora só
+    // soma o que de fato ainda não é Realizado: lançamentos Previsto/Em
+    // aberto dentro do período + ajustes manuais.
     const previsto_ajustes = doConta.filter((l) => (l.situacao === "Previsto" || l.situacao === "Em aberto") && l.ajusteManual !== true && l.dataVencimento && l.dataVencimento >= dataInicio && l.dataVencimento <= dataFim)
       .reduce((s, l) => s + valorComSinal(l), 0);
 
     const ajustesManual = doConta.filter((l) => l.ajusteManual === true).reduce((s, l) => s + valorComSinal(l), 0);
 
-    const previsto = realizadoAteHoje + previsto_ajustes + ajustesManual;
+    const previsto = previsto_ajustes + ajustesManual;
     const forecast = real + previsto;
     const orcado = conta.aceitaOrcamento ? getValorOrcadoPeriodo(orcamentoItens, { ano, meses, contaGerencialId: conta.id, empresaId: empresaId && empresaId !== "TODAS" ? empresaId : undefined }) : 0;
     valoresPorConta.set(conta.id, { real, previsto, forecast, orcado, temOrcamento: conta.aceitaOrcamento, temAjusteManual: ajustesManual !== 0 });
