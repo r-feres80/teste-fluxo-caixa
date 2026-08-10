@@ -35,7 +35,7 @@ function garantirBanco(nomeBanco, entidades) {
   return banco.id;
 }
 
-function criarEmpresa(nome, entidades, numeroConta, nomeBanco) {
+function criarEmpresa(nome, entidades, numeroConta, nomeBanco, saldoInicial = 0) {
   const empresa = { id: gerarId("emp", entidades.empresas), nome, ativo: true };
   entidades.empresas.push(empresa);
 
@@ -46,7 +46,7 @@ function criarEmpresa(nome, entidades, numeroConta, nomeBanco) {
       empresaId: empresa.id,
       apelido: "Conta Movimento",
       numero: numeroConta,
-      saldoInicial: 100000,
+      saldoInicial,
       ativo: true,
       bancoId: garantirBanco(nomeBanco, entidades),
     };
@@ -118,9 +118,19 @@ export function normalizarLinha(row, entidades) {
   const avisos = [];
   const buscarPorNome = (lista, nome, campo = "nome") => lista.find((i) => normalizarTexto(i[campo]) === normalizarTexto(nome));
 
+  // Hotfix: saldoInicial fixo em 100000 não tinha relação nenhuma com a
+  // planilha — a calibração do Bloco 1 não sobrevivia a um reimport real.
+  // "Saldo Inicial" é o saldo de abertura da Conta Bancária (dia de corte
+  // antes do primeiro lançamento), não um valor por lançamento — só é lido
+  // na linha que dispara a CRIAÇÃO da conta (primeira vez que ela aparece
+  // na planilha). Ausente/vazio nessa linha = 0, nunca um valor inventado.
+  const saldoInicialConta = row["Saldo Inicial"] != null && String(row["Saldo Inicial"]).trim() !== ""
+    ? Number(String(row["Saldo Inicial"]).replace(",", ".")) || 0
+    : 0;
+
   let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
   if (!empresa) {
-    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"], row["Banco"]);
+    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"], row["Banco"], saldoInicialConta);
     avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente com Conta Movimento`);
   } else if (row["Conta Bancária"] && !entidades.contasBancarias.some((c) => c.empresaId === empresa.id)) {
     // Se empresa existe mas não tem conta bancária, criar uma
@@ -129,7 +139,7 @@ export function normalizarLinha(row, entidades) {
       empresaId: empresa.id,
       apelido: "Conta Movimento",
       numero: row["Conta Bancária"],
-      saldoInicial: 100000,
+      saldoInicial: saldoInicialConta,
       ativo: true,
       bancoId: garantirBanco(row["Banco"], entidades),
     };
@@ -222,7 +232,10 @@ export function marcarDuplicados(linhasNormalizadas, lancamentosExistentes) {
   });
 }
 
+// "Saldo Inicial" (hotfix): preenchida só na(s) linha(s) da PRIMEIRA vez que
+// a Conta Bancária aparece na planilha — é o saldo de abertura daquela
+// conta, não um valor por lançamento. Vazio nas demais linhas.
 export const COLUNAS_TEMPLATE_LANCAMENTOS = [
   "Empresa", "Filial", "Data", "Competência", "Tipo", "Cliente/Fornecedor", "Documento", "Vencimento",
-  "Data de baixa", "Banco", "Conta Bancária", "Conta Gerencial", "Centro de Custo", "Projeto", "Valor", "Status", "Observação",
+  "Data de baixa", "Banco", "Conta Bancária", "Saldo Inicial", "Conta Gerencial", "Centro de Custo", "Projeto", "Valor", "Status", "Observação",
 ];
