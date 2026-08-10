@@ -4,6 +4,7 @@ import { Panel, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
 import { getDataAtualSistema, parseISO, startOfMonthISO, endOfMonthISO, diffDaysISO, addDaysISO } from "../utils/dateUtils.js";
 import { calcularDFCDiretoArvore } from "../financial-engine/dfc.js";
+import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
 
 const GRUPO_LABEL = { Operacional: "Atividades Operacionais", Investimento: "Atividades de Investimento", Financiamento: "Atividades de Financiamento" };
 const NOMES_MES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -51,6 +52,17 @@ export default function DFCDiretoPage({ data }) {
     ano: anoSel, meses: [mesSel], empresaId: filtros.empresaId, dias,
   }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoSel, mesSel, filtros.empresaId, dias]);
 
+  // Saldo Final (comando consolidado, Bloco 3): Caixa Inicial do mês + soma
+  // de tudo que passou pela árvore = saldo final teórico. Comparado com o
+  // saldo consolidado real de Tesouraria no último dia do período — mesmo
+  // dado, dois caminhos de cálculo, tem que bater (senão alguma conta
+  // Realizada não está classificada em nenhum Grupo DFC).
+  const contasFiltradas = useMemo(() => entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId)), [entidades.contasBancarias, filtros.empresaId]);
+  const caixaInicialMes = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, addDaysISO(inicio, -1)).total, [contasFiltradas, entidades.lancamentos, inicio]);
+  const saldoFinalCalculado = caixaInicialMes + arvore.reduce((s, g) => s + g.totalRealizado, 0);
+  const saldoFinalReal = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, fim).total, [contasFiltradas, entidades.lancamentos, fim]);
+  const saldoBate = Math.abs(saldoFinalCalculado - saldoFinalReal) < 0.01;
+
   // Recolhidos (não expandidos) — por padrão tudo aberto, como no TreeView do
   // Plano de Contas: guardamos só as chaves que o usuário fechou.
   const [recolhidos, setRecolhidos] = useState(() => new Set());
@@ -66,7 +78,7 @@ export default function DFCDiretoPage({ data }) {
       </InfoNote>
 
       <Panel
-        title="DFC Direto"
+        title="DFC"
         right={
           <div className="flex items-center gap-2">
             <button onClick={() => irParaMes(-1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Mês Passado</button>
@@ -137,11 +149,27 @@ export default function DFCDiretoPage({ data }) {
                     })}
                   </React.Fragment>
                 ))}
+                <tr className="border-t-2 border-slate-300">
+                  <td className="sticky left-0 bg-white py-2 pr-4 text-slate-500 z-10">Caixa Inicial</td>
+                  {dias.map((_, i) => <td key={i} />)}
+                  <td className="py-2 px-3 text-right border-l border-slate-200 font-mono tabular-nums text-slate-500" colSpan={2}>{fmtBRL(caixaInicialMes)}</td>
+                </tr>
+                <tr className="font-semibold bg-slate-50 border-b-2 border-slate-300">
+                  <td className="sticky left-0 bg-slate-50 py-2 pr-4 z-10">Saldo Final (Caixa Inicial + Total Real.)</td>
+                  {dias.map((_, i) => <td key={i} />)}
+                  <td className="py-2 px-3 text-right border-l border-slate-200 font-mono tabular-nums" colSpan={2}>{fmtBRL(saldoFinalCalculado)}</td>
+                </tr>
               </tbody>
             </table>
           </div>
         )}
       </Panel>
+
+      <InfoNote tone={saldoBate ? undefined : "amber"}>
+        Saldo Final calculado (Caixa Inicial + Total Realizado do período): <strong>{fmtBRL(saldoFinalCalculado)}</strong>.
+        Saldo real consolidado em Tesouraria no último dia do período: <strong>{fmtBRL(saldoFinalReal)}</strong>.
+        {saldoBate ? " Os dois batem — nenhuma conta Realizada ficou fora da classificação de Grupo DFC." : " Os dois NÃO batem — há lançamento(s) Realizado(s) sem Classificação DFC preenchida, fora da árvore acima."}
+      </InfoNote>
     </div>
   );
 }

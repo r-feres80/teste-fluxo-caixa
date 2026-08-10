@@ -2,7 +2,7 @@
 // ou em qualquer outro arquivo deste projeto.
 
 export const APP_NAME = "CFO Finance Intelligence";
-export const APP_TAGLINE = "Tesouraria • AP/AR • Fluxo de Caixa • FP&A • Controladoria";
+export const APP_TAGLINE = "Controle de Caixa • AP/AR • FP&A • Dados";
 export const APP_DISCLAIMER = "Projeto demonstrativo de gestão financeira gerencial • Dados 100% fictícios";
 
 export const STORAGE_KEY = "cfo-fi-v2-state";

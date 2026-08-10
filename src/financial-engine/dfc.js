@@ -72,7 +72,16 @@ export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, o
     return { id: conta.id, nome: conta.descricao, porDia, totalRealizado: porDia.reduce((s, v) => s + v, 0), totalPrevisto };
   };
 
-  return ["Operacional", "Investimento", "Financiamento"].map((grupo) => {
+  // Ordem pedida no comando consolidado (Bloco 3): Operacional (Receita +
+  // Despesas Operacionais) -> Financiamento (Despesas Financeiras +
+  // Aplicações) -> Investimento, em vez da ordem alfabética-de-classificação
+  // anterior. Divisão fina Receita/Despesas Operacionais e Despesas
+  // Financeiras/Aplicações como 4 GRUPOS separados exigiria reclassificar
+  // subgrupoDFC (hoje "Captações" mistura Juros/Tarifas de saída com
+  // Captações de entrada) — fora do escopo desta rodada, sinalizado ao
+  // usuário. O agrupamento em 3 níveis (classificacaoDFC) continua a fonte
+  // da verdade, só a ordem de exibição mudou.
+  return ["Operacional", "Financiamento", "Investimento"].map((grupo) => {
     const contasDoGrupo = contasComMovimento.filter((c) => c.classificacaoDFC === grupo);
     const subgrupoNomes = Array.from(new Set(contasDoGrupo.map((c) => c.subgrupoDFC || "(Sem subgrupo)")));
     const subgrupos = subgrupoNomes

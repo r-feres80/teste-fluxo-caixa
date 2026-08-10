@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileBarChart, FileText,
-  Scale, Wallet, Activity, GitBranch, ListPlus, Upload, Settings2, Sparkles, Save,
+  LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
+  Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
   Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut, ChevronRight, ChevronDown,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
@@ -19,7 +19,6 @@ import TesourariaPage from "./pages/TesourariaPage.jsx";
 import ContasAPagarPage from "./pages/ContasAPagarPage.jsx";
 import ContasAReceberPage from "./pages/ContasAReceberPage.jsx";
 import FluxoCaixaPage from "./pages/FluxoCaixaPage.jsx";
-import DFCPage from "./pages/DFCPage.jsx";
 import DFCDiretoPage from "./pages/DFCDiretoPage.jsx";
 import DREPage from "./pages/DREPage.jsx";
 import InadimplenciaPage from "./pages/InadimplenciaPage.jsx";
@@ -27,7 +26,7 @@ import OrcadoRealizadoPage from "./pages/OrcadoRealizadoPage.jsx";
 import OrcamentoPage from "./pages/OrcamentoPage.jsx";
 import ForecastPage from "./pages/ForecastPage.jsx";
 import CenariosPage from "./pages/CenariosPage.jsx";
-import LancamentosPage from "./pages/LancamentosPage.jsx";
+import PlanoDeContasPage from "./pages/PlanoDeContasPage.jsx";
 import ImportarDadosPage from "./pages/ImportarDadosPage.jsx";
 import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
 // Produto é camada de indicadores/analytics sobre dado de origem, nunca um
@@ -35,23 +34,29 @@ import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
 // Unidades, Clientes, Fornecedores, Bancos, Contas Bancárias, Centros de
 // Custo, Projetos, Plano de Contas) chega pronta via upload de planilha
 // (ImportarDadosPage cria automaticamente o que faltar). Único dado editável
-// na UI é o Orçamento (OrcamentoPage). Ver item 12/Etapa 4: as antigas telas
-// de cadastro manual (inclusive Plano de Contas) foram removidas do produto.
+// na UI é o Orçamento (OrcamentoPage). Plano de Contas tem tela própria
+// (PlanoDeContasPage) mas é somente leitura — ver item 12/Etapa 4 e comando
+// consolidado Bloco 3.
+//
+// Menu reorganizado (comando consolidado, Bloco 3): "Fluxo de Caixa" e "DFC
+// Gerencial" viraram uma tela só (FluxoCaixaPage) — ver comentário na
+// própria página. "DFC Direto" virou só "DFC" (dfc-direto id preservado).
+// "Lançamentos" (formulário manual) foi removida — contradiz o modelo
+// "tudo por upload, zero intervenção manual".
 const NAV = [
   { id: "dashboard", label: "Dashboard Executivo", icon: LayoutGrid, Page: DashboardPage },
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
+  { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
+  { id: "dfc-direto", label: "DFC", icon: Table2, Page: DFCDiretoPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
   { id: "contas-receber", label: "Contas a Receber", icon: ArrowUpCircle, Page: ContasAReceberPage },
   { id: "inadimplencia", label: "Inadimplência", icon: AlertOctagon, Page: InadimplenciaPage },
-  { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
-  { id: "dfc", label: "DFC Gerencial", icon: FileBarChart, Page: DFCPage },
-  { id: "dfc-direto", label: "DFC Direto", icon: Table2, Page: DFCDiretoPage },
-  { id: "dre", label: "DRE Gerencial", icon: FileText, Page: DREPage },
-  { id: "orcado-realizado", label: "Orçado x Realizado", icon: Scale, Page: OrcadoRealizadoPage },
   { id: "orcamento", label: "Orçamento", icon: Wallet, Page: OrcamentoPage },
+  { id: "orcado-realizado", label: "Orçado x Realizado", icon: Scale, Page: OrcadoRealizadoPage },
   { id: "forecast", label: "Forecast", icon: Activity, Page: ForecastPage },
   { id: "cenarios", label: "Cenários", icon: GitBranch, Page: CenariosPage },
-  { id: "lancamentos", label: "Lançamentos", icon: ListPlus, Page: LancamentosPage },
+  { id: "dre", label: "DRE Gerencial", icon: FileText, Page: DREPage },
+  { id: "plano-de-contas", label: "Plano de Contas", icon: List, Page: PlanoDeContasPage },
   { id: "importar", label: "Importar Dados", icon: Upload, Page: ImportarDadosPage },
   { id: "importar-orcamento", label: "Importar Orçamento", icon: Upload, Page: ImportarOrcamentoPage },
 ];
@@ -59,31 +64,34 @@ const NAV = [
 // Módulos de FATO: sempre a data real do sistema (getDataAtualSistema), sem
 // Data de Referência/Período/Mês/Ano editáveis — nada aqui pode dessincronizar
 // porque não existe mais estado de período para esses módulos lerem.
-const NAV_FATO = new Set(["dashboard", "tesouraria", "fluxo-caixa", "dfc", "dfc-direto", "contas-pagar", "contas-receber", "dre", "inadimplencia"]);
+// "fluxo-caixa" e "dre" SAÍRAM daqui no Bloco 3: a projeção de Fluxo de
+// Caixa continua sempre a partir de hoje (isso não muda), mas a síntese DFC
+// e o DRE agora usam o Mês/Ano do Filtro Global — precisam do seletor
+// visível. "dfc-direto" continua FATO porque já tem filtro de mês PRÓPRIO,
+// independente do Filtro Global (ver comentário em DFCDiretoPage.jsx).
+const NAV_FATO = new Set(["dashboard", "tesouraria", "dfc-direto", "contas-pagar", "contas-receber", "inadimplencia"]);
 
 // Governança é roteada à parte de NAV (ver JSX), mas entra no modo ícones
-// como mais um item do grupo Controladoria — por isso precisa de ícone/label aqui.
+// como mais um item do grupo Dados — por isso precisa de ícone/label aqui.
 const GOVERNANCA_ITEM = { id: "governanca", label: "Governança", icon: Settings2 };
 const ALL_NAV_ITEMS = [...NAV, GOVERNANCA_ITEM];
 
 // Agrupamento do modo ícones — puramente de apresentação, não afeta roteamento.
 const ICON_GROUPS = [
   { title: "Visão Geral", ids: ["dashboard"] },
-  { title: "Tesouraria", ids: ["tesouraria"] },
+  { title: "Controle de Caixa", ids: ["tesouraria", "fluxo-caixa", "dfc-direto"] },
   { title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
-  { title: "Fluxo de Caixa", ids: ["fluxo-caixa", "dfc", "dfc-direto"] },
-  { title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios"] },
-  { title: "Controladoria", ids: ["dre", "lancamentos", "importar", "importar-orcamento", "governanca"] },
+  { title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
+  { title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },
 ];
 
 // Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
 const GROUP_ACCENT = {
   "Visão Geral": "bg-emerald-500",
-  "Tesouraria": "bg-blue-500",
+  "Controle de Caixa": "bg-blue-500",
   "AP/AR": "bg-amber-500",
-  "Fluxo de Caixa": "bg-teal-500",
   "Planejamento (FP&A)": "bg-violet-500",
-  "Controladoria": "bg-slate-500",
+  "Dados": "bg-slate-500",
 };
 
 // Contagem de acesso por módulo (item 3 — ordenação adaptativa da landing).

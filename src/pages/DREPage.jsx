@@ -1,19 +1,32 @@
-import React, { useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Panel, Badge } from "../components/ui/Primitives.jsx";
+import { TabelaArvoreOrcadoRealizado } from "../components/orcadoRealizadoTree.jsx";
 import { fmtBRL } from "../utils/formatUtils.js";
-import { getDataAtualSistema, parseISO } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO, mesesDoPeriodo } from "../utils/dateUtils.js";
 import { calcularDRE, linhasDRE } from "../financial-engine/dre.js";
 import { excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getValorOrcadoPeriodo } from "../financial-engine/orcamento.js";
+import { construirOrcadoRealizado } from "../financial-engine/orcadoRealizado.js";
 import { CLASSIFICACAO_DRE } from "../config/appConfig.js";
 
-// DRE Gerencial é módulo de FATO: sempre o mês corrente real do sistema —
-// nunca Período/Mês/Ano editáveis — ver getDataAtualSistema.
+// Comando consolidado, Bloco 3: DRE Gerencial mudou de módulo de FATO
+// (sempre mês corrente) para usar o Mês/Ano do Filtro Global — mesma
+// convenção das outras telas de Planejamento (FP&A), pra onde esta tela se
+// mudou. Ganhou também a árvore Grupo → Subgrupo → Conta (mesmo componente
+// de Orçamento/Orçado x Realizado/Forecast, Bloco 2) logo abaixo do resumo
+// de 13 linhas — a coluna "Orçado" explícita já existia no resumo, ficou
+// mantida.
 export default function DREPage({ data }) {
-  const { entidades, filtros } = data;
-  const hoje = parseISO(getDataAtualSistema());
-  const anoRef = hoje.getFullYear();
-  const meses = [hoje.getMonth()];
+  const { entidades, filtros, parametros } = data;
+  const anoRef = filtros.anoRef;
+  const meses = mesesDoPeriodo(filtros);
+  const [expandidos, setExpandidos] = useState(new Set(entidades.planoDeContas.map((c) => c.id)));
+  const toggle = (id) => setExpandidos((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+
+  const arvore = useMemo(() => construirOrcadoRealizado({
+    planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens, lancamentos: entidades.lancamentos,
+    ano: anoRef, meses, empresaId: filtros.empresaId,
+  }), [entidades.planoDeContas, entidades.orcamentoItens, entidades.lancamentos, anoRef, meses, filtros.empresaId]);
 
   const lancamentosPeriodo = useMemo(() => excluirTransferencias(entidades.lancamentos).filter((l) => {
     if (filtros.empresaId !== "TODAS" && l.empresaId !== filtros.empresaId) return false;
@@ -44,18 +57,19 @@ export default function DREPage({ data }) {
   const linhasForecast = linhasDRE(forecast);
   const linhasOrc = linhasDRE(orcado);
 
-  // Visão Comparativa Mensal: últimos 10 meses lado a lado, sempre Realizado.
-  // Reaproveita calcularDRE (mesma função da tabela acima) — só muda a
-  // apresentação de 1 coluna (mês corrente) para N colunas (uma por mês).
-  const mesAtualIdx = hoje.getMonth();
+  // Visão Comparativa Mensal: 10 meses lado a lado terminando no Mês/Ano do
+  // Filtro Global (antes era sempre "hoje" — agora acompanha o mesmo
+  // período selecionado no resto da tela). Reaproveita calcularDRE (mesma
+  // função da tabela acima) — só muda a apresentação de 1 coluna pra N.
+  const mesRefIdx = meses[meses.length - 1] ?? parseISO(getDataAtualSistema()).getMonth();
   const mesesComparativo = useMemo(() => {
     const arr = [];
     for (let i = 9; i >= 0; i--) {
-      const d = new Date(anoRef, mesAtualIdx - i, 1);
+      const d = new Date(anoRef, mesRefIdx - i, 1);
       arr.push({ ano: d.getFullYear(), mes: d.getMonth() });
     }
     return arr;
-  }, [anoRef, mesAtualIdx]);
+  }, [anoRef, mesRefIdx]);
 
   const comparativoMensal = useMemo(() => mesesComparativo.map(({ ano, mes }) => {
     const competenciaDoMes = `${ano}-${String(mes + 1).padStart(2, "0")}`;
@@ -100,7 +114,11 @@ export default function DREPage({ data }) {
         </table>
       </Panel>
 
-      <Panel title="Visão Comparativa Mensal" subtitle="Realizado — últimos 10 meses lado a lado">
+      <Panel title="DRE por Conta" subtitle="Clique numa linha com subcontas para expandir/recolher (Grupo → Subgrupo → Conta)">
+        <TabelaArvoreOrcadoRealizado arvore={arvore} expandidos={expandidos} toggle={toggle} parametros={parametros} />
+      </Panel>
+
+      <Panel title="Visão Comparativa Mensal" subtitle="Realizado — 10 meses lado a lado, terminando no Mês/Ano do Filtro Global">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

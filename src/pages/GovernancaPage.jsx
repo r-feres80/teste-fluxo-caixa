@@ -93,7 +93,7 @@ export default function GovernancaPage({ data }) {
 
       <Panel title="Reconciliações" subtitle="Onde cada identidade contábil é exibida na prática">
         <InfoNote>
-          Saldo Inicial + Entradas − Saídas = Caixa Final → Tesouraria e Fluxo de Caixa (regime de Caixa) e DFC Gerencial/DFC Direto.
+          Saldo Inicial + Entradas − Saídas = Caixa Final → Tesouraria e Fluxo de Caixa (regime de Caixa) e DFC.
           Realizado + Previsto = Forecast → Orçado x Realizado e Forecast.
           Forecast − Orçamento = Desvio → Orçado x Realizado e o KPI "Desvio vs. Orçamento" no Dashboard Executivo (regime de Competência).
         </InfoNote>
@@ -104,8 +104,9 @@ export default function GovernancaPage({ data }) {
           A maioria dos KPIs monetários indica o próprio regime ao passar o mouse sobre o ícone <span className="italic">i</span> ao lado do rótulo
           (Regime de Caixa = Data de Baixa/Pagamento; Regime de Competência = Data de Competência). Principais indicadores por módulo:
           Dashboard Executivo (Caixa Disponível, Receita Bruta/EBITDA no ano, velocímetros de Liquidez e Inadimplência, Waterfall do DFC do mês) ·
-          Tesouraria (Saldo Consolidado/Disponível, Aplicações, Câmbio) · Fluxo de Caixa (projeção diária/semanal/mensal) ·
-          DFC Gerencial/DFC Direto (FCO/FCI/FCF, DSO/DPO, Cobertura de Caixa, Índice de Liquidez) ·
+          Tesouraria (Saldo Consolidado/Disponível, Aplicações, Câmbio) ·
+          Fluxo de Caixa (projeção diária/semanal/mensal, FCO/FCI/FCF, DSO/DPO, Cobertura de Caixa, Índice de Liquidez) ·
+          DFC (Grupo → Subgrupo → Conta, Saldo Final reconciliado com Tesouraria) ·
           Contas a Pagar/Receber e Inadimplência (Aging, PDD, DSO) · DRE Gerencial e Orçado x Realizado (Competência).
           Última atualização de dados: {lastUpdated ? fmtDataHora(lastUpdated) : "—"}.
         </InfoNote>
