@@ -10,6 +10,7 @@ export default function ImportarDadosPage({ data }) {
   const [linhas, setLinhas] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [importado, setImportado] = useState(false);
+  const [quantidadeImportada, setQuantidadeImportada] = useState(0);
 
   const baixarTemplate = () => {
     const ws = XLSX.utils.aoa_to_sheet([COLUNAS_TEMPLATE_LANCAMENTOS]);
@@ -47,8 +48,15 @@ export default function ImportarDadosPage({ data }) {
   const invalidos = linhas?.filter((l) => !l.lancamento) ?? [];
 
   const confirmarImportacao = () => {
+    // Bug corrigido: a mensagem de sucesso lia `validos.length` DEPOIS de
+    // `setLinhas(null)` — como `validos` é derivado de `linhas`, o próximo
+    // render sempre recalculava `validos` como [] (linhas nulo), mostrando
+    // "0 lançamento(s) importado(s) com sucesso" mesmo quando os 3192
+    // lançamentos tinham sido adicionados corretamente. A quantidade real
+    // agora é guardada ANTES de limpar `linhas`.
     validos.forEach((l) => addItem("lancamentos", l.lancamento));
     sincronizarPeriodoComReferencia();
+    setQuantidadeImportada(validos.length);
     setImportado(true);
     setLinhas(null);
   };
@@ -68,7 +76,7 @@ export default function ImportarDadosPage({ data }) {
           </button>
           {nomeArquivo && <span className="text-xs text-slate-500">{nomeArquivo}</span>}
         </div>
-        {importado && <div className="mt-3"><InfoNote tone="amber">{validos.length} lançamento(s) importado(s) com sucesso.</InfoNote></div>}
+        {importado && <div className="mt-3"><InfoNote tone="amber">{quantidadeImportada} lançamento(s) importado(s) com sucesso.</InfoNote></div>}
       </Panel>
 
       {linhas && (

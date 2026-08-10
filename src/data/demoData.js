@@ -2,7 +2,6 @@
 // Construído para exercitar toda a hierarquia de Plano de Contas e Centro
 // de Custo desde a Fase 1. Lançamentos reais de movimento entram na Fase 2.
 
-import { gerarOrcamentoAutomatico } from "./demoDataGenerator.js";
 import lancamentosImportadosRaw from "./lancamentosImportados.json" with { type: "json" };
 import clientesImportados from "./clientesImportados.json" with { type: "json" };
 import fornecedoresImportados from "./fornecedoresImportados.json" with { type: "json" };
@@ -232,4 +231,15 @@ export const demoCentrosCusto = [
 // Liquidez-alvo × AP em aberto. Ver scripts/verificar-massa-sintetica.mjs.
 export const demoLancamentos = lancamentosImportadosRaw;
 export const demoContasBancarias = demoContasBancariasBase;
-export const demoOrcamentoItens = gerarOrcamentoAutomatico(demoLancamentos, demoPlanoDeContas);
+
+// Comando consolidado, Bloco 2 (decisão do usuário): removida a geração
+// automática de orçamento sintético (gerarOrcamentoAutomatico, ainda em
+// demoDataGenerator.js, só não chamada mais). O app agora sobe SEM nenhum
+// item de orçamento pré-carregado — orçamento passa a vir exclusivamente
+// da planilha real, importada pela tela "Importar Orçamento". Evita que a
+// checagem de duplicata (marcarDuplicadosOrcamento, que não considera
+// empresa — só conta+ano+mês) rejeite a importação real por colidir com o
+// orçamento sintético pré-existente (792 itens cobrindo os 12 meses de
+// toda conta orçável — quase qualquer linha real de um orçamento de
+// verdade ia bater "duplicada" contra algum desses).
+export const demoOrcamentoItens = [];

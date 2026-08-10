@@ -17,7 +17,25 @@ function gerarId(prefixo, lista) {
   return `${prefixo}${max + 1}`;
 }
 
-function criarEmpresa(nome, entidades, numeroConta) {
+// Bug corrigido: Conta Bancária auto-criada (aqui e no fallback dentro de
+// normalizarLinha, mais abaixo) sempre nascia com bancoId: null — a
+// planilha de lançamentos não traz coluna "Banco", só "Conta Bancária"
+// (número). Isso deixava "Saldo por Conta"/"Saldo por Banco" em Tesouraria
+// sem nome de banco pra exibir (linha/grupo "sem nome", só o total). Toda
+// Conta Bancária agora ganha um Banco — usa `nomeBanco` se vier informado,
+// senão cai no placeholder "Banco não informado" (find-or-create, nunca
+// duplica) — nunca mais fica sem vínculo.
+function garantirBanco(nomeBanco, entidades) {
+  const nome = (nomeBanco || "").trim() || "Banco não informado";
+  let banco = entidades.bancos.find((b) => normalizarTexto(b.nome) === normalizarTexto(nome));
+  if (!banco) {
+    banco = { id: gerarId("b", entidades.bancos), nome, codigo: "", ativo: true };
+    entidades.bancos.push(banco);
+  }
+  return banco.id;
+}
+
+function criarEmpresa(nome, entidades, numeroConta, nomeBanco) {
   const empresa = { id: gerarId("emp", entidades.empresas), nome, ativo: true };
   entidades.empresas.push(empresa);
 
@@ -30,7 +48,7 @@ function criarEmpresa(nome, entidades, numeroConta) {
       numero: numeroConta,
       saldoInicial: 100000,
       ativo: true,
-      bancoId: null,
+      bancoId: garantirBanco(nomeBanco, entidades),
     };
     entidades.contasBancarias.push(contaBancaria);
   }
@@ -102,7 +120,7 @@ export function normalizarLinha(row, entidades) {
 
   let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
   if (!empresa) {
-    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"]);
+    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"], row["Banco"]);
     avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente com Conta Movimento`);
   } else if (row["Conta Bancária"] && !entidades.contasBancarias.some((c) => c.empresaId === empresa.id)) {
     // Se empresa existe mas não tem conta bancária, criar uma
@@ -113,7 +131,7 @@ export function normalizarLinha(row, entidades) {
       numero: row["Conta Bancária"],
       saldoInicial: 100000,
       ativo: true,
-      bancoId: null,
+      bancoId: garantirBanco(row["Banco"], entidades),
     };
     entidades.contasBancarias.push(contaBancaria);
     avisos.push(`Conta Bancária criada para "${row["Empresa"]}"`);

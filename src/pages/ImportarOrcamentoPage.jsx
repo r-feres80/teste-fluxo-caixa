@@ -10,6 +10,7 @@ export default function ImportarOrcamentoPage({ data }) {
   const [linhas, setLinhas] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [importado, setImportado] = useState(false);
+  const [quantidadeImportada, setQuantidadeImportada] = useState(0);
 
   const baixarTemplate = () => {
     const ws = XLSX.utils.aoa_to_sheet([COLUNAS_TEMPLATE_ORCAMENTO]);
@@ -42,8 +43,11 @@ export default function ImportarOrcamentoPage({ data }) {
   const invalidos = linhas?.filter((l) => !l.orcamentoItem) ?? [];
 
   const confirmarImportacao = () => {
+    // Mesmo bug corrigido em ImportarDadosPage.jsx: a mensagem de sucesso
+    // lia `validos.length` depois de `setLinhas(null)`, sempre mostrando 0.
     validos.forEach((l) => addItem("orcamentoItens", l.orcamentoItem));
     sincronizarPeriodoComReferencia();
+    setQuantidadeImportada(validos.length);
     setImportado(true);
     setLinhas(null);
   };
@@ -63,7 +67,7 @@ export default function ImportarOrcamentoPage({ data }) {
           </button>
           {nomeArquivo && <span className="text-xs text-slate-500">{nomeArquivo}</span>}
         </div>
-        {importado && <div className="mt-3"><InfoNote tone="amber">{validos.length} orçamento(s) importado(s) com sucesso.</InfoNote></div>}
+        {importado && <div className="mt-3"><InfoNote tone="amber">{quantidadeImportada} orçamento(s) importado(s) com sucesso.</InfoNote></div>}
       </Panel>
 
       {linhas && (

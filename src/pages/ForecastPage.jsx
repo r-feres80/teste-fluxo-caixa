@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 import { Panel, InfoNote } from "../components/ui/Primitives.jsx";
+import { TabelaArvoreOrcadoRealizado } from "../components/orcadoRealizadoTree.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { mesesDoPeriodo } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
@@ -8,8 +9,10 @@ import { buildFluxoCaixaDiario, menorPontoDaSerie } from "../financial-engine/fl
 import { construirOrcadoRealizado } from "../financial-engine/orcadoRealizado.js";
 
 export default function ForecastPage({ data }) {
-  const { entidades, filtros } = data;
+  const { entidades, filtros, parametros } = data;
   const meses = mesesDoPeriodo(filtros);
+  const [expandidos, setExpandidos] = useState(new Set(entidades.planoDeContas.map((c) => c.id)));
+  const toggle = (id) => setExpandidos((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
   const lancamentosFiltrados = entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId);
@@ -41,21 +44,8 @@ export default function ForecastPage({ data }) {
         </ResponsiveContainer>
       </Panel>
 
-      <Panel title="Realizado x Orçado x Forecast — por Grupo">
-        <table className="w-full text-sm">
-          <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Grupo</th><th className="py-2 pr-4 text-right">Real</th><th className="py-2 pr-4 text-right">Orçado</th><th className="py-2 pr-4 text-right">Forecast</th><th className="py-2 pr-4 text-right">Δ</th></tr></thead>
-          <tbody>
-            {arvore.map((no) => (
-              <tr key={no.id} className="border-b border-slate-100">
-                <td className="py-2 pr-4 text-slate-700">{no.descricao}</td>
-                <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(no.real)}</td>
-                <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-500">{no.temOrcamento ? fmtBRL(no.orcado) : "—"}</td>
-                <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-600">{fmtBRL(no.forecast)}</td>
-                <td className={`py-2 pr-4 text-right font-mono tabular-nums ${no.deltaForecast >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{no.temOrcamento ? fmtBRL(no.deltaForecast) : "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Panel title="Realizado x Orçado x Forecast" subtitle="Clique numa linha com subcontas para expandir/recolher (Grupo → Subgrupo → Conta)">
+        <TabelaArvoreOrcadoRealizado arvore={arvore} expandidos={expandidos} toggle={toggle} parametros={parametros} />
       </Panel>
     </div>
   );
