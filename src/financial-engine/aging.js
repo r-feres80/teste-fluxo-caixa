@@ -230,18 +230,23 @@ export function construirReguaDiasUteis(abertos, dataReferencia, quantidadeDiasU
 /**
  * Previsto x Realizado, série diária dos últimos "quantidadeDias" dias até
  * dataFim — mesma visualização para AP e AR (item 10/Etapa 3: antes só
- * existia para AR): "previsto" soma os títulos com Vencimento naquele dia
- * (qualquer situação, exceto Cancelado); "realizado" soma os títulos
- * Realizados com Data de baixa naquele dia. % aderência = realizado ÷
- * previsto (null quando não havia nada previsto no dia).
+ * existia para AR): para cada dia, olha a COORTE de títulos com Vencimento
+ * naquele dia (qualquer situação, exceto Cancelado) — "previsto" é a soma
+ * total dessa coorte, "realizado" é a soma da MESMA coorte já paga/recebida
+ * (situação Realizado), não importa em que data. Por construção realizado
+ * <= previsto sempre, então % aderência fica sempre entre 0-100% (null
+ * quando não havia nada previsto no dia). Antes o "realizado" era filtrado
+ * por Data de baixa igual ao dia (coorte diferente da do "previsto"), o que
+ * permitia % aderência acima de 100% ao comparar dias diferentes.
  */
 export function calcularPrevistoRealizadoDiario(lancamentos, dataFim, quantidadeDias) {
   const validos = lancamentos.filter((l) => l.situacao !== "Cancelado");
   const dias = [];
   for (let i = quantidadeDias - 1; i >= 0; i--) dias.push(addDaysISO(dataFim, -i));
   return dias.map((dia) => {
-    const previsto = validos.filter((l) => l.dataVencimento === dia).reduce((s, l) => s + l.valor, 0);
-    const realizado = validos.filter((l) => l.situacao === "Realizado" && l.dataPagamento === dia).reduce((s, l) => s + l.valor, 0);
+    const coorte = validos.filter((l) => l.dataVencimento === dia);
+    const previsto = coorte.reduce((s, l) => s + l.valor, 0);
+    const realizado = coorte.filter((l) => l.situacao === "Realizado").reduce((s, l) => s + l.valor, 0);
     return { data: dia, previsto, realizado, aderenciaPct: previsto > 0 ? (realizado / previsto) * 100 : null };
   });
 }

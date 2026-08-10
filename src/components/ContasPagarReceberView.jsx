@@ -23,7 +23,7 @@ export function ContasPagarReceberView({ data, tipo }) {
     l.tipo === tipo && !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
   ), [entidades.lancamentos, tipo, filtros.empresaId]);
 
-  const { abertos, buckets, totalVencido, totalCarteira, aVencer } = useMemo(
+  const { abertos, buckets, totalVencido, totalCarteira } = useMemo(
     () => calcularCarteiraEAging(lancamentosDoTipo, hoje), [lancamentosDoTipo, hoje]
   );
   const concentracao = useMemo(() => calcularConcentracaoPorParceiro(abertos, 5), [abertos]);
@@ -56,11 +56,10 @@ export function ContasPagarReceberView({ data, tipo }) {
 
   const inadimplenciaPct = totalCarteira > 0 ? (totalVencido / totalCarteira) * 100 : 0;
 
-  // Régua de aging estendida (9 faixas de vencido) — ver FAIXAS_AGING em aging.js.
-  const chartData = [
-    { faixa: "A vencer", valor: aVencer },
-    ...FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] })),
-  ];
+  // Régua de aging estendida (9 faixas de vencido) — ver FAIXAS_AGING em
+  // aging.js. Só vencidos: "A vencer" não é aging, já aparece nos KPIs de
+  // Vencimentos Hoje/Próximos dias acima.
+  const chartData = FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] }));
 
   // Composição do Recebido / Evolução de Inadimplência: só em Contas a Receber
   // (tipo === "Entrada") — ver item 9, escopo explícito de AR.
@@ -191,7 +190,7 @@ export function ContasPagarReceberView({ data, tipo }) {
 
       <Panel
         title={tipo === "Entrada" ? "Previsto x Recebido" : "Previsto x Pago"}
-        subtitle={tipo === "Entrada" ? "Últimos 30 dias — % aderência = Recebido no Dia ÷ A Receber no Dia" : "Últimos 30 dias — % aderência = Pago no Dia ÷ A Pagar no Dia"}
+        subtitle={tipo === "Entrada" ? "Últimos 30 dias, por Data de Vencimento — % aderência = do que venceu no dia, quanto já foi recebido" : "Últimos 30 dias, por Data de Vencimento — % aderência = do que venceu no dia, quanto já foi pago"}
       >
         <ResponsiveContainer width="100%" height={240}>
           <ComposedChart data={previstoRealizado}>
@@ -201,11 +200,17 @@ export function ContasPagarReceberView({ data, tipo }) {
             <YAxis yAxisId="pct" orientation="right" stroke="#94a3b8" fontSize={10} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} width={44} />
             <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v, n) => n === "% Aderência" ? (v == null ? "—" : `${v.toFixed(0)}%`) : fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Bar yAxisId="valor" dataKey="previsto" name={tipo === "Entrada" ? "A Receber no Dia" : "A Pagar no Dia"} fill="#818cf8" radius={[3, 3, 0, 0]} />
-            <Bar yAxisId="valor" dataKey="realizado" name={tipo === "Entrada" ? "Recebido no Dia" : "Pago no Dia"} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} radius={[3, 3, 0, 0]} />
+            <Bar yAxisId="valor" dataKey="previsto" name="Venceu no Dia" fill="#818cf8" radius={[3, 3, 0, 0]} />
+            <Bar yAxisId="valor" dataKey="realizado" name={tipo === "Entrada" ? "Já Recebido (do que venceu no dia)" : "Já Pago (do que venceu no dia)"} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} radius={[3, 3, 0, 0]} />
             <Line yAxisId="pct" type="monotone" dataKey="aderenciaPct" name="% Aderência" stroke="#f97316" strokeWidth={2} dot={false} connectNulls />
           </ComposedChart>
         </ResponsiveContainer>
+        <InfoNote>
+          Cada dia representa a coorte de títulos com Vencimento naquele dia (a "safra" que venceu ali).{" "}
+          <span className="font-medium text-slate-600">Venceu no Dia</span> é o total dessa safra;{" "}
+          <span className="font-medium text-slate-600">{tipo === "Entrada" ? "Já Recebido" : "Já Pago"}</span> é quanto dessa MESMA safra já está com situação Realizado, não importa quando foi liquidado;{" "}
+          <span className="font-medium text-slate-600">% Aderência</span> é a razão entre os dois — por isso fica sempre entre 0% e 100%, nunca acima. Dias recentes tendem a % baixo porque ainda não deu tempo de liquidar; isso não é atraso.
+        </InfoNote>
       </Panel>
 
       {/* PDD (Provisão para Devedores Duvidosos) mora em Inadimplência agora
