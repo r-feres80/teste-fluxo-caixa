@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar, Cell, LabelList } from "recharts";
 import { AlertTriangle, Info } from "lucide-react";
-import { Panel, Badge, BasisHint, Gauge } from "../components/ui/Primitives.jsx";
+import { Panel, Badge, BasisHint, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 import { classificarInadimplencia } from "../utils/moduleHealth.js";
@@ -59,16 +59,16 @@ function KpiCard({ label, value, sub, tone = "neutral", basis, tooltip }) {
 // 30 dias" acima; o alerta aqui vira uma linha de destaque que aponta pro
 // card em vez de repetir o número.
 const TEXTO_ALERTA = {
-  liquidez: (a) => `Caixa projetado fica negativo em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias" e Fluxo de Caixa.`,
-  caixa_abaixo_minimo: () => `Caixa consolidado abaixo do mínimo configurado — ver card "Caixa Disponível".`,
-  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado cai abaixo do mínimo em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias".`,
-  titulos_vencidos_receber: (a) => `Títulos vencidos a receber: ${fmtBRL(a.valor)}.`,
-  titulos_vencidos_pagar: (a) => `Títulos vencidos a pagar: ${fmtBRL(a.valor)}.`,
-  pagamentos_proximos: (a) => `${a.qtd} pagamento(s) relevante(s) nos próximos ${a.dias} dias (${fmtBRL(a.valor)}).`,
-  recebimentos_atraso_relevantes: (a) => `${a.qtd} recebimento(s) relevante(s) próximos/atrasados (${fmtBRL(a.valor)}).`,
-  desvio_orcamentario: (a) => `Desvio orçamentário em ${a.nome}: ${fmtBRL(a.valor)}${a.pct != null ? ` (${a.pct.toFixed(0)}%)` : " (orçado muito baixo, % não comparável)"}.`,
-  concentracao_cliente: (a) => `Concentração de cliente: ${a.pct.toFixed(0)}% da carteira em um único cliente.`,
-  concentracao_fornecedor: (a) => `Concentração de fornecedor: ${a.pct.toFixed(0)}% da carteira em um único fornecedor.`,
+  liquidez: (a) => `Caixa projetado fica negativo em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias" acima e a tela Fluxo de Caixa.`,
+  caixa_abaixo_minimo: () => `Caixa consolidado abaixo do mínimo configurado em Governança — ver card "Caixa Disponível" acima.`,
+  caixa_projetado_abaixo_minimo: (a) => `Caixa projetado cai abaixo do mínimo configurado em Governança, em ${fmtData(a.data)} — ver "Caixa Projetado 30 dias" acima.`,
+  titulos_vencidos_receber: (a) => `Títulos vencidos a receber: ${fmtBRL(a.valor)} — ver tela Contas a Receber ou Inadimplência.`,
+  titulos_vencidos_pagar: (a) => `Títulos vencidos a pagar: ${fmtBRL(a.valor)} — ver tela Contas a Pagar.`,
+  pagamentos_proximos: (a) => `${a.qtd} pagamento(s) relevante(s) nos próximos ${a.dias} dias (${fmtBRL(a.valor)}) — ver "Régua de Próximos Pagamentos" em Contas a Pagar.`,
+  recebimentos_atraso_relevantes: (a) => `${a.qtd} recebimento(s) relevante(s) próximos/atrasados (${fmtBRL(a.valor)}) — ver Contas a Receber.`,
+  desvio_orcamentario: (a) => `Desvio orçamentário em ${a.nome}: ${fmtBRL(a.valor)}${a.pct != null ? ` (${a.pct.toFixed(0)}%)` : " (orçado muito baixo, % não comparável)"} — ver tela Orçado x Realizado.`,
+  concentracao_cliente: (a) => `Concentração de cliente: ${a.pct.toFixed(0)}% da carteira em um único cliente — ver "Concentração por Cliente" em Contas a Receber.`,
+  concentracao_fornecedor: (a) => `Concentração de fornecedor: ${a.pct.toFixed(0)}% da carteira em um único fornecedor — ver "Concentração por Fornecedor" em Contas a Pagar.`,
 };
 
 // Dashboard consome exclusivamente o Resumo Executivo (financial-engine/resumoExecutivo.js) —
@@ -143,8 +143,14 @@ export default function DashboardPage({ data }) {
       </Panel>
 
       <Panel title="Alertas Executivos" subtitle={resumo.alertas.length === 0 ? "Nenhum alerta sustentado pelos dados atuais" : `${resumo.alertas.length} ponto(s) de atenção`}>
+        <InfoNote>
+          Cada linha aponta pro card/tela onde o número completo está. Severidade <span className="text-rose-600 font-medium">Alta</span> = liquidez
+          projetada fica negativa, caixa consolidado ATUAL abaixo do mínimo configurado, ou título já vencido; <span className="text-amber-600 font-medium">Média</span> = caixa
+          projetado (futuro) abaixo do mínimo, pagamento/recebimento relevante próximo, concentração de carteira acima de {parametros.limiteConcentracaoPct}%,
+          ou desvio orçamentário acima de {fmtBRL(parametros.materialidadeValor)} e {parametros.materialidadePct}% ao mesmo tempo — cortes configuráveis em Governança.
+        </InfoNote>
         {resumo.alertas.length === 0 ? <span className="text-sm text-slate-400">Sem alertas no momento.</span> : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mt-3">
             {resumo.alertas.map((a, i) => (
               <div key={i} className={`flex items-start gap-2 text-sm ${a.severidade === "Alta" ? "text-rose-600" : "text-amber-600"}`}>
                 <AlertTriangle size={14} className="mt-0.5 shrink-0" />
