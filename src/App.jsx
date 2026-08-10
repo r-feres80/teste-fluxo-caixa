@@ -4,7 +4,9 @@ import {
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
   Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut, ChevronRight, ChevronDown,
 } from "lucide-react";
-import { APP_NAME, APP_TAGLINE, APP_DISCLAIMER } from "./config/appConfig.js";
+import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
+import { useLanguage } from "./i18n/LanguageContext.jsx";
+import { IDIOMAS } from "./i18n/translations.js";
 import { useAppData } from "./hooks/useAppData.js";
 import { GlobalFilterBar } from "./components/ui/GlobalFilterBar.jsx";
 import { fmtDataHora } from "./utils/formatUtils.js";
@@ -43,6 +45,9 @@ import ImportarOrcamentoPage from "./pages/ImportarOrcamentoPage.jsx";
 // própria página. "DFC Direto" virou só "DFC" (dfc-direto id preservado).
 // "Lançamentos" (formulário manual) foi removida — contradiz o modelo
 // "tudo por upload, zero intervenção manual".
+// "label" abaixo é o fallback em português (chave de tradução em
+// i18n/translations.js é "nav.<id>") — usado só se o idioma selecionado não
+// tiver a chave, nunca renderizado direto (ver t("nav." + id) no JSX).
 const NAV = [
   { id: "dashboard", label: "Dashboard Executivo", icon: LayoutGrid, Page: DashboardPage },
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
@@ -76,13 +81,16 @@ const NAV_FATO = new Set(["dashboard", "tesouraria", "dfc-direto", "contas-pagar
 const GOVERNANCA_ITEM = { id: "governanca", label: "Governança", icon: Settings2 };
 const ALL_NAV_ITEMS = [...NAV, GOVERNANCA_ITEM];
 
-// Agrupamento do modo ícones — puramente de apresentação, não afeta roteamento.
+// Agrupamento do modo ícones — puramente de apresentação, não afeta
+// roteamento. "id" é a chave estável de tradução (i18n/translations.js,
+// "group.<id>") e de lookup interno (GROUP_ACCENT, memória de animação);
+// "title" é só o fallback em português.
 const ICON_GROUPS = [
-  { title: "Visão Geral", ids: ["dashboard"] },
-  { title: "Controle de Caixa", ids: ["tesouraria", "fluxo-caixa", "dfc-direto"] },
-  { title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
-  { title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
-  { title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },
+  { id: "visao-geral", title: "Visão Geral", ids: ["dashboard"] },
+  { id: "controle-caixa", title: "Controle de Caixa", ids: ["tesouraria", "fluxo-caixa", "dfc-direto"] },
+  { id: "ap-ar", title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
+  { id: "planejamento", title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
+  { id: "dados", title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },
 ];
 
 // Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
@@ -140,6 +148,7 @@ const ultimaOrdemPorGrupo = {};
 // primeiro no grupo); quando a ordem muda em relação à última vez que esse
 // grid foi mostrado, os ícones entram com uma pequena transição em cascata.
 function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = false }) {
+  const { t } = useLanguage();
   const idsOrdenados = useMemo(
     () => [...group.ids].sort((a, b) => (usage[b] || 0) - (usage[a] || 0)),
     [group.ids, usage]
@@ -163,15 +172,16 @@ function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = fals
         const Icon = item.icon;
         const status = saude?.[id];
         const ativo = activeId === id;
+        const label = t(`nav.${id}`);
         return (
-          <button key={id} onClick={() => onSelect(id)} title={item.label}
+          <button key={id} onClick={() => onSelect(id)} title={label}
             className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border text-center transition-colors ${ativo ? "border-emerald-300 bg-emerald-50" : "border-transparent hover:bg-slate-50 hover:border-slate-200"}${ordemMudou ? " landing-tile-reorder" : ""}`}
             style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
             <div className="relative">
               <div className={`${badgeSize} flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={iconSize} /></div>
               {status && <span className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
             </div>
-            <span className={`text-[11px] leading-tight ${ativo ? "text-emerald-700 font-medium" : "text-slate-600"}`}>{item.label}</span>
+            <span className={`text-[11px] leading-tight ${ativo ? "text-emerald-700 font-medium" : "text-slate-600"}`}>{label}</span>
           </button>
         );
       })}
@@ -194,6 +204,7 @@ function InsightDoDia({ texto, tone }) {
 // Tela de entrada (landing) estilo Omie — launcher em grade colorida por
 // categoria, mostrada ao abrir o app pela primeira vez ou ao clicar no logo.
 function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage }) {
+  const { t } = useLanguage();
   const insight = useMemo(() => gerarInsightDoDia(resumo), [resumo]);
   const insightTone = saude.dashboard ?? "green";
 
@@ -205,11 +216,11 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
           <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
           <div>
             <div className="text-slate-900 font-semibold text-2xl leading-tight">{APP_NAME}</div>
-            <div className="text-slate-400 text-sm mt-1">{APP_TAGLINE}</div>
+            <div className="text-slate-400 text-sm mt-1">{t("chrome.tagline")}</div>
           </div>
           <button onClick={onVerComoLista}
             className="mt-2 flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-700 transition-colors">
-            <List size={14} />Ver como lista
+            <List size={14} />{t("chrome.verComoLista")}
           </button>
         </div>
 
@@ -218,7 +229,7 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {ICON_GROUPS.map((group) => (
             <div key={group.title} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{group.title}</div>
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{t(`group.${group.id}`)}</div>
               <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} />
             </div>
           ))}
@@ -232,11 +243,12 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
 // visual da Landing (blocos por categoria, cores, badge de saúde), só mais
 // denso, pra caber acima do conteúdo da página em vez de ocupar a tela toda.
 function IconGridNav({ view, setView, saude, usage }) {
+  const { t } = useLanguage();
   return (
     <div className="bg-white border-b border-slate-200 px-8 py-4 flex flex-wrap gap-3">
       {ICON_GROUPS.map((group) => (
         <div key={group.title} className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex flex-col gap-2">
-          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{group.title}</div>
+          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{t(`group.${group.id}`)}</div>
           <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={setView} activeId={view} compact />
         </div>
       ))}
@@ -255,6 +267,7 @@ function grupoDoId(id) {
 // grupos que o usuário tenha aberto manualmente) — sempre fica visível qual
 // categoria está "corrente", mesmo que o usuário tenha recolhido outras.
 function SidebarNav({ view, irPara, saude }) {
+  const { t } = useLanguage();
   const [gruposAbertos, setGruposAbertos] = useState(() => {
     const grupo = grupoDoId(view);
     return new Set(grupo ? [grupo] : []);
@@ -283,7 +296,7 @@ function SidebarNav({ view, irPara, saude }) {
               className={`w-full flex items-center gap-2 px-5 py-2 text-[11px] font-semibold uppercase tracking-wide transition-colors ${grupoAtivo ? "text-emerald-700" : "text-slate-400 hover:text-slate-600"}`}>
               {aberto ? <ChevronDown size={13} className="shrink-0" /> : <ChevronRight size={13} className="shrink-0" />}
               <span className={`w-2 h-2 rounded-full shrink-0 ${GROUP_ACCENT[group.title]}`} />
-              <span className="flex-1 text-left truncate">{group.title}</span>
+              <span className="flex-1 text-left truncate">{t(`group.${group.id}`)}</span>
             </button>
 
             {aberto && group.ids.map((id) => {
@@ -299,7 +312,7 @@ function SidebarNav({ view, irPara, saude }) {
                     <Icon size={15} />
                     {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
                   </span>
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{t(`nav.${id}`)}</span>
                 </button>
               );
             })}
@@ -310,30 +323,52 @@ function SidebarNav({ view, irPara, saude }) {
   );
 }
 
+// Pills PT/EN/ES — Bloco 4 (item 1, escopo "só rótulos-chave": menu,
+// títulos, marca/tagline e KPI do Dashboard, sem tocar gráfico/tooltip/
+// tabela). Reaproveitado nos dois pontos fixos de topo (NavModeToggle e
+// LogoutButton — este último só existe sozinho na landing).
+function LanguageSwitcherPills() {
+  const { idioma, setIdioma } = useLanguage();
+  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
+  return (
+    <>
+      {IDIOMAS.map((l) => (
+        <button key={l} onClick={() => setIdioma(l)} title={l.toUpperCase()} className={pillLang(idioma === l)}>{l.toUpperCase()}</button>
+      ))}
+    </>
+  );
+}
+
 function NavModeToggle({ navMode, setNavMode, onLogout }) {
+  const { t } = useLanguage();
   const pill = (active) => `flex items-center justify-center w-8 h-8 rounded-md transition-colors ${active ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
   return (
     <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
-      <button onClick={() => setNavMode("sidebar")} title="Barra lateral" className={pill(navMode === "sidebar")}><PanelLeft size={15} /></button>
-      <button onClick={() => setNavMode("icons")} title="Ícones" className={pill(navMode === "icons")}><LayoutGrid size={15} /></button>
+      <LanguageSwitcherPills />
       <span className="w-px h-5 bg-slate-200 mx-0.5" />
-      <button onClick={onLogout} title="Sair" className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
+      <button onClick={() => setNavMode("sidebar")} title={t("chrome.sidebar")} className={pill(navMode === "sidebar")}><PanelLeft size={15} /></button>
+      <button onClick={() => setNavMode("icons")} title={t("chrome.icons")} className={pill(navMode === "icons")}><LayoutGrid size={15} /></button>
+      <span className="w-px h-5 bg-slate-200 mx-0.5" />
+      <button onClick={onLogout} title={t("chrome.logout")} className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
     </div>
   );
 }
 
-// Mesmo controle de "Sair" da NavModeToggle, mas sozinho — usado na landing,
-// que não tem o toggle sidebar/ícones (não existe tela ativa lá).
+// Mesmo controle de "Sair" (+ idioma) da NavModeToggle, mas sozinho — usado
+// na landing, que não tem o toggle sidebar/ícones (não existe tela ativa lá).
 function LogoutButton({ onLogout }) {
+  const { t } = useLanguage();
   return (
-    <button onClick={onLogout} title="Sair"
-      className="fixed top-4 right-4 z-50 flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors">
-      <LogOut size={15} />
-    </button>
+    <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
+      <LanguageSwitcherPills />
+      <span className="w-px h-5 bg-slate-200 mx-0.5" />
+      <button onClick={onLogout} title={t("chrome.logout")} className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
+    </div>
   );
 }
 
 export default function App() {
+  const { t } = useLanguage();
   // view=null é a tela de entrada (landing) — mostrada ao abrir o app e ao
   // clicar no logo/"Início". Selecionar qualquer tela sai da landing.
   const [view, setView] = useState(null);
@@ -369,7 +404,7 @@ export default function App() {
   };
 
   if (!appData.loaded) {
-    return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">Carregando…</div>;
+    return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400 text-sm">{t("chrome.carregando")}</div>;
   }
 
   if (view === null) {
@@ -386,7 +421,7 @@ export default function App() {
   }
 
   const navAtivo = NAV.find((n) => n.id === view);
-  const tituloAtual = navAtivo?.label ?? "Governança";
+  const tituloAtual = t(`nav.${navAtivo?.id ?? "governanca"}`);
 
   const conteudo = (
     <>
@@ -409,14 +444,14 @@ export default function App() {
       {navMode === "sidebar" && (
         <aside className="w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col">
           <div className="px-5 py-5 border-b border-slate-200">
-            <button onClick={() => setView(null)} title="Início" className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
               <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
               <div>
                 <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
-                <div className="text-slate-600 text-[11px] mt-0.5">Gestão Financeira Gerencial</div>
+                <div className="text-slate-600 text-[11px] mt-0.5">{t("chrome.subtitle")}</div>
               </div>
             </button>
-            <div className="text-slate-400 text-[10px] mt-3 leading-snug">{APP_TAGLINE}</div>
+            <div className="text-slate-400 text-[10px] mt-3 leading-snug">{t("chrome.tagline")}</div>
           </div>
 
           <SidebarNav view={view} irPara={irPara} saude={saude} />
@@ -424,7 +459,7 @@ export default function App() {
           <div className="px-5 py-4 border-t border-slate-200 flex flex-col gap-2">
             <div className="flex items-center gap-2 text-[11px] text-slate-500">
               <Save size={12} className={appData.savedFlash ? "text-emerald-500" : "text-slate-300"} />
-              {appData.savedFlash ? "Salvo" : `Última atualização: ${appData.lastUpdated ? fmtDataHora(appData.lastUpdated) : "—"}`}
+              {appData.savedFlash ? t("chrome.salvo") : `${t("chrome.ultimaAtualizacao")}: ${appData.lastUpdated ? fmtDataHora(appData.lastUpdated) : "—"}`}
             </div>
             <div className="text-[10px] text-slate-400 leading-snug pt-1 border-t border-slate-100">{APP_DISCLAIMER}</div>
           </div>
@@ -434,11 +469,11 @@ export default function App() {
       <main className="flex-1 min-w-0">
         {navMode === "icons" && (
           <div className="bg-white border-b border-slate-200 px-8 py-3 flex items-center gap-2">
-            <button onClick={() => setView(null)} title="Início" className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
               <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
               <div>
                 <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
-                <div className="text-slate-400 text-[10px] mt-0.5">{APP_TAGLINE}</div>
+                <div className="text-slate-400 text-[10px] mt-0.5">{t("chrome.tagline")}</div>
               </div>
             </button>
           </div>

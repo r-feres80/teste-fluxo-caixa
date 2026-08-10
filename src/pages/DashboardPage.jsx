@@ -5,6 +5,7 @@ import { Panel, Badge, BasisHint, Gauge, InfoNote } from "../components/ui/Primi
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 import { classificarInadimplencia } from "../utils/moduleHealth.js";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5e" };
 
@@ -77,6 +78,7 @@ const TEXTO_ALERTA = {
 // por conta própria.
 export default function DashboardPage({ data }) {
   const { entidades, filtros, parametros } = data;
+  const { t } = useLanguage();
 
   const resumo = useMemo(
     () => construirResumoExecutivo({ entidades, filtros, parametros }),
@@ -89,21 +91,21 @@ export default function DashboardPage({ data }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Caixa Disponível" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)}`} basis="caixa" />
-        <KpiCard label="Contas a Receber (aberto)" value={fmtBRL(resumo.contasReceber.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasReceber.inadimplenciaPct))}
+        <KpiCard label={t("kpi.caixaDisponivel")} value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)}`} basis="caixa" />
+        <KpiCard label={t("kpi.contasReceberAberto")} value={fmtBRL(resumo.contasReceber.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasReceber.inadimplenciaPct))}
           sub={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}% vencido`} tooltip="Cor pelo % da carteira vencido: verde <5%, amarelo 5-10%, vermelho >10% — mesmo corte do velocímetro de Inadimplência abaixo." />
-        <KpiCard label="Contas a Pagar (aberto)" value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
+        <KpiCard label={t("kpi.contasPagarAberto")} value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
           sub={`${resumo.contasPagar.atrasoPct.toFixed(1)}% em atraso`} tooltip="Cor pelo % da carteira em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
-        <KpiCard label="Caixa Projetado 30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
+        <KpiCard label={t("kpi.caixaProjetado30")} value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
           tooltip="Projeção de caixa: parte do Caixa Disponível de hoje e soma/subtrai os títulos já cadastrados (Previsto/Vencido) com vencimento nos próximos 30 dias — não é o saldo real desses dias, é uma estimativa com a carteira atual." />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Receita Bruta no ano" value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia"
+        <KpiCard label={t("kpi.receitaBrutaAno")} value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia"
           tooltip="Soma da Receita Bruta (DRE, regime de Competência) de todos os meses do ano corrente até hoje (Year-to-Date) — usa Data de Competência, não Data de Vencimento/Pagamento." />
-        <KpiCard label="EBITDA no ano" value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} basis="competencia" />
-        <KpiCard label="Desvio vs. Orçamento (período)" value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia"
+        <KpiCard label={t("kpi.ebitdaAno")} value={fmtBRL(resumo.dreYTD.ebitda)} tone={resumo.dreYTD.ebitda >= 0 ? "positive" : "negative"} basis="competencia" />
+        <KpiCard label={t("kpi.desvioOrcamento")} value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia"
           tooltip="Número LÍQUIDO: soma o desvio (favorável menos desfavorável) dos 6 grupos do DRE. Grupos favoráveis podem mascarar grupos desfavoráveis — um total pequeno aqui não significa que todo grupo está dentro do orçado. Ver 'Alertas Executivos' abaixo para a composição por grupo." />
-        <KpiCard label="Inadimplência (Receber)" value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
+        <KpiCard label={t("kpi.inadimplenciaReceber")} value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
