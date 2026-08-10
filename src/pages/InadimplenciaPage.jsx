@@ -4,7 +4,7 @@ import { Panel, KPI, Gauge, InfoNote, selectCls, DateInputBR } from "../componen
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularEvolucaoInadimplencia, calcularPDD,
-  FAIXAS_AGING, calcularDSOouDPO,
+  FAIXAS_AGING, calcularDSOouDPO, FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos,
 } from "../financial-engine/aging.js";
 import { diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
 import { PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
@@ -50,6 +50,11 @@ export default function InadimplenciaPage({ data }) {
   const totalFiltrado = vencidosFiltrados.reduce((s, l) => s + l.valor, 0);
   const concentracaoVencidos = useMemo(() => calcularConcentracaoPorParceiro(vencidos, 5), [vencidos]);
   const evolucaoInadimplencia = useMemo(() => calcularEvolucaoInadimplencia(lancamentosAR, hoje, 6), [lancamentosAR, hoje]);
+  // Aging de Vencidos Recebidos: mudou de Contas a Receber pra cá (Bloco 4)
+  // — histórico de atraso já liquidado (Data de baixa − Vencimento), é
+  // conceito de inadimplência, não de carteira em aberto.
+  const agingVencidosRecebidos = useMemo(() => calcularAgingVencidosRecebidos(lancamentosAR), [lancamentosAR]);
+  const chartAgingRecebidos = FAIXAS_AGING_RECEBIDOS.map((f) => ({ faixa: f.label, valor: agingVencidosRecebidos.buckets[f.key] }));
   const pdd = useMemo(() => calcularPDD(lancamentosAR, hoje, parametros.pddFaixas || PDD_FAIXAS_PADRAO), [lancamentosAR, hoje, parametros.pddFaixas]);
 
   const realizadoNoMes = useMemo(() => {
@@ -67,7 +72,7 @@ export default function InadimplenciaPage({ data }) {
     <div className="flex flex-col gap-6">
       <InfoNote>
         Inadimplência de Contas a Receber: títulos com Vencimento já passado em relação a hoje (situação "Vencido"),
-        ainda sem baixa. Para o histórico de atraso já liquidado, veja "Aging de Vencidos Recebidos" em Contas a Receber.
+        ainda sem baixa. O histórico de atraso já liquidado (títulos Realizados com atraso) está em "Aging de Vencidos Recebidos" abaixo.
       </InfoNote>
 
       <div className="grid grid-cols-3 gap-4">
@@ -140,6 +145,19 @@ export default function InadimplenciaPage({ data }) {
         </Panel>
       </div>
 
+      <Panel title="Aging de Vencidos Recebidos" subtitle="Títulos Realizados liquidados com atraso — dias_atraso = Data de baixa − Vencimento">
+        {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={chartAgingRecebidos}>
+              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
+              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </Panel>
+
       <Panel
         title="Títulos Vencidos em Aberto"
         right={
@@ -164,7 +182,7 @@ export default function InadimplenciaPage({ data }) {
               <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">Cliente</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4 text-right">Dias em Atraso</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
                 {vencidosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
-                  <tr key={l.id} className="border-b border-slate-100">
+                  <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
                     <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
                     <td className="py-2 pr-4 text-slate-700">{entidades.clientes.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
                     <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>

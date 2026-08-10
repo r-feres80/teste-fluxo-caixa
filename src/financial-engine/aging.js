@@ -76,6 +76,27 @@ export function calcularComposicaoRecebido(lancamentosRealizados) {
   };
 }
 
+const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+/**
+ * Composição do Recebido por dia da semana (Bloco 4): soma o valor
+ * Realizado por dia da semana da Data de baixa — mesmo recorte usado em
+ * "Composição do Recebido" (Antecipado/Em dia/Atrasado), agora quebrado por
+ * Seg-Sex (mínimo 5 dias úteis). Sáb/Dom entram só se houver baixa nesses
+ * dias (não é comum, mas não é descartado).
+ */
+export function calcularComposicaoPorDiaSemana(lancamentosRealizados) {
+  const porDia = DIAS_SEMANA.map((label, dow) => ({ dow, label, valor: 0, qtd: 0 }));
+  lancamentosRealizados.forEach((l) => {
+    if (!l.dataPagamento) return;
+    const dow = parseISO(l.dataPagamento).getDay();
+    porDia[dow].valor += l.valor;
+    porDia[dow].qtd += 1;
+  });
+  // Seg (1) a Sex (5) sempre aparecem; Dom (0) e Sáb (6) só se tiverem valor.
+  return porDia.filter((d) => (d.dow >= 1 && d.dow <= 5) || d.valor > 0);
+}
+
 /**
  * Evolução mensal de inadimplência (%): para cada um dos últimos N meses,
  * entre os títulos com Vencimento naquele mês, qual % está/ficou em atraso —

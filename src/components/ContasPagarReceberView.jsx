@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, CartesianGrid, ComposedChart, Legend } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Legend } from "recharts";
 import { Panel, KPI, InfoNote, selectCls } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
+import { MESES } from "../config/appConfig.js";
 import {
   calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos,
-  FAIXAS_AGING, calcularComposicaoRecebido, calcularEvolucaoInadimplencia,
-  FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos, calcularPrevistoRealizadoDiario, construirReguaDiasUteis,
+  FAIXAS_AGING, calcularComposicaoRecebido,
+  calcularPrevistoRealizadoDiario, construirReguaDiasUteis,
+  calcularComposicaoPorDiaSemana,
 } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
@@ -34,19 +36,26 @@ export function ContasPagarReceberView({ data, tipo }) {
   const vencimentosHoje = abertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
   const regua = useMemo(() => construirReguaDiasUteis(abertos, hoje, 10), [abertos, hoje]);
 
-  // Filtro de "Títulos em Aberto": vencimento (faixa) + status, com totalizador
-  // do resultado filtrado — ver item 8/Etapa 3.
+  // Filtro de "Títulos em Aberto": vencimento (faixa em dias) + mês de
+  // vencimento + status, com totalizador do resultado filtrado — ver item
+  // 8/Etapa 3 (faixa+status) e Bloco 4 (mês, além do filtro por dia).
   const [fVencimento, setFVencimento] = useState("todos");
+  const [fMes, setFMes] = useState("todos");
   const [fSituacao, setFSituacao] = useState("TODAS");
+  const mesesDisponiveis = useMemo(() => {
+    const set = new Set(abertos.map((l) => l.dataVencimento.slice(0, 7)));
+    return Array.from(set).sort();
+  }, [abertos]);
   const abertosFiltrados = useMemo(() => abertos.filter((l) => {
     const sit = situacaoEfetiva(l, hoje);
     if (fSituacao !== "TODAS" && sit !== fSituacao) return false;
+    if (fMes !== "todos" && !l.dataVencimento.startsWith(fMes)) return false;
     if (fVencimento === "todos") return true;
     const diasAteVencer = diffDaysISO(hoje, l.dataVencimento);
     if (fVencimento === "vencidos") return diasAteVencer < 0;
     if (fVencimento === "hoje") return diasAteVencer === 0;
     return diasAteVencer >= 0 && diasAteVencer <= Number(fVencimento);
-  }), [abertos, fSituacao, fVencimento, hoje]);
+  }), [abertos, fSituacao, fMes, fVencimento, hoje]);
   const totalFiltrado = abertosFiltrados.reduce((s, l) => s + l.valor, 0);
 
   const realizadoNoMes = useMemo(() => {
@@ -61,16 +70,13 @@ export function ContasPagarReceberView({ data, tipo }) {
   // Vencimentos Hoje/Próximos dias acima.
   const chartData = FAIXAS_AGING.map((f) => ({ faixa: f.label, valor: buckets[f.key] }));
 
-  // Composição do Recebido / Evolução de Inadimplência: só em Contas a Receber
-  // (tipo === "Entrada") — ver item 9, escopo explícito de AR.
+  // Composição do Recebido: só em Contas a Receber (tipo === "Entrada") —
+  // ver item 9, escopo explícito de AR. "Aging de Vencidos Recebidos" e
+  // "Evolução Mensal de Inadimplência" moraram aqui antes; agora vivem só em
+  // Inadimplência (Bloco 4) — não recalcular/duplicar aqui.
   const lancamentosRealizados = useMemo(() => lancamentosDoTipo.filter((l) => l.situacao === "Realizado"), [lancamentosDoTipo]);
   const composicaoRecebido = useMemo(() => tipo === "Entrada" ? calcularComposicaoRecebido(lancamentosRealizados) : null, [tipo, lancamentosRealizados]);
-  const evolucaoInadimplencia = useMemo(() => tipo === "Entrada" ? calcularEvolucaoInadimplencia(lancamentosDoTipo, hoje, 6) : null, [tipo, lancamentosDoTipo, hoje]);
-
-  // Aging de Vencidos Recebidos: histórico de atraso na liquidação (Data de
-  // baixa − Vencimento), aplicável tanto a AR quanto a AP.
-  const agingVencidosRecebidos = useMemo(() => calcularAgingVencidosRecebidos(lancamentosDoTipo), [lancamentosDoTipo]);
-  const chartAgingRecebidos = FAIXAS_AGING_RECEBIDOS.map((f) => ({ faixa: f.label, valor: agingVencidosRecebidos.buckets[f.key] }));
+  const composicaoPorDiaSemana = useMemo(() => tipo === "Entrada" ? calcularComposicaoPorDiaSemana(lancamentosRealizados) : null, [tipo, lancamentosRealizados]);
 
   // Previsto x Realizado: visualização única compartilhada por AP e AR (item
   // 10/Etapa 3 — antes só existia para AR). PDD mora em InadimplenciaPage.jsx
@@ -138,22 +144,10 @@ export function ContasPagarReceberView({ data, tipo }) {
         </Panel>
       </div>
 
-      {/* "Aging de Vencidos Recebidos" é conceito de AR (histórico de atraso
-          no recebimento) — não faz sentido em Contas a Pagar. */}
-      {tipo === "Entrada" && (
-        <Panel title="Aging de Vencidos Recebidos" subtitle="Títulos Realizados liquidados com atraso — dias_atraso = Data de baixa − Vencimento">
-          {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={chartAgingRecebidos}>
-                <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
-                <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-                <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-                <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </Panel>
-      )}
+      {/* "Aging de Vencidos Recebidos" e "Top 5 Devedores" mudaram para a
+          página Inadimplência (Bloco 4) — é o módulo dedicado a atraso, não
+          precisa duplicar aqui. "Evolução Mensal de Inadimplência" também
+          saiu daqui pelo mesmo motivo (já existe em Inadimplência). */}
 
       {tipo === "Entrada" && (
         <div className="grid grid-cols-2 gap-4">
@@ -174,16 +168,18 @@ export function ContasPagarReceberView({ data, tipo }) {
             )}
           </Panel>
 
-          <Panel title="Evolução Mensal de Inadimplência (%)" subtitle="Últimos 6 meses, por Data de Vencimento">
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={evolucaoInadimplencia}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
-                <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => `${v.toFixed(1)}%`} />
-                <Line type="monotone" dataKey="pct" name="Inadimplência" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
+          <Panel title="Composição do Recebido por Dia da Semana" subtitle="Soma do valor Realizado por dia da semana da Data de baixa (mín. Seg-Sex)">
+            {composicaoPorDiaSemana.every((d) => d.valor === 0) ? <span className="text-sm text-slate-400">Nenhum título Realizado no momento.</span> : (
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={composicaoPorDiaSemana}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+                  <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+                  <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </Panel>
         </div>
       )}
@@ -221,6 +217,13 @@ export function ContasPagarReceberView({ data, tipo }) {
         title={`Títulos em Aberto — ${rotuloParceiro}`}
         right={
           <div className="flex items-center gap-2">
+            <select value={fMes} onChange={(e) => setFMes(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="todos">Todos os meses</option>
+              {mesesDisponiveis.map((m) => {
+                const [ano, mes] = m.split("-");
+                return <option key={m} value={m}>{MESES[Number(mes) - 1]}/{ano}</option>;
+              })}
+            </select>
             <select value={fVencimento} onChange={(e) => setFVencimento(e.target.value)} className={selectCls + " w-auto"}>
               <option value="todos">Todos vencimentos</option>
               <option value="vencidos">Vencidos</option>
@@ -244,7 +247,7 @@ export function ContasPagarReceberView({ data, tipo }) {
               <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">{rotuloParceiro}</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4">Situação</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
                 {abertosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
-                  <tr key={l.id} className="border-b border-slate-100">
+                  <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
                     <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
                     <td className="py-2 pr-4 text-slate-700">{listaParceiros.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
                     <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>
