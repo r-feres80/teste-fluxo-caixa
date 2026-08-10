@@ -4,38 +4,13 @@ import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign,
 import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
-import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorParceiro, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
-import { calcularComposicaoRecebido } from "../financial-engine/aging.js";
+import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
+import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getDataAtualSistema, parseISO } from "../utils/dateUtils.js";
 import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
-
-// Mini-donut de composição (Antecipado/Em dia/Atrasado) por Cliente/Fornecedor
-// — igual ao que existia na página standalone de Composição do Caixa, agora
-// consolidada aqui dentro de Tesouraria (Etapa 2 item 4).
-function MiniDonutComposicao({ item, nome }) {
-  const partes = [
-    { key: "antecipado", label: "Antecipado", valor: item.antecipado },
-    { key: "emDia", label: "Em dia", valor: item.emDia },
-    { key: "atrasado", label: "Atrasado", valor: item.atrasado },
-  ].filter((p) => p.valor > 0);
-  return (
-    <div className="flex flex-col items-center gap-1">
-      <ResponsiveContainer width={92} height={92}>
-        <PieChart>
-          <Pie data={partes} dataKey="valor" nameKey="label" innerRadius={26} outerRadius={40} paddingAngle={2}>
-            {partes.map((p) => <Cell key={p.key} fill={CORES_COMPOSICAO[p.key]} />)}
-          </Pie>
-          <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ fontSize: 11 }} />
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="text-xs text-slate-600 text-center truncate w-24" title={nome}>{nome}</div>
-      <div className="text-[11px] text-slate-400 font-mono">{fmtBRLShort(item.total)}</div>
-    </div>
-  );
-}
 
 // Tooltip do sparkline — mesma informação (Data + Valor) já disponível na
 // tabela ao lado, só que sob hover no gráfico. Conteúdo customizado (em vez
@@ -163,6 +138,19 @@ export default function TesourariaPage({ data }) {
   const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), hoje), [entidades.lancamentos, filtros.empresaId, hoje]);
+  // "Movimento de Hoje" acima é só o que já baixou (regime de Caixa); aqui
+  // olhamos o que VENCE hoje e ainda não foi Realizado — sinaliza o que
+  // ainda pode se mover no caixa até o fim do dia, sem misturar os regimes.
+  const previstoHoje = useMemo(() => {
+    const doDia = excluirTransferencias(entidades.lancamentos).filter((l) =>
+      l.situacao !== "Cancelado" && l.situacao !== "Realizado" && l.dataVencimento === hoje &&
+      (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
+    );
+    return {
+      entradas: doDia.filter((l) => l.tipo === "Entrada").reduce((s, l) => s + l.valor, 0),
+      saidas: doDia.filter((l) => l.tipo === "Saída").reduce((s, l) => s + l.valor, 0),
+    };
+  }, [entidades.lancamentos, filtros.empresaId, hoje]);
   const transferencias = useMemo(() => listarTransferencias(entidades.lancamentos), [entidades.lancamentos]);
 
   const realizados = useMemo(() => excluirTransferencias(entidades.lancamentos)
@@ -175,12 +163,13 @@ export default function TesourariaPage({ data }) {
   const agora = parseISO(hoje);
   const composicaoGeral = useMemo(() => calcularComposicaoRecebido(realizados), [realizados]);
   const composicaoMensal = useMemo(() => calcularComposicaoMensal(realizados, agora.getFullYear(), agora.getMonth(), 6), [realizados, agora]);
-  const composicaoPorParceiro = useMemo(() => calcularComposicaoPorParceiro(realizados, 6), [realizados]);
+  // Resumo AP x AR (substitui "Composição por Cliente/Fornecedor" — Bloco 4):
+  // visão rápida de quanto está em aberto/vencido dos dois lados, contexto
+  // direto pro Saldo Disponível e pro Índice de Liquidez acima.
+  const lancamentosDaEmpresa = useMemo(() => entidades.lancamentos.filter((l) => !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)), [entidades.lancamentos, filtros.empresaId]);
+  const agingAR = useMemo(() => calcularCarteiraEAging(lancamentosDaEmpresa.filter((l) => l.tipo === "Entrada"), hoje), [lancamentosDaEmpresa, hoje]);
+  const agingAP = useMemo(() => calcularCarteiraEAging(lancamentosDaEmpresa.filter((l) => l.tipo === "Saída"), hoje), [lancamentosDaEmpresa, hoje]);
   const composicaoPorContaBancaria = useMemo(() => calcularComposicaoPorContaBancaria(realizados), [realizados]);
-  const nomeParceiroComposicao = (item) => {
-    const lista = item.tipoParceiro === "Cliente" ? entidades.clientes : entidades.fornecedores;
-    return lista.find((p) => p.id === item.id)?.nome ?? "—";
-  };
   const nomeContaBancaria = (id) => entidades.contasBancarias.find((c) => c.id === id)?.apelido ?? "—";
 
   if (contasFiltradas.length === 0) {
@@ -195,7 +184,13 @@ export default function TesourariaPage({ data }) {
         <KPI label="Aplicações Financeiras" value={fmtBRL(posicao.aplicacoes)} tone="neutral" icon={PiggyBank} basis="caixa" />
         <KPI label="Movimento de Hoje"
           value={<span className="flex items-baseline gap-1.5 text-lg"><span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span><span className="text-slate-300 text-sm">/</span><span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>}
-          sub="Entradas / Saídas (exclui transferências)" tone="neutral" icon={ArrowUpRight} basis="caixa" />
+          sub={
+            <span className="flex flex-col gap-0.5">
+              <span>Já realizado — Entradas / Saídas</span>
+              <span>Previsto p/ hoje (ainda não baixado): <span className="text-emerald-600">{fmtBRL(previstoHoje.entradas)}</span> / <span className="text-rose-600">{fmtBRL(previstoHoje.saidas)}</span></span>
+            </span>
+          }
+          tone="neutral" icon={ArrowUpRight} basis="caixa" />
       </div>
 
       <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
@@ -244,7 +239,10 @@ export default function TesourariaPage({ data }) {
 
       <div className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-slate-800 font-semibold text-sm">Composição do Caixa</h2>
+          <h2 className="text-slate-800 font-semibold text-sm flex items-center gap-1">
+            Composição do Caixa
+            <Info size={12} className="text-slate-300 shrink-0 cursor-help" title="Sem janela de tempo: considera TODOS os lançamentos Realizados até hoje, desde o início da base — não é limitado aos últimos 30 dias. Esse recorte de 30 dias só existe no gráfico 'Composição Diária' abaixo." />
+          </h2>
           <span className="text-xs text-slate-400">Antecipado (baixa antes do vencimento) / Em dia (no vencimento) / Atrasado (depois) — Entradas e Saídas Realizadas, exclui transferências</span>
         </div>
 
@@ -307,18 +305,28 @@ export default function TesourariaPage({ data }) {
           </Panel>
         </div>
 
-        {/* Decisão item 5/Etapa 4: manter a separação Cliente/Fornecedor —
-            é o único lugar do app que mostra pontualidade (Antecipado/Em
-            dia/Atrasado) por parceiro individual; "Quebra por Conta
-            Bancária" acima é a mesma métrica por conta, e Contas a Pagar/
-            Receber mostra concentração por parceiro em R$, não pontualidade.
-            Cortes diferentes do mesmo dado, não duplicidade. */}
-        <Panel title="Composição por Cliente/Fornecedor" subtitle="Top 6 por volume Realizado">
-          {composicaoPorParceiro.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado com parceiro vinculado.</span> : (
-            <div className="flex flex-wrap gap-6 justify-around">
-              {composicaoPorParceiro.map((item) => <MiniDonutComposicao key={item.id} item={item} nome={nomeParceiroComposicao(item)} />)}
+        {/* Bloco 4: "Composição por Cliente/Fornecedor" (pontualidade por
+            parceiro) saiu daqui — já existe em detalhe em Contas a Pagar/
+            Receber (Títulos em Aberto, por parceiro). No lugar entra um
+            resumo AP x AR, mais direto pro contexto de Tesouraria (quanto
+            ainda entra/sai e o que já está vencido dos dois lados). */}
+        <Panel title="Resumo AP x AR (em aberto)" subtitle="Contexto do Saldo Disponível e do Índice de Liquidez acima">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2 pr-4 border-r border-slate-100">
+              <div className="text-xs text-slate-500 uppercase tracking-wide">A Receber</div>
+              <div className="font-mono tabular-nums text-xl font-semibold text-emerald-600">{fmtBRL(agingAR.totalCarteira)}</div>
+              <div className="text-xs text-slate-500">Vencido: <span className={agingAR.totalVencido > 0 ? "text-rose-600 font-medium" : ""}>{fmtBRL(agingAR.totalVencido)}</span></div>
             </div>
-          )}
+            <div className="flex flex-col gap-2">
+              <div className="text-xs text-slate-500 uppercase tracking-wide">A Pagar</div>
+              <div className="font-mono tabular-nums text-xl font-semibold text-rose-600">{fmtBRL(agingAP.totalCarteira)}</div>
+              <div className="text-xs text-slate-500">Vencido: <span className={agingAP.totalVencido > 0 ? "text-rose-600 font-medium" : ""}>{fmtBRL(agingAP.totalVencido)}</span></div>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+            <span className="text-slate-500">Saldo líquido (A Receber − A Pagar, ambos em aberto)</span>
+            <span className={`font-mono tabular-nums font-semibold ${agingAR.totalCarteira - agingAP.totalCarteira >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{fmtBRL(agingAR.totalCarteira - agingAP.totalCarteira)}</span>
+          </div>
         </Panel>
       </div>
 

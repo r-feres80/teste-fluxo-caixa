@@ -131,6 +131,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     contasPagar: {
       totalEmAberto: agingAP.totalCarteira,
       totalVencido: agingAP.totalVencido,
+      atrasoPct: agingAP.totalCarteira > 0 ? Number(((agingAP.totalVencido / agingAP.totalCarteira) * 100).toFixed(1)) : 0,
       concentracaoTop5: topFornecedores,
       despesasInternas: despesasInternasFornecedores,
       vencimentosProximos: vencAP,
