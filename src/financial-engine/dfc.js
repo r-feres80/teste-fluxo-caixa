@@ -85,6 +85,16 @@ export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, o
   // Dashboard e FluxoCaixaPage — o agrupamento em 3 níveis (classificacaoDFC)
   // continua a fonte da verdade, só a ordem de exibição e os subgrupos
   // internos mudaram.
+  //
+  // Aporte/resgate de Aplicações Financeiras (pc4.07, comando DFC-mapeamento
+  // item 2a/2d) FICOU FORA desta árvore, mesmo sendo tecnicamente
+  // classificacaoDFC=Financiamento: os dois lados de toda transferência
+  // (saída da conta corrente + entrada na aplicação, mesmo dia, mesma conta
+  // gerencial) sempre somam ZERO nesse agrupamento por conta — não existe
+  // jeito de mostrar o movimento sem quebrar "Saldo Final do DFC bate com
+  // Tesouraria" (que soma Disponível + Aplicações). Ver nota para o usuário
+  // no relatório desta rodada — decisão de arquitetura pendente, não
+  // implementada.
   return ["Operacional", "Financiamento", "Investimento"].map((grupo) => {
     const contasDoGrupo = contasComMovimento.filter((c) => c.classificacaoDFC === grupo);
     const subgrupoNomes = Array.from(new Set(contasDoGrupo.map((c) => c.subgrupoDFC || "(Sem subgrupo)")));

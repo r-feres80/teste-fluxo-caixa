@@ -74,13 +74,25 @@ export const demoBancos = [
 // saldoInicial. 5 contas líquidas com pesos próximos (em vez de
 // concentradas em 1-2 contas) — Composição do Caixa em Tesouraria fica mais
 // distribuída (item 2/Etapa 4).
+// cb3/cb7/cb8 (semLiquidez="true") ganham 3 campos extras (comando
+// DFC-mapeamento item 2a): modalidade, taxaAnual (% ao ano) e dataAplicacao
+// (ISO) — só essas contas, contas correntes normais não usam. prazoDias é
+// SEMPRE calculado dinamicamente (diffDaysISO(dataAplicacao, hoje) em
+// aplicacoesFinanceiras.js), nunca armazenado aqui: evita um campo que
+// desatualiza sozinho conforme os dias passam. cb7/cb8 nascem com
+// saldoInicial=0 — todo o principal delas entra via lançamento de aporte
+// (transferência pc4.07) dentro da janela mai-nov/2026, não por saldo
+// pré-existente (diferente de cb3, cujo saldoInicial já vem de antes da
+// janela rastreada).
 const demoContasBancariasBase = [
   { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 45000, semLiquidez: "false", ativo: true },
   { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 42000, semLiquidez: "false", ativo: true },
-  { id: "cb3", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB", agencia: "1234", numero: "99887-1", saldoInicial: 150000, semLiquidez: "true", ativo: true },
+  { id: "cb3", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB", agencia: "1234", numero: "99887-1", saldoInicial: 150000, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2025-11-01" },
   { id: "cb4", bancoId: "b3", empresaId: "e2", apelido: "Conta Movimento", agencia: "4321", numero: "34521-9", saldoInicial: 40000, semLiquidez: "false", ativo: true },
   { id: "cb5", bancoId: "b4", empresaId: "e1", apelido: "Conta Movimento", agencia: "9012", numero: "34567-8", saldoInicial: 38000, semLiquidez: "false", ativo: true },
   { id: "cb6", bancoId: "b5", empresaId: "e2", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
+  { id: "cb7", bancoId: "b1", empresaId: "e1", apelido: "Aplicação LCI", agencia: "5678", numero: "77123-4", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "LCI", taxaAnual: 10.8, dataAplicacao: "2026-06-01" },
+  { id: "cb8", bancoId: "b3", empresaId: "e2", apelido: "Aplicação Tesouro Selic", agencia: "4321", numero: "88456-2", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "Tesouro Selic", taxaAnual: 11.9, dataAplicacao: "2024-01-15" },
 ];
 
 export const demoProjetos = [

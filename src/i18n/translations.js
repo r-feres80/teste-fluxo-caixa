@@ -8,6 +8,7 @@ export const TRANSLATIONS = {
   pt: {
     "nav.dashboard": "Dashboard Executivo",
     "nav.tesouraria": "Tesouraria",
+    "nav.aplicacoes-financeiras": "Aplicações Financeiras",
     "nav.fluxo-caixa": "Fluxo de Caixa",
     "nav.dfc-direto": "DFC",
     "nav.contas-pagar": "Contas a Pagar",
@@ -52,6 +53,7 @@ export const TRANSLATIONS = {
   en: {
     "nav.dashboard": "Executive Dashboard",
     "nav.tesouraria": "Treasury",
+    "nav.aplicacoes-financeiras": "Financial Investments",
     "nav.fluxo-caixa": "Cash Flow",
     "nav.dfc-direto": "DFC (Cash Flow Statement)",
     "nav.contas-pagar": "Accounts Payable",
@@ -96,6 +98,7 @@ export const TRANSLATIONS = {
   es: {
     "nav.dashboard": "Panel Ejecutivo",
     "nav.tesouraria": "Tesorería",
+    "nav.aplicacoes-financeiras": "Aplicaciones Financieras",
     "nav.fluxo-caixa": "Flujo de Caja",
     "nav.dfc-direto": "DFC (Estado de Flujo de Caja)",
     "nav.contas-pagar": "Cuentas por Pagar",
