@@ -93,6 +93,16 @@ const demoContasBancariasBase = [
   { id: "cb6", bancoId: "b5", empresaId: "e2", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
   { id: "cb7", bancoId: "b1", empresaId: "e1", apelido: "Aplicação LCI", agencia: "5678", numero: "77123-4", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "LCI", taxaAnual: 10.8, dataAplicacao: "2026-06-01" },
   { id: "cb8", bancoId: "b3", empresaId: "e2", apelido: "Aplicação Tesouro Selic", agencia: "4321", numero: "88456-2", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "Tesouro Selic", taxaAnual: 11.9, dataAplicacao: "2024-01-15" },
+  // cb9/cb10/cb11 — cenário "aperto de tesouraria" (comando
+  // cenario-tesouraria-aperto): varredura de quase todo o saldo líquido
+  // (cb1/cb2/cb4/cb5/cb6) pra 3 tranches de CDB, via aporte real
+  // (transferência) datado na própria dataAplicacao de cada tranche —
+  // saldoInicial=0, todo o principal vem do aporte, mesmo padrão de
+  // cb7/cb8. Resultado: Disponível cai pra R$10.000 (mínimo operacional),
+  // Aplicações sobe na mesma proporção — nenhum caixa criado/destruído.
+  { id: "cb9", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB - Tranche 1", agencia: "1234", numero: "55201-3", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-05-11" },
+  { id: "cb10", bancoId: "b3", empresaId: "e2", apelido: "Aplicação CDB - Tranche 2", agencia: "4321", numero: "55202-1", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-06-11" },
+  { id: "cb11", bancoId: "b1", empresaId: "e1", apelido: "Aplicação CDB - Tranche 3", agencia: "5678", numero: "55203-8", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-07-31" },
 ];
 
 export const demoProjetos = [
