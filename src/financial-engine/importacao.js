@@ -35,22 +35,39 @@ function garantirBanco(nomeBanco, entidades) {
   return banco.id;
 }
 
-function criarEmpresa(nome, entidades, numeroConta, nomeBanco, saldoInicial = 0) {
+// Conta Bancária "Aplicação" (comando dashboard-causa-raiz, 1b): antes toda
+// conta auto-criada pelo import nascia sem semLiquidez/modalidade/taxaAnual/
+// dataAplicacao — mesmo quando a linha claramente descrevia uma aplicação
+// financeira (CDB/LCI/Tesouro). Colunas opcionais "Tipo de Conta" (Líquida/
+// Aplicação, default Líquida), "Modalidade", "Taxa Anual (%)" e "Data de
+// Aplicação" só são lidas/usadas quando "Tipo de Conta" = "Aplicação" — pra
+// conta líquida comum, fica exatamente como antes (sem esses campos, igual
+// ao resto do Plano de Contas Bancárias já cadastrado manualmente).
+function construirContaBancaria(id, empresaId, row, entidades, saldoInicial) {
+  const ehAplicacao = normalizarTexto(row["Tipo de Conta"]) === "aplicacao";
+  const conta = {
+    id, empresaId, apelido: "Conta Movimento", numero: row["Conta Bancária"],
+    saldoInicial, ativo: true, bancoId: garantirBanco(row["Banco"], entidades),
+    semLiquidez: ehAplicacao ? "true" : "false",
+  };
+  if (!ehAplicacao) return conta;
+
+  const taxaAnualTxt = row["Taxa Anual (%)"] != null ? String(row["Taxa Anual (%)"]).trim() : "";
+  return {
+    ...conta,
+    modalidade: row["Modalidade"] || "",
+    taxaAnual: taxaAnualTxt !== "" ? Number(taxaAnualTxt.replace(",", ".")) || 0 : 0,
+    dataAplicacao: limparData(row["Data de Aplicação"]) || "",
+  };
+}
+
+function criarEmpresa(nome, entidades, row, saldoInicial = 0) {
   const empresa = { id: gerarId("emp", entidades.empresas), nome, ativo: true };
   entidades.empresas.push(empresa);
 
   // Criar Conta Bancária padrão se número for fornecido
-  if (numeroConta) {
-    const contaBancaria = {
-      id: gerarId("cb", entidades.contasBancarias),
-      empresaId: empresa.id,
-      apelido: "Conta Movimento",
-      numero: numeroConta,
-      saldoInicial,
-      ativo: true,
-      bancoId: garantirBanco(nomeBanco, entidades),
-    };
-    entidades.contasBancarias.push(contaBancaria);
+  if (row["Conta Bancária"]) {
+    entidades.contasBancarias.push(construirContaBancaria(gerarId("cb", entidades.contasBancarias), empresa.id, row, entidades, saldoInicial));
   }
 
   return empresa;
@@ -130,7 +147,7 @@ export function normalizarLinha(row, entidades) {
 
   let empresa = buscarPorNome(entidades.empresas, row["Empresa"]);
   if (!empresa) {
-    empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"], row["Banco"], saldoInicialConta);
+    empresa = criarEmpresa(row["Empresa"], entidades, row, saldoInicialConta);
     avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente com Conta Movimento`);
   } else if (
     // Bug corrigido: a checagem antiga era "a empresa não tem NENHUMA conta
@@ -144,17 +161,8 @@ export function normalizarLinha(row, entidades) {
     row["Conta Bancária"] &&
     !entidades.contasBancarias.some((c) => c.empresaId === empresa.id && (c.apelido === row["Conta Bancária"] || c.numero === row["Conta Bancária"]))
   ) {
-    const contaBancaria = {
-      id: gerarId("cb", entidades.contasBancarias),
-      empresaId: empresa.id,
-      apelido: "Conta Movimento",
-      numero: row["Conta Bancária"],
-      saldoInicial: saldoInicialConta,
-      ativo: true,
-      bancoId: garantirBanco(row["Banco"], entidades),
-    };
-    entidades.contasBancarias.push(contaBancaria);
-    avisos.push(`Conta Bancária "${row["Conta Bancária"]}" criada para "${row["Empresa"]}"`);
+    entidades.contasBancarias.push(construirContaBancaria(gerarId("cb", entidades.contasBancarias), empresa.id, row, entidades, saldoInicialConta));
+    avisos.push(`Conta Bancária "${row["Conta Bancária"]}" criada para "${row["Empresa"]}"${normalizarTexto(row["Tipo de Conta"]) === "aplicacao" ? " (Aplicação)" : ""}`);
   }
 
   const unidade = row["Filial"] ? buscarPorNome(entidades.unidades.filter((u) => u.empresaId === empresa?.id), row["Filial"]) : null;
@@ -173,7 +181,15 @@ export function normalizarLinha(row, entidades) {
   let conta = buscarPorNome(entidades.planoDeContas, row["Conta Gerencial"], "descricao");
   if (!conta) {
     conta = criarContaGerencial(row["Conta Gerencial"], entidades, row["Classificação DRE"], grupoDFC, subgrupoDFC);
-    avisos.push(`Conta Gerencial "${row["Conta Gerencial"]}" criada automaticamente`);
+    // Achado (comando dashboard-causa-raiz, 1c): sem "Classificação DRE"/
+    // "Grupo DFC" na planilha, a conta nascia "Não classificado"/
+    // "Operacional" genérico SILENCIOSAMENTE — Receita Bruta, EBITDA e o DFC
+    // simplesmente não computavam essa conta, sem nenhum sinal de que algo
+    // estava errado até o usuário notar os totais zerados. Aviso agora avisa
+    // explicitamente qual conta ficou incompleta e o que isso quebra.
+    avisos.push(!row["Classificação DRE"] && !grupoDFC
+      ? `Conta Gerencial "${row["Conta Gerencial"]}" criada como Não Classificado — Receita Bruta/EBITDA/DFC não vão computar essa conta até você classificar em Plano de Contas`
+      : `Conta Gerencial "${row["Conta Gerencial"]}" criada automaticamente`);
   } else if (conta.tipo !== "Analítica") erros.push(`Conta "${conta.descricao}" é Sintética — não recebe lançamento`);
 
   let centro = row["Centro de Custo"] ? buscarPorNome(entidades.centrosCusto, row["Centro de Custo"], "nome") : null;
@@ -249,7 +265,15 @@ export function marcarDuplicados(linhasNormalizadas, lancamentosExistentes) {
 // "Saldo Inicial" (hotfix): preenchida só na(s) linha(s) da PRIMEIRA vez que
 // a Conta Bancária aparece na planilha — é o saldo de abertura daquela
 // conta, não um valor por lançamento. Vazio nas demais linhas.
+//
+// "Classificação DRE"/"Grupo DFC"/"Subgrupo" e "Tipo de Conta"/"Modalidade"/
+// "Taxa Anual (%)"/"Data de Aplicação" (comando dashboard-causa-raiz, 1c/1b):
+// normalizarLinha já aceitava as 3 primeiras — só não apareciam aqui, então
+// ninguém que baixasse o template saberia que existem. As 4 últimas são
+// novas: só lidas/usadas quando "Tipo de Conta" = "Aplicação" (default
+// "Líquida" se vazio) — ver construirContaBancaria.
 export const COLUNAS_TEMPLATE_LANCAMENTOS = [
   "Empresa", "Filial", "Data", "Competência", "Tipo", "Cliente/Fornecedor", "Documento", "Vencimento",
-  "Data de baixa", "Banco", "Conta Bancária", "Saldo Inicial", "Conta Gerencial", "Centro de Custo", "Projeto", "Valor", "Status", "Observação",
+  "Data de baixa", "Banco", "Conta Bancária", "Saldo Inicial", "Tipo de Conta", "Modalidade", "Taxa Anual (%)", "Data de Aplicação",
+  "Conta Gerencial", "Classificação DRE", "Grupo DFC", "Subgrupo", "Centro de Custo", "Projeto", "Valor", "Status", "Observação",
 ];

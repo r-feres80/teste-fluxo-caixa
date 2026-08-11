@@ -146,7 +146,33 @@ export function useAppData() {
     sincronizarPeriodoComReferencia();
   }, [sincronizarPeriodoComReferencia]);
 
+  // Limpar Base reseta dado TRANSACIONAL (lançamentos, orçamento, contas
+  // bancárias, clientes/fornecedores/projetos/centros de custo/unidades) mas
+  // PRESERVA estrutura de configuração (Empresas, Bancos, Plano de Contas) —
+  // decisão já registrada de que Plano de Contas não é dado transacional.
+  // Achado real (comando dashboard-causa-raiz): apagar o Plano de Contas
+  // junto fazia um reimport de planilha real (sem colunas de classificação)
+  // recriar toda conta gerencial como "Não classificado"/"Operacional"
+  // genérico, zerando Receita Bruta/EBITDA/DFC — sem o usuário nunca ter
+  // pedido pra apagar a classificação que ele já tinha configurado.
   const limparBase = useCallback(() => {
+    // Vira "usuario" (nunca mais auto-regenera demo obsoleta): a partir
+    // daqui a estrutura preservada (Empresas/Bancos/Plano de Contas) é
+    // intencional, não "sobra de demo esperando reload".
+    origemBaseRef.current = "usuario";
+    setEntidades((prev) => ({
+      ...criarEntidadesVazias(),
+      empresas: prev.empresas,
+      bancos: prev.bancos,
+      planoDeContas: prev.planoDeContas,
+    }));
+    sincronizarPeriodoComReferencia();
+  }, [sincronizarPeriodoComReferencia]);
+
+  // Resetar Tudo: o "recomeçar do zero de verdade" — apaga também Empresas/
+  // Bancos/Plano de Contas. Ação separada de Limpar Base (que só mexe em
+  // dado transacional) pra não ser possível apagar configuração sem querer.
+  const resetarTudo = useCallback(() => {
     origemBaseRef.current = null;
     setEntidades(criarEntidadesVazias());
     sincronizarPeriodoComReferencia();
@@ -156,6 +182,6 @@ export function useAppData() {
     loaded, savedFlash, lastUpdated,
     entidades, filtros, updateFiltros, parametros, updateParametros,
     addItem, updateItem, removeItem,
-    carregarDemo, limparBase, sincronizarPeriodoComReferencia,
+    carregarDemo, limparBase, resetarTudo, sincronizarPeriodoComReferencia,
   };
 }

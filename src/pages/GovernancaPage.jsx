@@ -5,11 +5,15 @@ import { fmtDataHora } from "../utils/formatUtils.js";
 import { APP_DISCLAIMER, PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
 
 export default function GovernancaPage({ data }) {
-  const { parametros, updateParametros, filtros, updateFiltros, lastUpdated, carregarDemo, limparBase, entidades } = data;
+  const { parametros, updateParametros, filtros, updateFiltros, lastUpdated, carregarDemo, limparBase, resetarTudo, entidades } = data;
   const { pedirConfirmacao, ConfirmDialogSlot } = useConfirm();
 
   const totalRegistros = Object.values(entidades).reduce((s, arr) => s + arr.length, 0);
   const totalLancamentos = entidades.lancamentos?.length ?? 0;
+  // Limpar Base só mexe em dado transacional (Plano de Contas/Empresas/
+  // Bancos são preservados — ver comentário em useAppData.js/limparBase).
+  const totalTransacional = ["lancamentos", "orcamentoItens", "contasBancarias", "clientes", "fornecedores", "projetos", "centrosCusto", "unidades"]
+    .reduce((s, chave) => s + (entidades[chave]?.length ?? 0), 0);
 
   // Backup local -> arquivo, fora do localStorage: gera e baixa um .json com
   // toda a base (inclui lançamentos) direto no navegador, sem passar por
@@ -30,9 +34,16 @@ export default function GovernancaPage({ data }) {
 
   const confirmarLimpeza = () => {
     pedirConfirmacao(
-      "Limpar toda a base?",
-      `Isso removerá TODOS os ${totalRegistros} registros cadastrados (empresas, unidades, clientes, fornecedores, bancos, contas bancárias, plano de contas, centros de custo, projetos, lançamentos e itens de orçamento). Esta ação não pode ser desfeita.`,
+      "Limpar Base (dado transacional)?",
+      `Isso removerá os ${totalTransacional} registro(s) de movimento (lançamentos, itens de orçamento, contas bancárias, clientes, fornecedores, centros de custo, projetos e unidades). Empresas, Bancos e Plano de Contas são PRESERVADOS — é configuração, não dado transacional. Esta ação não pode ser desfeita.`,
       limparBase
+    );
+  };
+  const confirmarResetTudo = () => {
+    pedirConfirmacao(
+      "Resetar Tudo (incluindo Plano de Contas)?",
+      `Isso removerá TODOS os ${totalRegistros} registros cadastrados, incluindo Empresas, Bancos e Plano de Contas — use só se for genuinamente recomeçar do zero. Esta ação não pode ser desfeita.`,
+      resetarTudo
     );
   };
   const confirmarCargaDemo = () => {
@@ -60,7 +71,14 @@ export default function GovernancaPage({ data }) {
           <button onClick={confirmarLimpeza} className="px-4 py-2 rounded text-sm bg-white border border-rose-300 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2">
             <Trash2 size={15} /> Limpar Base
           </button>
+          <button onClick={confirmarResetTudo} className="px-4 py-2 rounded text-sm bg-white border border-rose-300 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2">
+            <Trash2 size={15} /> Resetar Tudo
+          </button>
           <div className="text-xs text-slate-500 flex items-center gap-1.5"><Database size={13} /> {totalRegistros} registro(s) na base atual ({totalLancamentos} lançamento(s))</div>
+        </div>
+        <div className="text-xs text-slate-400 mt-3">
+          <strong>Limpar Base</strong> reseta só dado transacional (lançamentos, contas bancárias, clientes/fornecedores...) e preserva Empresas/Bancos/Plano de Contas.{" "}
+          <strong>Resetar Tudo</strong> apaga também a configuração — use só pra recomeçar do zero de verdade.
         </div>
       </Panel>
 
