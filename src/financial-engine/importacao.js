@@ -132,8 +132,18 @@ export function normalizarLinha(row, entidades) {
   if (!empresa) {
     empresa = criarEmpresa(row["Empresa"], entidades, row["Conta Bancária"], row["Banco"], saldoInicialConta);
     avisos.push(`Empresa "${row["Empresa"]}" criada automaticamente com Conta Movimento`);
-  } else if (row["Conta Bancária"] && !entidades.contasBancarias.some((c) => c.empresaId === empresa.id)) {
-    // Se empresa existe mas não tem conta bancária, criar uma
+  } else if (
+    // Bug corrigido: a checagem antiga era "a empresa não tem NENHUMA conta
+    // bancária" — então uma empresa que já tinha 1 conta nunca ganhava a 2ª,
+    // 3ª etc. quando a planilha trazia um valor diferente de "Conta
+    // Bancária" pra ela (cenário comum: conta corrente + aplicação, ou
+    // contas em bancos diferentes). O lançamento entrava com
+    // contaBancariaId: null, sem erro nem aviso. Agora a checagem é por essa
+    // conta ESPECÍFICA (apelido/número) já existir pra essa empresa — sem
+    // limite de quantas contas por empresa.
+    row["Conta Bancária"] &&
+    !entidades.contasBancarias.some((c) => c.empresaId === empresa.id && (c.apelido === row["Conta Bancária"] || c.numero === row["Conta Bancária"]))
+  ) {
     const contaBancaria = {
       id: gerarId("cb", entidades.contasBancarias),
       empresaId: empresa.id,
@@ -144,7 +154,7 @@ export function normalizarLinha(row, entidades) {
       bancoId: garantirBanco(row["Banco"], entidades),
     };
     entidades.contasBancarias.push(contaBancaria);
-    avisos.push(`Conta Bancária criada para "${row["Empresa"]}"`);
+    avisos.push(`Conta Bancária "${row["Conta Bancária"]}" criada para "${row["Empresa"]}"`);
   }
 
   const unidade = row["Filial"] ? buscarPorNome(entidades.unidades.filter((u) => u.empresaId === empresa?.id), row["Filial"]) : null;
@@ -175,7 +185,11 @@ export function normalizarLinha(row, entidades) {
 
   const projeto = row["Projeto"] ? buscarPorNome(entidades.projetos, row["Projeto"]) : null;
   const banco = row["Banco"] ? buscarPorNome(entidades.bancos, row["Banco"]) : null;
-  const contaBancaria = row["Conta Bancária"] ? entidades.contasBancarias.find((c) => c.apelido === row["Conta Bancária"] || c.numero === row["Conta Bancária"]) : null;
+  // Escopado por empresa (achado adicional ao corrigir a criação acima):
+  // sem isso, duas empresas com contas de mesmo apelido/número (coincidência
+  // plausível numa planilha real, ex.: ambas chamam "Conta Movimento") podiam
+  // fazer o lançamento de uma empresa apontar pra conta bancária da OUTRA.
+  const contaBancaria = row["Conta Bancária"] ? entidades.contasBancarias.find((c) => c.empresaId === empresa.id && (c.apelido === row["Conta Bancária"] || c.numero === row["Conta Bancária"])) : null;
 
   let clienteFornecedorId = null, tipoParceiro = null;
   if (row["Cliente/Fornecedor"]) {
