@@ -27,14 +27,25 @@ export function calcularIndiceLiquidezCaixa(caixaDisponivel, totalContasAPagarEm
 }
 
 /**
- * Índice de Liquidez Total — mesma aproximação acima (Contas a Pagar em
- * aberto como proxy do Passivo Circulante), mas somando ao numerador o que
- * está em Aplicações Financeiras (sem liquidez imediata, mas resgatável).
- * Mostra o fôlego real considerando resgate, não só o caixa já disponível.
+ * Liquidez Seca (Quick Ratio) — mesma aproximação de Passivo Circulante
+ * acima (Contas a Pagar em aberto), no numerador soma Caixa Disponível +
+ * Contas a Receber em aberto (o que já é caixa ou vai virar caixa via
+ * cobrança). NÃO inclui Aplicações Financeiras — por definição, Liquidez
+ * Seca exclui ativos que exigem conversão/resgate.
  */
-export function calcularIndiceLiquidezTotal(caixaDisponivel, aplicacoesFinanceiras, totalContasAPagarEmAberto) {
+export function calcularLiquidezSeca(caixaDisponivel, contasReceberEmAberto, totalContasAPagarEmAberto) {
   if (!totalContasAPagarEmAberto) return null;
-  return (caixaDisponivel + aplicacoesFinanceiras) / totalContasAPagarEmAberto;
+  return (caixaDisponivel + contasReceberEmAberto) / totalContasAPagarEmAberto;
+}
+
+/**
+ * Liquidez Corrente (Current Ratio) — mesma aproximação acima, no numerador
+ * soma TODOS os ativos de curto prazo do sistema hoje: Caixa Disponível +
+ * Aplicações Financeiras + Contas a Receber em aberto.
+ */
+export function calcularLiquidezCorrente(caixaDisponivel, aplicacoesFinanceiras, contasReceberEmAberto, totalContasAPagarEmAberto) {
+  if (!totalContasAPagarEmAberto) return null;
+  return (caixaDisponivel + aplicacoesFinanceiras + contasReceberEmAberto) / totalContasAPagarEmAberto;
 }
 
 /**

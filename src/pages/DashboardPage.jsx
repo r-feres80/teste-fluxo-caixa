@@ -170,24 +170,24 @@ export default function DashboardPage({ data }) {
 
       <div className="grid grid-cols-3 gap-4">
         <Gauge
-          label="Liquidez Imediata"
-          value={resumo.caixa.indiceLiquidezCaixa}
+          label="Liquidez Seca"
+          value={resumo.caixa.indiceLiquidezSeca}
           min={0} max={3}
-          meta={1.5}
-          bands={[{ upTo: 1, color: "#f43f5e" }, { upTo: 1.5, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          meta={parametros.metaLiquidezSeca}
+          bands={[{ upTo: parametros.metaLiquidezSeca * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezSeca, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
-          sub="Caixa Disponível ÷ Contas a Pagar em aberto — <1,0x vermelho, 1,0-1,5x amarelo, >1,5x verde"
-          tooltip="O que já está disponível sem precisar resgatar nada."
+          sub={`(Caixa Disponível + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezSeca.toFixed(2)}x configurável em Governança`}
+          tooltip="O que já é caixa ou vai virar caixa via cobrança, sem contar aplicações."
         />
         <Gauge
-          label="Liquidez Total"
-          value={resumo.caixa.indiceLiquidezTotal}
+          label="Liquidez Corrente"
+          value={resumo.caixa.indiceLiquidezCorrente}
           min={0} max={3}
-          meta={parametros.metaLiquidezTotal}
-          bands={[{ upTo: parametros.metaLiquidezTotal * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezTotal, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          meta={parametros.metaLiquidezCorrente}
+          bands={[{ upTo: parametros.metaLiquidezCorrente * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezCorrente, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
-          sub={`(Caixa Disponível + Aplicações) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezTotal.toFixed(2)}x configurável em Governança`}
-          tooltip="Incluindo o que pode ser resgatado de Aplicações — mostra o fôlego real, mas resgatar CDB/LCI antes do prazo pode ter custo/perda de benefício fiscal."
+          sub={`(Caixa Disponível + Aplicações + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezCorrente.toFixed(2)}x configurável em Governança`}
+          tooltip="Tudo somado, incluindo o que pode ser resgatado de aplicações."
         />
         <Gauge
           label="Inadimplência"

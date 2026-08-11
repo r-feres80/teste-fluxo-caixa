@@ -92,7 +92,8 @@ export default function GovernancaPage({ data }) {
           <Field label="Materialidade — Δ R$ mínimo"><input type="number" value={parametros.materialidadeValor} onChange={(e) => updateParametros({ materialidadeValor: Number(e.target.value) || 0 })} className={inputCls} /></Field>
           <Field label="Dias para alertas de vencimento"><input type="number" value={parametros.diasParaAlertas} onChange={(e) => updateParametros({ diasParaAlertas: Number(e.target.value) || 0 })} className={inputCls} /></Field>
           <Field label="Limite de concentração (%)"><input type="number" value={parametros.limiteConcentracaoPct} onChange={(e) => updateParametros({ limiteConcentracaoPct: Number(e.target.value) || 0 })} className={inputCls} /></Field>
-          <Field label="Meta Liquidez Total (x)"><input type="number" step="0.1" value={parametros.metaLiquidezTotal} onChange={(e) => updateParametros({ metaLiquidezTotal: Number(e.target.value) || 0 })} className={inputCls} /></Field>
+          <Field label="Meta Liquidez Seca (x)"><input type="number" step="0.1" value={parametros.metaLiquidezSeca} onChange={(e) => updateParametros({ metaLiquidezSeca: Number(e.target.value) || 0 })} className={inputCls} /></Field>
+          <Field label="Meta Liquidez Corrente (x)"><input type="number" step="0.1" value={parametros.metaLiquidezCorrente} onChange={(e) => updateParametros({ metaLiquidezCorrente: Number(e.target.value) || 0 })} className={inputCls} /></Field>
         </div>
       </Panel>
 
