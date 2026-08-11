@@ -39,11 +39,11 @@ export const CLASSIFICACAO_DFC = ["Operacional", "Investimento", "Financiamento"
 export const SUBGRUPOS_POR_GRUPO_DFC = {
   Operacional: [
     "Entradas", "Saídas Diretas", "Pessoal", "Benefícios", "Impostos de Folha",
-    "Impostos", "Terceiros e Consultorias", "Marketing e Publicidade",
+    "Impostos", "Impostos sobre o Lucro", "Terceiros e Consultorias", "Marketing e Publicidade",
     "Real Estate e Facilities", "Outros Operacionais",
   ],
   Investimento: ["Investimentos"],
-  Financiamento: ["Captações", "Receitas Financeiras"],
+  Financiamento: ["Captações", "Despesas Financeiras", "Receitas Financeiras"],
   "Fora do DFC": [],
 };
 
