@@ -3,7 +3,7 @@ import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, L
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
-import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
+import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, listarTransferencias } from "../financial-engine/tesouraria.js";
 import { calcularComposicaoDiaria, calcularComposicaoMensal } from "../financial-engine/composicaoCaixa.js";
 import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
@@ -138,10 +138,11 @@ export default function TesourariaPage({ data }) {
   const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
-  const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), hoje), [entidades.lancamentos, filtros.empresaId, hoje]);
-  // "Já realizado" abaixo é só o que já baixou (regime de Caixa); aqui
-  // olhamos o que VENCE hoje e ainda não foi Realizado — sinaliza o que
-  // ainda pode se mover no caixa até o fim do dia, sem misturar os regimes.
+  // "Movimento de Hoje" mostra só o Previsto (o que ainda vai baixar hoje);
+  // o Já Realizado do dia saiu do card por decisão do usuário — não é
+  // omissão, o dado (calcularMovimentoDoDia) só deixou de ser exibido aqui.
+  // Aqui olhamos o que VENCE hoje e ainda não foi Realizado — sinaliza o
+  // que ainda pode se mover no caixa até o fim do dia, sem misturar regimes.
   // Reaproveita a MESMA lógica/fonte de "Vencimentos Hoje" de Contas a Pagar/
   // Receber (ContasPagarReceberView.jsx: calcularCarteiraEAging + diffDaysISO
   // === 0), pra garantir que o número bate exato entre as três telas — nunca
@@ -203,12 +204,7 @@ export default function TesourariaPage({ data }) {
               <span className="text-rose-600">{fmtBRL(previstoHoje.saidas)}</span>
             </span>
           }
-          sub={
-            <span className="flex flex-col gap-0.5">
-              <span>Previsto p/ hoje (ainda não baixado) — Entradas | Saídas</span>
-              <span>Já realizado: <span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span> <span className="text-slate-300">|</span> <span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>
-            </span>
-          }
+          sub="Previsto p/ hoje (ainda não baixado) — Entradas | Saídas"
           tone="neutral" icon={ArrowUpRight} basis="caixa" />
       </div>
 
