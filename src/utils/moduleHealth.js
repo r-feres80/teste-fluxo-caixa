@@ -109,8 +109,8 @@ export function gerarInsightDoDia(resumo) {
         return "Há pontos de atenção nos indicadores financeiros.";
     }
   }
-  if (resumo.caixa.indiceLiquidezCaixa == null) {
+  if (resumo.caixa.indiceLiquidezSeca == null) {
     return "Nenhum alerta ativo. Carregue dados em Governança para ver os indicadores desta base.";
   }
-  return `Liquidez em ${resumo.caixa.indiceLiquidezCaixa.toFixed(2)}x, inadimplência em ${resumo.contasReceber.inadimplenciaPct.toFixed(1)}% e nenhum alerta ativo — operação sob controle.`;
+  return `Liquidez Seca em ${resumo.caixa.indiceLiquidezSeca.toFixed(2)}x, inadimplência em ${resumo.contasReceber.inadimplenciaPct.toFixed(1)}% e nenhum alerta ativo — operação sob controle.`;
 }

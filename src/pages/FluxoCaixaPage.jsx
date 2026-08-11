@@ -9,7 +9,7 @@ import { aggregateSerie } from "../financial-engine/projecaoAgregada.js";
 import { getDataAtualSistema, startOfMonthISO, endOfMonthISO, diffDaysISO, addDaysISO } from "../utils/dateUtils.js";
 import { calcularDFC, calcularDFCPorConta } from "../financial-engine/dfc.js";
 import { calcularCarteiraEAging, calcularDSOouDPO } from "../financial-engine/aging.js";
-import { calcularCoberturaCaixaDias, calcularIndiceLiquidezCaixa, buildFluxoCaixaMensal } from "../financial-engine/indicadoresCaixa.js";
+import { calcularCoberturaCaixaDias, calcularLiquidezSeca, buildFluxoCaixaMensal } from "../financial-engine/indicadoresCaixa.js";
 
 const CLASSIF_LABEL = { Operacional: "Atividades Operacionais", Investimento: "Atividades de Investimento", Financiamento: "Atividades de Financiamento" };
 
@@ -82,7 +82,7 @@ export default function FluxoCaixaPage({ data }) {
   const dso = calcularDSOouDPO(agingAR.totalCarteira, totalRecebidoPeriodo, diasPeriodo);
   const dpo = calcularDSOouDPO(agingAP.totalCarteira, totalPagoPeriodo, diasPeriodo);
   const coberturaCaixaDias = calcularCoberturaCaixaDias(posicaoFimMes.disponivel, totalPagoPeriodo, diasPeriodo);
-  const indiceLiquidezCaixa = calcularIndiceLiquidezCaixa(posicaoFimMes.disponivel, agingAP.totalCarteira);
+  const liquidezSeca = calcularLiquidezSeca(posicaoFimMes.disponivel, agingAR.totalCarteira, agingAP.totalCarteira);
 
   const evolucaoMensal = useMemo(() => buildFluxoCaixaMensal({
     lancamentos: entidades.lancamentos, empresaId: filtros.empresaId, anoRef, mesRef, quantidadeMeses: 6,
@@ -135,10 +135,10 @@ export default function FluxoCaixaPage({ data }) {
           basis="caixa"
         />
         <KPI
-          label="Índice de Liquidez de Caixa"
-          value={indiceLiquidezCaixa != null ? `${indiceLiquidezCaixa.toFixed(2)}x` : "—"}
-          tone={indiceLiquidezCaixa == null ? "neutral" : indiceLiquidezCaixa >= 1.5 ? "positive" : indiceLiquidezCaixa >= 1.0 ? "neutral" : "negative"}
-          sub="Caixa ÷ Contas a Pagar em aberto (proxy) — meta: ≥1,5x (sem teto)"
+          label="Liquidez Seca"
+          value={liquidezSeca != null ? `${liquidezSeca.toFixed(2)}x` : "—"}
+          tone={liquidezSeca == null ? "neutral" : liquidezSeca >= parametros.metaLiquidezSeca ? "positive" : liquidezSeca >= parametros.metaLiquidezSeca * 0.67 ? "neutral" : "negative"}
+          sub={`(Caixa Disponível + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezSeca.toFixed(2)}x, mesma métrica do Dashboard`}
           basis="caixa"
         />
       </div>
@@ -226,9 +226,10 @@ export default function FluxoCaixaPage({ data }) {
         DSO/DPO/Cobertura/Liquidez e a síntese do DFC usam o Mês/Ano selecionado no Filtro Global (comparativo entre meses). "Caixa" aqui é
         sempre o <strong>Caixa Disponível</strong> (contas líquidas) — Aplicações Financeiras (CDB/LCI/Tesouro) são uso de caixa, não caixa em
         si: aporte/resgate aparecem no DFC como Atividades de Investimento, igual qualquer outra aquisição de investimento. Transferências
-        entre contas correntes comuns continuam fora do DFC. O <strong>Índice de Liquidez de Caixa</strong> é uma aproximação (Caixa
-        Disponível ÷ Contas a Pagar em aberto) — o Cash Ratio contábil completo (Caixa ÷ Passivo Circulante) exige um módulo de Balanço
-        Patrimonial ainda não implementado neste produto.
+        entre contas correntes comuns continuam fora do DFC. A <strong>Liquidez Seca</strong> aqui é a mesma métrica do Dashboard, não uma
+        terceira variante: (Caixa Disponível + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — usa Contas a Pagar em aberto como
+        proxy do Passivo Circulante, já que o Quick Ratio contábil completo exige um módulo de Balanço Patrimonial ainda não implementado
+        neste produto.
       </InfoNote>
     </div>
   );
