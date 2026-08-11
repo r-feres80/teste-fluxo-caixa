@@ -179,6 +179,16 @@ export const demoPlanoDeContas = [
   { id: "pc5.03", codigo: "5.03", descricao: "Veículos", contaPaiId: "pc5", tipo: "Analítica", natureza: "Devedora", classificacaoDRE: "Fora do DRE", classificacaoDFC: "Investimento", subgrupoDFC: "Investimentos", entradaSaida: "Saída", centroCustoObrigatorio: true, aceitaOrcamento: true, ativo: true },
   { id: "pc5.04", codigo: "5.04", descricao: "Aquisição de Imobilizado", contaPaiId: "pc5", tipo: "Analítica", natureza: "Devedora", classificacaoDRE: "Fora do DRE", classificacaoDFC: "Investimento", subgrupoDFC: "Investimentos", entradaSaida: "Saída", centroCustoObrigatorio: true, aceitaOrcamento: true, ativo: true },
   { id: "pc5.05", codigo: "5.05", descricao: "Capex - Projetos", contaPaiId: "pc5", tipo: "Analítica", natureza: "Devedora", classificacaoDRE: "Fora do DRE", classificacaoDFC: "Investimento", subgrupoDFC: "Investimentos", entradaSaida: "Saída", centroCustoObrigatorio: true, aceitaOrcamento: true, ativo: true },
+  // Aporte/Resgate de Aplicações Financeiras — comando DFC-caixa-real: agora
+  // que "caixa" do DFC é só o Disponível (contas líquidas), aplicar em CDB/
+  // LCI/Tesouro é USO de caixa (Atividades de Investimento, igual Aquisição
+  // de Imobilizado), resgatar é FONTE de caixa. Só o lado da transferência
+  // que toca uma conta líquida (contaBancariaId semLiquidez != "true") entra
+  // aqui — o lado que entra/sai da própria aplicação nunca teve efeito sobre
+  // o Disponível, então fica de fora (ver filtrarParaCaixaDisponivel em
+  // lancamentos.js). aceitaOrcamento false: aporte/resgate é decisão de
+  // tesouraria pontual, não faz sentido orçar como uma despesa recorrente.
+  { id: "pc5.06", codigo: "5.06", descricao: "Aplicações e Resgates", contaPaiId: "pc5", tipo: "Analítica", natureza: "Devedora", classificacaoDRE: "Fora do DRE", classificacaoDFC: "Investimento", subgrupoDFC: "Aplicações e Resgates", entradaSaida: "Saída", centroCustoObrigatorio: false, aceitaOrcamento: false, ativo: true },
 
   // IRPJ e CSLL: a planilha real (Leva 3) traz "IRPJ" e "CSLL" como linhas
   // separadas, mas por decisão do usuário elas são remapeadas para esta

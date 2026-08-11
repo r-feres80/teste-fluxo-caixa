@@ -42,7 +42,7 @@ export const SUBGRUPOS_POR_GRUPO_DFC = {
     "Impostos", "Impostos sobre o Lucro", "Terceiros e Consultorias", "Marketing e Publicidade",
     "Real Estate e Facilities", "Outros Operacionais",
   ],
-  Investimento: ["Investimentos"],
+  Investimento: ["Investimentos", "Aplicações e Resgates"],
   Financiamento: ["Captações", "Despesas Financeiras", "Receitas Financeiras"],
   "Fora do DFC": [],
 };

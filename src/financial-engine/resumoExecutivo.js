@@ -52,11 +52,14 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
 
   // DFC do mês corrente, para o waterfall executivo — mesmo cálculo/período
   // do DFC Gerencial (calcularDFC), nunca duplicado com lógica própria.
+  // Comando DFC-caixa-real: caixaInicial é o Caixa Disponível (líquido), não
+  // o Total Consolidado — aplicação financeira é uso de caixa, não caixa em
+  // si (mesma definição usada em toda a tela DFC/Fluxo de Caixa).
   const inicioMes = startOfMonthISO(anoRef, hoje.getMonth());
   const fimMes = endOfMonthISO(anoRef, hoje.getMonth());
-  const caixaInicioMes = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, addDaysISO(inicioMes, -1)).total;
+  const caixaInicioMes = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, addDaysISO(inicioMes, -1)).disponivel;
   const lancamentosDoMes = lancamentosFiltrados.filter((l) => l.dataPagamento && l.dataPagamento >= inicioMes && l.dataPagamento <= fimMes);
-  const dfcMesAtual = calcularDFC({ lancamentosNoPeriodo: lancamentosDoMes, planoDeContas: entidades.planoDeContas, caixaInicial: caixaInicioMes });
+  const dfcMesAtual = calcularDFC({ lancamentosNoPeriodo: lancamentosDoMes, planoDeContas: entidades.planoDeContas, contasBancarias: contasFiltradas, caixaInicial: caixaInicioMes });
 
   const agingAR = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), dataReferencia);
   const agingAP = calcularCarteiraEAging(lancamentosFiltrados.filter((l) => l.tipo === "Saída" && !l.transferencia), dataReferencia);

@@ -111,10 +111,15 @@ console.log("EBITDA no ano:", fmt(dreYTD.ebitda), "| margem:", margemEbitda == n
 console.log("\n=== DFC do mês corrente (Waterfall) ===");
 const anoRef = Number(HOJE.slice(0, 4)), mesRef = Number(HOJE.slice(5, 7)) - 1;
 const inicioMes = startOfMonthISO(anoRef, mesRef), fimMes = endOfMonthISO(anoRef, mesRef);
-const caixaInicioMes = calcularPosicaoConsolidada(demoContasBancarias.filter((c) => c.ativo), demoLancamentos, addDaysISO(inicioMes, -1)).total;
+// Comando DFC-caixa-real: "caixa" do DFC é o Disponível (líquido), não mais
+// o Total Consolidado — aplicação financeira é uso de caixa, não caixa em si.
+const contasAtivas = demoContasBancarias.filter((c) => c.ativo);
+const caixaInicioMes = calcularPosicaoConsolidada(contasAtivas, demoLancamentos, addDaysISO(inicioMes, -1)).disponivel;
 const lancDoMes = demoLancamentos.filter((l) => l.dataPagamento && l.dataPagamento >= inicioMes && l.dataPagamento <= fimMes);
-const dfc = calcularDFC({ lancamentosNoPeriodo: lancDoMes, planoDeContas: demoPlanoDeContas, caixaInicial: caixaInicioMes });
+const dfc = calcularDFC({ lancamentosNoPeriodo: lancDoMes, planoDeContas: demoPlanoDeContas, contasBancarias: contasAtivas, caixaInicial: caixaInicioMes });
 console.log("Caixa Inicial:", fmt(dfc.caixaInicial), "| FCO:", fmt(dfc.Operacional), "| FCI:", fmt(dfc.Investimento), "| FCF:", fmt(dfc.Financiamento), "| Caixa Final:", fmt(dfc.caixaFinal));
+const disponivelFimMes = calcularPosicaoConsolidada(contasAtivas, demoLancamentos, fimMes).disponivel;
+console.log("Caixa Disponível real (Tesouraria) no fim do mês:", fmt(disponivelFimMes), Math.abs(dfc.caixaFinal - disponivelFimMes) < 0.01 ? "OK (bate com o Caixa Final do DFC)" : "NÃO BATE");
 
 console.log("\n=== Orçado x Realizado (ano corrente, todos os meses) ===");
 const arvore = construirOrcadoRealizado({ planoDeContas: demoPlanoDeContas, orcamentoItens: demoOrcamentoItens, lancamentos: demoLancamentos, ano: anoRef, meses: Array.from({ length: 12 }, (_, i) => i), empresaId: "TODAS", centroCustoId: "TODAS", dataReferencia: HOJE });

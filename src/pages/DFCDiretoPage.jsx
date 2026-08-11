@@ -47,20 +47,24 @@ export default function DFCDiretoPage({ data }) {
     return l.dataPagamento >= inicio && l.dataPagamento <= fim;
   }), [entidades.lancamentos, filtros.empresaId, inicio, fim]);
 
-  const arvore = useMemo(() => calcularDFCDiretoArvore({
-    lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens,
-    ano: anoSel, meses: [mesSel], empresaId: filtros.empresaId, dias,
-  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoSel, mesSel, filtros.empresaId, dias]);
-
-  // Saldo Final (comando consolidado, Bloco 3): Caixa Inicial do mês + soma
-  // de tudo que passou pela árvore = saldo final teórico. Comparado com o
-  // saldo consolidado real de Tesouraria no último dia do período — mesmo
-  // dado, dois caminhos de cálculo, tem que bater (senão alguma conta
-  // Realizada não está classificada em nenhum Grupo DFC).
   const contasFiltradas = useMemo(() => entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId)), [entidades.contasBancarias, filtros.empresaId]);
-  const caixaInicialMes = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, addDaysISO(inicio, -1)).total, [contasFiltradas, entidades.lancamentos, inicio]);
+
+  const arvore = useMemo(() => calcularDFCDiretoArvore({
+    lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, contasBancarias: contasFiltradas, orcamentoItens: entidades.orcamentoItens,
+    ano: anoSel, meses: [mesSel], empresaId: filtros.empresaId, dias,
+  }), [lancamentosNoPeriodo, entidades.planoDeContas, contasFiltradas, entidades.orcamentoItens, anoSel, mesSel, filtros.empresaId, dias]);
+
+  // Saldo Final (comando consolidado, Bloco 3; atualizado no comando
+  // DFC-caixa-real): Caixa Inicial do mês + soma de tudo que passou pela
+  // árvore = saldo final teórico. Comparado com o CAIXA DISPONÍVEL real de
+  // Tesouraria no último dia do período (não mais o Total Consolidado —
+  // aplicação financeira é uso de caixa, não caixa em si) — mesmo dado, dois
+  // caminhos de cálculo, tem que bater (senão alguma conta Realizada não
+  // está classificada em nenhum Grupo DFC, ou algum lançamento não-
+  // transferência está postado numa conta de aplicação sem ser Rendimento).
+  const caixaInicialMes = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, addDaysISO(inicio, -1)).disponivel, [contasFiltradas, entidades.lancamentos, inicio]);
   const saldoFinalCalculado = caixaInicialMes + arvore.reduce((s, g) => s + g.totalRealizado, 0);
-  const saldoFinalReal = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, fim).total, [contasFiltradas, entidades.lancamentos, fim]);
+  const saldoFinalReal = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, fim).disponivel, [contasFiltradas, entidades.lancamentos, fim]);
   const saldoBate = Math.abs(saldoFinalCalculado - saldoFinalReal) < 0.01;
 
   // Recolhidos (não expandidos) — por padrão tudo aberto, como no TreeView do
@@ -167,8 +171,10 @@ export default function DFCDiretoPage({ data }) {
 
       <InfoNote tone={saldoBate ? undefined : "amber"}>
         Saldo Final calculado (Caixa Inicial + Total Realizado do período): <strong>{fmtBRL(saldoFinalCalculado)}</strong>.
-        Saldo real consolidado em Tesouraria no último dia do período: <strong>{fmtBRL(saldoFinalReal)}</strong>.
+        Caixa Disponível real em Tesouraria no último dia do período: <strong>{fmtBRL(saldoFinalReal)}</strong>.
         {saldoBate ? " Os dois batem — nenhuma conta Realizada ficou fora da classificação de Grupo DFC." : " Os dois NÃO batem — há lançamento(s) Realizado(s) sem Classificação DFC preenchida, fora da árvore acima."}
+        {" "}"Caixa" aqui é o Disponível (contas líquidas) — Aplicações Financeiras não entram: aporte/resgate aparecem na árvore como Atividades de
+        Investimento, mas o saldo da própria conta de aplicação fica de fora da reconciliação.
       </InfoNote>
     </div>
   );

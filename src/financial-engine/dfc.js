@@ -1,4 +1,4 @@
-import { valorComSinal, estaRealizado, excluirTransferencias } from "./lancamentos.js";
+import { valorComSinal, estaRealizado, filtrarParaCaixaDisponivel } from "./lancamentos.js";
 import { getValorOrcadoPeriodo } from "./orcamento.js";
 import { calcularVariacaoPct } from "./variacao.js";
 
@@ -7,10 +7,18 @@ import { calcularVariacaoPct } from "./variacao.js";
  * Fluxo de Financiamentos = Variação de Caixa = Caixa Final.
  * A classificação (Operacional/Investimento/Financiamento) vem do Plano de
  * Contas (classificacaoDFC) — nunca é decidida pela tela.
+ *
+ * "Caixa" aqui é o CAIXA DISPONÍVEL (contas líquidas), não o Total
+ * Consolidado da Tesouraria (comando DFC-caixa-real): caixaInicial precisa
+ * vir de calcularPosicaoConsolidada(...).disponivel no chamador, e
+ * contasBancarias é obrigatório para filtrarParaCaixaDisponivel saber quais
+ * contaBancariaId são líquidas. Aplicação Financeira é USO de caixa
+ * (Atividades de Investimento — pc5.06), não caixa em si; ver
+ * filtrarParaCaixaDisponivel em lancamentos.js para a regra completa.
  */
-export function calcularDFC({ lancamentosNoPeriodo, planoDeContas, caixaInicial }) {
+export function calcularDFC({ lancamentosNoPeriodo, planoDeContas, contasBancarias, caixaInicial }) {
   const porClassificacao = { Operacional: 0, Investimento: 0, Financiamento: 0 };
-  excluirTransferencias(lancamentosNoPeriodo)
+  filtrarParaCaixaDisponivel(lancamentosNoPeriodo, contasBancarias)
     .filter((l) => estaRealizado(l))
     .forEach((l) => {
       const conta = planoDeContas.find((c) => c.id === l.contaGerencialId);
@@ -28,8 +36,8 @@ export function calcularDFC({ lancamentosNoPeriodo, planoDeContas, caixaInicial 
  * ou orçado no período. Orçado vem sempre de OrcamentoItem (nunca de
  * lançamento), conforme a separação definida em orcamento.js.
  */
-export function calcularDFCPorConta({ lancamentosNoPeriodo, planoDeContas, orcamentoItens, ano, meses, empresaId }) {
-  const realizados = excluirTransferencias(lancamentosNoPeriodo).filter((l) => estaRealizado(l));
+export function calcularDFCPorConta({ lancamentosNoPeriodo, planoDeContas, contasBancarias, orcamentoItens, ano, meses, empresaId }) {
+  const realizados = filtrarParaCaixaDisponivel(lancamentosNoPeriodo, contasBancarias).filter((l) => estaRealizado(l));
   const contas = planoDeContas.filter((c) => c.tipo === "Analítica" && c.classificacaoDFC && c.classificacaoDFC !== "Fora do DFC");
 
   return contas
@@ -53,8 +61,8 @@ export function calcularDFCPorConta({ lancamentosNoPeriodo, planoDeContas, orcam
  * são somas (rollup) das linhas abaixo — nunca recalculados a partir dos
  * lançamentos diretamente, para nunca divergir do detalhe por conta.
  */
-export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, orcamentoItens, ano, meses, empresaId, dias }) {
-  const realizados = excluirTransferencias(lancamentosNoPeriodo).filter((l) => estaRealizado(l));
+export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, contasBancarias, orcamentoItens, ano, meses, empresaId, dias }) {
+  const realizados = filtrarParaCaixaDisponivel(lancamentosNoPeriodo, contasBancarias).filter((l) => estaRealizado(l));
   const contasComMovimento = planoDeContas.filter((c) => c.tipo === "Analítica" && c.classificacaoDFC && c.classificacaoDFC !== "Fora do DFC");
 
   const somarLinhas = (linhas) => ({
@@ -86,15 +94,14 @@ export function calcularDFCDiretoArvore({ lancamentosNoPeriodo, planoDeContas, o
   // continua a fonte da verdade, só a ordem de exibição e os subgrupos
   // internos mudaram.
   //
-  // Aporte/resgate de Aplicações Financeiras (pc4.07, comando DFC-mapeamento
-  // item 2a/2d) FICOU FORA desta árvore, mesmo sendo tecnicamente
-  // classificacaoDFC=Financiamento: os dois lados de toda transferência
-  // (saída da conta corrente + entrada na aplicação, mesmo dia, mesma conta
-  // gerencial) sempre somam ZERO nesse agrupamento por conta — não existe
-  // jeito de mostrar o movimento sem quebrar "Saldo Final do DFC bate com
-  // Tesouraria" (que soma Disponível + Aplicações). Ver nota para o usuário
-  // no relatório desta rodada — decisão de arquitetura pendente, não
-  // implementada.
+  // Aporte/Resgate de Aplicações Financeiras (pc5.06, comando DFC-caixa-real)
+  // agora aparece de verdade nesta árvore, dentro de Investimento/
+  // "Aplicações e Resgates": só o lado da transferência que toca uma conta
+  // líquida entra (filtrarParaCaixaDisponivel, lancamentos.js) — aporte é
+  // saída (uso de caixa), resgate é entrada (fonte de caixa). O lado que
+  // entra/sai da própria conta de aplicação nunca é contado (não é conta
+  // líquida), então não há mais o problema do round anterior (os dois lados
+  // de toda transferência cancelando e a linha sumindo com totalRealizado=0).
   return ["Operacional", "Financiamento", "Investimento"].map((grupo) => {
     const contasDoGrupo = contasComMovimento.filter((c) => c.classificacaoDFC === grupo);
     const subgrupoNomes = Array.from(new Set(contasDoGrupo.map((c) => c.subgrupoDFC || "(Sem subgrupo)")));

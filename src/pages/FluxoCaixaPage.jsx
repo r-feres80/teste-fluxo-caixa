@@ -32,8 +32,11 @@ export default function FluxoCaixaPage({ data }) {
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
   const lancamentosFiltrados = entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId);
 
+  // "Saldo Inicial"/"Saldo Final" da projeção usam Caixa Disponível (líquido),
+  // não o Total Consolidado — comando DFC-caixa-real: aplicação financeira é
+  // uso de caixa, não caixa em si, mesma lógica da síntese DFC abaixo.
   const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, hoje), [contasFiltradas, lancamentosFiltrados, hoje]);
-  const serieDiaria = useMemo(() => buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.total, dataReferencia: hoje, diasHorizonte: horizonte }), [lancamentosFiltrados, posicao.total, hoje, horizonte]);
+  const serieDiaria = useMemo(() => buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel, dataReferencia: hoje, diasHorizonte: horizonte }), [lancamentosFiltrados, posicao.disponivel, hoje, horizonte]);
   const agregada = useMemo(() => aggregateSerie(serieDiaria, granularidade), [serieDiaria, granularidade]);
   const menor = useMemo(() => menorPontoDaSerie(serieDiaria), [serieDiaria]);
   const fimProjecao = serieDiaria[serieDiaria.length - 1];
@@ -57,17 +60,17 @@ export default function FluxoCaixaPage({ data }) {
 
   const caixaInicialMes = useMemo(() => {
     const vespera = addDaysISO(inicioMes, -1);
-    return calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, vespera).total;
+    return calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, vespera).disponivel;
   }, [contasFiltradas, entidades.lancamentos, inicioMes]);
 
   const posicaoFimMes = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, fimMes), [contasFiltradas, entidades.lancamentos, fimMes]);
 
-  const dfc = useMemo(() => calcularDFC({ lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, caixaInicial: caixaInicialMes }), [lancamentosNoPeriodo, entidades.planoDeContas, caixaInicialMes]);
+  const dfc = useMemo(() => calcularDFC({ lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, contasBancarias: contasFiltradas, caixaInicial: caixaInicialMes }), [lancamentosNoPeriodo, entidades.planoDeContas, contasFiltradas, caixaInicialMes]);
 
   const dfcPorConta = useMemo(() => calcularDFCPorConta({
-    lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, orcamentoItens: entidades.orcamentoItens,
+    lancamentosNoPeriodo, planoDeContas: entidades.planoDeContas, contasBancarias: contasFiltradas, orcamentoItens: entidades.orcamentoItens,
     ano: anoRef, meses: [mesRef], empresaId: filtros.empresaId,
-  }), [lancamentosNoPeriodo, entidades.planoDeContas, entidades.orcamentoItens, anoRef, mesRef, filtros.empresaId]);
+  }), [lancamentosNoPeriodo, entidades.planoDeContas, contasFiltradas, entidades.orcamentoItens, anoRef, mesRef, filtros.empresaId]);
 
   const lancamentosGlobaisFiltrados = useMemo(() => entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), [entidades.lancamentos, filtros.empresaId]);
   const agingAR = useMemo(() => calcularCarteiraEAging(lancamentosGlobaisFiltrados.filter((l) => l.tipo === "Entrada" && !l.transferencia), fimMes), [lancamentosGlobaisFiltrados, fimMes]);
@@ -103,10 +106,10 @@ export default function FluxoCaixaPage({ data }) {
           </div>
         }>
         <div className="grid grid-cols-4 gap-4">
-          <KPI label="Saldo Inicial" value={fmtBRL(posicao.total)} icon={Wallet} basis="caixa" />
+          <KPI label="Saldo Inicial" value={fmtBRL(posicao.disponivel)} icon={Wallet} basis="caixa" />
           <KPI label="Entradas no Período" value={fmtBRL(entradasPeriodo)} tone="positive" icon={ArrowUpRight} basis="caixa" />
           <KPI label="Saídas no Período" value={fmtBRL(saidasPeriodo)} tone="negative" icon={ArrowDownRight} basis="caixa" />
-          <KPI label="Saldo Final" value={fmtBRL(fimProjecao?.saldo ?? posicao.total)} tone={(fimProjecao?.saldo ?? 0) < 0 ? "negative" : "neutral"} icon={TrendingUp} basis="caixa" />
+          <KPI label="Saldo Final" value={fmtBRL(fimProjecao?.saldo ?? posicao.disponivel)} tone={(fimProjecao?.saldo ?? 0) < 0 ? "negative" : "neutral"} icon={TrendingUp} basis="caixa" />
         </div>
         {necessidade > 0 && <div className="mt-3"><InfoNote tone="amber">Necessidade de caixa: {fmtBRL(necessidade)} em {fmtData(menor.data)}.</InfoNote></div>}
       </Panel>
@@ -220,8 +223,10 @@ export default function FluxoCaixaPage({ data }) {
 
       <InfoNote>
         A projeção (KPIs e gráfico de evolução no topo) é sempre a partir de hoje — não muda com o Mês/Ano do Filtro Global. Os índices
-        DSO/DPO/Cobertura/Liquidez e a síntese do DFC usam o Mês/Ano selecionado no Filtro Global (comparativo entre meses). Transferências
-        internas entre contas próprias são excluídas do DFC. O <strong>Índice de Liquidez de Caixa</strong> é uma aproximação (Caixa
+        DSO/DPO/Cobertura/Liquidez e a síntese do DFC usam o Mês/Ano selecionado no Filtro Global (comparativo entre meses). "Caixa" aqui é
+        sempre o <strong>Caixa Disponível</strong> (contas líquidas) — Aplicações Financeiras (CDB/LCI/Tesouro) são uso de caixa, não caixa em
+        si: aporte/resgate aparecem no DFC como Atividades de Investimento, igual qualquer outra aquisição de investimento. Transferências
+        entre contas correntes comuns continuam fora do DFC. O <strong>Índice de Liquidez de Caixa</strong> é uma aproximação (Caixa
         Disponível ÷ Contas a Pagar em aberto) — o Cash Ratio contábil completo (Caixa ÷ Passivo Circulante) exige um módulo de Balanço
         Patrimonial ainda não implementado neste produto.
       </InfoNote>

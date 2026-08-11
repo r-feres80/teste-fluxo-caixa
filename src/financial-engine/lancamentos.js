@@ -43,3 +43,31 @@ export function filtrarLancamentos(lancamentos, { empresaId, unidadeId, inicio, 
 export function excluirTransferencias(lancamentos) {
   return lancamentos.filter((l) => !l.transferencia);
 }
+
+/**
+ * Lançamentos que de fato afetam o CAIXA DISPONÍVEL (contas líquidas,
+ * semLiquidez != "true") — usado só no DFC (dfc.js). Comando DFC-caixa-real:
+ * "caixa" deixou de ser o Total Consolidado (Disponível + Aplicações) e virou
+ * só o Disponível — aplicação financeira é USO de caixa, não caixa em si.
+ * Duas regras, aplicadas juntas:
+ *   1. Lançamento normal (não-transferência) só conta se a contaBancariaId
+ *      apontar pra uma conta líquida — ex.: rendimento de aplicação (pc4.04)
+ *      creditado DENTRO da própria conta de aplicação nunca tocou o
+ *      Disponível, mesmo sendo Receita Financeira "de verdade" na DRE.
+ *   2. Transferência só conta se tiver contaGerencialId preenchido — hoje só
+ *      o lado de CONTA CORRENTE do aporte/resgate de Aplicações Financeiras
+ *      tem isso (pc5.06, classificacaoDFC=Investimento); toda transferência
+ *      comum (entre contas correntes) e o lado que entra/sai da própria
+ *      aplicação continuam com contaGerencialId nulo, fora do DFC como
+ *      sempre foram — a regra 1 já os barra de qualquer forma (o lado da
+ *      aplicação não é conta líquida), mas a regra 2 é o que garante que uma
+ *      transferência comum entre 2 contas líquidas (contaGerencialId nulo)
+ *      não seja contada por engano.
+ */
+export function filtrarParaCaixaDisponivel(lancamentos, contasBancarias) {
+  const idsContasLiquidas = new Set(contasBancarias.filter((c) => c.semLiquidez !== "true").map((c) => c.id));
+  return lancamentos.filter((l) => {
+    if (l.transferencia && !l.contaGerencialId) return false;
+    return idsContasLiquidas.has(l.contaBancariaId);
+  });
+}
