@@ -4,7 +4,7 @@ import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign,
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
-import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
+import { calcularComposicaoDiaria, calcularComposicaoMensal } from "../financial-engine/composicaoCaixa.js";
 import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { getDataAtualSistema, parseISO, endOfMonthISO, diffDaysISO } from "../utils/dateUtils.js";
@@ -176,17 +176,14 @@ export default function TesourariaPage({ data }) {
   const [anoSelCompo, setAnoSelCompo] = useState(agora.getFullYear());
   const ehMesAtualCompo = mesSelCompo === agora.getMonth() && anoSelCompo === agora.getFullYear();
   const dataFimCompo = ehMesAtualCompo ? hoje : endOfMonthISO(anoSelCompo, mesSelCompo);
-  const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizados, dataFimCompo, 30), [realizados, dataFimCompo]);
+  // Composição do Recebimento: só Entrada (AR) — antes misturava Entrada+
+  // Saída na mesma barra, o que não faz sentido pro nome "recebimento".
+  // somenteDiasUteis=true remove sábado/domingo do eixo X (banco não
+  // processa recebimento no fim de semana no Brasil).
+  const realizadosEntrada = useMemo(() => realizados.filter((l) => l.tipo === "Entrada"), [realizados]);
+  const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizadosEntrada, dataFimCompo, 30, true), [realizadosEntrada, dataFimCompo]);
   const composicaoGeral = useMemo(() => calcularComposicaoRecebido(realizados), [realizados]);
   const composicaoMensal = useMemo(() => calcularComposicaoMensal(realizados, anoSelCompo, mesSelCompo, 6), [realizados, anoSelCompo, mesSelCompo]);
-  // Resumo AP x AR (substitui "Composição por Cliente/Fornecedor" — Bloco 4):
-  // visão rápida de quanto está em aberto/vencido dos dois lados, contexto
-  // direto pro Saldo Disponível e pro Índice de Liquidez acima.
-  const lancamentosDaEmpresa = useMemo(() => entidades.lancamentos.filter((l) => !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)), [entidades.lancamentos, filtros.empresaId]);
-  const agingAR = useMemo(() => calcularCarteiraEAging(lancamentosDaEmpresa.filter((l) => l.tipo === "Entrada"), hoje), [lancamentosDaEmpresa, hoje]);
-  const agingAP = useMemo(() => calcularCarteiraEAging(lancamentosDaEmpresa.filter((l) => l.tipo === "Saída"), hoje), [lancamentosDaEmpresa, hoje]);
-  const composicaoPorContaBancaria = useMemo(() => calcularComposicaoPorContaBancaria(realizados), [realizados]);
-  const nomeContaBancaria = (id) => entidades.contasBancarias.find((c) => c.id === id)?.apelido ?? "—";
 
   if (contasFiltradas.length === 0) {
     return <InfoNote tone="amber">Nenhuma conta bancária ativa para os filtros atuais. Contas Bancárias são criadas automaticamente ao importar Lançamentos (Controladoria → Importar Dados) ou ao carregar os Dados Demonstrativos em Governança.</InfoNote>;
@@ -199,11 +196,17 @@ export default function TesourariaPage({ data }) {
         <KPI label="Saldo Disponível (Livre)" value={fmtBRL(posicao.disponivel)} tone="neutral" icon={Landmark} sub={`Data-base: ${fmtData(hoje)}`} basis="caixa" />
         <KPI label="Aplicações Financeiras" value={fmtBRL(posicao.aplicacoes)} tone="neutral" icon={PiggyBank} basis="caixa" />
         <KPI label="Movimento de Hoje"
-          value={<span className="flex flex-col gap-0.5"><span className="text-emerald-600 whitespace-nowrap">{fmtBRL(previstoHoje.entradas)}</span><span className="text-rose-600 whitespace-nowrap">{fmtBRL(previstoHoje.saidas)}</span></span>}
+          value={
+            <span className="flex items-baseline gap-2 text-lg whitespace-nowrap">
+              <span className="text-emerald-600">{fmtBRL(previstoHoje.entradas)}</span>
+              <span className="text-slate-300">|</span>
+              <span className="text-rose-600">{fmtBRL(previstoHoje.saidas)}</span>
+            </span>
+          }
           sub={
             <span className="flex flex-col gap-0.5">
-              <span>Previsto p/ hoje (ainda não baixado) — Entradas / Saídas</span>
-              <span>Já realizado: <span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span> / <span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>
+              <span>Previsto p/ hoje (ainda não baixado) — Entradas | Saídas</span>
+              <span>Já realizado: <span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span> <span className="text-slate-300">|</span> <span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>
             </span>
           }
           tone="neutral" icon={ArrowUpRight} basis="caixa" />
@@ -257,7 +260,7 @@ export default function TesourariaPage({ data }) {
         <div className="flex items-baseline justify-between">
           <h2 className="text-slate-800 font-semibold text-sm flex items-center gap-1">
             Composição do Caixa
-            <Info size={12} className="text-slate-300 shrink-0 cursor-help" title="Sem janela de tempo: considera TODOS os lançamentos Realizados até hoje, desde o início da base — não é limitado aos últimos 30 dias. Esse recorte de 30 dias só existe no gráfico 'Composição Diária' abaixo." />
+            <Info size={12} className="text-slate-300 shrink-0 cursor-help" title="Sem janela de tempo: considera TODOS os lançamentos Realizados até hoje, desde o início da base — não é limitado aos últimos 30 dias. Esse recorte de 30 dias só existe no gráfico 'Composição do Recebimento' abaixo." />
           </h2>
           <span className="text-xs text-slate-400">Antecipado (baixa antes do vencimento) / Em dia (no vencimento) / Atrasado (depois) — Entradas e Saídas Realizadas, exclui transferências</span>
         </div>
@@ -279,7 +282,7 @@ export default function TesourariaPage({ data }) {
           {!ehMesAtualCompo && <span className="text-[11px] text-slate-400">(KPIs "Antecipado/Em dia/Atrasado" acima não seguem esse filtro — são sempre a base inteira)</span>}
         </div>
 
-        <Panel title="Composição Diária" subtitle={ehMesAtualCompo ? "Últimos 30 dias até hoje, por Data de baixa" : `Últimos 30 dias até ${fmtData(dataFimCompo)}, por Data de baixa`}>
+        <Panel title="Composição do Recebimento" subtitle={ehMesAtualCompo ? "Só Entrada (AR), dias úteis dos últimos 30 dias até hoje, por Data de baixa" : `Só Entrada (AR), dias úteis dos últimos 30 dias até ${fmtData(dataFimCompo)}, por Data de baixa`}>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={composicao30dias}>
               <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
@@ -293,67 +296,18 @@ export default function TesourariaPage({ data }) {
           </ResponsiveContainer>
         </Panel>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Panel title="Composição Mensal" subtitle={`Últimos 6 meses até ${MESES[mesSelCompo]}/${anoSelCompo}`}>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={composicaoMensal}>
-                <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-                <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
-                <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
-                <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </Panel>
-
-          <Panel
-            title="Quebra por Conta Bancária"
-            right={<Info size={13} className="text-slate-300 shrink-0 cursor-help" title="% de cada conta bancária que teve baixa Antecipada, Em dia ou Atrasada em relação ao vencimento — mesmo critério da Composição do Caixa acima, quebrado por conta em vez do consolidado." />}
-          >
-            {composicaoPorContaBancaria.length === 0 ? <span className="text-sm text-slate-400">Sem movimento Realizado.</span> : (
-              <table className="w-full text-sm">
-                <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
-                  <th className="py-2 pr-4">Conta</th><th className="py-2 pr-4 text-right">Antecipado</th><th className="py-2 pr-4 text-right">Em dia</th><th className="py-2 text-right">Atrasado</th>
-                </tr></thead>
-                <tbody>
-                  {composicaoPorContaBancaria.map((c) => (
-                    <tr key={c.id} className="border-b border-slate-100">
-                      <td className="py-2 pr-4 text-slate-700">{nomeContaBancaria(c.id)}</td>
-                      <td className="py-2 pr-4 text-right font-mono tabular-nums text-emerald-600">{c.antecipadoPct.toFixed(0)}%</td>
-                      <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-500">{c.emDiaPct.toFixed(0)}%</td>
-                      <td className="py-2 text-right font-mono tabular-nums text-rose-600">{c.atrasadoPct.toFixed(0)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </Panel>
-        </div>
-
-        {/* Bloco 4: "Composição por Cliente/Fornecedor" (pontualidade por
-            parceiro) saiu daqui — já existe em detalhe em Contas a Pagar/
-            Receber (Títulos em Aberto, por parceiro). No lugar entra um
-            resumo AP x AR, mais direto pro contexto de Tesouraria (quanto
-            ainda entra/sai e o que já está vencido dos dois lados). */}
-        <Panel title="Resumo AP x AR (em aberto)" subtitle="Contexto do Saldo Disponível e do Índice de Liquidez acima">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2 pr-4 border-r border-slate-100">
-              <div className="text-xs text-slate-500 uppercase tracking-wide">A Receber</div>
-              <div className="font-mono tabular-nums text-xl font-semibold text-emerald-600">{fmtBRL(agingAR.totalCarteira)}</div>
-              <div className="text-xs text-slate-500">Vencido: <span className={agingAR.totalVencido > 0 ? "text-rose-600 font-medium" : ""}>{fmtBRL(agingAR.totalVencido)}</span></div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="text-xs text-slate-500 uppercase tracking-wide">A Pagar</div>
-              <div className="font-mono tabular-nums text-xl font-semibold text-rose-600">{fmtBRL(agingAP.totalCarteira)}</div>
-              <div className="text-xs text-slate-500">Vencido: <span className={agingAP.totalVencido > 0 ? "text-rose-600 font-medium" : ""}>{fmtBRL(agingAP.totalVencido)}</span></div>
-            </div>
-          </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
-            <span className="text-slate-500">Saldo líquido (A Receber − A Pagar, ambos em aberto)</span>
-            <span className={`font-mono tabular-nums font-semibold ${agingAR.totalCarteira - agingAP.totalCarteira >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{fmtBRL(agingAR.totalCarteira - agingAP.totalCarteira)}</span>
-          </div>
+        <Panel title="Composição Mensal" subtitle={`Últimos 6 meses até ${MESES[mesSelCompo]}/${anoSelCompo}`}>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={composicaoMensal}>
+              <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+              <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
+              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
+              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </Panel>
       </div>
 

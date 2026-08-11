@@ -5,17 +5,22 @@
 // comum, para não duplicar a lógica de acúmulo/percentual em cada recorte.
 
 import { calcularComposicaoRecebido } from "./aging.js";
-import { addDaysISO } from "../utils/dateUtils.js";
+import { addDaysISO, isDiaUtil } from "../utils/dateUtils.js";
 
 /** Composição diária: um ponto por dia de calendário, do mais antigo ao mais
- * recente, usando Data de baixa (dataPagamento) como o dia do movimento. */
-export function calcularComposicaoDiaria(lancamentosRealizados, dataFim, quantidadeDias) {
+ * recente, usando Data de baixa (dataPagamento) como o dia do movimento.
+ * `somenteDiasUteis`: remove sábado/domingo da série (não plota "vazio" em
+ * dia que banco não processa) — janela de calendário continua a mesma, só
+ * os pontos de fim de semana saem do array. */
+export function calcularComposicaoDiaria(lancamentosRealizados, dataFim, quantidadeDias, somenteDiasUteis = false) {
   const dias = [];
   for (let i = quantidadeDias - 1; i >= 0; i--) dias.push(addDaysISO(dataFim, -i));
-  return dias.map((dia) => ({
-    data: dia,
-    ...calcularComposicaoRecebido(lancamentosRealizados.filter((l) => l.dataPagamento === dia)),
-  }));
+  return dias
+    .filter((dia) => !somenteDiasUteis || isDiaUtil(dia))
+    .map((dia) => ({
+      data: dia,
+      ...calcularComposicaoRecebido(lancamentosRealizados.filter((l) => l.dataPagamento === dia)),
+    }));
 }
 
 /** Composição mensal, últimos N meses até ano/mês de referência (mesmo
