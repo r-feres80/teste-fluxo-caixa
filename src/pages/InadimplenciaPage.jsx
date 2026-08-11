@@ -7,7 +7,7 @@ import {
   FAIXAS_AGING, calcularDSOouDPO, FAIXAS_AGING_RECEBIDOS, calcularAgingVencidosRecebidos,
 } from "../financial-engine/aging.js";
 import { diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
-import { PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
+import { PDD_FAIXAS_PADRAO, MESES } from "../config/appConfig.js";
 
 // Inadimplência é módulo de FATO (mesma base de Contas a Receber): aging e
 // vencimentos sempre a partir de "hoje" real — ver getDataAtualSistema.
@@ -26,16 +26,22 @@ export default function InadimplenciaPage({ data }) {
 
   const vencidos = useMemo(() => abertos.filter((l) => diffDaysISO(l.dataVencimento, hoje) > 0), [abertos, hoje]);
 
-  // Filtro de "Títulos Vencidos em Aberto": data (vencimento), cliente e
-  // faixa de atraso, com totalizador — ver item 9/Etapa 3.
+  // Filtro de "Títulos Vencidos em Aberto": mês de vencimento (mesmo padrão
+  // de Contas a Pagar/Receber — Bloco 4, auditoria item 3) + data (De/Até) +
+  // cliente + faixa de atraso, com totalizador — ver item 9/Etapa 3.
   const faixaDoAtraso = (l) => {
     const dias = diffDaysISO(l.dataVencimento, hoje);
     return (FAIXAS_AGING.find((f) => dias <= f.max) ?? FAIXAS_AGING[FAIXAS_AGING.length - 1]).key;
   };
+  const [fMes, setFMes] = useState("todos");
   const [fDataDe, setFDataDe] = useState("");
   const [fDataAte, setFDataAte] = useState("");
   const [fClienteId, setFClienteId] = useState("TODOS");
   const [fFaixa, setFFaixa] = useState("TODAS");
+  const mesesDisponiveis = useMemo(() => {
+    const set = new Set(vencidos.map((l) => l.dataVencimento.slice(0, 7)));
+    return Array.from(set).sort();
+  }, [vencidos]);
   const clientesComVencido = useMemo(() => {
     const ids = new Set(vencidos.map((l) => l.clienteFornecedorId).filter(Boolean));
     return entidades.clientes.filter((c) => ids.has(c.id)).sort((a, b) => a.nome.localeCompare(b.nome));
@@ -43,10 +49,11 @@ export default function InadimplenciaPage({ data }) {
   const vencidosFiltrados = useMemo(() => vencidos.filter((l) => {
     if (fClienteId !== "TODOS" && l.clienteFornecedorId !== fClienteId) return false;
     if (fFaixa !== "TODAS" && faixaDoAtraso(l) !== fFaixa) return false;
+    if (fMes !== "todos" && !l.dataVencimento.startsWith(fMes)) return false;
     if (fDataDe && l.dataVencimento < fDataDe) return false;
     if (fDataAte && l.dataVencimento > fDataAte) return false;
     return true;
-  }), [vencidos, fClienteId, fFaixa, fDataDe, fDataAte, hoje]);
+  }), [vencidos, fClienteId, fFaixa, fMes, fDataDe, fDataAte, hoje]);
   const totalFiltrado = vencidosFiltrados.reduce((s, l) => s + l.valor, 0);
   const concentracaoVencidos = useMemo(() => calcularConcentracaoPorParceiro(vencidos, 5), [vencidos]);
   const evolucaoInadimplencia = useMemo(() => calcularEvolucaoInadimplencia(lancamentosAR, hoje, 6), [lancamentosAR, hoje]);
@@ -163,6 +170,13 @@ export default function InadimplenciaPage({ data }) {
         title="Títulos Vencidos em Aberto"
         right={
           <div className="flex items-center gap-2">
+            <select value={fMes} onChange={(e) => setFMes(e.target.value)} className={selectCls + " w-auto"}>
+              <option value="todos">Todos os meses</option>
+              {mesesDisponiveis.map((m) => {
+                const [ano, mes] = m.split("-");
+                return <option key={m} value={m}>{MESES[Number(mes) - 1]}/{ano}</option>;
+              })}
+            </select>
             <DateInputBR value={fDataDe} onChange={setFDataDe} className={selectCls + " w-auto"} />
             <span className="text-slate-400 text-xs">até</span>
             <DateInputBR value={fDataAte} onChange={setFDataAte} className={selectCls + " w-auto"} />
