@@ -7,7 +7,7 @@ import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa,
 import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
 import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
-import { getDataAtualSistema, parseISO, endOfMonthISO } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO, endOfMonthISO, diffDaysISO } from "../utils/dateUtils.js";
 import { MESES } from "../config/appConfig.js";
 import { useCambio } from "../hooks/useCambio.js";
 
@@ -139,17 +139,22 @@ export default function TesourariaPage({ data }) {
   const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porEmpresa = useMemo(() => calcularSaldoPorEmpresa(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const movimentoHoje = useMemo(() => calcularMovimentoDoDia(entidades.lancamentos.filter((l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId), hoje), [entidades.lancamentos, filtros.empresaId, hoje]);
-  // "Movimento de Hoje" acima é só o que já baixou (regime de Caixa); aqui
+  // "Já realizado" abaixo é só o que já baixou (regime de Caixa); aqui
   // olhamos o que VENCE hoje e ainda não foi Realizado — sinaliza o que
   // ainda pode se mover no caixa até o fim do dia, sem misturar os regimes.
+  // Reaproveita a MESMA lógica/fonte de "Vencimentos Hoje" de Contas a Pagar/
+  // Receber (ContasPagarReceberView.jsx: calcularCarteiraEAging + diffDaysISO
+  // === 0), pra garantir que o número bate exato entre as três telas — nunca
+  // uma reimplementação paralela do mesmo filtro.
   const previstoHoje = useMemo(() => {
-    const doDia = excluirTransferencias(entidades.lancamentos).filter((l) =>
-      l.situacao !== "Cancelado" && l.situacao !== "Realizado" && l.dataVencimento === hoje &&
-      (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
-    );
+    const lancsDaEmpresa = entidades.lancamentos.filter((l) => !l.transferencia && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId));
+    const { abertos: arAbertos } = calcularCarteiraEAging(lancsDaEmpresa.filter((l) => l.tipo === "Entrada"), hoje);
+    const { abertos: apAbertos } = calcularCarteiraEAging(lancsDaEmpresa.filter((l) => l.tipo === "Saída"), hoje);
+    const arHoje = arAbertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
+    const apHoje = apAbertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
     return {
-      entradas: doDia.filter((l) => l.tipo === "Entrada").reduce((s, l) => s + l.valor, 0),
-      saidas: doDia.filter((l) => l.tipo === "Saída").reduce((s, l) => s + l.valor, 0),
+      entradas: arHoje.reduce((s, l) => s + l.valor, 0),
+      saidas: apHoje.reduce((s, l) => s + l.valor, 0),
     };
   }, [entidades.lancamentos, filtros.empresaId, hoje]);
   const transferencias = useMemo(() => listarTransferencias(entidades.lancamentos), [entidades.lancamentos]);
@@ -194,11 +199,11 @@ export default function TesourariaPage({ data }) {
         <KPI label="Saldo Disponível (Livre)" value={fmtBRL(posicao.disponivel)} tone="neutral" icon={Landmark} sub={`Data-base: ${fmtData(hoje)}`} basis="caixa" />
         <KPI label="Aplicações Financeiras" value={fmtBRL(posicao.aplicacoes)} tone="neutral" icon={PiggyBank} basis="caixa" />
         <KPI label="Movimento de Hoje"
-          value={<span className="flex items-baseline gap-1.5 text-lg"><span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span><span className="text-slate-300 text-sm">/</span><span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>}
+          value={<span className="flex flex-col gap-0.5"><span className="text-emerald-600 whitespace-nowrap">{fmtBRL(previstoHoje.entradas)}</span><span className="text-rose-600 whitespace-nowrap">{fmtBRL(previstoHoje.saidas)}</span></span>}
           sub={
             <span className="flex flex-col gap-0.5">
-              <span>Já realizado — Entradas / Saídas</span>
-              <span>Previsto p/ hoje (ainda não baixado): <span className="text-emerald-600">{fmtBRL(previstoHoje.entradas)}</span> / <span className="text-rose-600">{fmtBRL(previstoHoje.saidas)}</span></span>
+              <span>Previsto p/ hoje (ainda não baixado) — Entradas / Saídas</span>
+              <span>Já realizado: <span className="text-emerald-600">{fmtBRL(movimentoHoje.entradas)}</span> / <span className="text-rose-600">{fmtBRL(movimentoHoje.saidas)}</span></span>
             </span>
           }
           tone="neutral" icon={ArrowUpRight} basis="caixa" />
