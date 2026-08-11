@@ -42,13 +42,19 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     (l) => filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId
   );
 
+  // Comando DFC-caixa-real / caixa-projetado-fix: a projeção de 30 dias
+  // (card "Caixa Projetado 30 dias" no Dashboard) parte do Caixa Disponível
+  // (líquido), não do Total Consolidado — mesma definição de "caixa" usada
+  // no DFC/Fluxo de Caixa, senão o card fica ~R$ 200k acima do "Caixa
+  // Disponível" ao lado sem nenhuma explicação (aplicação financeira não é
+  // caixa disponível pra projetar).
   const posicao = calcularPosicaoConsolidada(contasFiltradas, lancamentosFiltrados, dataReferencia);
   const serie30 = buildFluxoCaixaDiario({
-    lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.total,
+    lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel,
     dataReferencia, diasHorizonte: 30,
   });
   const menor30 = menorPontoDaSerie(serie30);
-  const caixaProjetado30 = serie30[serie30.length - 1]?.saldo ?? posicao.total;
+  const caixaProjetado30 = serie30[serie30.length - 1]?.saldo ?? posicao.disponivel;
 
   // DFC do mês corrente, para o waterfall executivo — mesmo cálculo/período
   // do DFC Gerencial (calcularDFC), nunca duplicado com lógica própria.
@@ -109,7 +115,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   }));
 
   const alertas = calcularAlertasExecutivos({
-    caixaConsolidado: posicao.total, menorProjetado: menor30, parametros, agingAR, agingAP,
+    caixaConsolidado: posicao.disponivel, menorProjetado: menor30, parametros, agingAR, agingAP,
     concentracaoClientes, concentracaoFornecedores, desviosOrcamentarios: desviosPorGrupo, vencimentosProximosAP: vencAP, vencimentosProximosAR: vencAR,
   });
 

@@ -52,7 +52,9 @@ console.log("Disponível:", fmt(posicao.disponivel),
 console.log("Nenhum saldoInicial negativo:", demoContasBancarias.every((c) => c.saldoInicial >= 0) ? "OK" : "FALHOU");
 demoContasBancarias.forEach((c) => console.log(`  ${c.id} (${c.empresaId}, ${c.semLiquidez === "true" ? "aplicação" : "líquida"}): saldoInicial=${fmt(c.saldoInicial)}`));
 
-const serie30 = buildFluxoCaixaDiario({ lancamentos: demoLancamentos, saldoInicialConsolidado: posicao.total, dataReferencia: HOJE, diasHorizonte: 30 });
+// Comando caixa-projetado-fix: "Projetado 30 dias" (card do Dashboard) parte
+// do Caixa Disponível, não do Total Consolidado — mesma definição do DFC.
+const serie30 = buildFluxoCaixaDiario({ lancamentos: demoLancamentos, saldoInicialConsolidado: posicao.disponivel, dataReferencia: HOJE, diasHorizonte: 30 });
 const menor30 = menorPontoDaSerie(serie30);
 const projetado30 = serie30[serie30.length - 1].saldo;
 console.log("Projetado 30 dias (saldo final):", fmt(projetado30), "(sem faixa-alvo)");
