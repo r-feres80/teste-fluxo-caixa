@@ -124,9 +124,9 @@ export default function DashboardPage({ data }) {
       <div className="grid grid-cols-4 gap-4">
         <KpiCard label={t("kpi.caixaDisponivel")} value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)}`} basis="caixa" />
         <KpiCard label={t("kpi.contasReceberAberto")} value={fmtBRL(resumo.contasReceber.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasReceber.inadimplenciaPct))}
-          sub={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}% vencido`} tooltip="Cor pelo % da carteira vencido: verde <5%, amarelo 5-10%, vermelho >10% — mesmo corte do velocímetro de Inadimplência abaixo." />
+          sub={`Vencido: ${fmtBRL(resumo.contasReceber.totalVencido)} (${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%)`} tooltip="Cor pelo % da carteira vencido: verde <5%, amarelo 5-10%, vermelho >10% — mesmo corte do velocímetro de Inadimplência abaixo." />
         <KpiCard label={t("kpi.contasPagarAberto")} value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
-          sub={`${resumo.contasPagar.atrasoPct.toFixed(1)}% em atraso`} tooltip="Cor pelo % da carteira em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
+          sub={`Vencido: ${fmtBRL(resumo.contasPagar.totalVencido)} (${resumo.contasPagar.atrasoPct.toFixed(1)}%)`} tooltip="Cor pelo % da carteira em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
         <KpiCard label={t("kpi.caixaProjetado30")} value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
           tooltip="Projeção de caixa: parte do Caixa Disponível de hoje e soma/subtrai os títulos já cadastrados (Previsto/Vencido) com vencimento nos próximos 30 dias — não é o saldo real desses dias, é uma estimativa com a carteira atual." />
       </div>
@@ -230,7 +230,16 @@ export default function DashboardPage({ data }) {
             <AreaChart data={sparkData}>
               <defs><linearGradient id="gradDash" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity={0.25} /><stop offset="100%" stopColor="#10b981" stopOpacity={0} /></linearGradient></defs>
               <XAxis dataKey="data" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
+              {/* Achado (comando dashboard-causa-raiz, 2b): a série diária JÁ
+                  oscila de verdade dia a dia (entradas/saídas reais variam)
+                  — o que achatava a linha era o eixo Y partindo de 0 por
+                  padrão, espremendo uma variação real de ~R$ 20-30k lá no
+                  topo de uma escala de ~R$ 800k+. Mesmo ajuste já usado no
+                  sparkline de Câmbio (TesourariaPage.jsx): domain
+                  dataMin/dataMax em vez de deixar o Recharts assumir [0,
+                  max]. Não mexemos em buildFluxoCaixaDiario — os valores
+                  continuam os mesmos, só a escala do eixo mudou. */}
+              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} domain={["dataMin", "dataMax"]} />
               <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
               <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
               <Area type="monotone" dataKey="saldo" stroke="#10b981" fill="url(#gradDash)" strokeWidth={1.75} />
