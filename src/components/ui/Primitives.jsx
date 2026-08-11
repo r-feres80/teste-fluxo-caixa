@@ -32,12 +32,15 @@ export function BasisHint({ basis }) {
   return <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={BASIS_LABEL[basis]} />;
 }
 
-export function KPI({ label, value, sub, tone = "neutral", icon: Icon, basis }) {
+export function KPI({ label, value, sub, tone = "neutral", icon: Icon, basis, tooltip }) {
   const toneColor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-800";
   return (
     <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide flex items-center gap-1">{label}<BasisHint basis={basis} /></span>
+        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide flex items-center gap-1">
+          {label}<BasisHint basis={basis} />
+          {tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+        </span>
         {Icon && <Icon size={16} className="text-slate-400" />}
       </div>
       <span className={`font-mono tabular-nums text-2xl font-semibold ${toneColor}`}>{value}</span>

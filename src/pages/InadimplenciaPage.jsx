@@ -83,7 +83,8 @@ export default function InadimplenciaPage({ data }) {
 
       <div className="grid grid-cols-3 gap-4">
         <KPI label="Contas a Receber Líquido de PDD" value={fmtBRL(totalCarteira - pdd.provisaoTotal)} tone="neutral" />
-        <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} sub={`${pdd.saldoVencido > 0 ? ((pdd.provisaoTotal / pdd.saldoVencido) * 100).toFixed(1) : "0.0"}% do saldo vencido`} />
+        <KPI label="Provisão (PDD)" value={fmtBRL(pdd.provisaoTotal)} tone={pdd.provisaoTotal > 0 ? "negative" : "neutral"} sub={`${pdd.saldoVencido > 0 ? ((pdd.provisaoTotal / pdd.saldoVencido) * 100).toFixed(1) : "0.0"}% do saldo vencido`}
+          tooltip="R$ 0,00 é esperado, não é bug, sempre que todo o vencido estiver dentro da faixa 1-30 dias — política intencional (configurável em Governança) de não provisionar atraso recente. A provisão só aparece quando o atraso passa de 30 dias." />
         <Panel title="PDD por Faixa de Atraso" subtitle="Percentuais configuráveis em Governança">
           <div className="flex flex-col gap-1 text-xs">
             {pdd.porFaixa.filter((f) => f.saldo > 0).map((f) => (

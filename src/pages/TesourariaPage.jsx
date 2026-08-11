@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
-import { Panel, KPI, InfoNote } from "../components/ui/Primitives.jsx";
+import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, calcularMovimentoDoDia, listarTransferencias } from "../financial-engine/tesouraria.js";
 import { calcularComposicaoDiaria, calcularComposicaoMensal, calcularComposicaoPorContaBancaria } from "../financial-engine/composicaoCaixa.js";
 import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
-import { getDataAtualSistema, parseISO } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO, endOfMonthISO } from "../utils/dateUtils.js";
+import { MESES } from "../config/appConfig.js";
 import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
@@ -156,13 +157,23 @@ export default function TesourariaPage({ data }) {
   const realizados = useMemo(() => excluirTransferencias(entidades.lancamentos)
     .filter((l) => estaRealizado(l) && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)),
     [entidades.lancamentos, filtros.empresaId]);
-  const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizados, hoje, 30), [realizados, hoje]);
 
   // Composição do Caixa consolidada aqui (Etapa 2 item 4) — antes também
   // vivia numa página standalone (composicao-caixa), removida do menu.
   const agora = parseISO(hoje);
+  // Filtro de mês PRÓPRIO dos gráficos de Composição (Bloco 4, pendência 3)
+  // — mesmo padrão do filtro local de DFC Direto: Tesouraria continua FATO
+  // (saldo/movimento sempre hoje real), só esses dois gráficos aceitam
+  // "olhar outro mês". Mês selecionado = mês corrente -> mantém dataFim =
+  // hoje (Composição Diária continua um retrato "até agora"); mês passado
+  // -> dataFim = último dia daquele mês.
+  const [mesSelCompo, setMesSelCompo] = useState(agora.getMonth());
+  const [anoSelCompo, setAnoSelCompo] = useState(agora.getFullYear());
+  const ehMesAtualCompo = mesSelCompo === agora.getMonth() && anoSelCompo === agora.getFullYear();
+  const dataFimCompo = ehMesAtualCompo ? hoje : endOfMonthISO(anoSelCompo, mesSelCompo);
+  const composicao30dias = useMemo(() => calcularComposicaoDiaria(realizados, dataFimCompo, 30), [realizados, dataFimCompo]);
   const composicaoGeral = useMemo(() => calcularComposicaoRecebido(realizados), [realizados]);
-  const composicaoMensal = useMemo(() => calcularComposicaoMensal(realizados, agora.getFullYear(), agora.getMonth(), 6), [realizados, agora]);
+  const composicaoMensal = useMemo(() => calcularComposicaoMensal(realizados, anoSelCompo, mesSelCompo, 6), [realizados, anoSelCompo, mesSelCompo]);
   // Resumo AP x AR (substitui "Composição por Cliente/Fornecedor" — Bloco 4):
   // visão rápida de quanto está em aberto/vencido dos dois lados, contexto
   // direto pro Saldo Disponível e pro Índice de Liquidez acima.
@@ -252,7 +263,18 @@ export default function TesourariaPage({ data }) {
           <KPI label="Atrasado" value={fmtBRL(composicaoGeral.atrasado)} sub={`${composicaoGeral.atrasadoPct.toFixed(0)}% do total`} tone={composicaoGeral.atrasadoPct > 20 ? "negative" : "neutral"} basis="caixa" />
         </div>
 
-        <Panel title="Composição Diária" subtitle="Últimos 30 dias, por Data de baixa">
+        <div className="flex items-center gap-2 -mb-2">
+          <span className="text-xs text-slate-500">Mês de referência dos 2 gráficos abaixo:</span>
+          <select value={mesSelCompo} onChange={(e) => setMesSelCompo(Number(e.target.value))} className={selectCls + " w-auto"}>
+            {MESES.map((m, i) => <option key={m} value={i}>{m}</option>)}
+          </select>
+          <select value={anoSelCompo} onChange={(e) => setAnoSelCompo(Number(e.target.value))} className={selectCls + " w-auto"}>
+            {[2024, 2025, 2026, 2027].map((a) => <option key={a} value={a}>{a}</option>)}
+          </select>
+          {!ehMesAtualCompo && <span className="text-[11px] text-slate-400">(KPIs "Antecipado/Em dia/Atrasado" acima não seguem esse filtro — são sempre a base inteira)</span>}
+        </div>
+
+        <Panel title="Composição Diária" subtitle={ehMesAtualCompo ? "Últimos 30 dias até hoje, por Data de baixa" : `Últimos 30 dias até ${fmtData(dataFimCompo)}, por Data de baixa`}>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={composicao30dias}>
               <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
@@ -267,7 +289,7 @@ export default function TesourariaPage({ data }) {
         </Panel>
 
         <div className="grid grid-cols-2 gap-4">
-          <Panel title="Composição Mensal" subtitle="Últimos 6 meses">
+          <Panel title="Composição Mensal" subtitle={`Últimos 6 meses até ${MESES[mesSelCompo]}/${anoSelCompo}`}>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={composicaoMensal}>
                 <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />

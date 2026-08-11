@@ -89,6 +89,12 @@ export default function GovernancaPage({ data }) {
             </Field>
           ))}
         </div>
+        <InfoNote>
+          A faixa "1-30 dias" vem com 0% de provisão por padrão — decisão intencional (não bug): atraso recente ainda não
+          é considerado risco de perda, então não provisiona. Enquanto todo o saldo vencido de um cliente estiver dentro
+          dessa faixa, o card "Provisão (PDD)" em Inadimplência mostra R$ 0,00 corretamente. A provisão só passa a
+          aparecer quando o atraso avança pra faixas seguintes (31-60, 61-90...), conforme os percentuais acima.
+        </InfoNote>
       </Panel>
 
       <Panel title="Reconciliações" subtitle="Onde cada identidade contábil é exibida na prática">
@@ -103,7 +109,7 @@ export default function GovernancaPage({ data }) {
         <InfoNote>
           A maioria dos KPIs monetários indica o próprio regime ao passar o mouse sobre o ícone <span className="italic">i</span> ao lado do rótulo
           (Regime de Caixa = Data de Baixa/Pagamento; Regime de Competência = Data de Competência). Principais indicadores por módulo:
-          Dashboard Executivo (Caixa Disponível, Receita Bruta/EBITDA no ano, velocímetros de Liquidez e Inadimplência, Waterfall do DFC do mês) ·
+          Dashboard Executivo (Caixa Disponível, Receita Bruta/EBITDA no ano, velocímetros de Liquidez e Inadimplência, Composição do Caixa do Mês) ·
           Tesouraria (Saldo Consolidado/Disponível, Aplicações, Câmbio) ·
           Fluxo de Caixa (projeção diária/semanal/mensal, FCO/FCI/FCF, DSO/DPO, Cobertura de Caixa, Índice de Liquidez) ·
           DFC (Grupo → Subgrupo → Conta, Saldo Final reconciliado com Tesouraria) ·

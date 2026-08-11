@@ -2,7 +2,10 @@
 // chave, CORS liberado. Chamada direta do frontend, sem proxy/Function.
 // Cache em localStorage (TTL de algumas horas) para não bater na API do BCB
 // a cada render/reload — a cotação PTAX não muda intra-dia de forma que
-// justifique buscar de novo a cada poucos minutos.
+// justifique buscar de novo a cada poucos minutos. Chave do cache carrega
+// CACHE_SCHEMA_VERSION (ver abaixo) — mudou o formato do payload, incrementa
+// a versão e o cache velho é ignorado sozinho, sem precisar de
+// localStorage.clear() manual (Bloco 4, pendência 6a).
 
 import { STORAGE_KEY } from "../config/appConfig.js";
 import { calcularIndicadoresCambio } from "../financial-engine/cambio.js";
@@ -10,7 +13,12 @@ import { calcularIndicadoresCambio } from "../financial-engine/cambio.js";
 // Séries SGS do BCB: 1 = Dólar americano (venda) PTAX diário;
 // 21619 = Euro (venda) PTAX diário.
 const SERIES_SGS = { USD: 1, EUR: 21619 };
-const CACHE_KEY = `${STORAGE_KEY}-cambio-cache`;
+// Versão do schema do payload cacheado (formato de calcularIndicadoresCambio)
+// — incremente sempre que mudar os campos retornados. A versão faz parte da
+// própria chave: bump aqui invalida sozinho qualquer cache antigo (a chave
+// velha vira órfã, ignorada; sem precisar de localStorage.clear() manual).
+const CACHE_SCHEMA_VERSION = 2;
+const CACHE_KEY = `${STORAGE_KEY}-cambio-cache-v${CACHE_SCHEMA_VERSION}`;
 const TTL_MS = 4 * 60 * 60 * 1000; // 4 horas
 
 function lerCache() {

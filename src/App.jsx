@@ -74,7 +74,11 @@ const NAV = [
 // e o DRE agora usam o Mês/Ano do Filtro Global — precisam do seletor
 // visível. "dfc-direto" continua FATO porque já tem filtro de mês PRÓPRIO,
 // independente do Filtro Global (ver comentário em DFCDiretoPage.jsx).
-const NAV_FATO = new Set(["dashboard", "tesouraria", "dfc-direto", "contas-pagar", "contas-receber", "inadimplencia"]);
+// "dashboard" SAIU daqui no Bloco 4 (pendência 2): os cards de caixa/EBITDA
+// YTD continuam sempre "hoje real" (não usam o filtro), mas o novo painel
+// "Comparativo Mensal" precisa do seletor Mês/Ano visível — ver
+// DashboardPage.jsx.
+const NAV_FATO = new Set(["tesouraria", "dfc-direto", "contas-pagar", "contas-receber", "inadimplencia"]);
 
 // Governança é roteada à parte de NAV (ver JSX), mas entra no modo ícones
 // como mais um item do grupo Dados — por isso precisa de ícone/label aqui.

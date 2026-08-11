@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Legend, Line } from "recharts";
-import { Panel, KPI, InfoNote, selectCls } from "./ui/Primitives.jsx";
+import { Panel, KPI, InfoNote, selectCls, DateInputBR } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { MESES } from "../config/appConfig.js";
 import {
@@ -36,11 +36,13 @@ export function ContasPagarReceberView({ data, tipo }) {
   const vencimentosHoje = abertos.filter((l) => diffDaysISO(hoje, l.dataVencimento) === 0);
   const regua = useMemo(() => construirReguaDiasUteis(abertos, hoje, 10), [abertos, hoje]);
 
-  // Filtro de "Títulos em Aberto": vencimento (faixa em dias) + mês de
-  // vencimento + status, com totalizador do resultado filtrado — ver item
-  // 8/Etapa 3 (faixa+status) e Bloco 4 (mês, além do filtro por dia).
+  // Filtro de "Títulos em Aberto": vencimento (faixa em dias) + mês + DIA
+  // específico de vencimento + status, com totalizador do resultado
+  // filtrado — ver item 8/Etapa 3 (faixa+status), Bloco 4 hotfix (mês) e
+  // Bloco 4 fechamento (dia específico, via DateInputBR).
   const [fVencimento, setFVencimento] = useState("todos");
   const [fMes, setFMes] = useState("todos");
+  const [fDia, setFDia] = useState("");
   const [fSituacao, setFSituacao] = useState("TODAS");
   const mesesDisponiveis = useMemo(() => {
     const set = new Set(abertos.map((l) => l.dataVencimento.slice(0, 7)));
@@ -50,12 +52,13 @@ export function ContasPagarReceberView({ data, tipo }) {
     const sit = situacaoEfetiva(l, hoje);
     if (fSituacao !== "TODAS" && sit !== fSituacao) return false;
     if (fMes !== "todos" && !l.dataVencimento.startsWith(fMes)) return false;
+    if (fDia && l.dataVencimento !== fDia) return false;
     if (fVencimento === "todos") return true;
     const diasAteVencer = diffDaysISO(hoje, l.dataVencimento);
     if (fVencimento === "vencidos") return diasAteVencer < 0;
     if (fVencimento === "hoje") return diasAteVencer === 0;
     return diasAteVencer >= 0 && diasAteVencer <= Number(fVencimento);
-  }), [abertos, fSituacao, fMes, fVencimento, hoje]);
+  }), [abertos, fSituacao, fMes, fDia, fVencimento, hoje]);
   const totalFiltrado = abertosFiltrados.reduce((s, l) => s + l.valor, 0);
 
   const realizadoNoMes = useMemo(() => {
@@ -224,6 +227,7 @@ export function ContasPagarReceberView({ data, tipo }) {
                 return <option key={m} value={m}>{MESES[Number(mes) - 1]}/{ano}</option>;
               })}
             </select>
+            <DateInputBR value={fDia} onChange={setFDia} className={selectCls + " w-auto"} />
             <select value={fVencimento} onChange={(e) => setFVencimento(e.target.value)} className={selectCls + " w-auto"}>
               <option value="todos">Todos vencimentos</option>
               <option value="vencidos">Vencidos</option>

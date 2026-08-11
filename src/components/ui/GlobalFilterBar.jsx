@@ -3,14 +3,15 @@ import { selectCls, inputCls, Field, DateInputBR } from "./Primitives.jsx";
 import { MESES, TIPOS_PERIODO } from "../../config/appConfig.js";
 import { parseISO } from "../../utils/dateUtils.js";
 
-// mostrarPeriodo=false nos módulos de FATO (Dashboard, Tesouraria, Fluxo de
-// Caixa, DFC, Contas a Pagar/Receber, DRE): esses módulos nunca leem
-// Data de Referência/Período/Mês/Ano do estado editável (sempre a data real
-// do sistema — ver getDataAtualSistema em dateUtils.js), então esses campos
+// mostrarPeriodo=false nos módulos de FATO (Tesouraria, DFC, Contas a
+// Pagar/Receber, Inadimplência): esses módulos nunca leem Data de
+// Referência/Período/Mês/Ano do estado editável (sempre a data real do
+// sistema — ver getDataAtualSistema em dateUtils.js), então esses campos
 // não fazem sentido na tela e são removidos por completo. Módulos de
-// PROJEÇÃO (Forecast, Cenários, Orçado x Realizado, Orçamento) continuam
-// com o seletor de período completo, pois simular "e se fosse outro
-// período" é o propósito dessas telas.
+// PROJEÇÃO (Forecast, Cenários, Orçado x Realizado, Orçamento, DRE) e o
+// Dashboard (Bloco 4 — só o painel "Comparativo Mensal" usa o filtro; os
+// cards de caixa/EBITDA YTD continuam hoje-real) continuam com o seletor
+// de período completo.
 export function GlobalFilterBar({ filtros, empresas, unidades, updateFiltros, mostrarPeriodo = true }) {
   const unidadesDaEmpresa = filtros.empresaId === "TODAS" ? unidades : unidades.filter((u) => u.empresaId === filtros.empresaId);
 

@@ -4,8 +4,12 @@ import { AlertTriangle, Info } from "lucide-react";
 import { Panel, Badge, BasisHint, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
+import { calcularDRE } from "../financial-engine/dre.js";
+import { excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { classificarInadimplencia } from "../utils/moduleHealth.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
+import { getDataAtualSistema, parseISO, mesesDoPeriodo } from "../utils/dateUtils.js";
+import { MESES } from "../config/appConfig.js";
 
 const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5e" };
 
@@ -88,6 +92,33 @@ export default function DashboardPage({ data }) {
   const sparkData = resumo.caixa.serieDiaria30dias.map((p) => ({ data: p.data.slice(8, 10), saldo: p.saldo }));
   const waterfallData = useMemo(() => construirWaterfall(resumo.dfcMesAtual), [resumo.dfcMesAtual]);
 
+  // Comparativo Mensal (Bloco 4, pendência 2): único trecho do Dashboard que
+  // usa o filtro Mês/Ano — os cards de caixa/EBITDA YTD acima continuam
+  // hoje-real (resumo, de resumoExecutivo.js, nunca lê filtros de período).
+  // Calculado localmente com calcularDRE (mesma função do DRE Gerencial),
+  // não duplica lógica nem toca resumoExecutivo.js.
+  const mesRefIdx = mesesDoPeriodo(filtros).slice(-1)[0] ?? filtros.mesRef ?? parseISO(getDataAtualSistema()).getMonth();
+  const anoRefComp = filtros.anoRef;
+  const mesAnteriorAno = mesRefIdx === 0 ? anoRefComp - 1 : anoRefComp;
+  const mesAnteriorIdx = mesRefIdx === 0 ? 11 : mesRefIdx - 1;
+  const comparativoMensal = useMemo(() => {
+    const lancsBase = excluirTransferencias(entidades.lancamentos).filter(
+      (l) => l.situacao === "Realizado" && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
+    );
+    const doMes = (ano, mes) => lancsBase.filter((l) => {
+      const [a, m] = l.competencia.split("-").map(Number);
+      return a === ano && m - 1 === mes;
+    });
+    const atual = calcularDRE(doMes(anoRefComp, mesRefIdx), entidades.planoDeContas);
+    const anterior = calcularDRE(doMes(mesAnteriorAno, mesAnteriorIdx), entidades.planoDeContas);
+    const deltaPct = (a, b) => (b !== 0 ? ((a - b) / Math.abs(b)) * 100 : null);
+    return {
+      atual, anterior,
+      deltaReceitaPct: deltaPct(atual.receitaBruta, anterior.receitaBruta),
+      deltaEbitdaPct: deltaPct(atual.ebitda, anterior.ebitda),
+    };
+  }, [entidades.lancamentos, entidades.planoDeContas, filtros.empresaId, anoRefComp, mesRefIdx, mesAnteriorAno, mesAnteriorIdx]);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-4">
@@ -107,6 +138,35 @@ export default function DashboardPage({ data }) {
           tooltip="Número LÍQUIDO: soma o desvio (favorável menos desfavorável) dos 6 grupos do DRE. Grupos favoráveis podem mascarar grupos desfavoráveis — um total pequeno aqui não significa que todo grupo está dentro do orçado. Ver 'Alertas Executivos' abaixo para a composição por grupo." />
         <KpiCard label={t("kpi.inadimplenciaReceber")} value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
       </div>
+
+      <Panel title="Comparativo Mensal" subtitle={`${MESES[mesRefIdx]}/${anoRefComp} vs. ${MESES[mesAnteriorIdx]}/${mesAnteriorAno} — Regime de Competência, use o filtro Mês/Ano acima pra escolher outro mês`}>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] text-slate-500 uppercase tracking-wide">Receita Bruta</span>
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono tabular-nums text-xl font-semibold text-slate-900">{fmtBRL(comparativoMensal.atual.receitaBruta)}</span>
+              {comparativoMensal.deltaReceitaPct != null && (
+                <span className={`text-sm font-medium ${comparativoMensal.deltaReceitaPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                  {comparativoMensal.deltaReceitaPct >= 0 ? "▲" : "▼"} {Math.abs(comparativoMensal.deltaReceitaPct).toFixed(0)}%
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] text-slate-400">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.receitaBruta)}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] text-slate-500 uppercase tracking-wide">EBITDA</span>
+            <div className="flex items-baseline gap-3">
+              <span className={`font-mono tabular-nums text-xl font-semibold ${comparativoMensal.atual.ebitda >= 0 ? "text-slate-900" : "text-rose-600"}`}>{fmtBRL(comparativoMensal.atual.ebitda)}</span>
+              {comparativoMensal.deltaEbitdaPct != null && (
+                <span className={`text-sm font-medium ${comparativoMensal.deltaEbitdaPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                  {comparativoMensal.deltaEbitdaPct >= 0 ? "▲" : "▼"} {Math.abs(comparativoMensal.deltaEbitdaPct).toFixed(0)}%
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] text-slate-400">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.ebitda)}</span>
+          </div>
+        </div>
+      </Panel>
 
       <div className="grid grid-cols-2 gap-4">
         <Gauge
@@ -129,7 +189,7 @@ export default function DashboardPage({ data }) {
         />
       </div>
 
-      <Panel title="Waterfall Executivo (DFC do mês)" subtitle={`Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final — Data-base: ${fmtData(resumo.dataReferencia)}`}>
+      <Panel title="Composição do Caixa do Mês" subtitle={`Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final — Data-base: ${fmtData(resumo.dataReferencia)} (sempre o mês corrente real, não segue o filtro Mês/Ano abaixo)`}>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={waterfallData} margin={{ top: 20 }}>
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
