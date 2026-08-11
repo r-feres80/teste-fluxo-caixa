@@ -6,7 +6,7 @@ import { parseISO, getDataAtualSistema, startOfMonthISO, endOfMonthISO, addDaysI
 import { calcularPosicaoConsolidada } from "./tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "./fluxoCaixa.js";
 import { calcularCarteiraEAging, calcularConcentracaoPorParceiro, calcularDespesasInternas, vencimentosProximos } from "./aging.js";
-import { calcularIndiceLiquidezCaixa } from "./indicadoresCaixa.js";
+import { calcularIndiceLiquidezCaixa, calcularIndiceLiquidezTotal } from "./indicadoresCaixa.js";
 import { calcularDRE } from "./dre.js";
 import { calcularDFC } from "./dfc.js";
 import { excluirTransferencias } from "./lancamentos.js";
@@ -129,6 +129,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
       menorPontoProjetado30dias: menor30 ?? null,
       serieDiaria30dias: serie30,
       indiceLiquidezCaixa: calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira),
+      indiceLiquidezTotal: calcularIndiceLiquidezTotal(posicao.disponivel, posicao.aplicacoes, agingAP.totalCarteira),
     },
     contasReceber: {
       totalEmAberto: agingAR.totalCarteira,

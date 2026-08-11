@@ -83,5 +83,6 @@ export const DEFAULT_PARAMETROS = {
   materialidadePct: 15,
   diasParaAlertas: 7,
   limiteConcentracaoPct: 40,
+  metaLiquidezTotal: 1.5,
   pddFaixas: PDD_FAIXAS_PADRAO,
 };

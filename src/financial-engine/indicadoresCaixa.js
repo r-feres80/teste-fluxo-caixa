@@ -27,6 +27,17 @@ export function calcularIndiceLiquidezCaixa(caixaDisponivel, totalContasAPagarEm
 }
 
 /**
+ * Índice de Liquidez Total — mesma aproximação acima (Contas a Pagar em
+ * aberto como proxy do Passivo Circulante), mas somando ao numerador o que
+ * está em Aplicações Financeiras (sem liquidez imediata, mas resgatável).
+ * Mostra o fôlego real considerando resgate, não só o caixa já disponível.
+ */
+export function calcularIndiceLiquidezTotal(caixaDisponivel, aplicacoesFinanceiras, totalContasAPagarEmAberto) {
+  if (!totalContasAPagarEmAberto) return null;
+  return (caixaDisponivel + aplicacoesFinanceiras) / totalContasAPagarEmAberto;
+}
+
+/**
  * Evolução mensal do fluxo de caixa (Entradas, Saídas, Saldo líquido) para os
  * últimos N meses até o mês de referência — usa dataPagamento (caixa
  * realizado), nunca competência, e exclui transferências internas.

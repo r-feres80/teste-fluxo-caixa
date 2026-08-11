@@ -80,7 +80,7 @@ export function useAppData() {
           setEntidades(s.entidades ?? criarEntidadesVazias());
         }
         setFiltros(s.filtros ?? DEFAULT_FILTROS);
-        setParametros(s.parametros ?? DEFAULT_PARAMETROS);
+        setParametros(s.parametros ? { ...DEFAULT_PARAMETROS, ...s.parametros } : DEFAULT_PARAMETROS);
         setLastUpdated(s.lastUpdated ?? null);
       }
       setLoaded(true);

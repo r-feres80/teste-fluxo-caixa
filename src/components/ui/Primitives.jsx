@@ -63,12 +63,14 @@ function pontoVelocimetro(cx, cy, r, t) {
  * O valor é sempre exibido por extenso (formatValue), mesmo quando excede
  * `max` — só o ponteiro fica "preso" no extremo do arco.
  */
-export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub, meta }) {
+export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub, meta, tooltip }) {
   const cx = 110, cy = 100, r = 82, espessura = 18;
   if (value == null) {
     return (
       <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-1">
-        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start">{label}</span>
+        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
+          {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+        </span>
         <div className="h-[110px] flex items-center justify-center text-slate-300 text-sm">Sem dados</div>
       </div>
     );
@@ -96,7 +98,9 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
 
   return (
     <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-0.5">
-      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start">{label}</span>
+      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
+        {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+      </span>
       <svg viewBox="0 0 220 112" width="100%" height="112">
         {segmentos}
         {metaP1 && metaP2 && <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y} stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />}

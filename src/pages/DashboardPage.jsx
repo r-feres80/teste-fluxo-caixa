@@ -168,15 +168,26 @@ export default function DashboardPage({ data }) {
         </div>
       </Panel>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Gauge
-          label="Liquidez (Giro de Caixa)"
+          label="Liquidez Imediata"
           value={resumo.caixa.indiceLiquidezCaixa}
           min={0} max={3}
           meta={1.5}
           bands={[{ upTo: 1, color: "#f43f5e" }, { upTo: 1.5, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
           sub="Caixa Disponível ÷ Contas a Pagar em aberto — <1,0x vermelho, 1,0-1,5x amarelo, >1,5x verde"
+          tooltip="O que já está disponível sem precisar resgatar nada."
+        />
+        <Gauge
+          label="Liquidez Total"
+          value={resumo.caixa.indiceLiquidezTotal}
+          min={0} max={3}
+          meta={parametros.metaLiquidezTotal}
+          bands={[{ upTo: parametros.metaLiquidezTotal * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezTotal, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          formatValue={(v) => `${v.toFixed(2)}x`}
+          sub={`(Caixa Disponível + Aplicações) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezTotal.toFixed(2)}x configurável em Governança`}
+          tooltip="Incluindo o que pode ser resgatado de Aplicações — mostra o fôlego real, mas resgatar CDB/LCI antes do prazo pode ter custo/perda de benefício fiscal."
         />
         <Gauge
           label="Inadimplência"
