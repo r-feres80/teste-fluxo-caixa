@@ -39,6 +39,86 @@ const CAIXA_DISPONIVEL_MIN = 637500, CAIXA_DISPONIVEL_MAX = 807500; // = Liquide
 const HOJE = todayISO();
 const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
 
+// ═══════════════════════════════════════════════════════════════════════
+// === Invariantes de calibração (não pode ter revertido) ===
+// Comando "restaurar-e-prevenir" (Grupo 3): checa se calibrações já
+// validadas foram silenciosamente revertidas por algum script rodado
+// depois. Nasceu de um caso real (commit b40012d): um script de
+// recalibração de inadimplência reclassificou dataPagamento de forma
+// ampla demais e, como efeito colateral não previsto, derrubou o dia
+// 10/08 da "Composição do Recebimento" e zerou parte do "Previsto p/
+// hoje" — ninguém percebeu antes do commit porque só o Bloco 1 agregado
+// era checado, nunca a distribuição dia a dia.
+//
+// Atualize os valores-alvo abaixo sempre que uma NOVA calibração
+// legítima mudar o número esperado (ex.: depois de rodar o sweep do
+// Grupo 2, DISPONIVEL_ESPERADO cai de ~R$66.101 pra ~R$10.000) — nunca
+// ignore um "REGRESSÃO DETECTADA" sem antes confirmar se é essa mudança
+// pretendida ou uma perda de verdade.
+const DISPONIVEL_ESPERADO = 66100.96; // pós-restauração deste comando; cai pra ~10.000 depois do sweep (Grupo 2) — atualize aqui quando isso acontecer
+const DISPONIVEL_TOLERANCIA = 1000;
+const APERTO_IMPOSTOS_ESPERADO = 149503.00; // Impostos 20/08 (cenário de aperto de tesouraria)
+const APERTO_FOLHA_ESPERADO = 351342.00; // Folha 31/08 (cenário de aperto de tesouraria)
+const GERADO_MIN_COUNT = 3; // lançamentos "Gerado —" (preenchimento de gap) conhecidos até este comando
+
+{
+  const invariantes = [];
+  const posicaoInv = calcularPosicaoConsolidada(demoContasBancarias.filter((c) => c.ativo), demoLancamentos, HOJE);
+  if (Math.abs(posicaoInv.disponivel - DISPONIVEL_ESPERADO) > DISPONIVEL_TOLERANCIA) {
+    invariantes.push(`Saldo Disponível calculado: esperado ~${fmt(DISPONIVEL_ESPERADO)}, encontrado ${fmt(posicaoInv.disponivel)}`);
+  }
+
+  const impostosAperto = demoLancamentos.filter((l) => l.documento && l.documento.startsWith("IMP-202608-"));
+  const totalImpostosAperto = impostosAperto.reduce((s, l) => s + l.valor, 0);
+  if (Math.abs(totalImpostosAperto - APERTO_IMPOSTOS_ESPERADO) > 1) {
+    invariantes.push(`Cenário de aperto — Impostos 20/08: esperado ${fmt(APERTO_IMPOSTOS_ESPERADO)}, encontrado ${fmt(totalImpostosAperto)} (${impostosAperto.length} lançamento(s))`);
+  }
+  const folhaAperto = demoLancamentos.filter((l) => l.documento && l.documento.startsWith("FOLHA-202608-"));
+  const totalFolhaAperto = folhaAperto.reduce((s, l) => s + l.valor, 0);
+  if (Math.abs(totalFolhaAperto - APERTO_FOLHA_ESPERADO) > 1) {
+    invariantes.push(`Cenário de aperto — Folha 31/08: esperado ${fmt(APERTO_FOLHA_ESPERADO)}, encontrado ${fmt(totalFolhaAperto)} (${folhaAperto.length} lançamento(s))`);
+  }
+
+  const gerados = demoLancamentos.filter((l) => l.observacao && l.observacao.startsWith("Gerado — "));
+  if (gerados.length < GERADO_MIN_COUNT) {
+    invariantes.push(`Lançamentos "Gerado —" (preenchimento de gap): esperado >= ${GERADO_MIN_COUNT}, encontrado ${gerados.length}`);
+  }
+
+  // Checagem extra (além do que o comando pediu, mas é literalmente o que
+  // teria pego a regressão real do b40012d): nenhum dia ÚTIL dentro da
+  // janela de 30 dias da Composição do Recebimento pode estar com R$0 de
+  // recebimento Realizado por empresa. Exceto os 2 dias mais recentes
+  // (hoje e ontem) — hoje fica vazio de propósito (defasagem de
+  // confirmação bancária) e, como "hoje" avança com o relógio real, ontem
+  // é sempre o "hoje" de calibrações anteriores que nunca foi
+  // retroativamente liquidado (o dataset não simula esse catch-up) —
+  // achado desta própria rodada, não é regressão, é um rastro esperado da
+  // janela andando. Um catch-up automático de "ontem" seria um bom
+  // complemento futuro do sweep do Grupo 2, mas não foi pedido nesta
+  // rodada.
+  const isDiaUtil = (iso) => { const dow = new Date(iso + "T00:00:00Z").getUTCDay(); return dow !== 0 && dow !== 6; };
+  const janelaInicio = addDaysISO(HOJE, -29);
+  const ontem = addDaysISO(HOJE, -1);
+  const empresasComContas = [...new Set(demoContasBancarias.map((c) => c.empresaId))];
+  for (const empresaId of empresasComContas) {
+    const arRealizados = demoLancamentos.filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.empresaId === empresaId);
+    for (let d = janelaInicio; d <= HOJE; d = addDaysISO(d, 1)) {
+      if (d === HOJE || d === ontem || !isDiaUtil(d)) continue;
+      const total = arRealizados.filter((l) => l.dataPagamento === d).reduce((s, l) => s + l.valor, 0);
+      if (total === 0) invariantes.push(`Composição do Recebimento — dia útil ${d} sem NENHUM recebimento Realizado pra empresa ${empresaId} (esperado: todo dia útil que não seja hoje tem dado)`);
+    }
+  }
+
+  if (invariantes.length > 0) {
+    console.log("⚠️⚠️⚠️ REGRESSÃO DETECTADA ⚠️⚠️⚠️");
+    invariantes.forEach((msg) => console.log("  ⚠️ " + msg));
+    console.log("⚠️⚠️⚠️ Confirme se é a mudança pretendida deste comando específico antes de commitar — não commite torcendo pra estar certo. ⚠️⚠️⚠️\n");
+  } else {
+    console.log("=== Invariantes de calibração: OK, nada revertido silenciosamente ===\n");
+  }
+}
+// ═══════════════════════════════════════════════════════════════════════
+
 console.log("=== VOLUME ===");
 console.log("Total lançamentos:", demoLancamentos.length);
 console.log("Data de referência (HOJE):", HOJE);

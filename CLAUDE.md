@@ -52,3 +52,37 @@ Antes de aplicar, rode scripts/verificar-massa-sintetica.mjs pra saber
 o estado atual por empresa, e depois de aplicar, rode de novo e
 reporte a comparação antes/depois — nunca presuma que a calibração
 anterior ainda vale sem checar.
+
+## Regra permanente — Hábito de verificação em scripts de calibração
+
+Nasceu de um caso real (commit b40012d): um script de recalibração de
+inadimplência mexeu em dataPagamento de forma mais ampla do que o
+necessário e, como efeito colateral não previsto (não intencional,
+não percebido antes do commit), derrubou um dia inteiro de
+"Composição do Recebimento" e zerou parte do "Previsto p/ hoje" —
+calibrações de rodadas anteriores que ninguém tinha pedido pra mexer.
+Corrigido no comando seguinte (restaurar-e-prevenir), que também
+criou a seção "Invariantes de calibração" em
+scripts/verificar-massa-sintetica.mjs pra pegar esse tipo de coisa
+ANTES do commit, não depois que o usuário reportar que algo sumiu.
+
+Daqui pra frente, todo script de recalibração de dado
+(`scripts/*.mjs` que edita `lancamentosImportados.json` ou
+`demoData.js`) segue este hábito:
+
+1. Roda `node scripts/verificar-massa-sintetica.mjs` ANTES de editar
+   qualquer coisa — esse é o baseline, incluindo a seção de
+   Invariantes de calibração.
+2. Aplica a mudança.
+3. Roda `node scripts/verificar-massa-sintetica.mjs` de novo DEPOIS —
+   compara com o baseline.
+4. Se aparecer "⚠️ REGRESSÃO DETECTADA" na seção de Invariantes que
+   NÃO for a mudança pretendida daquele comando específico, o script
+   PARA e reporta o achado antes de commitar — não commita "torcendo
+   pra estar certo". Investiga a causa raiz (qual parte do script
+   mexeu no que não devia) antes de decidir se corrige o script ou
+   se pede confirmação ao usuário.
+5. Todo script de calibração começa lendo o estado ATUAL do arquivo
+   (nunca uma cópia local antiga, nunca regenera a massa do zero) e
+   aplica a mudança em cima dele — documentar isso num comentário no
+   topo do próprio script.
