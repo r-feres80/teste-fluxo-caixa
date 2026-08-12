@@ -113,3 +113,25 @@ Alerta "Sweep executado: R$X → Aplicação (data)" aparece em Alertas
 Executivos com severidade "Informativa" (não é risco) só no dia em
 que o sweep de fato varreu algo — dias "sem excedente" ficam só no
 log, sem alerta no Dashboard.
+
+**"Limpar Base" preserva sweepLog x "Carregar Dados Demonstrativos"
+limpa sweepLog — não confundir os dois (comando
+fix-sweeplog-carregar-demo):**
+- "Limpar Base" preserva sweepLog porque mantém a MESMA linha de
+  dados (só reseta transacional) — o log continua descrevendo
+  fielmente o que aconteceu com aquele cenário.
+- "Carregar Dados Demonstrativos" **limpa** sweepLog (e os
+  lançamentos `SWEEP-*` associados) porque SUBSTITUI o cenário
+  inteiro por um novo baseline calibrado — um log referenciando saldo
+  de um cenário que acabou de deixar de existir não é auditoria
+  válida, é lixo. `demoFresco()` já devolve `sweepLog: []` nesse
+  fluxo. "Resetar Tudo" também limpa (sempre limpou).
+- Achado real desta rodada: limpar o log sozinho não bastava — o
+  guard de "já rodei hoje" do sweep (`sweepChecadoParaRef`, uma trava
+  só de double-invoke do React.StrictMode dentro do MESMO render) não
+  se resetava quando o cenário mudava no meio da sessão, então o
+  sweep ficava "travado" sem rodar de novo até um reload de página —
+  saldo recém-recalibrado ficava visivelmente sem sweep por um tempo
+  indeterminado. `carregarDemo`, `limparBase` e `resetarTudo` agora
+  resetam esse ref também, pra o sweep poder reavaliar e disparar de
+  novo na mesma sessão, sem exigir reload.

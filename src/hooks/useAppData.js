@@ -236,6 +236,16 @@ export function useAppData() {
     origemBaseRef.current = fresco.origemBase;
     setEntidades(fresco.entidades);
     sincronizarPeriodoComReferencia();
+    // Comando fix-sweeplog-carregar-demo: fresco.entidades já vem com
+    // sweepLog: [] (novo cenário, log antigo não é mais auditoria válida
+    // — referencia um mundo que acabou de ser substituído). Sem resetar
+    // este ref também, o efeito do sweep via "sweepChecadoParaRef.current
+    // === hoje" (já setado por uma execução anterior no mesmo dia) ficava
+    // bloqueado até um reload de página — o saldo recém-recalibrado ficava
+    // visivelmente "sem sweep" até alguém lembrar de apertar F5. Resetando
+    // aqui, o sweep reavalia e dispara de novo na mesma sessão, sem
+    // precisar reload.
+    sweepChecadoParaRef.current = null;
   }, [sincronizarPeriodoComReferencia]);
 
   // Limpar Base reseta dado TRANSACIONAL (lançamentos, orçamento, contas
@@ -267,6 +277,9 @@ export function useAppData() {
       sweepLog: prev.sweepLog,
     }));
     sincronizarPeriodoComReferencia();
+    // Mesmo raciocínio do carregarDemo: contasBancarias/lancamentos mudam
+    // aqui, então o sweep precisa poder reavaliar na mesma sessão.
+    sweepChecadoParaRef.current = null;
   }, [sincronizarPeriodoComReferencia]);
 
   // Resetar Tudo: o "recomeçar do zero de verdade" — apaga também Empresas/
@@ -274,6 +287,7 @@ export function useAppData() {
   // dado transacional) pra não ser possível apagar configuração sem querer.
   const resetarTudo = useCallback(() => {
     origemBaseRef.current = null;
+    sweepChecadoParaRef.current = null;
     setEntidades(criarEntidadesVazias());
     sincronizarPeriodoComReferencia();
   }, [sincronizarPeriodoComReferencia]);
