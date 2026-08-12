@@ -74,6 +74,7 @@ const TEXTO_ALERTA = {
   desvio_orcamentario: (a) => `Desvio orçamentário em ${a.nome}: ${fmtBRL(a.valor)}${a.pct != null ? ` (${a.pct.toFixed(0)}%)` : " (orçado muito baixo, % não comparável)"} — ver tela Orçado x Realizado.`,
   concentracao_cliente: (a) => `Concentração de cliente: ${a.pct.toFixed(0)}% da carteira em um único cliente — ver "Concentração por Cliente" em Contas a Receber.`,
   concentracao_fornecedor: (a) => `Concentração de fornecedor: ${a.pct.toFixed(0)}% da carteira em um único fornecedor — ver "Concentração por Fornecedor" em Contas a Pagar.`,
+  sweep_executado: (a) => `Sweep executado: ${fmtBRL(a.valor)} → Aplicação (${fmtData(a.data)}) — ver "Transferências Internas" em Tesouraria.`,
 };
 
 // Dashboard consome exclusivamente o Resumo Executivo (financial-engine/resumoExecutivo.js) —
@@ -220,17 +221,23 @@ export default function DashboardPage({ data }) {
           Cada linha aponta pro card/tela onde o número completo está. Severidade <span className="text-rose-600 font-medium">Alta</span> = liquidez
           projetada fica negativa, caixa consolidado ATUAL abaixo do mínimo configurado, ou título já vencido; <span className="text-amber-600 font-medium">Média</span> = caixa
           projetado (futuro) abaixo do mínimo, pagamento/recebimento relevante próximo, concentração de carteira acima de {parametros.limiteConcentracaoPct}%,
-          ou desvio orçamentário acima de {fmtBRL(parametros.materialidadeValor)} e {parametros.materialidadePct}% ao mesmo tempo — cortes configuráveis em Governança.
+          ou desvio orçamentário acima de {fmtBRL(parametros.materialidadeValor)} e {parametros.materialidadePct}% ao mesmo tempo — cortes configuráveis em Governança;
+          <span className="text-indigo-600 font-medium"> Informativa</span> = evento de rotina (ex.: sweep automático de caixa), não é risco.
         </InfoNote>
         {resumo.alertas.length === 0 ? <span className="text-sm text-slate-400">Sem alertas no momento.</span> : (
           <div className="flex flex-col gap-2 mt-3">
-            {resumo.alertas.map((a, i) => (
-              <div key={i} className={`flex items-start gap-2 text-sm ${a.severidade === "Alta" ? "text-rose-600" : "text-amber-600"}`}>
-                <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-                <span>{TEXTO_ALERTA[a.tipo]?.(a) ?? a.tipo}</span>
-                <Badge tone={a.severidade === "Alta" ? "rose" : "amber"}>{a.severidade}</Badge>
-              </div>
-            ))}
+            {resumo.alertas.map((a, i) => {
+              const cor = a.severidade === "Alta" ? "text-rose-600" : a.severidade === "Média" ? "text-amber-600" : "text-indigo-600";
+              const tone = a.severidade === "Alta" ? "rose" : a.severidade === "Média" ? "amber" : "indigo";
+              const Icon = a.severidade === "Informativa" ? Info : AlertTriangle;
+              return (
+                <div key={i} className={`flex items-start gap-2 text-sm ${cor}`}>
+                  <Icon size={14} className="mt-0.5 shrink-0" />
+                  <span>{TEXTO_ALERTA[a.tipo]?.(a) ?? a.tipo}</span>
+                  <Badge tone={tone}>{a.severidade}</Badge>
+                </div>
+              );
+            })}
           </div>
         )}
       </Panel>

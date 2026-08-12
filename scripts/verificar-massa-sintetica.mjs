@@ -15,6 +15,7 @@ import { calcularDRE } from "../src/financial-engine/dre.js";
 import { calcularDFC } from "../src/financial-engine/dfc.js";
 import { construirOrcadoRealizado } from "../src/financial-engine/orcadoRealizado.js";
 import { calcularIndiceLiquidezCaixa } from "../src/financial-engine/indicadoresCaixa.js";
+import { calcularSweepCaixa } from "../src/financial-engine/sweepCaixa.js";
 import { todayISO, diffDaysISO, startOfMonthISO, endOfMonthISO, addDaysISO } from "../src/utils/dateUtils.js";
 
 // Faixas-alvo — Comando consolidado, Bloco 1 (Liquidez 1,5x-1,9x + EBITDA
@@ -107,6 +108,29 @@ const GERADO_MIN_COUNT = 3; // lançamentos "Gerado —" (preenchimento de gap) 
       const total = arRealizados.filter((l) => l.dataPagamento === d).reduce((s, l) => s + l.valor, 0);
       if (total === 0) invariantes.push(`Composição do Recebimento — dia útil ${d} sem NENHUM recebimento Realizado pra empresa ${empresaId} (esperado: todo dia útil que não seja hoje tem dado)`);
     }
+  }
+
+  // Comando sweep-automatico-b, item 5 ("nenhuma execução de sweep deve
+  // ter data duplicada no log"): o log real (entidades.sweepLog) é estado
+  // de runtime do navegador (localStorage), não existe nos arquivos
+  // estáticos que este script Node lê — não dá pra inspecionar o log ao
+  // vivo daqui. A proteção contra duplicidade em si mora em
+  // useAppData.js (checagem "já rodou hoje?" antes de disparar), testada
+  // de verdade via simulação de 2 dias no navegador (Playwright +
+  // page.clock), não aqui. O que ESTE script consegue e deve garantir é
+  // a pureza/determinismo do cálculo que alimenta o sweep — mesmo input,
+  // mesmo output, sem mutação escondida — e a ausência de "movimentos
+  // fantasma" de valor zero (bug real encontrado e corrigido nesta
+  // rodada: resíduo de ponto flutuante fazia o loop empurrar 3
+  // transferências de R$0,00 pro log).
+  const sweepA = calcularSweepCaixa({ contasBancarias: demoContasBancarias, lancamentos: demoLancamentos, hoje: HOJE, caixaMinimo: 10000 });
+  const sweepB = calcularSweepCaixa({ contasBancarias: demoContasBancarias, lancamentos: demoLancamentos, hoje: HOJE, caixaMinimo: 10000 });
+  if (JSON.stringify(sweepA) !== JSON.stringify(sweepB)) {
+    invariantes.push("calcularSweepCaixa não é determinístico: 2 chamadas com o mesmo input produziram resultados diferentes");
+  }
+  const movimentoZerado = sweepA.movimentos.find((m) => m.valor <= 0);
+  if (movimentoZerado) {
+    invariantes.push(`calcularSweepCaixa produziu um movimento de valor <= 0 (${fmt(movimentoZerado.valor)}, conta ${movimentoZerado.contaOrigemId}) — voltou o bug de resíduo de ponto flutuante`);
   }
 
   if (invariantes.length > 0) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Database, Trash2, Sparkles, Download } from "lucide-react";
 import { Panel, Field, inputCls, InfoNote, useConfirm, DateInputBR } from "../components/ui/Primitives.jsx";
-import { fmtDataHora } from "../utils/formatUtils.js";
+import { fmtDataHora, fmtData, fmtBRL } from "../utils/formatUtils.js";
 import { APP_DISCLAIMER, PDD_FAIXAS_PADRAO } from "../config/appConfig.js";
 
 export default function GovernancaPage({ data }) {
@@ -136,6 +136,48 @@ export default function GovernancaPage({ data }) {
           Contas a Pagar/Receber e Inadimplência (Aging, PDD, DSO) · DRE Gerencial e Orçado x Realizado (Competência).
           Última atualização de dados: {lastUpdated ? fmtDataHora(lastUpdated) : "—"}.
         </InfoNote>
+      </Panel>
+
+      <Panel title="Log de Varredura Automática de Caixa (Sweep)" subtitle="Comando sweep-automatico-b — 1 execução por dia, na virada de data, com trilha de auditoria completa">
+        <InfoNote>
+          Dispara sozinho no primeiro carregamento do app após a virada de dia (nunca a cada reload dentro do mesmo dia — ver useAppData.js).
+          Varre saldo de conta líquida acima do Caixa Mínimo Operacional (parâmetro acima) pra Aplicação. Sobrevive a "Limpar Base" — é trilha de
+          auditoria, não dado transacional descartável; só "Resetar Tudo" apaga. Script manual (scripts/varredura-caixa-aplicacao.mjs) continua
+          disponível à parte, fora deste ciclo automático.
+        </InfoNote>
+        {(!entidades.sweepLog || entidades.sweepLog.length === 0) ? (
+          <span className="text-sm text-slate-400 mt-3 block">Nenhuma execução registrada ainda.</span>
+        ) : (
+          <table className="w-full text-sm mt-3">
+            <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+              <th className="py-2 pr-4">Data</th><th className="py-2 pr-4">Executado em</th><th className="py-2 pr-4">Resultado</th>
+              <th className="py-2 pr-4 text-right">Valor varrido</th><th className="py-2 pr-4">Mínimo vigente</th><th className="py-2">Movimentos (origem → destino)</th>
+            </tr></thead>
+            <tbody>
+              {[...entidades.sweepLog].reverse().map((r) => (
+                <tr key={r.id} className="border-b border-slate-100 align-top">
+                  <td className="py-2 pr-4 text-slate-700 whitespace-nowrap">{fmtData(r.dataExecucao)}</td>
+                  <td className="py-2 pr-4 text-slate-500 text-xs whitespace-nowrap">{fmtDataHora(r.timestamp)}</td>
+                  <td className="py-2 pr-4">
+                    {r.executado ? <span className="text-emerald-600 font-medium">Executado</span> : <span className="text-slate-400">Sem excedente</span>}
+                  </td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(r.valorTotalVarrido)}</td>
+                  <td className="py-2 pr-4 font-mono tabular-nums text-slate-500">{fmtBRL(r.caixaMinimoVigente)}</td>
+                  <td className="py-2 text-xs text-slate-600">
+                    {r.movimentos.length === 0 ? "—" : r.movimentos.map((m, i) => (
+                      <div key={i}>
+                        {entidades.contasBancarias.find((c) => c.id === m.contaOrigemId)?.apelido ?? m.contaOrigemId}
+                        {" → "}
+                        {entidades.contasBancarias.find((c) => c.id === m.contaDestinoId)?.apelido ?? m.contaDestinoId}
+                        : <span className="font-mono">{fmtBRL(m.valor)}</span>
+                      </div>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </Panel>
 
       <ConfirmDialogSlot />

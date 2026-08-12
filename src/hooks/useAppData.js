@@ -3,6 +3,7 @@ import { storageService } from "../services/storageService.js";
 import { STORAGE_KEY, DEFAULT_PARAMETROS } from "../config/appConfig.js";
 import { todayISO, parseISO } from "../utils/dateUtils.js";
 import { uid } from "../utils/formatUtils.js";
+import { calcularSweepCaixa } from "../financial-engine/sweepCaixa.js";
 import {
   demoEmpresas, demoUnidades, demoClientes, demoFornecedores, demoBancos,
   demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoOrcamentoItens,
@@ -17,7 +18,7 @@ import {
 const criarEntidadesVazias = () => ({
   empresas: [], unidades: [], clientes: [], fornecedores: [], bancos: [],
   contasBancarias: [], projetos: [], planoDeContas: [], centrosCusto: [],
-  lancamentos: [], orcamentoItens: [],
+  lancamentos: [], orcamentoItens: [], sweepLog: [],
 });
 
 // anoRef/mesRef sempre derivados da Data de Referência (nunca de new Date()
@@ -40,7 +41,7 @@ const demoFresco = () => ({
     empresas: [...demoEmpresas], unidades: [...demoUnidades], clientes: [...demoClientes], fornecedores: [...demoFornecedores],
     bancos: [...demoBancos], contasBancarias: [...demoContasBancarias], projetos: [...demoProjetos],
     planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
-    lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens],
+    lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens], sweepLog: [],
   },
   origemBase: "demo", demoGeradoEm: HOJE_ISO,
 });
@@ -74,10 +75,28 @@ export function useAppData() {
         if (s.origemBase === "demo" && s.demoGeradoEm !== HOJE_ISO) {
           const fresco = demoFresco();
           origemBaseRef.current = fresco.origemBase;
-          setEntidades(fresco.entidades);
+          // Achado do comando sweep-automatico-b: essa regeneração silenciosa
+          // (pensada só pra manter texto/data relativa da demo "fresca")
+          // colidia direto com o sweep automático — toda virada de dia
+          // apagava o sweepLog inteiro E os lançamentos SWEEP-* que ele
+          // tinha criado no dia anterior, fazendo o sweep "recalcular do
+          // zero" e nunca acumular histórico de verdade. Preserva os dois
+          // através da regeneração: sweepLog é trilha de auditoria (mesmo
+          // raciocínio de por que sobrevive a "Limpar Base"), e os
+          // lançamentos SWEEP-* precisam vir junto pra "Transferências
+          // Internas" em Tesouraria continuar batendo com o que o log diz
+          // que aconteceu.
+          const sweepLancamentosAnteriores = (s.entidades?.lancamentos || []).filter((l) => l.documento?.startsWith("SWEEP-"));
+          setEntidades({
+            ...fresco.entidades,
+            lancamentos: [...fresco.entidades.lancamentos, ...sweepLancamentosAnteriores],
+            sweepLog: s.entidades?.sweepLog || [],
+          });
         } else {
           origemBaseRef.current = s.origemBase ?? null;
-          setEntidades(s.entidades ?? criarEntidadesVazias());
+          // sweepLog: default defensivo pra sessão salva antes deste campo
+          // existir (comando sweep-automatico-b) não quebrar com undefined.
+          setEntidades(s.entidades ? { sweepLog: [], ...s.entidades } : criarEntidadesVazias());
         }
         setFiltros(s.filtros ?? DEFAULT_FILTROS);
         setParametros(s.parametros ? { ...DEFAULT_PARAMETROS, ...s.parametros } : DEFAULT_PARAMETROS);
@@ -102,6 +121,79 @@ export function useAppData() {
     }, 400);
     return () => clearTimeout(t);
   }, [entidades, filtros, parametros, loaded]);
+
+  // ---- Sweep automático de caixa (comando sweep-automatico-b, Modelo B) ----
+  // Dispara 1x por dia, no primeiro carregamento do app após a virada de
+  // data — nunca a cada render/reload dentro do mesmo dia. Idempotente por
+  // construção: a fonte da verdade de "já rodou hoje" é o PRÓPRIO log
+  // (entidades.sweepLog), não uma flag separada que possa dessincronizar.
+  // Reaproveita a mesma lógica de cálculo de scripts/varredura-caixa-
+  // aplicacao.mjs via financial-engine/sweepCaixa.js (script manual
+  // continua intocado, fora de escopo deste comando) — nunca uma versão
+  // paralela do algoritmo.
+  // Guarda por DIA (não um boolean simples): React.StrictMode (ativo em
+  // src/main.jsx) invoca efeitos 2x em dev de propósito, e um boolean que
+  // volta pra false no fim do corpo do efeito não pega esse re-entry —
+  // guardar "já disparei uma checagem pra ESTE hoje" resolve tanto o
+  // double-invoke do StrictMode quanto permite disparar de novo numa
+  // virada de dia real numa aba que ficou aberta.
+  const sweepChecadoParaRef = useRef(null);
+  useEffect(() => {
+    if (!loaded) return;
+    if (entidades.contasBancarias.length === 0) return; // sem base carregada, nada a varrer
+    if (parametros.caixaMinimo == null) return; // sweep desligado até Governança configurar um mínimo
+    const hoje = todayISO();
+    const jaRodouHoje = (entidades.sweepLog || []).some((r) => r.dataExecucao === hoje);
+    if (jaRodouHoje || sweepChecadoParaRef.current === hoje) return;
+    sweepChecadoParaRef.current = hoje;
+
+    const resultado = calcularSweepCaixa({
+      contasBancarias: entidades.contasBancarias, lancamentos: entidades.lancamentos,
+      hoje, caixaMinimo: parametros.caixaMinimo,
+    });
+
+    const registroBase = {
+      id: uid(), dataExecucao: hoje, timestamp: new Date().toISOString(),
+      caixaMinimoVigente: parametros.caixaMinimo,
+    };
+
+    if (!resultado.executar) {
+      setEntidades((prev) => ({ ...prev, sweepLog: [...prev.sweepLog, { ...registroBase, executado: false, motivo: "sem excedente", valorTotalVarrido: 0, movimentos: [] }] }));
+      return;
+    }
+
+    const novosLancamentos = [];
+    const movimentosLog = [];
+    resultado.movimentos.forEach((m) => {
+      const grupoId = uid();
+      const base = {
+        empresaId: m.empresaId, unidadeId: null, centroCustoId: null, projetoId: null,
+        tipoParceiro: null, clienteFornecedorId: null, bancoId: null,
+        dataEmissao: hoje, competencia: hoje.slice(0, 7), dataVencimento: hoje, dataPagamento: hoje,
+        situacao: "Realizado", valor: m.valor, transferencia: true, transferenciaGrupoId: grupoId,
+      };
+      const idSaida = uid(), idEntrada = uid();
+      novosLancamentos.push({
+        ...base, id: idSaida, contaBancariaId: m.contaOrigemId, tipo: "Saída",
+        documento: `SWEEP-${hoje.replace(/-/g, "")}-${m.contaOrigemId}-SAI`, contaGerencialId: "pc5.06",
+        observacao: "Gerado — varredura automática de caixa acima do mínimo operacional (sweep diário, virada de dia)",
+      });
+      novosLancamentos.push({
+        ...base, id: idEntrada, contaBancariaId: m.contaDestinoId, tipo: "Entrada",
+        documento: `SWEEP-${hoje.replace(/-/g, "")}-${m.contaOrigemId}-ENT`, contaGerencialId: null,
+        observacao: "Gerado — varredura automática de caixa acima do mínimo operacional (sweep diário, virada de dia)",
+      });
+      movimentosLog.push({ ...m, lancamentoIdSaida: idSaida, lancamentoIdEntrada: idEntrada });
+    });
+
+    setEntidades((prev) => ({
+      ...prev,
+      lancamentos: [...prev.lancamentos, ...novosLancamentos],
+      sweepLog: [...prev.sweepLog, {
+        ...registroBase, executado: true, valorTotalVarrido: resultado.excedenteTotal, movimentos: movimentosLog,
+      }],
+    }));
+  }, [loaded, entidades.contasBancarias, entidades.lancamentos, entidades.sweepLog, parametros.caixaMinimo]);
 
   // ---- Filtros e Governança ----
 
@@ -165,6 +257,14 @@ export function useAppData() {
       empresas: prev.empresas,
       bancos: prev.bancos,
       planoDeContas: prev.planoDeContas,
+      // sweepLog é trilha de auditoria (rastreabilidade do que o sweep
+      // automático já fez), não dado transacional operacional — decisão:
+      // sobrevive a Limpar Base (só "Resetar Tudo" apaga), senão o próprio
+      // "log que nunca é apagado silenciosamente" perderia o sentido. O
+      // comando pediu isso de forma um pouco ambígua ("tabela no dado
+      // transacional" + "deve sobreviver a Limpar Base") — fica registrado
+      // aqui qual leitura foi escolhida.
+      sweepLog: prev.sweepLog,
     }));
     sincronizarPeriodoComReferencia();
   }, [sincronizarPeriodoComReferencia]);

@@ -119,6 +119,18 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     concentracaoClientes, concentracaoFornecedores, desviosOrcamentarios: desviosPorGrupo, vencimentosProximosAP: vencAP, vencimentosProximosAR: vencAR,
   });
 
+  // Comando sweep-automatico-b: sweep executado HOJE vira uma linha
+  // informativa em Alertas Executivos — não é risco (Alta/Média), é um
+  // evento de rotina já registrado em entidades.sweepLog pelo gatilho de
+  // useAppData.js. RANK garante que Informativa sempre fica depois de
+  // Alta/Média, nunca embaralhada entre elas.
+  const sweepHoje = (entidades.sweepLog || []).find((r) => r.dataExecucao === dataReferencia && r.executado);
+  if (sweepHoje) {
+    alertas.push({ tipo: "sweep_executado", severidade: "Informativa", valor: sweepHoje.valorTotalVarrido, data: sweepHoje.dataExecucao });
+  }
+  const RANK_SEVERIDADE = { Alta: 0, Média: 1, Informativa: 2 };
+  alertas.sort((a, b) => RANK_SEVERIDADE[a.severidade] - RANK_SEVERIDADE[b.severidade]);
+
   return {
     dataReferencia,
     empresaFiltro: filtros.empresaId,

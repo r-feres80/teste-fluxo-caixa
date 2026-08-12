@@ -86,3 +86,30 @@ Daqui pra frente, todo script de recalibração de dado
    (nunca uma cópia local antiga, nunca regenera a massa do zero) e
    aplica a mudança em cima dele — documentar isso num comentário no
    topo do próprio script.
+
+## Regra permanente — Sweep automático de caixa (Modelo B)
+
+Comando sweep-automatico-b: o sweep de caixa (varrer saldo de conta
+líquida acima do Caixa Mínimo Operacional pra Aplicação) dispara
+sozinho 1x/dia, na virada de data real (nunca em runtime além disso —
+nunca a cada reload/render dentro do mesmo dia), sempre logado em
+`entidades.sweepLog` com trilha de auditoria completa (data/hora,
+valor, contas de origem/destino, mínimo vigente). Gatilho em
+`useAppData.js`; cálculo puro reaproveitado de
+`financial-engine/sweepCaixa.js` (mesma lógica do script manual
+`scripts/varredura-caixa-aplicacao.mjs`, que continua existindo à
+parte pra execução avulsa).
+
+sweepLog sobrevive a "Limpar Base" (é trilha de auditoria, não dado
+transacional descartável) — só "Resetar Tudo" apaga. Isso inclui
+sobreviver à regeneração automática de base demo "obsoleta" (quando
+`origemBase === "demo"` e o dia mudou desde a última carga) — achado
+real desta rodada: sem esse cuidado, cada virada de dia apagava o
+sweepLog inteiro e recomeçava do zero, porque essa regeneração foi
+pensada originalmente só pra manter texto/data relativa da demo
+"fresca", sem saber que o sweep agora também vive nessa mesma base.
+
+Alerta "Sweep executado: R$X → Aplicação (data)" aparece em Alertas
+Executivos com severidade "Informativa" (não é risco) só no dia em
+que o sweep de fato varreu algo — dias "sem excedente" ficam só no
+log, sem alerta no Dashboard.
