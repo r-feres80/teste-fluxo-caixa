@@ -312,7 +312,7 @@ export default function TesourariaPage({ data }) {
           <div className="flex flex-col gap-2">
             {transferencias.map((grupo) => (
               <div key={grupo.id} className="text-sm flex items-center gap-2 text-slate-600">
-                <ArrowDownCircle size={14} className="text-indigo-500" />
+                <ArrowDownCircle size={14} className="text-brand-violet" />
                 {grupo.itens.map((i) => `${entidades.contasBancarias.find((c) => c.id === i.contaBancariaId)?.apelido} (${i.tipo})`).join(" → ")}
                 <span className="font-mono text-xs text-slate-500 ml-auto">{fmtBRL(grupo.itens[0]?.valor)}</span>
               </div>

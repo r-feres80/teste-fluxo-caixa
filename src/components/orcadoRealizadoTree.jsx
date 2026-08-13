@@ -24,7 +24,7 @@ export function LinhaArvoreOrcadoRealizado({ no, profundidade, expandidos, toggl
         </td>
         <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(no.real)}</td>
         <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-500">{no.temOrcamento ? fmtBRL(no.orcado) : "—"}</td>
-        <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-600">{fmtBRL(no.forecast)}</td>
+        <td className="py-2 pr-4 text-right font-mono tabular-nums text-brand-violet-deep">{fmtBRL(no.forecast)}</td>
         <td className={`py-2 pr-4 text-right font-mono tabular-nums ${no.deltaForecast >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{no.temOrcamento ? fmtBRL(no.deltaForecast) : "—"}</td>
         <td className="py-2 pr-4 text-right font-mono tabular-nums">
           {!no.temOrcamento ? "—" : no.deltaForecastPct != null ? `${no.deltaForecastPct.toFixed(0)}%` : <span className="text-slate-400 font-sans normal-case text-[11px]">não comparável</span>}

@@ -159,12 +159,12 @@ export function ContasPagarReceberView({ data, tipo }) {
               <div className="flex flex-col gap-3">
                 <div className="w-full h-6 rounded overflow-hidden flex">
                   {composicaoRecebido.antecipadoPct > 0 && <div className="bg-emerald-500" style={{ width: `${composicaoRecebido.antecipadoPct}%` }} title="Antecipado" />}
-                  {composicaoRecebido.emDiaPct > 0 && <div className="bg-indigo-400" style={{ width: `${composicaoRecebido.emDiaPct}%` }} title="Em dia" />}
+                  {composicaoRecebido.emDiaPct > 0 && <div className="bg-brand-violet" style={{ width: `${composicaoRecebido.emDiaPct}%` }} title="Em dia" />}
                   {composicaoRecebido.atrasadoPct > 0 && <div className="bg-rose-500" style={{ width: `${composicaoRecebido.atrasadoPct}%` }} title="Atrasado" />}
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />Antecipado <span className="font-mono">{composicaoRecebido.antecipadoPct.toFixed(0)}%</span></span>
-                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-indigo-400 inline-block" />Em dia <span className="font-mono">{composicaoRecebido.emDiaPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-brand-violet inline-block" />Em dia <span className="font-mono">{composicaoRecebido.emDiaPct.toFixed(0)}%</span></span>
                   <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block" />Atrasado <span className="font-mono">{composicaoRecebido.atrasadoPct.toFixed(0)}%</span></span>
                 </div>
               </div>

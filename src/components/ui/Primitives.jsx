@@ -120,7 +120,7 @@ export function Badge({ children, tone = "slate" }) {
     amber: "bg-amber-50 text-amber-700 border-amber-200",
     rose: "bg-rose-50 text-rose-700 border-rose-200",
     slate: "bg-slate-100 text-slate-600 border-slate-200",
-    indigo: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    indigo: "bg-brand-lilac/20 text-brand-violet-deep border-brand-lilac/50",
   };
   return <span className={`text-[11px] px-2 py-0.5 rounded border font-medium ${map[tone]}`}>{children}</span>;
 }

@@ -222,12 +222,12 @@ export default function DashboardPage({ data }) {
           projetada fica negativa, caixa consolidado ATUAL abaixo do mínimo configurado, ou título já vencido; <span className="text-amber-600 font-medium">Média</span> = caixa
           projetado (futuro) abaixo do mínimo, pagamento/recebimento relevante próximo, concentração de carteira acima de {parametros.limiteConcentracaoPct}%,
           ou desvio orçamentário acima de {fmtBRL(parametros.materialidadeValor)} e {parametros.materialidadePct}% ao mesmo tempo — cortes configuráveis em Governança;
-          <span className="text-indigo-600 font-medium"> Informativa</span> = evento de rotina (ex.: sweep automático de caixa), não é risco.
+          <span className="text-brand-violet-deep font-medium"> Informativa</span> = evento de rotina (ex.: sweep automático de caixa), não é risco.
         </InfoNote>
         {resumo.alertas.length === 0 ? <span className="text-sm text-slate-400">Sem alertas no momento.</span> : (
           <div className="flex flex-col gap-2 mt-3">
             {resumo.alertas.map((a, i) => {
-              const cor = a.severidade === "Alta" ? "text-rose-600" : a.severidade === "Média" ? "text-amber-600" : "text-indigo-600";
+              const cor = a.severidade === "Alta" ? "text-rose-600" : a.severidade === "Média" ? "text-amber-600" : "text-brand-violet-deep";
               const tone = a.severidade === "Alta" ? "rose" : a.severidade === "Média" ? "amber" : "indigo";
               const Icon = a.severidade === "Informativa" ? Info : AlertTriangle;
               return (

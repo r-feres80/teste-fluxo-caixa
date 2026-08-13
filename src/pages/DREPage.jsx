@@ -104,7 +104,7 @@ export default function DREPage({ data }) {
                 <tr key={l.label} className={`border-b border-slate-100 ${l.destaque ? "font-semibold bg-slate-50" : ""}`}>
                   <td className="py-2 pr-4 text-slate-700">{l.label}</td>
                   <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-indigo-600">{fmtBRL(linhasForecast[i].valor)}</td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-brand-violet-deep">{fmtBRL(linhasForecast[i].valor)}</td>
                   <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-500">{fmtBRL(linhasOrc[i].valor)}</td>
                   <td className={`py-2 pr-4 text-right font-mono tabular-nums ${delta >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{fmtBRL(delta)}</td>
                 </tr>
