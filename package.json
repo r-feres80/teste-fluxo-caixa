@@ -19,6 +19,7 @@
   "homepage": "https://github.com/r-feres80/teste-fluxo-caixa#readme",
   "devDependencies": {
     "@playwright/test": "^1.62.1",
+    "chart.js": "^4.4.1",
     "http-server": "^14.1.1"
   }
 }

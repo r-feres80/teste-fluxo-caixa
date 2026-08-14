@@ -1,0 +1,6 @@
+Data,Extra,Historico,Valor,Categoria
+05/01/2024,,Doacao normal para dar contexto,1800,receita
+01/04/2024,,Valor zero teste,0,pagamentos
+2024-04-02,,Data em formato invalido sem barras,-50,pagamentos
+05/04/2024,,SoDoisCamposAntesDoValor
+06/04/2024,,Descricao propositalmente gigante que ultrapassa os setenta caracteres para testar o corte automatico de texto exibido na tabela do sistema de fluxo de caixa,-75,pagamentos
