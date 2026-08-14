@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "playwright test"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/r-feres80/teste-fluxo-caixa.git"
@@ -18,7 +16,6 @@
   },
   "homepage": "https://github.com/r-feres80/teste-fluxo-caixa#readme",
   "devDependencies": {
-    "@playwright/test": "^1.62.1",
     "chart.js": "^4.4.1",
     "http-server": "^14.1.1"
   }
