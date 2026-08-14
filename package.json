@@ -14,9 +14,5 @@
   "bugs": {
     "url": "https://github.com/r-feres80/teste-fluxo-caixa/issues"
   },
-  "homepage": "https://github.com/r-feres80/teste-fluxo-caixa#readme",
-  "devDependencies": {
-    "chart.js": "^4.4.1",
-    "http-server": "^14.1.1"
-  }
+  "homepage": "https://github.com/r-feres80/teste-fluxo-caixa#readme"
 }
