@@ -299,10 +299,18 @@ mudança recente:
 
 ## 11. Casos extremos e resiliência (EDGE)
 
-- [ ] **EDGE-01** Lista de anos/meses totalmente vazia (fixture de CSV
-  sem nenhuma linha válida, sync cai em erro e sem cache) → seletores de
-  Ano/Mês ficam vazios, mas a página não trava (sem exceção não tratada
-  no console) e todas as abas continuam navegáveis.
+- [ ] **EDGE-01** Lista de anos totalmente vazia (fixture de CSV sem
+  nenhuma linha válida, sync cai em erro e sem cache) → o seletor de Ano
+  (`#p-ano`) fica vazio (não há anos nos dados); os seletores de Mês
+  (`#p-mes`, `#cm-mes1`, `#cm-mes2`, `#ca-mes`) continuam mostrando a
+  lista fixa de Janeiro a Dezembro — isso é esperado por design (não
+  dependem dos dados carregados, só o Ano depende). A página não trava
+  (sem exceção não tratada no console) e todas as abas continuam
+  navegáveis.
+  > Correção de enunciado (Fase 4): a versão original deste item dizia
+  > "seletores de Ano/Mês ficam vazios", o que é impreciso — só o de Ano
+  > esvazia. Encontrado pelo QA da Fase 3 (ver `qa-evidence/EDGE-01.*`);
+  > o app não foi alterado, só a descrição do item.
 - [ ] **EDGE-02** CSV da planilha com uma linha de valor **zero**
   (`0,00`) → `parseFloat` calcula `0`; o item deve ser tratado como saída
   (valor não é `>0`) e não deve quebrar o total nem gerar `NaN` em
