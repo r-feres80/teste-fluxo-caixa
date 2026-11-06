@@ -50,7 +50,8 @@ const MESES_HISTORICO = 18; // inclui o mês corrente (parcial, até HOJE)
 // histórico existem. Só o volume total de lançamentos depende dos dois.
 const REVENUE_E1_POR_MES = { count: 27, ticketMin: 3500, ticketMax: 12000 };
 const REVENUE_E2_POR_MES = { count: 11, ticketMin: 4000, ticketMax: 11000 };
-const CUSTOS_POR_MES = { count: 17, min: 3200, max: 10500 };
+// Etapa 1C fine-tune 3: custos intermediários -> EBITDA 10-12%.
+const CUSTOS_POR_MES = { count: 17, min: 4000, max: 10500 };
 const FIXOS_MENSAIS_E1 = { salarios: 36000, encargos: 10000, beneficios: 5500, aluguel: 9800, energia: 2800, sistemas: 3300, marketing: 7000, comissoes: 8600, diversas: 2600, tarifas: 380 };
 const FIXOS_MENSAIS_E2 = { salarios: 22500, encargos: 6400, beneficios: 3300, aluguel: 6700, energia: 4400, sistemas: 1500, diversas: 1700, tarifas: 260 };
 
@@ -59,13 +60,17 @@ const FIXOS_MENSAIS_E2 = { salarios: 22500, encargos: 6400, beneficios: 3300, al
 // Contagem alta (vs. poucas dezenas) só pra dar volume de lançamentos sem
 // mexer no total-alvo (que é quem importa pro tamanho da carteira) nem no
 // backbone histórico (que é quem importa pra margem/caixa acumulado).
-const AR_ABERTO = { count: 360, totalAlvo: 245000 };
-const AP_ABERTO = { count: 280, totalAlvo: 172000 };
-// Mix pedido: Antecipado ~48% / Em dia ~29% / Atrasado ~23%.
+// Etapa 1B (2026-11-06): ajustes pra perfil "PME BR típica" (inadimplência
+// 5-8%, liquidez 1.0-1.5x, desvios 10-25%). AR e AP maiores pra dar peso
+// real à carteira; mix vencimento com MENOS atrasado (10% vs 23% anterior).
+const AR_ABERTO = { count: 360, totalAlvo: 400000 };
+const AP_ABERTO = { count: 280, totalAlvo: 300000 };
+// Etapa 1C (2026-11-06): Mix 72/23/5 -> inadimplência alvo 5-8% (era 23% em 1B).
+// Antecipado = títulos ainda a vencer (futuro); Em dia = vence hoje/ontem; Atrasado = já vencido.
 const MIX_VENCIMENTO = [
-  ["antecipado", 0.48],
-  ["emDia", 0.29],
-  ["atrasado", 0.23],
+  ["antecipado", 0.72],
+  ["emDia", 0.23],
+  ["atrasado", 0.05],
 ];
 
 // Caixa Disponível/Projetado — alvo de calibração do saldo inicial das
@@ -74,7 +79,8 @@ const MIX_VENCIMENTO = [
 // é o ponto de partida do "Projetado 30 dias" (Fluxo de Caixa) — por isso a
 // aplicação também precisa de alvo pequeno: senão o total já nasce perto do
 // teto da faixa antes de qualquer projeção.
-const ALVO_CAIXA_DISPONIVEL = 680000;
+// Etapa 1C final: caixa 600k -> liquidez ~1.5-1.8x (PME BR confortável).
+const ALVO_CAIXA_DISPONIVEL = 600000;
 const ALVO_APLICACAO = 55000;
 
 export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancariasBase }) {
@@ -109,9 +115,13 @@ export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancar
 
     const dataNoMes = () => `${inicioMes.slice(0, 7)}-${String(inteiro(1, diaMaximo)).padStart(2, "0")}`;
 
-    const gerarRealizado = ({ empresaId, unidadeId, contaGerencialId, centroCustoId, tipo, tipoParceiro, parceiroId, bancoId, contaBancariaId, valor, prazoDias, documento }) => {
+    // Etapa 1C: diaVencimentoFixo (opcional) força vencimento no dia X do mês
+    // (calendário fiscal BR: folha dia 5, encargos dia 7, impostos dia 20).
+    const gerarRealizado = ({ empresaId, unidadeId, contaGerencialId, centroCustoId, tipo, tipoParceiro, parceiroId, bancoId, contaBancariaId, valor, prazoDias, documento, diaVencimentoFixo }) => {
       const emissao = dataNoMes();
-      const vencimento = addDaysISO(emissao, prazoDias);
+      const vencimento = diaVencimentoFixo
+        ? `${inicioMes.slice(0, 7)}-${String(Math.min(diaVencimentoFixo, diaMaximo)).padStart(2, "0")}`
+        : addDaysISO(emissao, prazoDias);
       const pagamento = dataPagamentoRealista(vencimento);
       // Nunca deixa o backbone histórico "vazar" pro futuro do mês corrente.
       const pagamentoFinal = pagamento > HOJE ? HOJE : pagamento;
@@ -134,7 +144,9 @@ export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancar
         tipo: "Entrada", tipoParceiro: "Cliente", parceiroId: escolha(clientesIds),
         bancoId: "b2", contaBancariaId: "cb1",
         valor: uniforme(REVENUE_E1_POR_MES.ticketMin, REVENUE_E1_POR_MES.ticketMax),
-        prazoDias: inteiro(0, 3), documento: `NF-${1000 + seq}`,
+        // Etapa 1C: prazos escalonados PME BR 30/45/60/90/120 dias (ponderados).
+        prazoDias: escolhaPonderada([[30, 30], [45, 25], [60, 20], [90, 15], [120, 10]]),
+        documento: `NF-${1000 + seq}`,
       });
     }
     // Receita e2 (Indústria XYZ) — Venda de Produtos.
@@ -145,11 +157,13 @@ export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancar
         tipo: "Entrada", tipoParceiro: "Cliente", parceiroId: escolha(clientesIds),
         bancoId: "b3", contaBancariaId: "cb4",
         valor: uniforme(REVENUE_E2_POR_MES.ticketMin, REVENUE_E2_POR_MES.ticketMax),
-        prazoDias: inteiro(0, 3), documento: `NF-9${100 + seq}`,
+        // Etapa 1C: prazos escalonados PME BR 30/45/60/90/120 dias (ponderados).
+        prazoDias: escolhaPonderada([[30, 30], [45, 25], [60, 20], [90, 15], [120, 10]]),
+        documento: `NF-9${100 + seq}`,
       });
     }
 
-    // Impostos sobre vendas (Deduções) — proporcional à receita do mês.
+    // Etapa 1C: Impostos sobre vendas (PIS/COFINS/ICMS/ISS) — consolidados no DIA 20 do mês.
     ["e1", "e2"].forEach((empresaId) => {
       const banco = empresaId === "e1" ? ["b2", "cb1"] : ["b3", "cb4"];
       gerarRealizado({
@@ -157,7 +171,7 @@ export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancar
         centroCustoId: empresaId === "e1" ? "cc1100" : "cc3000", tipo: "Saída", tipoParceiro: null, parceiroId: null,
         bancoId: banco[0], contaBancariaId: banco[1],
         valor: (empresaId === "e1" ? qtdRevE1 * 7500 : qtdRevE2 * 7000) * 0.085,
-        prazoDias: 0, documento: `Impostos-${inicioMes.slice(0, 7)}`,
+        prazoDias: 0, documento: `Impostos-${inicioMes.slice(0, 7)}`, diaVencimentoFixo: 20,
       });
     });
 
@@ -179,31 +193,34 @@ export function gerarMassaSintetica({ clientesIds, fornecedoresIds, contasBancar
     // Fixos mensais (folha, facilities, comercial, financeiro) por empresa.
     {
       const bancoE1 = ["b2", "cb1"]; const bancoE2 = ["b3", "cb4"];
-      const linha = (empresaId, banco, cc, contaGer, valor, doc) => gerarRealizado({
+      // Etapa 1C: calendário fiscal/operacional BR com dias fixos.
+      const linha = (empresaId, banco, cc, contaGer, valor, doc, diaVencimentoFixo) => gerarRealizado({
         empresaId, unidadeId: empresaId === "e1" ? "u1" : "u3", contaGerencialId: contaGer, centroCustoId: cc,
         tipo: "Saída", tipoParceiro: null, parceiroId: null, bancoId: banco[0], contaBancariaId: banco[1],
-        valor, prazoDias: 0, documento: `${doc}-${inicioMes.slice(0, 7)}`,
+        valor, prazoDias: 0, documento: `${doc}-${inicioMes.slice(0, 7)}`, diaVencimentoFixo,
       });
       const f1 = FIXOS_MENSAIS_E1, f2 = FIXOS_MENSAIS_E2;
-      linha("e1", bancoE1, "cc1300", "pc3.01.01", f1.salarios * fator, "Folha");
-      linha("e1", bancoE1, "cc1300", "pc3.01.02", f1.encargos * fator, "Encargos");
-      linha("e1", bancoE1, "cc1300", "pc3.01.03", f1.beneficios * fator, "Beneficios");
-      linha("e1", bancoE1, "cc1100", "pc3.02.01", f1.aluguel * fator, "Aluguel");
-      linha("e1", bancoE1, "cc1100", "pc3.02.02", f1.energia * fator, "Energia");
-      linha("e1", bancoE1, "cc1100", "pc3.02.03", f1.sistemas * fator, "Sistemas");
-      linha("e1", bancoE1, "cc2200", "pc3.03.01", f1.marketing * fator, "Marketing");
-      linha("e1", bancoE1, "cc2100", "pc3.03.02", f1.comissoes * fator, "Comissoes");
-      linha("e1", bancoE1, "cc1100", "pc3.04", f1.diversas * fator, "Diversas");
-      linha("e1", bancoE1, "cc1100", "pc4.03", f1.tarifas * fator, "Tarifas");
+      // Folha dia 5, Encargos dia 7, Benefícios dia 10, Aluguel dia 10,
+      // Energia dia 15, Sistemas/Marketing/Comissões/Diversas dia 20, Tarifas dia 25.
+      linha("e1", bancoE1, "cc1300", "pc3.01.01", f1.salarios * fator, "Folha", 5);
+      linha("e1", bancoE1, "cc1300", "pc3.01.02", f1.encargos * fator, "Encargos", 7);
+      linha("e1", bancoE1, "cc1300", "pc3.01.03", f1.beneficios * fator, "Beneficios", 10);
+      linha("e1", bancoE1, "cc1100", "pc3.02.01", f1.aluguel * fator, "Aluguel", 10);
+      linha("e1", bancoE1, "cc1100", "pc3.02.02", f1.energia * fator, "Energia", 15);
+      linha("e1", bancoE1, "cc1100", "pc3.02.03", f1.sistemas * fator, "Sistemas", 20);
+      linha("e1", bancoE1, "cc2200", "pc3.03.01", f1.marketing * fator, "Marketing", 20);
+      linha("e1", bancoE1, "cc2100", "pc3.03.02", f1.comissoes * fator, "Comissoes", 20);
+      linha("e1", bancoE1, "cc1100", "pc3.04", f1.diversas * fator, "Diversas", 20);
+      linha("e1", bancoE1, "cc1100", "pc4.03", f1.tarifas * fator, "Tarifas", 25);
 
-      linha("e2", bancoE2, "cc3100", "pc3.01.01", f2.salarios * fator, "Folha-XYZ");
-      linha("e2", bancoE2, "cc3100", "pc3.01.02", f2.encargos * fator, "Encargos-XYZ");
-      linha("e2", bancoE2, "cc3100", "pc3.01.03", f2.beneficios * fator, "Beneficios-XYZ");
-      linha("e2", bancoE2, "cc3000", "pc3.02.01", f2.aluguel * fator, "Aluguel-XYZ");
-      linha("e2", bancoE2, "cc3000", "pc3.02.02", f2.energia * fator, "Energia-XYZ");
-      linha("e2", bancoE2, "cc3000", "pc3.02.03", f2.sistemas * fator, "Sistemas-XYZ");
-      linha("e2", bancoE2, "cc3000", "pc3.04", f2.diversas * fator, "Diversas-XYZ");
-      linha("e2", bancoE2, "cc3000", "pc4.03", f2.tarifas * fator, "Tarifas-XYZ");
+      linha("e2", bancoE2, "cc3100", "pc3.01.01", f2.salarios * fator, "Folha-XYZ", 5);
+      linha("e2", bancoE2, "cc3100", "pc3.01.02", f2.encargos * fator, "Encargos-XYZ", 7);
+      linha("e2", bancoE2, "cc3100", "pc3.01.03", f2.beneficios * fator, "Beneficios-XYZ", 10);
+      linha("e2", bancoE2, "cc3000", "pc3.02.01", f2.aluguel * fator, "Aluguel-XYZ", 10);
+      linha("e2", bancoE2, "cc3000", "pc3.02.02", f2.energia * fator, "Energia-XYZ", 15);
+      linha("e2", bancoE2, "cc3000", "pc3.02.03", f2.sistemas * fator, "Sistemas-XYZ", 20);
+      linha("e2", bancoE2, "cc3000", "pc3.04", f2.diversas * fator, "Diversas-XYZ", 20);
+      linha("e2", bancoE2, "cc3000", "pc4.03", f2.tarifas * fator, "Tarifas-XYZ", 25);
 
       // Financeiro: pequena receita financeira (rendimento da aplicação) e juros ocasionais.
       gerarRealizado({ empresaId: "e1", unidadeId: "u1", contaGerencialId: "pc4.01", centroCustoId: "cc1100", tipo: "Entrada", tipoParceiro: null, parceiroId: null, bancoId: "b2", contaBancariaId: "cb3", valor: uniforme(800, 1800) * fator, prazoDias: 0, documento: `Rend-${inicioMes.slice(0, 7)}` });

@@ -5,6 +5,7 @@
 import lancamentosImportadosRaw from "./lancamentosImportados.json" with { type: "json" };
 import clientesImportados from "./clientesImportados.json" with { type: "json" };
 import fornecedoresImportados from "./fornecedoresImportados.json" with { type: "json" };
+import orcamentoItensGerados from "./orcamentoItensGerados.json" with { type: "json" };
 
 // DRE/DFC/Tesouraria/Fluxo de Caixa/Contas a Pagar/Receber são módulos de
 // FATO: sempre o "hoje" real do dispositivo, nunca uma data fixa. O dado real
@@ -274,4 +275,6 @@ export const demoContasBancarias = demoContasBancariasBase;
 // orçamento sintético pré-existente (792 itens cobrindo os 12 meses de
 // toda conta orçável — quase qualquer linha real de um orçamento de
 // verdade ia bater "duplicada" contra algum desses).
-export const demoOrcamentoItens = [];
+// Etapa 1B (2026-11-06): orçamento sintético coerente com o Realizado (±10-15%),
+// gerado por scripts/regenerar-1a.mjs em src/data/orcamentoItensGerados.json.
+export const demoOrcamentoItens = orcamentoItensGerados;

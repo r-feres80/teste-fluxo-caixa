@@ -135,3 +135,28 @@ fix-sweeplog-carregar-demo):**
   indeterminado. `carregarDemo`, `limparBase` e `resetarTudo` agora
   resetam esse ref também, pra o sweep poder reavaliar e disparar de
   novo na mesma sessão, sem exigir reload.
+
+## Coordenação dos funcionários de IA
+
+A sessão principal do Claude Code é o coordenador do projeto. Os subagentes são especialistas sob demanda, não executores autônomos.
+
+### Fluxo obrigatório
+1. **Requisitos financeiros:** consultar `esqueletofinanceiro.md` como referência principal do modelo de dados e `CLAUDE.md` para regras permanentes. Acionar `especialista-financeiro` quando houver dúvida ou impacto sobre regras de negócio.
+2. **Planejamento:** avaliar arquivos afetados, dependências, riscos e critérios de aceitação antes de implementar mudanças relevantes. Acionar `cto` para planejamento técnico, decisões de arquitetura e revisão do plano quando necessário (o `cto` não implementa).
+3. **Desenvolvimento:** executar somente o escopo autorizado, preferindo alterações pequenas e verificáveis. Quando delegado, a implementação e os testes autorizados ficam com o `desenvolvedor`, que não aprova sozinho a própria entrega.
+4. **Validação:** executar os testes pertinentes e depois acionar `revisor-qualidade` para uma revisão independente, somente leitura.
+5. **Conclusão:** apresentar o que mudou, verificações executadas, problemas encontrados e pendências antes de solicitar autorização para a próxima etapa.
+
+O agente `arquiteto-desenvolvedor` está descontinuado (legado); não acioná-lo. Usar `cto` e `desenvolvedor` no lugar dele.
+
+### Limites operacionais
+- Usar no máximo um subagente por vez, considerando o notebook com 8 GB de RAM.
+- Não iniciar agentes em paralelo, não delegar recursivamente e não usar swarm ou hive-mind.
+- Não utilizar `agent_spawn` ou `agent_execute` do Ruflo neste fluxo inicial.
+- Não instalar dependências, alterar variáveis secretas, fazer commit, push ou deploy sem autorização expressa.
+- Não corrigir testes ou indicadores apenas para eliminar alertas; investigar a causa raiz.
+- Não acessar arquivos fora de `D:\MiniERP` sem autorização.
+- Não criar sistemas de memória adicionais. Usar a documentação do projeto como referência persistente.
+
+### Prioridade atual
+Restaurar o Mini ERP existente na Vercel por meio de uma implantação de pré-visualização validada, antes de promover a versão para produção. A regressão relacionada às datas fixas dos dados demonstrativos permanece como pendência a ser tratada posteriormente.
