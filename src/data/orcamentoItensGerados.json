@@ -1,0 +1,3722 @@
+[
+  {
+    "id": "orc-e1-pc1.01.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": 178349
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.01.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": 56754
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc1.02.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc1.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -18840
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -64426
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc2.01.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -17199
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -32966
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -9157
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.01.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -5729
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -10450
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -3166
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.02.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -2869
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -7906
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.03.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.03.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -9421
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc3.04-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -2276
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": 1248
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -825
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc4.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -416
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -707
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc5.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -1513
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e1-pc6.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc6.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -11020
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc1.01.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc1.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": 108315
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -22809
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc2.01.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc2.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -5904
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -21909
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -6418
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.01.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.01.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -3207
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.01-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.01",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -7269
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.02-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.02",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -4136
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.02.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.02.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -1333
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc3.04-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc3.04",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -1782
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-0",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 0,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-1",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 1,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-2",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 2,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-3",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 3,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-4",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 4,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-5",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 5,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-6",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 6,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-7",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 7,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-8",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 8,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-9",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 9,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-10",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 10,
+    "valor": -252
+  },
+  {
+    "id": "orc-e2-pc4.03-2026-11",
+    "ano": 2026,
+    "empresaId": "e2",
+    "contaGerencialId": "pc4.03",
+    "centroCustoId": null,
+    "projetoId": null,
+    "mes": 11,
+    "valor": -252
+  }
+]
