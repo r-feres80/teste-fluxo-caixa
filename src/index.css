@@ -279,3 +279,41 @@ nav button:active { transform: scale(.97); }
 /* ── Progress / bar fills ── */
 [data-theme="dark"] .bg-violet-500 { background-color: var(--vx-blue) !important; }
 [data-theme="dark"] .bg-violet-400 { background-color: var(--vx-cyan) !important; }
+
+/* ── KPI cards on dark: glassmorphism + JetBrains Mono pop ── */
+[data-theme="dark"] .rounded-lg.shadow-sm.overflow-hidden {
+  background: linear-gradient(
+    160deg,
+    rgba(10,20,48,.9) 0%,
+    rgba(5,10,22,.85) 100%
+  ) !important;
+  border-color: var(--vx-line) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4), inset 0 1px 0 rgba(160,200,255,.06) !important;
+}
+
+/* JetBrains Mono numbers: brighter on dark */
+[data-theme="dark"] span[style*="JetBrains Mono"] {
+  color: #ddeeff !important;
+  text-shadow: 0 0 24px rgba(18,216,255,.18);
+}
+
+/* Positive tone number */
+[data-theme="dark"] .text-emerald-600 { color: #34d399 !important; }
+/* Negative tone number */
+[data-theme="dark"] .text-rose-600 { color: #fb7185 !important; }
+
+/* Panel component on dark */
+[data-theme="dark"] .rounded-lg.shadow-sm:not(.overflow-hidden) {
+  background: linear-gradient(
+    140deg,
+    rgba(10,20,48,.88) 0%,
+    rgba(5,10,22,.82) 100%
+  ) !important;
+  border-color: var(--vx-line) !important;
+}
+
+/* ── Mono font for all tabular-nums on dark ── */
+[data-theme="dark"] .tabular-nums {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace !important;
+  font-feature-settings: "tnum" 1;
+}
