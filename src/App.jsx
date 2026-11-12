@@ -392,9 +392,9 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             left: 8,
             right: 8,
             borderRadius: 8,
-            background: "rgba(255,255,255,.18)",
-            border: "1px solid rgba(255,255,255,.35)",
-            boxShadow: "0 0 16px rgba(255,255,255,.12)",
+            background: "rgba(10,108,255,.08)",
+            border: "1px solid rgba(10,108,255,.18)",
+            boxShadow: "0 0 12px rgba(10,108,255,.08)",
             transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
             zIndex: 0,
           }}
@@ -411,8 +411,8 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             left: 0,
             width: 3,
             borderRadius: "0 3px 3px 0",
-            background: "rgba(255,255,255,0.9)",
-            boxShadow: "0 0 8px rgba(255,255,255,.6)",
+            background: "linear-gradient(180deg,#7C3AED,#0A6CFF,#12D8FF)",
+            boxShadow: "0 0 8px rgba(10,108,255,.5)",
             transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
             zIndex: 1,
           }}
@@ -423,7 +423,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
         <div key={group.title}>
           <div
             className="px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest whitespace-nowrap transition-opacity duration-200"
-            style={{ opacity: expanded ? 1 : 0, color: "rgba(255,255,255,0.55)" }}
+            style={{ opacity: expanded ? 1 : 0, color: "#94a3b8" }}
           >
             {t(`group.${group.id}`)}
           </div>
@@ -444,19 +444,19 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                   onClick={() => irPara(id)}
                   className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors duration-150"
                   style={{
-                    color: active ? "#fff" : "rgba(255,255,255,0.75)",
+                    color: active ? "#0A6CFF" : "#475569",
                     background: "transparent",
                     zIndex: 1,
                   }}
                   onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.color = "#fff";
+                    if (!active) e.currentTarget.style.color = "#0A6CFF";
                     if (!expanded) {
                       const rect = e.currentTarget.getBoundingClientRect();
                       setTooltip({ id, y: rect.top + rect.height / 2 });
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                    if (!active) e.currentTarget.style.color = "#475569";
                     setTooltip(null);
                   }}
                 >
@@ -464,13 +464,13 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                     <Icon
                       size={16}
                       style={active
-                        ? { color: "#fff", filter: "drop-shadow(0 0 6px rgba(255,255,255,.8))" }
+                        ? { color: "#0A6CFF", filter: "drop-shadow(0 0 6px rgba(10,108,255,.4))" }
                         : {}}
                     />
                     {status && (
                       <span
                         className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${STATUS_DOT[status]}`}
-                        style={{ border: "1px solid #0A6CFF" }}
+                        style={{ border: "1px solid #F0F6FF" }}
                       />
                     )}
                   </span>
@@ -699,14 +699,14 @@ export default function App() {
           className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
           style={{
             width: sidebarExpanded ? 240 : 64,
-            background: "linear-gradient(160deg, #7C3AED 0%, #0A6CFF 55%, #12D8FF 100%)",
-            borderRight: "1px solid rgba(255,255,255,0.15)",
+            background: "linear-gradient(160deg, #F7F4FF 0%, #F0F6FF 55%, #EDFCFF 100%)",
+            borderRight: "1px solid #e2e8f0",
           }}
         >
           {/* Logo + toggle */}
           <div
             className="px-3 py-4 flex items-center justify-between"
-            style={{ borderBottom: "1px solid rgba(255,255,255,0.18)" }}
+            style={{ borderBottom: "1px solid #e2e8f0" }}
           >
             <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity flex-1 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0">
@@ -716,18 +716,18 @@ export default function App() {
                 className="overflow-hidden transition-opacity duration-200"
                 style={{ opacity: sidebarExpanded ? 1 : 0 }}
               >
-                <div className="font-semibold text-sm leading-none whitespace-nowrap" style={{ color: "#fff" }}>{APP_NAME}</div>
-                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.38)" }}>{t("chrome.subtitle")}</div>
+                <div className="font-semibold text-sm leading-none whitespace-nowrap" style={{ color: "#1e293b" }}>{APP_NAME}</div>
+                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "#94a3b8" }}>{t("chrome.subtitle")}</div>
               </div>
             </button>
             {/* Botão toggle */}
             <button
               onClick={() => setSidebarExpanded((v) => !v)}
               className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
-              style={{ color: "rgba(255,255,255,0.3)" }}
+              style={{ color: "#cbd5e1" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.08)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.background = "transparent"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#0A6CFF"; e.currentTarget.style.background = "rgba(10,108,255,0.08)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "#cbd5e1"; e.currentTarget.style.background = "transparent"; }}
             >
               <ChevronLeft
                 size={14}
@@ -741,9 +741,9 @@ export default function App() {
 
           <div
             className="px-3 py-3"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
+            style={{ borderTop: "1px solid #e2e8f0" }}
           >
-            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "rgba(255,255,255,0.6)" }}>
+            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "#94a3b8" }}>
               <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-400" : ""}`} />
               <span
                 className="whitespace-nowrap truncate transition-opacity duration-200"
