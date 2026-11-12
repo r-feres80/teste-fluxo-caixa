@@ -199,11 +199,11 @@ function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = fals
 // Faixa "Insight do dia" — frase curta derivada localmente do Resumo
 // Executivo (mesmos alertas do Dashboard), sem chamada externa.
 function InsightDoDia({ texto, tone }) {
-  const iconColor = tone === "red" ? "#fca5a5" : tone === "amber" ? "#fcd34d" : "#6ee7b7";
+  const iconColor = tone === "red" ? "#DC2626" : tone === "amber" ? "#D97706" : "#059669";
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 12, padding: "10px 16px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFF", border: "1px solid #DBE4FF", borderRadius: 12, padding: "10px 16px" }}>
       <Lightbulb size={18} style={{ color: iconColor, flexShrink: 0 }} />
-      <span style={{ fontSize: 16, color: "rgba(255,255,255,0.92)", lineHeight: 1.4 }}>{texto}</span>
+      <span style={{ fontSize: 16, color: "#334155", lineHeight: 1.4 }}>{texto}</span>
     </div>
   );
 }
@@ -232,19 +232,29 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
   }, [saude]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(160deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "#ffffff" }}>
       <LogoutButton onLogout={onLogout} />
 
       {/* ── Header ── */}
       <div className="flex flex-col items-center pt-10 pb-6 px-6">
         <div
           className="w-20 h-20 rounded-3xl flex items-center justify-center mb-4"
-          style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", boxShadow: "0 8px 32px rgba(0,0,0,0.2)" }}
+          style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)", boxShadow: "0 10px 30px rgba(96,165,250,0.35)" }}
         >
           <Sparkles size={36} className="text-white" />
         </div>
-        <div className="font-extrabold text-4xl text-white tracking-tight">{APP_NAME}</div>
-        <div className="text-base mt-2" style={{ color: "rgba(255,255,255,0.75)" }}>{t("chrome.tagline")}</div>
+        <div
+          className="font-extrabold text-4xl tracking-tight"
+          style={{
+            background: "linear-gradient(90deg,#A78BFA 0%,#60A5FA 55%,#22D3EE 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          {APP_NAME}
+        </div>
+        <div className="text-base mt-2 text-slate-500">{t("chrome.tagline")}</div>
       </div>
 
       {/* Insight */}
@@ -308,9 +318,9 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 340, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
+          style={{ width: 340, maxWidth: "100%", maxHeight: "42vh", objectFit: "contain" }}
         />
-        <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>CFO Bot</div>
+        <div className="text-xs font-semibold tracking-widest uppercase text-slate-400">CFO Bot</div>
       </div>
     </div>
   );

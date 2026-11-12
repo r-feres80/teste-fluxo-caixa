@@ -49,7 +49,7 @@ export default function PasswordGate({ children }) {
     // Não voltar pra altura/largura fixa — estoura de novo em tela baixa.
     <div
       className="h-screen overflow-hidden flex items-center justify-center px-4 py-6"
-      style={{ background: "linear-gradient(160deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}
+      style={{ background: "#ffffff" }}
     >
       <div className="w-full max-w-sm h-full flex flex-col items-center justify-center gap-5">
 
@@ -57,20 +57,30 @@ export default function PasswordGate({ children }) {
         <div className="flex flex-col items-center gap-2 text-center shrink-0">
           <div
             className="w-16 h-16 rounded-3xl flex items-center justify-center"
-            style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", boxShadow: "0 8px 32px rgba(0,0,0,0.2)" }}
+            style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)", boxShadow: "0 10px 30px rgba(96,165,250,0.35)" }}
           >
             <Sparkles size={30} className="text-white" />
           </div>
           <div>
-            <div className="text-white font-extrabold text-2xl tracking-tight">{APP_NAME}</div>
-            <div className="text-white/70 text-sm mt-1">{APP_TAGLINE}</div>
+            <div
+              className="font-extrabold text-2xl tracking-tight"
+              style={{
+                background: "linear-gradient(90deg,#A78BFA 0%,#60A5FA 55%,#22D3EE 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              {APP_NAME}
+            </div>
+            <div className="text-slate-500 text-sm mt-1">{APP_TAGLINE}</div>
           </div>
         </div>
 
         {/* Card de login */}
         <div
           className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
-          style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.3)", boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}
+          style={{ background: "linear-gradient(160deg,#9B9CFB 0%,#86B0FB 100%)", border: "1px solid rgba(255,255,255,0.45)", boxShadow: "0 10px 34px rgba(96,165,250,0.35)" }}
         >
           {semSenhaConfigurada ? (
             <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-900/30 border border-amber-400/40 rounded-lg px-3 py-2">
@@ -93,7 +103,7 @@ export default function PasswordGate({ children }) {
                   fontSize: "1rem",
                 }}
               />
-              {erro && <span className="text-sm text-red-200 font-medium">Senha incorreta.</span>}
+              {erro && <span className="text-sm font-semibold" style={{ color: "#7F1D1D" }}>Senha incorreta.</span>}
               <button
                 type="submit"
                 className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
@@ -111,10 +121,10 @@ export default function PasswordGate({ children }) {
           src="/cfobot.png"
           alt="CFO Bot"
           className="flex-1 min-h-0 w-auto max-w-full object-contain"
-          style={{ maxHeight: 420, filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
+          style={{ maxHeight: 420 }}
         />
 
-        <p className="text-white/40 text-xs text-center shrink-0">
+        <p className="text-slate-400 text-xs text-center shrink-0">
           Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
