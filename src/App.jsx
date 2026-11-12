@@ -264,14 +264,14 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
               <button
                 key={group.id}
                 onClick={() => onSelect(firstId)}
-                className="rounded-2xl flex flex-col items-center justify-center gap-3 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98] shrink-0"
+                className="rounded-2xl flex flex-col items-center justify-center gap-4 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98] shrink-0"
                 style={{
                   background: cfg.bg,
                   boxShadow: `0 6px 28px ${cfg.bg}66`,
                   animation: `vxFadeUp 350ms ${gi * 60}ms both`,
-                  minHeight: 200,
-                  width: 190,
-                  padding: "28px 16px",
+                  minHeight: 260,
+                  width: 230,
+                  padding: "32px 20px",
                 }}
               >
                 {alertas > 0 && (
@@ -279,19 +279,19 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
                     {alertas}
                   </span>
                 )}
-                <TileIcon size={48} strokeWidth={1.4} className="opacity-90" />
-                <span className="font-bold text-sm text-center leading-tight opacity-95">
+                <TileIcon size={52} strokeWidth={1.3} className="opacity-90" />
+                <span className="font-bold text-base text-center leading-snug opacity-95">
                   {t(`group.${group.id}`)}
                 </span>
-                <div className="flex flex-wrap gap-1 justify-center mt-1">
+                <div className="flex flex-wrap gap-1.5 justify-center">
                   {group.ids.map((id) => (
                     <span
                       key={id}
                       onClick={(e) => { e.stopPropagation(); onSelect(id); }}
-                      className="text-[10px] px-2 py-0.5 rounded-full cursor-pointer transition-colors font-medium"
-                      style={{ background: "rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.95)" }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.38)"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.22)"}
+                      className="text-[12px] px-3 py-1 rounded-full cursor-pointer transition-colors font-semibold"
+                      style={{ background: "rgba(255,255,255,0.25)", color: "#fff" }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.42)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
                     >
                       {t(`nav.${id}`)}
                     </span>
@@ -308,7 +308,7 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 120, objectFit: "contain", filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.15))" }}
+          style={{ width: 160, objectFit: "contain", filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.18))" }}
         />
         <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#94a3b8" }}>CFO Bot</div>
       </div>
