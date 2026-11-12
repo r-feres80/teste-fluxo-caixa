@@ -53,7 +53,7 @@ function SparklineCambio({ dias }) {
         <YAxis hide domain={["dataMin", "dataMax"]} />
         <ReferenceLine y={media} stroke="#cbd5e1" strokeDasharray="2 2" />
         <Tooltip content={<TooltipSparklineCambio />} cursor={{ stroke: "#cbd5e1", strokeDasharray: "2 2" }} />
-        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} activeDot={{ r: 4 }} isAnimationActive={false} />
+        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} activeDot={{ r: 4 }} isAnimationActive animationBegin={100} animationDuration={800} animationEasing="ease-out" />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -132,6 +132,8 @@ function CambioMoeda({ nome, d }) {
 export default function TesourariaPage({ data }) {
   const { entidades, filtros } = data;
   const hoje = getDataAtualSistema();
+  // Chave que muda a cada montagem — força Recharts a re-animar do zero
+  const [animKey] = React.useState(() => Date.now());
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
   const { carregando: cambioCarregando, dados: cambioDados } = useCambio();
 
@@ -285,9 +287,9 @@ export default function TesourariaPage({ data }) {
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
               <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
-              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
-              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} key={`a-${animKey}`} isAnimationActive animationBegin={100} animationDuration={700} animationEasing="ease-out" />
+              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} key={`b-${animKey}`} isAnimationActive animationBegin={150} animationDuration={750} animationEasing="ease-out" />
+              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} key={`c-${animKey}`} isAnimationActive animationBegin={200} animationDuration={800} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
@@ -299,9 +301,9 @@ export default function TesourariaPage({ data }) {
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
               <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
-              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
-              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} />
+              <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} key={`ma-${animKey}`} isAnimationActive animationBegin={100} animationDuration={700} animationEasing="ease-out" />
+              <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} key={`mb-${animKey}`} isAnimationActive animationBegin={150} animationDuration={750} animationEasing="ease-out" />
+              <Bar dataKey="atrasado" name="Atrasado" stackId="c" fill={CORES_COMPOSICAO.atrasado} radius={[3, 3, 0, 0]} key={`mc-${animKey}`} isAnimationActive animationBegin={200} animationDuration={800} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>
         </Panel>

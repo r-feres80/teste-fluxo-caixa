@@ -85,6 +85,9 @@ export default function DashboardPage({ data }) {
   const { entidades, filtros, parametros } = data;
   const { t } = useLanguage();
 
+  // Chave que muda a cada montagem — força Recharts a re-animar do zero
+  const [animKey] = React.useState(() => Date.now());
+
   const resumo = useMemo(
     () => construirResumoExecutivo({ entidades, filtros, parametros }),
     [entidades, filtros, parametros]
@@ -207,8 +210,8 @@ export default function DashboardPage({ data }) {
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
             <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
             <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
-            <Bar dataKey="base" stackId="wf" fill="transparent" />
-            <Bar dataKey="delta" stackId="wf" radius={[3, 3, 3, 3]}>
+            <Bar dataKey="base" stackId="wf" fill="transparent" isAnimationActive={false} />
+            <Bar dataKey="delta" stackId="wf" radius={[3, 3, 3, 3]} key={animKey} isAnimationActive animationBegin={150} animationDuration={700} animationEasing="ease-out">
               {waterfallData.map((d, i) => <Cell key={i} fill={COR_WATERFALL[d.cor]} />)}
               <LabelList dataKey="valorReal" position="top" formatter={fmtBRLShort} style={{ fontSize: 11, fill: "#475569" }} />
             </Bar>
@@ -260,7 +263,7 @@ export default function DashboardPage({ data }) {
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} domain={["dataMin", "dataMax"]} />
               <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
               <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
-              <Area type="monotone" dataKey="saldo" stroke="#10b981" fill="url(#gradDash)" strokeWidth={1.75} />
+              <Area type="monotone" dataKey="saldo" stroke="#10b981" fill="url(#gradDash)" strokeWidth={1.75} key={animKey} isAnimationActive animationBegin={100} animationDuration={900} animationEasing="ease-out" />
             </AreaChart>
           </ResponsiveContainer>
         </Panel>
@@ -270,7 +273,7 @@ export default function DashboardPage({ data }) {
               <XAxis type="number" stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
               <YAxis type="category" dataKey="nome" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} width={90} />
               <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" fill="#f43f5e" radius={[0, 3, 3, 0]} />
+              <Bar dataKey="valor" fill="#f43f5e" radius={[0, 3, 3, 0]} key={animKey} isAnimationActive animationBegin={200} animationDuration={750} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
