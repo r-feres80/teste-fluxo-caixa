@@ -359,13 +359,13 @@ function SidebarNav({ view, irPara, saude, expanded }) {
         <div key={group.title}>
           {/* Separador entre grupos */}
           {gi > 0 && (
-            <div style={{ height: 1, margin: "6px 12px", background: "rgba(255,255,255,0.25)" }} />
+            <div style={{ height: 1, margin: "6px 12px", background: "#E7EAF3" }} />
           )}
           {/* Label do grupo */}
           {expanded && (
             <div
               className="px-4 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest whitespace-nowrap"
-              style={{ color: "rgba(255,255,255,0.75)" }}
+              style={{ color: "#94A3B8" }}
             >
               {t(`group.${group.id}`)}
             </div>
@@ -383,12 +383,12 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                   onClick={() => irPara(id)}
                   className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-150"
                   style={{
-                    color: "rgba(255,255,255,0.95)",
-                    background: active ? "rgba(255,255,255,0.18)" : "transparent",
-                    boxShadow: active ? "inset 0 0 0 1px rgba(255,255,255,0.25)" : "none",
+                    color: active ? "#0A6CFF" : "#475569",
+                    background: active ? "#EEF3FF" : "transparent",
+                    boxShadow: active ? "inset 0 0 0 1px #D6E2FF" : "none",
                   }}
                   onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.10)";
+                    if (!active) e.currentTarget.style.background = "#F4F6FB";
                     if (!expanded) {
                       const rect = e.currentTarget.getBoundingClientRect();
                       setTooltip({ id, y: rect.top + rect.height / 2 });
@@ -406,8 +406,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                       style={{
                         width: 3, height: 20,
                         borderRadius: "0 3px 3px 0",
-                        background: "#fff",
-                        opacity: 0.9,
+                        background: "linear-gradient(180deg,#A78BFA,#0A6CFF)",
                       }}
                     />
                   )}
@@ -416,7 +415,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                     {status && (
                       <span
                         className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${STATUS_DOT[status]}`}
-                        style={{ border: "1px solid rgba(255,255,255,0.3)" }}
+                        style={{ border: "1px solid #ffffff" }}
                       />
                     )}
                   </span>
@@ -644,35 +643,35 @@ export default function App() {
           className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
           style={{
             width: sidebarExpanded ? 240 : 64,
-            background: "linear-gradient(180deg, #7C3AED 0%, #0A6CFF 55%, #12D8FF 100%)",
-            borderRight: "none",
+            background: "#ffffff",
+            borderRight: "1px solid #E7EAF3",
           }}
         >
           {/* Logo + toggle */}
           <div
             className="px-3 py-4 flex items-center justify-between"
-            style={{ borderBottom: "1px solid rgba(255,255,255,0.15)" }}
+            style={{ borderBottom: "1px solid #E7EAF3" }}
           >
             <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-90 transition-opacity flex-1 min-w-0">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(4px)" }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}>
                 <Sparkles size={15} className="text-white" />
               </div>
               <div
                 className="overflow-hidden transition-opacity duration-200"
                 style={{ opacity: sidebarExpanded ? 1 : 0 }}
               >
-                <div className="font-bold text-sm leading-none whitespace-nowrap text-white">{APP_NAME}</div>
-                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.6)" }}>{t("chrome.subtitle")}</div>
+                <div className="font-bold text-sm leading-none whitespace-nowrap text-slate-800">{APP_NAME}</div>
+                <div className="text-[10px] mt-0.5 whitespace-nowrap text-slate-400">{t("chrome.subtitle")}</div>
               </div>
             </button>
             {/* Botão toggle */}
             <button
               onClick={() => setSidebarExpanded((v) => !v)}
               className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
-              style={{ color: "rgba(255,255,255,0.75)" }}
+              style={{ color: "#94A3B8" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#0A6CFF"; e.currentTarget.style.background = "#EEF2FF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.background = "transparent"; }}
             >
               <ChevronLeft
                 size={14}
@@ -685,28 +684,27 @@ export default function App() {
           <SidebarNav view={view} irPara={irPara} saude={saude} expanded={sidebarExpanded} />
 
           {/* ── Mascote ── */}
-          <div className="flex flex-col items-center py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+          <div className="flex flex-col items-center py-3" style={{ borderTop: "1px solid #E7EAF3" }}>
             <img
               src="/cfobot.png"
               alt="CFO Bot"
-              className="transition-all duration-300 drop-shadow-xl"
+              className="transition-all duration-300"
               style={{
                 width: sidebarExpanded ? 100 : 44,
                 height: sidebarExpanded ? 100 : 44,
                 objectFit: "contain",
-                filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.3))",
               }}
             />
             {sidebarExpanded && (
-              <div className="text-[10px] mt-1.5 font-semibold tracking-wider uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>CFO Bot</div>
+              <div className="text-[10px] mt-1.5 font-semibold tracking-wider uppercase text-slate-400">CFO Bot</div>
             )}
           </div>
 
           <div
             className="px-3 py-2"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
+            style={{ borderTop: "1px solid #E7EAF3" }}
           >
-            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <div className="flex items-center gap-2 text-[11px] overflow-hidden text-slate-400">
               <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-400" : ""}`} />
               <span
                 className="whitespace-nowrap truncate transition-opacity duration-200"
