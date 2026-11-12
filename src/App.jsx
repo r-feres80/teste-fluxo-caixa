@@ -252,9 +252,9 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         <InsightDoDia texto={insight} tone={insightTone} />
       </div>
 
-      {/* ── Grid Omie ── */}
-      <div className="flex-1 px-8 pb-10">
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20, maxWidth: 1100, margin: "0 auto" }}>
+      {/* ── Grid Omie — 5 tiles em fila horizontal ── */}
+      <div className="flex-1 px-6 pb-6">
+        <div style={{ display: "flex", justifyContent: "center", gap: 16, overflowX: "auto", paddingBottom: 4 }}>
           {ICON_GROUPS.map((group, gi) => {
             const cfg = GROUP_TILE_CFG[group.id] ?? { bg: "#64748b", Icon: LayoutGrid };
             const TileIcon = cfg.Icon;
@@ -264,15 +264,14 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
               <button
                 key={group.id}
                 onClick={() => onSelect(firstId)}
-                className="rounded-2xl flex flex-col items-center justify-center gap-3 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98]"
+                className="rounded-2xl flex flex-col items-center justify-center gap-3 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98] shrink-0"
                 style={{
                   background: cfg.bg,
                   boxShadow: `0 6px 28px ${cfg.bg}66`,
                   animation: `vxFadeUp 350ms ${gi * 60}ms both`,
-                  minHeight: 220,
-                  width: "calc(33.333% - 14px)",
-                  minWidth: 240,
-                  padding: "32px 20px",
+                  minHeight: 200,
+                  width: 190,
+                  padding: "28px 16px",
                 }}
               >
                 {alertas > 0 && (
@@ -280,17 +279,16 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
                     {alertas}
                   </span>
                 )}
-                <TileIcon size={52} strokeWidth={1.4} className="opacity-90" />
-                <span className="font-bold text-base text-center leading-tight opacity-95">
+                <TileIcon size={48} strokeWidth={1.4} className="opacity-90" />
+                <span className="font-bold text-sm text-center leading-tight opacity-95">
                   {t(`group.${group.id}`)}
                 </span>
-                {/* Sub-itens como chips clicáveis */}
-                <div className="flex flex-wrap gap-1.5 justify-center mt-1">
+                <div className="flex flex-wrap gap-1 justify-center mt-1">
                   {group.ids.map((id) => (
                     <span
                       key={id}
                       onClick={(e) => { e.stopPropagation(); onSelect(id); }}
-                      className="text-[11px] px-2.5 py-1 rounded-full cursor-pointer transition-colors font-medium"
+                      className="text-[10px] px-2 py-0.5 rounded-full cursor-pointer transition-colors font-medium"
                       style={{ background: "rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.95)" }}
                       onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.38)"}
                       onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.22)"}
@@ -303,6 +301,16 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
             );
           })}
         </div>
+      </div>
+
+      {/* ── Mascote centralizado ── */}
+      <div className="flex flex-col items-center pb-8 gap-1">
+        <img
+          src="/cfobot.png"
+          alt="CFO Bot"
+          style={{ width: 120, objectFit: "contain", filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.15))" }}
+        />
+        <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#94a3b8" }}>CFO Bot</div>
       </div>
     </div>
   );
@@ -341,13 +349,13 @@ function SidebarNav({ view, irPara, saude, expanded }) {
         <div key={group.title}>
           {/* Separador entre grupos */}
           {gi > 0 && (
-            <div style={{ height: 1, margin: "6px 12px", background: "rgba(255,255,255,0.15)" }} />
+            <div style={{ height: 1, margin: "6px 12px", background: "rgba(255,255,255,0.25)" }} />
           )}
           {/* Label do grupo */}
           {expanded && (
             <div
               className="px-4 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest whitespace-nowrap"
-              style={{ color: "rgba(255,255,255,0.5)" }}
+              style={{ color: "rgba(255,255,255,0.75)" }}
             >
               {t(`group.${group.id}`)}
             </div>
@@ -394,7 +402,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                     />
                   )}
                   <span className="relative shrink-0">
-                    <Icon size={16} style={{ opacity: active ? 1 : 0.75 }} />
+                    <Icon size={16} style={{ opacity: active ? 1 : 0.92 }} />
                     {status && (
                       <span
                         className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${STATUS_DOT[status]}`}
@@ -403,8 +411,8 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                     )}
                   </span>
                   <span
-                    className="whitespace-nowrap truncate font-medium transition-opacity duration-200"
-                    style={{ opacity: expanded ? 1 : 0, pointerEvents: expanded ? "auto" : "none", fontWeight: active ? 600 : 400 }}
+                    className="whitespace-nowrap truncate transition-opacity duration-200"
+                    style={{ opacity: expanded ? 1 : 0, pointerEvents: expanded ? "auto" : "none", fontWeight: active ? 700 : 500, fontSize: "0.8125rem", letterSpacing: "0.01em" }}
                   >
                     {label}
                   </span>
@@ -651,7 +659,7 @@ export default function App() {
             <button
               onClick={() => setSidebarExpanded((v) => !v)}
               className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
-              style={{ color: "rgba(255,255,255,0.5)" }}
+              style={{ color: "rgba(255,255,255,0.75)" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
               onMouseEnter={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent"; }}
