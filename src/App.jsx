@@ -509,6 +509,17 @@ export default function App() {
   );
   const saude = useMemo(() => calcularSaudeModulos(resumo), [resumo]);
 
+  // Header: alertas e grupo atual — devem ficar ANTES de qualquer return
+  // condicional para não violar as Rules of Hooks.
+  const totalAlertas = useMemo(
+    () => Object.values(saude).filter((s) => s === "red" || s === "amber").length,
+    [saude]
+  );
+  const grupoAtual = useMemo(
+    () => ICON_GROUPS.find((g) => g.ids.includes(view)),
+    [view]
+  );
+
   // Navegação instrumentada: toda troca de tela (landing, sidebar ou modo
   // ícones) conta como acesso ao módulo, para a ordenação adaptativa da landing.
   const irPara = (id) => {
@@ -547,18 +558,6 @@ export default function App() {
 
   const navAtivo = NAV.find((n) => n.id === view);
   const tituloAtual = t(`nav.${navAtivo?.id ?? "governanca"}`);
-
-  // Conta alertas ativos (red + amber) para o badge no header
-  const totalAlertas = useMemo(
-    () => Object.values(saude).filter((s) => s === "red" || s === "amber").length,
-    [saude]
-  );
-
-  // Grupo ao qual a tela atual pertence — para breadcrumb
-  const grupoAtual = useMemo(
-    () => ICON_GROUPS.find((g) => g.ids.includes(view)),
-    [view]
-  );
 
   const conteudo = (
     <>
