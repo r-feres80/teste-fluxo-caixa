@@ -462,12 +462,68 @@ export default function App() {
   const navAtivo = NAV.find((n) => n.id === view);
   const tituloAtual = t(`nav.${navAtivo?.id ?? "governanca"}`);
 
+  // Conta alertas ativos (red + amber) para o badge no header
+  const totalAlertas = useMemo(
+    () => Object.values(saude).filter((s) => s === "red" || s === "amber").length,
+    [saude]
+  );
+
+  // Grupo ao qual a tela atual pertence — para breadcrumb
+  const grupoAtual = useMemo(
+    () => ICON_GROUPS.find((g) => g.ids.includes(view)),
+    [view]
+  );
+
   const conteudo = (
     <>
-      <header className="border-b border-slate-200 bg-white px-8 py-4 flex flex-col gap-3">
-        <h1 className="text-slate-900 font-semibold text-lg tracking-tight">{tituloAtual}</h1>
-        <GlobalFilterBar filtros={appData.filtros} empresas={appData.entidades.empresas} unidades={appData.entidades.unidades} updateFiltros={appData.updateFiltros} mostrarPeriodo={!NAV_FATO.has(view)} />
+      <header className="border-b border-slate-200 bg-white px-6 py-0 flex items-center gap-4 h-14">
+        {/* breadcrumb */}
+        <div className="flex items-center gap-1.5 text-sm flex-1 min-w-0">
+          {grupoAtual && (
+            <>
+              <span className="text-slate-400 truncate hidden sm:block">{t(`group.${grupoAtual.id}`)}</span>
+              <span className="text-slate-300 hidden sm:block">/</span>
+            </>
+          )}
+          <span className="text-slate-800 font-semibold truncate">{tituloAtual}</span>
+        </div>
+
+        {/* badge de alertas */}
+        {totalAlertas > 0 && (
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shrink-0"
+            style={{
+              background: "rgba(220,38,38,.12)",
+              border: "1px solid rgba(220,38,38,.25)",
+              color: "#fb7185",
+            }}
+            title={`${totalAlertas} módulo${totalAlertas > 1 ? "s" : ""} com alerta`}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"
+            />
+            {totalAlertas}
+          </div>
+        )}
+
+        {/* avatar com iniciais */}
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 select-none"
+          style={{
+            background: "linear-gradient(140deg,#0A6CFF,#12D8FF)",
+            color: "#fff",
+            boxShadow: "0 0 12px rgba(10,108,255,.35)",
+          }}
+          title="Velmetryx"
+        >
+          CF
+        </div>
       </header>
+
+      {/* filter bar separada — linha própria abaixo do header */}
+      <div className="border-b border-slate-200 bg-white px-6 py-2.5">
+        <GlobalFilterBar filtros={appData.filtros} empresas={appData.entidades.empresas} unidades={appData.entidades.unidades} updateFiltros={appData.updateFiltros} mostrarPeriodo={!NAV_FATO.has(view)} />
+      </div>
 
       <div className="p-8">
         {view === "governanca" && <GovernancaPage data={appData} />}
