@@ -42,29 +42,34 @@ export default function PasswordGate({ children }) {
   };
 
   return (
+    // h-screen + overflow-hidden, com o mascote em flex-1/min-h-0: a tela
+    // inteira cabe na viewport sem rolagem em qualquer altura de monitor.
+    // Antes era min-h-screen com o mascote em largura fixa (340px), o que
+    // cortava o robô em telas baixas (o notebook do usuário é 1366x768).
+    // Não voltar pra altura/largura fixa — estoura de novo em tela baixa.
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="h-screen overflow-hidden flex items-center justify-center px-4 py-6"
       style={{ background: "linear-gradient(160deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}
     >
-      <div className="w-full max-w-sm flex flex-col items-center gap-6">
+      <div className="w-full max-w-sm h-full flex flex-col items-center justify-center gap-5">
 
         {/* Logo */}
-        <div className="flex flex-col items-center gap-3 text-center">
+        <div className="flex flex-col items-center gap-2 text-center shrink-0">
           <div
-            className="w-20 h-20 rounded-3xl flex items-center justify-center"
+            className="w-16 h-16 rounded-3xl flex items-center justify-center"
             style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", boxShadow: "0 8px 32px rgba(0,0,0,0.2)" }}
           >
-            <Sparkles size={36} className="text-white" />
+            <Sparkles size={30} className="text-white" />
           </div>
           <div>
-            <div className="text-white font-extrabold text-3xl tracking-tight">{APP_NAME}</div>
-            <div className="text-white/70 text-base mt-1">{APP_TAGLINE}</div>
+            <div className="text-white font-extrabold text-2xl tracking-tight">{APP_NAME}</div>
+            <div className="text-white/70 text-sm mt-1">{APP_TAGLINE}</div>
           </div>
         </div>
 
         {/* Card de login */}
         <div
-          className="w-full rounded-2xl p-7 flex flex-col gap-4"
+          className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
           style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.3)", boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}
         >
           {semSenhaConfigurada ? (
@@ -100,14 +105,16 @@ export default function PasswordGate({ children }) {
           )}
         </div>
 
-        {/* Mascote centralizado abaixo do login */}
+        {/* Mascote centralizado abaixo do login — flex-1/min-h-0 faz ele
+            encolher pro espaço que sobra, sem nunca estourar a viewport */}
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 340, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
+          className="flex-1 min-h-0 w-auto max-w-full object-contain"
+          style={{ maxHeight: 420, filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
         />
 
-        <p className="text-white/40 text-xs text-center">
+        <p className="text-white/40 text-xs text-center shrink-0">
           Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
