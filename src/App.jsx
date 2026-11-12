@@ -269,10 +269,14 @@ function grupoDoId(id) {
 
 // Sidebar com hover-expand: ícones sempre visíveis (w-16), texto aparece ao hover (w-60).
 // Grupos mostrados como separadores finos; sem accordion — todos os itens sempre visíveis.
+// Tooltip flutuante aparece no modo colapsado (ícone-only); indicador lateral animado no ativo.
 function SidebarNav({ view, irPara, saude }) {
   const { t } = useLanguage();
+  const [tooltip, setTooltip] = React.useState(null); // { id, y }
+  const sidebarRef = React.useRef(null);
+
   return (
-    <nav className="flex-1 py-2 overflow-y-auto overflow-x-hidden">
+    <nav ref={sidebarRef} className="flex-1 py-2 overflow-y-auto overflow-x-hidden relative">
       {ICON_GROUPS.map((group) => (
         <div key={group.title}>
           {/* cabeçalho do grupo — só aparece quando expandido */}
@@ -285,21 +289,75 @@ function SidebarNav({ view, irPara, saude }) {
             const Icon = item.icon;
             const active = view === id;
             const status = saude?.[id];
+            const label = t(`nav.${id}`);
             return (
-              <button key={id} onClick={() => irPara(id)} title={t(`nav.${id}`)}
-                className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${active ? "bg-violet-50 text-violet-700 border-r-2 border-violet-600" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
+              <button
+                key={id}
+                onClick={() => irPara(id)}
+                onMouseEnter={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setTooltip({ id, y: rect.top + rect.height / 2 });
+                }}
+                onMouseLeave={() => setTooltip(null)}
+                className={`relative w-full flex items-center gap-3 px-4 py-2 text-sm transition-all duration-200
+                  ${active
+                    ? "text-blue-400 bg-transparent"
+                    : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
+                  }`}
+              >
+                {/* indicador lateral animado */}
+                <span
+                  className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full transition-all duration-300 ease-out"
+                  style={{
+                    width: active ? 3 : 0,
+                    height: active ? 20 : 0,
+                    background: "linear-gradient(180deg,#0A6CFF,#12D8FF)",
+                    boxShadow: active ? "0 0 8px rgba(10,108,255,.7)" : "none",
+                    opacity: active ? 1 : 0,
+                  }}
+                />
                 <span className="relative shrink-0">
-                  <Icon size={16} />
+                  <Icon size={16} className={active ? "drop-shadow-[0_0_6px_rgba(18,216,255,.5)]" : ""} />
                   {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
                 </span>
-                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate">
-                  {t(`nav.${id}`)}
+                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate font-medium">
+                  {label}
                 </span>
               </button>
             );
           })}
         </div>
       ))}
+
+      {/* Tooltip flutuante — aparece só no modo colapsado (ícone-only) */}
+      {tooltip && (
+        <div
+          className="pointer-events-none fixed z-[200] group-hover/sidebar:hidden"
+          style={{ top: tooltip.y, left: 68, transform: "translateY(-50%)" }}
+        >
+          <div
+            className="px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap"
+            style={{
+              background: "#0B1C39",
+              color: "#F3F7FF",
+              border: "1px solid rgba(160,200,255,.18)",
+              boxShadow: "0 4px 16px rgba(0,0,0,.5)",
+            }}
+          >
+            {tooltip.id && t(`nav.${tooltip.id}`)}
+            <span
+              className="absolute right-full top-1/2 -translate-y-1/2"
+              style={{
+                borderTop: "5px solid transparent",
+                borderBottom: "5px solid transparent",
+                borderRight: "5px solid #0B1C39",
+                display: "block",
+                width: 0,
+              }}
+            />
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
