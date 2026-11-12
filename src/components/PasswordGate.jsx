@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Lock, AlertTriangle } from "lucide-react";
+import { Sparkles, AlertTriangle } from "lucide-react";
 import { APP_NAME, APP_TAGLINE } from "../config/appConfig.js";
-import { inputCls } from "./ui/Primitives.jsx";
 
 // ---------------------------------------------------------------------
 // REMENDO TEMPORÁRIO — proteção por senha única e compartilhada (não é
@@ -70,40 +69,83 @@ export default function PasswordGate({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-white border border-slate-200 rounded-lg shadow-sm p-6 flex flex-col gap-4">
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"><Lock size={18} className="text-slate-500" /></div>
-          <div>
-            <div className="text-slate-900 font-semibold text-sm">{APP_NAME}</div>
-            <div className="text-slate-400 text-[11px] mt-0.5">{APP_TAGLINE}</div>
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ background: "linear-gradient(160deg, #a78bfa 0%, #60a5fa 55%, #67e8f9 100%)" }}
+    >
+      <div className="w-full max-w-sm flex flex-col items-center gap-6">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div
+            className="w-20 h-20 rounded-3xl flex items-center justify-center"
+            style={{
+              background: "rgba(255,255,255,0.2)",
+              backdropFilter: "blur(8px)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+            }}
+          >
+            <Sparkles size={36} className="text-white" />
           </div>
+          <div className="text-white font-extrabold text-3xl tracking-tight">{APP_NAME}</div>
+          <div className="text-white/70 text-base mt-1">{APP_TAGLINE}</div>
         </div>
 
-        {semSenhaConfigurada ? (
-          <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
-            <AlertTriangle size={15} className="mt-0.5 shrink-0" />
-            <span>Senha de acesso não configurada (VITE_APP_PASSWORD ausente neste build). Contate quem administra o projeto.</span>
-          </div>
-        ) : (
-          <form onSubmit={tentar} className="flex flex-col gap-3">
-            <input
-              type="password"
-              autoFocus
-              value={senha}
-              onChange={(e) => { setSenha(e.target.value); setErro(false); }}
-              placeholder="Senha de acesso"
-              className={inputCls}
-            />
-            {erro && <span className="text-xs text-rose-600">Senha incorreta.</span>}
-            <button type="submit" className="px-4 py-2 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium">
-              Entrar
-            </button>
-          </form>
-        )}
+        {/* Form card */}
+        <div
+          className="w-full rounded-2xl p-7 flex flex-col gap-4"
+          style={{
+            background: "rgba(255,255,255,0.15)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(255,255,255,0.3)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
+          }}
+        >
+          {semSenhaConfigurada ? (
+            <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+              <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+              <span>Senha de acesso não configurada (VITE_APP_PASSWORD ausente neste build). Contate quem administra o projeto.</span>
+            </div>
+          ) : (
+            <form onSubmit={tentar} className="flex flex-col gap-4">
+              <input
+                type="password"
+                autoFocus
+                value={senha}
+                onChange={(e) => { setSenha(e.target.value); setErro(false); }}
+                placeholder="Senha de acesso"
+                className="w-full px-4 py-3 rounded-xl text-base outline-none"
+                style={{
+                  background: "rgba(255,255,255,0.9)",
+                  border: erro ? "2px solid #f43f5e" : "2px solid transparent",
+                  color: "#1e293b",
+                  fontSize: "1rem",
+                }}
+              />
+              {erro && <span className="text-xs text-rose-200 -mt-2">Senha incorreta.</span>}
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: "rgba(255,255,255,0.95)",
+                  color: "#0a6cff",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                }}
+              >
+                Entrar
+              </button>
+            </form>
+          )}
+        </div>
 
-        <p className="text-[10px] text-slate-300 text-center leading-snug">
-          Proteção temporária por senha única — será substituída por autenticação por usuário (Supabase) numa próxima fase.
+        {/* Robot */}
+        <img
+          src="/cfobot.png"
+          alt="CFO Bot"
+          style={{ width: 340, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
+        />
+
+        <p className="text-white/40 text-xs text-center">
+          Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
     </div>
