@@ -4,6 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Velmetryx</title>
+<script>
+(function(){
+  var k='vlm_auth', pw='cfo-teste-2026';
+  if(sessionStorage.getItem(k)===pw) return;
+  document.addEventListener('DOMContentLoaded',function(){
+    var o=document.getElementById('vlm-gate');
+    if(o) o.style.display='flex';
+    document.getElementById('vlm-app').style.display='none';
+    document.getElementById('vlm-pw-input').focus();
+    document.getElementById('vlm-pw-form').addEventListener('submit',function(e){
+      e.preventDefault();
+      var v=document.getElementById('vlm-pw-input').value;
+      if(v===pw){sessionStorage.setItem(k,pw);o.style.display='none';document.getElementById('vlm-app').style.display='';}
+      else{document.getElementById('vlm-pw-err').style.display='block';document.getElementById('vlm-pw-input').value='';document.getElementById('vlm-pw-input').focus();}
+    });
+  });
+})();
+</script>
+<style>
+#vlm-gate{display:none;position:fixed;inset:0;background:#f4f5f9;z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
+#vlm-gate .gate-card{background:#fff;border-radius:16px;padding:40px 48px;box-shadow:0 4px 32px rgba(124,58,237,0.12);display:flex;flex-direction:column;align-items:center;gap:20px;min-width:320px;}
+#vlm-gate .gate-logo{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#vlm-gate input{width:100%;padding:10px 14px;border:1.5px solid rgba(124,58,237,0.25);border-radius:8px;font-size:15px;outline:none;box-sizing:border-box;font-family:inherit;}
+#vlm-gate input:focus{border-color:#7c3aed;}
+#vlm-gate button{width:100%;padding:11px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+#vlm-gate button:hover{opacity:0.9;}
+#vlm-pw-err{color:#dc2626;font-size:13px;display:none;}
+</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -262,6 +290,19 @@ tbody td{padding:11px 14px;color:var(--fg);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
+<!-- Login Gate -->
+<div id="vlm-gate">
+  <div class="gate-card">
+    <div class="gate-logo">⬡ Velmetryx</div>
+    <form id="vlm-pw-form" style="width:100%;display:flex;flex-direction:column;gap:12px;">
+      <input id="vlm-pw-input" type="password" placeholder="Senha de acesso" autocomplete="current-password">
+      <span id="vlm-pw-err">Senha incorreta. Tente novamente.</span>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</div>
+<!-- App -->
+<div id="vlm-app">
 <div id="app">
 
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
@@ -1055,5 +1096,6 @@ tick(); setInterval(tick,30000);
 // ═══════════════════════════════════════════
 requestAnimationFrame(() => INITS.dashboard());
 </script>
+</div><!-- /vlm-app -->
 </body>
 </html>
