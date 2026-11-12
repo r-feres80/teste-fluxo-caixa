@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
-  Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut, ChevronRight, ChevronDown,
+  Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut,
   PiggyBank,
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
@@ -102,10 +102,10 @@ const ICON_GROUPS = [
 
 // Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
 const GROUP_ACCENT = {
-  "Visão Geral": "bg-emerald-500",
+  "Visão Geral": "bg-violet-600",
   "Controle de Caixa": "bg-blue-500",
   "AP/AR": "bg-amber-500",
-  "Planejamento (FP&A)": "bg-violet-500",
+  "Planejamento (FP&A)": "bg-cyan-500",
   "Dados": "bg-slate-500",
 };
 
@@ -182,13 +182,13 @@ function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = fals
         const label = t(`nav.${id}`);
         return (
           <button key={id} onClick={() => onSelect(id)} title={label}
-            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border text-center transition-colors ${ativo ? "border-emerald-300 bg-emerald-50" : "border-transparent hover:bg-slate-50 hover:border-slate-200"}${ordemMudou ? " landing-tile-reorder" : ""}`}
+            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border text-center transition-colors ${ativo ? "border-violet-300 bg-violet-50" : "border-transparent hover:bg-slate-50 hover:border-slate-200"}${ordemMudou ? " landing-tile-reorder" : ""}`}
             style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
             <div className="relative">
               <div className={`${badgeSize} flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={iconSize} /></div>
               {status && <span className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
             </div>
-            <span className={`text-[11px] leading-tight ${ativo ? "text-emerald-700 font-medium" : "text-slate-600"}`}>{label}</span>
+            <span className={`text-[11px] leading-tight ${ativo ? "text-violet-700 font-medium" : "text-slate-600"}`}>{label}</span>
           </button>
         );
       })}
@@ -220,13 +220,13 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
       <LogoutButton onLogout={onLogout} />
       <div className="w-full max-w-6xl flex flex-col gap-6">
         <div className="flex flex-col items-center text-center gap-3">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-sm"><Sparkles size={26} className="text-slate-950" /></div>
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-400 flex items-center justify-center shadow-md"><Sparkles size={26} className="text-white" /></div>
           <div>
-            <div className="text-slate-900 font-semibold text-2xl leading-tight">{APP_NAME}</div>
+            <div className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-blue-500 to-cyan-500 font-bold text-2xl leading-tight">{APP_NAME}</div>
             <div className="text-slate-400 text-sm mt-1">{t("chrome.tagline")}</div>
           </div>
           <button onClick={onVerComoLista}
-            className="mt-2 flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-700 transition-colors">
+            className="mt-2 flex items-center gap-1.5 text-sm text-slate-500 hover:text-violet-700 transition-colors">
             <List size={14} />{t("chrome.verComoLista")}
           </button>
         </div>
@@ -267,65 +267,39 @@ function grupoDoId(id) {
   return ICON_GROUPS.find((g) => g.ids.includes(id))?.title;
 }
 
-// Barra lateral em árvore Categoria → tela, mesmo padrão de expand/colapso já
-// usado em DFC Direto (Grupo → Subgrupo → Conta): cada categoria é um item
-// recolhível: clicar no cabeçalho abre/fecha, clicar numa tela dentro navega
-// direto. O grupo da tela ativa abre automaticamente ao navegar (sem fechar
-// grupos que o usuário tenha aberto manualmente) — sempre fica visível qual
-// categoria está "corrente", mesmo que o usuário tenha recolhido outras.
+// Sidebar com hover-expand: ícones sempre visíveis (w-16), texto aparece ao hover (w-60).
+// Grupos mostrados como separadores finos; sem accordion — todos os itens sempre visíveis.
 function SidebarNav({ view, irPara, saude }) {
   const { t } = useLanguage();
-  const [gruposAbertos, setGruposAbertos] = useState(() => {
-    const grupo = grupoDoId(view);
-    return new Set(grupo ? [grupo] : []);
-  });
-
-  useEffect(() => {
-    const grupo = grupoDoId(view);
-    if (!grupo) return;
-    setGruposAbertos((atual) => (atual.has(grupo) ? atual : new Set(atual).add(grupo)));
-  }, [view]);
-
-  const toggleGrupo = (title) => setGruposAbertos((atual) => {
-    const novo = new Set(atual);
-    if (novo.has(title)) novo.delete(title); else novo.add(title);
-    return novo;
-  });
-
   return (
-    <nav className="flex-1 py-2 overflow-y-auto">
-      {ICON_GROUPS.map((group) => {
-        const aberto = gruposAbertos.has(group.title);
-        const grupoAtivo = grupoDoId(view) === group.title;
-        return (
-          <div key={group.title}>
-            <button onClick={() => toggleGrupo(group.title)}
-              className={`w-full flex items-center gap-2 px-5 py-2 text-[11px] font-semibold uppercase tracking-wide transition-colors ${grupoAtivo ? "text-emerald-700" : "text-slate-400 hover:text-slate-600"}`}>
-              {aberto ? <ChevronDown size={13} className="shrink-0" /> : <ChevronRight size={13} className="shrink-0" />}
-              <span className={`w-2 h-2 rounded-full shrink-0 ${GROUP_ACCENT[group.title]}`} />
-              <span className="flex-1 text-left truncate">{t(`group.${group.id}`)}</span>
-            </button>
-
-            {aberto && group.ids.map((id) => {
-              const item = ALL_NAV_ITEMS.find((n) => n.id === id);
-              if (!item) return null;
-              const Icon = item.icon;
-              const active = view === id;
-              const status = saude?.[id];
-              return (
-                <button key={id} onClick={() => irPara(id)}
-                  className={`w-full flex items-center gap-3 pl-11 pr-5 py-2 text-sm transition-colors ${active ? "bg-emerald-50 text-emerald-700 border-r-2 border-emerald-500" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
-                  <span className="relative shrink-0">
-                    <Icon size={15} />
-                    {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
-                  </span>
-                  <span className="truncate">{t(`nav.${id}`)}</span>
-                </button>
-              );
-            })}
+    <nav className="flex-1 py-2 overflow-y-auto overflow-x-hidden">
+      {ICON_GROUPS.map((group) => (
+        <div key={group.title}>
+          {/* cabeçalho do grupo — só aparece quando expandido */}
+          <div className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400 whitespace-nowrap">
+            {t(`group.${group.id}`)}
           </div>
-        );
-      })}
+          {group.ids.map((id) => {
+            const item = ALL_NAV_ITEMS.find((n) => n.id === id);
+            if (!item) return null;
+            const Icon = item.icon;
+            const active = view === id;
+            const status = saude?.[id];
+            return (
+              <button key={id} onClick={() => irPara(id)} title={t(`nav.${id}`)}
+                className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${active ? "bg-violet-50 text-violet-700 border-r-2 border-violet-600" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}>
+                <span className="relative shrink-0">
+                  <Icon size={16} />
+                  {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
+                </span>
+                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate">
+                  {t(`nav.${id}`)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ))}
     </nav>
   );
 }
@@ -336,7 +310,7 @@ function SidebarNav({ view, irPara, saude }) {
 // LogoutButton — este último só existe sozinho na landing).
 function LanguageSwitcherPills() {
   const { idioma, setIdioma } = useLanguage();
-  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
+  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-violet-600 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
   return (
     <>
       {IDIOMAS.map((l) => (
@@ -348,7 +322,7 @@ function LanguageSwitcherPills() {
 
 function NavModeToggle({ navMode, setNavMode, onLogout }) {
   const { t } = useLanguage();
-  const pill = (active) => `flex items-center justify-center w-8 h-8 rounded-md transition-colors ${active ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
+  const pill = (active) => `flex items-center justify-center w-8 h-8 rounded-md transition-colors ${active ? "bg-violet-600 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
   return (
     <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
       <LanguageSwitcherPills />
@@ -449,26 +423,26 @@ export default function App() {
       <NavModeToggle navMode={navMode} setNavMode={setNavMode} onLogout={sair} />
 
       {navMode === "sidebar" && (
-        <aside className="w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col">
-          <div className="px-5 py-5 border-b border-slate-200">
-            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
-              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
-              <div>
-                <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
-                <div className="text-slate-600 text-[11px] mt-0.5">{t("chrome.subtitle")}</div>
+        <aside className="group/sidebar w-16 hover:w-60 shrink-0 bg-white border-r border-slate-200 flex flex-col overflow-hidden transition-[width] duration-[280ms] ease-[cubic-bezier(.4,0,.2,1)]">
+          <div className="px-3 py-4 border-b border-slate-200">
+            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity w-full">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-white" /></div>
+              <div className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 overflow-hidden">
+                <div className="text-slate-900 font-semibold text-sm leading-none whitespace-nowrap">{APP_NAME}</div>
+                <div className="text-slate-500 text-[10px] mt-0.5 whitespace-nowrap">{t("chrome.subtitle")}</div>
               </div>
             </button>
-            <div className="text-slate-400 text-[10px] mt-3 leading-snug">{t("chrome.tagline")}</div>
           </div>
 
           <SidebarNav view={view} irPara={irPara} saude={saude} />
 
-          <div className="px-5 py-4 border-t border-slate-200 flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-[11px] text-slate-500">
-              <Save size={12} className={appData.savedFlash ? "text-emerald-500" : "text-slate-300"} />
-              {appData.savedFlash ? t("chrome.salvo") : `${t("chrome.ultimaAtualizacao")}: ${appData.lastUpdated ? fmtDataHora(appData.lastUpdated) : "—"}`}
+          <div className="px-3 py-3 border-t border-slate-200">
+            <div className="flex items-center gap-2 text-[11px] text-slate-500 overflow-hidden">
+              <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-500" : "text-slate-300"}`} />
+              <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate">
+                {appData.savedFlash ? t("chrome.salvo") : `${t("chrome.ultimaAtualizacao")}: ${appData.lastUpdated ? fmtDataHora(appData.lastUpdated) : "—"}`}
+              </span>
             </div>
-            <div className="text-[10px] text-slate-400 leading-snug pt-1 border-t border-slate-100">{APP_DISCLAIMER}</div>
           </div>
         </aside>
       )}
@@ -477,7 +451,7 @@ export default function App() {
         {navMode === "icons" && (
           <div className="bg-white border-b border-slate-200 px-8 py-3 flex items-center gap-2">
             <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
-              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-slate-950" /></div>
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-white" /></div>
               <div>
                 <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
                 <div className="text-slate-400 text-[10px] mt-0.5">{t("chrome.tagline")}</div>
