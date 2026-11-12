@@ -208,14 +208,21 @@ function InsightDoDia({ texto, tone }) {
   );
 }
 
-// Tela de entrada (landing) estilo Omie — launcher em grade colorida por
-// categoria, mostrada ao abrir o app pela primeira vez ou ao clicar no logo.
-function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage }) {
+// Config de cor e ícone representativo por grupo (estilo Omie)
+const GROUP_TILE_CFG = {
+  "visao-geral":    { bg: "#7C3AED", Icon: LayoutGrid },
+  "controle-caixa": { bg: "#0A6CFF", Icon: Landmark },
+  "ap-ar":          { bg: "#F59E0B", Icon: Scale },
+  "planejamento":   { bg: "#0D9488", Icon: TrendingUp },
+  "dados":          { bg: "#475569", Icon: Table2 },
+};
+
+// Tela de entrada estilo Omie — tiles grandes coloridos por grupo
+function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
   const { t } = useLanguage();
   const insight = useMemo(() => gerarInsightDoDia(resumo), [resumo]);
   const insightTone = saude.dashboard ?? "green";
 
-  // Conta alertas por grupo para o badge do tile
   const alertasPorGrupo = useMemo(() => {
     const out = {};
     ICON_GROUPS.forEach((g) => {
@@ -225,105 +232,71 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
   }, [saude]);
 
   return (
-    <div
-      data-theme="dark"
-      className="min-h-screen flex flex-col items-center px-6 py-10"
-      style={{ background: "var(--vx-bg)" }}
-    >
+    <div className="min-h-screen flex flex-col" style={{ background: "#f8fafc" }}>
       <LogoutButton onLogout={onLogout} />
 
-      {/* ── Hero ── */}
-      <div className="w-full max-w-6xl flex flex-col gap-8">
+      {/* ── Header ── */}
+      <div className="flex flex-col items-center pt-10 pb-6 px-6">
         <div
-          className="flex flex-col items-center text-center gap-4 pt-4 pb-2"
-          style={{ animation: "vxFadeUp 500ms var(--vx-e) both" }}
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-3"
+          style={{ background: "linear-gradient(140deg,#7C3AED,#0A6CFF,#12D8FF)", boxShadow: "0 8px 24px rgba(10,108,255,.35)" }}
         >
-          {/* Logo orb */}
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center"
-            style={{
-              background: "linear-gradient(140deg,#0A6CFF,#12D8FF)",
-              boxShadow: "0 0 32px rgba(10,108,255,.5), 0 0 64px rgba(18,216,255,.2)",
-            }}
-          >
-            <Sparkles size={28} className="text-white" />
-          </div>
-
-          {/* Nome + tagline */}
-          <div>
-            <div
-              className="font-bold text-3xl leading-tight"
-              style={{
-                background: "linear-gradient(100deg,#0A6CFF 0%,#12D8FF 55%,#a5f3fc 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                fontFamily: "'Outfit', sans-serif",
-              }}
-            >
-              {APP_NAME}
-            </div>
-            <div className="text-sm mt-1" style={{ color: "var(--vx-muted)" }}>
-              {t("chrome.tagline")}
-            </div>
-          </div>
-
-          {/* Link "ver como lista" */}
-          <button
-            onClick={onVerComoLista}
-            className="flex items-center gap-1.5 text-sm transition-colors"
-            style={{ color: "var(--vx-dim)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--vx-cyan)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--vx-dim)")}
-          >
-            <List size={14} />{t("chrome.verComoLista")}
-          </button>
+          <Sparkles size={26} className="text-white" />
         </div>
+        <div className="font-bold text-2xl text-slate-800">{APP_NAME}</div>
+        <div className="text-sm text-slate-400 mt-1">{t("chrome.tagline")}</div>
+      </div>
 
-        {/* Insight do dia */}
-        <div style={{ animation: "vxFadeUp 500ms 80ms var(--vx-e) both" }}>
-          <InsightDoDia texto={insight} tone={insightTone} />
-        </div>
+      {/* Insight */}
+      <div className="px-8 pb-6 max-w-3xl mx-auto w-full">
+        <InsightDoDia texto={insight} tone={insightTone} />
+      </div>
 
-        {/* Grid de tiles por grupo */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {/* ── Grid Omie ── */}
+      <div className="flex-1 px-8 pb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {ICON_GROUPS.map((group, gi) => {
+            const cfg = GROUP_TILE_CFG[group.id] ?? { bg: "#64748b", Icon: LayoutGrid };
+            const TileIcon = cfg.Icon;
             const alertas = alertasPorGrupo[group.id] ?? 0;
+            const firstId = group.ids[0];
             return (
-              <div
+              <button
                 key={group.id}
-                className="landing-tile rounded-xl p-4 flex flex-col gap-3"
+                onClick={() => onSelect(firstId)}
+                className="rounded-2xl flex flex-col items-center justify-center gap-3 py-8 px-4 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98]"
                 style={{
-                  background: "linear-gradient(140deg,rgba(10,20,48,.92),rgba(5,10,22,.88))",
-                  border: "1px solid var(--vx-line)",
-                  boxShadow: "0 4px 20px rgba(0,0,0,.4), inset 0 1px 0 rgba(160,200,255,.06)",
-                  backdropFilter: "blur(12px)",
-                  animation: `vxFadeUp 400ms ${gi * 55}ms var(--vx-e) both`,
+                  background: cfg.bg,
+                  boxShadow: `0 4px 20px ${cfg.bg}55`,
+                  animation: `vxFadeUp 350ms ${gi * 60}ms both`,
+                  minHeight: 160,
                 }}
               >
-                {/* cabeçalho do tile */}
-                <div className="flex items-center justify-between">
-                  <div
-                    className="text-xs font-semibold uppercase tracking-widest"
-                    style={{ color: "var(--vx-dim)" }}
-                  >
-                    {t(`group.${group.id}`)}
-                  </div>
-                  {alertas > 0 && (
+                {alertas > 0 && (
+                  <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
+                    {alertas}
+                  </span>
+                )}
+                <TileIcon size={40} strokeWidth={1.5} className="opacity-90" />
+                <span className="font-semibold text-sm text-center leading-tight opacity-95">
+                  {t(`group.${group.id}`)}
+                </span>
+                {/* Sub-itens como chips clicáveis */}
+                <div className="flex flex-wrap gap-1 justify-center mt-1">
+                  {group.ids.map((id) => (
                     <span
-                      className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                      style={{
-                        background: "rgba(220,38,38,.15)",
-                        border: "1px solid rgba(220,38,38,.3)",
-                        color: "#fb7185",
-                      }}
+                      key={id}
+                      onClick={(e) => { e.stopPropagation(); onSelect(id); }}
+                      className="text-[10px] px-2 py-0.5 rounded-full cursor-pointer transition-colors"
+                      style={{ background: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.9)" }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.35)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.2)"}
                     >
-                      {alertas}
+                      {t(`nav.${id}`)}
                     </span>
-                  )}
+                  ))}
                 </div>
-                <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} />
-              </div>
+              </button>
             );
           })}
         </div>
@@ -575,7 +548,6 @@ export default function App() {
         saude={saude}
         usage={usage}
         onSelect={(id) => { irPara(id); setNavMode("sidebar"); }}
-        onVerComoLista={() => { irPara("dashboard"); setNavMode("sidebar"); }}
         onLogout={sair}
       />
     );
@@ -691,9 +663,40 @@ export default function App() {
 
           <SidebarNav view={view} irPara={irPara} saude={saude} expanded={sidebarExpanded} />
 
+          {/* ── Mascote ── */}
+          <div className="flex flex-col items-center py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+            <svg viewBox="0 0 64 72" width={sidebarExpanded ? 64 : 36} className="transition-all duration-300 drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+              {/* Corpo */}
+              <rect x="12" y="28" width="40" height="34" rx="10" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"/>
+              {/* Cabeça */}
+              <rect x="16" y="10" width="32" height="26" rx="10" fill="rgba(255,255,255,0.28)" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5"/>
+              {/* Antena */}
+              <line x1="32" y1="10" x2="32" y2="4" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeLinecap="round"/>
+              <circle cx="32" cy="3" r="2.5" fill="#12D8FF"/>
+              {/* Olhos */}
+              <rect x="21" y="17" width="8" height="6" rx="3" fill="#12D8FF" opacity="0.9"/>
+              <rect x="35" y="17" width="8" height="6" rx="3" fill="#12D8FF" opacity="0.9"/>
+              {/* Sorriso */}
+              <path d="M24 29 Q32 34 40 29" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+              {/* Gravatinha */}
+              <polygon points="32,38 29,43 32,42 35,43" fill="#12D8FF" opacity="0.8"/>
+              {/* Braços */}
+              <rect x="4" y="32" width="10" height="6" rx="3" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
+              <rect x="50" y="32" width="10" height="6" rx="3" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
+              {/* Pernas */}
+              <rect x="19" y="58" width="10" height="10" rx="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
+              <rect x="35" y="58" width="10" height="10" rx="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
+              {/* Cifrão no peito */}
+              <text x="32" y="52" textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.65)" fontWeight="bold">$</text>
+            </svg>
+            {sidebarExpanded && (
+              <div className="text-[9px] mt-1 font-semibold tracking-wide" style={{ color: "rgba(255,255,255,0.45)" }}>CFO Bot</div>
+            )}
+          </div>
+
           <div
-            className="px-3 py-3"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}
+            className="px-3 py-2"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
             <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "rgba(255,255,255,0.55)" }}>
               <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-400" : ""}`} />
