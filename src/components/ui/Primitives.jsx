@@ -84,6 +84,19 @@ function pontoVelocimetro(cx, cy, r, t) {
  */
 export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub, meta, tooltip }) {
   const cx = 110, cy = 100, r = 82, espessura = 18;
+  const needleLen = r - espessura / 2 - 8; // 65px
+
+  // Animação do ponteiro: começa apontando para mínimo (-90°) e gira até o valor real.
+  // Alpha = t - 90 onde t = ((value-min)/(max-min)) * 180
+  const [alpha, setAlpha] = useState(-90); // -90 = apontando para a esquerda (mínimo)
+  useEffect(() => {
+    if (value == null) return;
+    const clamped = Math.max(min, Math.min(value, max));
+    const t = ((clamped - min) / (max - min)) * 180;
+    const timer = setTimeout(() => setAlpha(t - 90), 150);
+    return () => clearTimeout(timer);
+  }, [value, min, max]);
+
   if (value == null) {
     return (
       <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-1">
@@ -94,9 +107,7 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
       </div>
     );
   }
-  const clamped = Math.max(min, Math.min(value, max));
   const paraAngulo = (v) => ((v - min) / (max - min)) * 180;
-  const ponteiro = pontoVelocimetro(cx, cy, r - espessura / 2 - 8, paraAngulo(clamped));
 
   let anterior = min;
   const segmentos = bands.map((b, i) => {
@@ -108,8 +119,7 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
     return <path key={i} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`} stroke={b.color} strokeWidth={espessura} fill="none" />;
   });
 
-  // Marcador de meta: traço radial curto sobre o arco, na posição do valor-alvo
-  // — não recalcula nada, só indica visualmente onde a meta cai na régua.
+  // Marcador de meta: traço radial curto sobre o arco
   const metaClamped = meta != null ? Math.max(min, Math.min(meta, max)) : null;
   const metaAngulo = metaClamped != null ? paraAngulo(metaClamped) : null;
   const metaP1 = metaAngulo != null ? pontoVelocimetro(cx, cy, r - espessura - 3, metaAngulo) : null;
@@ -122,8 +132,24 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
       </span>
       <svg viewBox="0 0 220 112" width="100%" height="112">
         {segmentos}
-        {metaP1 && metaP2 && <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y} stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />}
-        <line x1={cx} y1={cy} x2={ponteiro.x} y2={ponteiro.y} stroke="#1e293b" strokeWidth={3} strokeLinecap="round" />
+        {metaP1 && metaP2 && (
+          <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y}
+            stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />
+        )}
+        {/* Ponteiro com animação spring — rotaciona em torno de (cx, cy) */}
+        <g
+          style={{
+            transformOrigin: `${cx}px ${cy}px`,
+            transform: `rotate(${alpha}deg)`,
+            transition: "transform 1100ms cubic-bezier(0.34,1.56,0.64,1)",
+          }}
+        >
+          <line
+            x1={cx} y1={cy}
+            x2={cx} y2={cy - needleLen}
+            stroke="#1e293b" strokeWidth={3} strokeLinecap="round"
+          />
+        </g>
         <circle cx={cx} cy={cy} r={5} fill="#1e293b" />
       </svg>
       <span className="font-mono tabular-nums text-xl font-semibold text-slate-800 -mt-3">{formatValue(value)}</span>

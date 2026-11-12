@@ -353,22 +353,77 @@ function grupoDoId(id) {
   return ICON_GROUPS.find((g) => g.ids.includes(id))?.title;
 }
 
-// Sidebar click-toggle: ícones sempre visíveis (w-16 collapsed), labels visíveis quando expanded (w-60).
-// Pill background ativo — linha branca/translúcida que percorre toda a largura do item.
-// Tooltip flutuante aparece só quando colapsado.
+// Sidebar escura com bead deslizante estilo Meniscus:
+// — fundo #070D1A, bead (pill absoluto) desliza verticalmente com spring ao trocar de item
+// — left accent bar (3px) + glow no ícone ativo
+// — tooltip flutuante aparece só no modo colapsado
 function SidebarNav({ view, irPara, saude, expanded }) {
   const { t } = useLanguage();
-  const [tooltip, setTooltip] = React.useState(null); // { id, y }
-  const sidebarRef = React.useRef(null);
+  const [tooltip, setTooltip] = React.useState(null);
+  const navRef = React.useRef(null);
+  const wrapperRefs = React.useRef({});
+  const [bead, setBead] = React.useState({ top: 0, height: 36, ready: false });
+
+  // Mede a posição do item ativo dentro do nav scrollável
+  React.useLayoutEffect(() => {
+    const wrapper = wrapperRefs.current[view];
+    const nav = navRef.current;
+    if (!wrapper || !nav) return;
+    // Percorre offsetParent até chegar no nav (que é position:relative)
+    let top = 0;
+    let el = wrapper;
+    while (el && el !== nav) {
+      top += el.offsetTop;
+      el = el.offsetParent;
+    }
+    setBead({ top, height: wrapper.offsetHeight, ready: true });
+  }, [view, expanded]);
 
   return (
-    <nav ref={sidebarRef} className="flex-1 py-2 overflow-y-auto overflow-x-hidden relative">
+    <nav ref={navRef} className="flex-1 py-2 overflow-y-auto overflow-x-hidden relative">
+
+      {/* ── Bead deslizante (pill de fundo) ── */}
+      {bead.ready && (
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: bead.top + 2,
+            height: bead.height - 4,
+            left: 8,
+            right: 8,
+            borderRadius: 8,
+            background: "rgba(10,108,255,.18)",
+            border: "1px solid rgba(10,108,255,.35)",
+            boxShadow: "0 0 16px rgba(10,108,255,.22)",
+            transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
+            zIndex: 0,
+          }}
+        />
+      )}
+
+      {/* ── Accent bar esquerda ── */}
+      {bead.ready && (
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: bead.top + Math.round((bead.height - 20) / 2),
+            height: 20,
+            left: 0,
+            width: 3,
+            borderRadius: "0 3px 3px 0",
+            background: "linear-gradient(180deg,#0A6CFF,#12D8FF)",
+            boxShadow: "0 0 8px rgba(10,108,255,.9)",
+            transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
+            zIndex: 1,
+          }}
+        />
+      )}
+
       {ICON_GROUPS.map((group) => (
         <div key={group.title}>
-          {/* cabeçalho do grupo — só visível quando expandido */}
           <div
-            className="px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400 whitespace-nowrap transition-opacity duration-200"
-            style={{ opacity: expanded ? 1 : 0 }}
+            className="px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest whitespace-nowrap transition-opacity duration-200"
+            style={{ opacity: expanded ? 1 : 0, color: "rgba(255,255,255,0.28)" }}
           >
             {t(`group.${group.id}`)}
           </div>
@@ -380,30 +435,44 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             const status = saude?.[id];
             const label = t(`nav.${id}`);
             return (
-              <div key={id} className="px-2 py-0.5">
+              <div
+                key={id}
+                ref={(el) => { wrapperRefs.current[id] = el; }}
+                className="px-2 py-0.5"
+              >
                 <button
                   onClick={() => irPara(id)}
+                  className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors duration-150"
+                  style={{
+                    color: active ? "#fff" : "rgba(255,255,255,0.42)",
+                    background: "transparent",
+                    zIndex: 1,
+                  }}
                   onMouseEnter={(e) => {
+                    if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.75)";
                     if (!expanded) {
                       const rect = e.currentTarget.getBoundingClientRect();
                       setTooltip({ id, y: rect.top + rect.height / 2 });
                     }
                   }}
-                  onMouseLeave={() => setTooltip(null)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200
-                    ${active
-                      ? "text-white"
-                      : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
-                    }`}
-                  style={active ? {
-                    background: "rgba(10,108,255,.18)",
-                    border: "1px solid rgba(10,108,255,.35)",
-                    boxShadow: "0 0 12px rgba(10,108,255,.18)",
-                  } : { border: "1px solid transparent" }}
+                  onMouseLeave={(e) => {
+                    if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.42)";
+                    setTooltip(null);
+                  }}
                 >
                   <span className="relative shrink-0">
-                    <Icon size={16} className={active ? "drop-shadow-[0_0_6px_rgba(18,216,255,.6)]" : ""} style={active ? { color: "#12D8FF" } : {}} />
-                    {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
+                    <Icon
+                      size={16}
+                      style={active
+                        ? { color: "#12D8FF", filter: "drop-shadow(0 0 6px rgba(18,216,255,.7))" }
+                        : {}}
+                    />
+                    {status && (
+                      <span
+                        className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${STATUS_DOT[status]}`}
+                        style={{ border: "1px solid #070D1A" }}
+                      />
+                    )}
                   </span>
                   <span
                     className="whitespace-nowrap truncate font-medium transition-opacity duration-200"
@@ -627,25 +696,38 @@ export default function App() {
 
       {navMode === "sidebar" && (
         <aside
-          className="shrink-0 bg-white border-r border-slate-200 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
-          style={{ width: sidebarExpanded ? 240 : 64 }}
+          className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
+          style={{
+            width: sidebarExpanded ? 240 : 64,
+            background: "#070D1A",
+            borderRight: "1px solid rgba(255,255,255,0.08)",
+          }}
         >
-          <div className="px-3 py-4 border-b border-slate-200 flex items-center justify-between">
+          {/* Logo + toggle */}
+          <div
+            className="px-3 py-4 flex items-center justify-between"
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+          >
             <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity flex-1 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-white" /></div>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0">
+                <Sparkles size={15} className="text-white" />
+              </div>
               <div
                 className="overflow-hidden transition-opacity duration-200"
                 style={{ opacity: sidebarExpanded ? 1 : 0 }}
               >
-                <div className="text-slate-900 font-semibold text-sm leading-none whitespace-nowrap">{APP_NAME}</div>
-                <div className="text-slate-500 text-[10px] mt-0.5 whitespace-nowrap">{t("chrome.subtitle")}</div>
+                <div className="font-semibold text-sm leading-none whitespace-nowrap" style={{ color: "#fff" }}>{APP_NAME}</div>
+                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.38)" }}>{t("chrome.subtitle")}</div>
               </div>
             </button>
-            {/* Botão toggle < / > */}
+            {/* Botão toggle */}
             <button
               onClick={() => setSidebarExpanded((v) => !v)}
-              className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all duration-200"
+              className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
+              style={{ color: "rgba(255,255,255,0.3)" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.08)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.background = "transparent"; }}
             >
               <ChevronLeft
                 size={14}
@@ -657,9 +739,12 @@ export default function App() {
 
           <SidebarNav view={view} irPara={irPara} saude={saude} expanded={sidebarExpanded} />
 
-          <div className="px-3 py-3 border-t border-slate-200">
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 overflow-hidden">
-              <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-500" : "text-slate-300"}`} />
+          <div
+            className="px-3 py-3"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+          >
+            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "rgba(255,255,255,0.28)" }}>
+              <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-400" : ""}`} />
               <span
                 className="whitespace-nowrap truncate transition-opacity duration-200"
                 style={{ opacity: sidebarExpanded ? 1 : 0 }}
