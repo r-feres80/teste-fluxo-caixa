@@ -368,8 +368,8 @@ function SidebarNav({ view, irPara, saude, expanded }) {
           {expanded && (
             <div className="px-2 pt-3 pb-1.5">
               <div
-                className="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest whitespace-nowrap text-white"
-                style={{ background: "linear-gradient(160deg,#9B9CFB 0%,#86B0FB 100%)" }}
+                className="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest whitespace-nowrap"
+                style={{ background: "linear-gradient(160deg,#EDEEFE 0%,#E4EDFE 100%)", color: "#5A62D8" }}
               >
                 {t(`group.${group.id}`)}
               </div>
