@@ -104,7 +104,7 @@ export default function PasswordGate({ children }) {
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 340, objectFit: "contain", mixBlendMode: "multiply" }}
+          style={{ width: 340, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
         />
 
         <p className="text-white/40 text-xs text-center">
