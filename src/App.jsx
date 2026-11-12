@@ -215,31 +215,117 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
   const insight = useMemo(() => gerarInsightDoDia(resumo), [resumo]);
   const insightTone = saude.dashboard ?? "green";
 
+  // Conta alertas por grupo para o badge do tile
+  const alertasPorGrupo = useMemo(() => {
+    const out = {};
+    ICON_GROUPS.forEach((g) => {
+      out[g.id] = g.ids.filter((id) => saude[id] === "red" || saude[id] === "amber").length;
+    });
+    return out;
+  }, [saude]);
+
   return (
-    <div data-theme="dark" className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-10">
+    <div
+      data-theme="dark"
+      className="min-h-screen flex flex-col items-center px-6 py-10"
+      style={{ background: "var(--vx-bg)" }}
+    >
       <LogoutButton onLogout={onLogout} />
-      <div className="w-full max-w-6xl flex flex-col gap-6">
-        <div className="flex flex-col items-center text-center gap-3">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-400 flex items-center justify-center shadow-md"><Sparkles size={26} className="text-white" /></div>
-          <div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-blue-500 to-cyan-500 font-bold text-2xl leading-tight">{APP_NAME}</div>
-            <div className="text-slate-400 text-sm mt-1">{t("chrome.tagline")}</div>
+
+      {/* ── Hero ── */}
+      <div className="w-full max-w-6xl flex flex-col gap-8">
+        <div
+          className="flex flex-col items-center text-center gap-4 pt-4 pb-2"
+          style={{ animation: "vxFadeUp 500ms var(--vx-e) both" }}
+        >
+          {/* Logo orb */}
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center"
+            style={{
+              background: "linear-gradient(140deg,#0A6CFF,#12D8FF)",
+              boxShadow: "0 0 32px rgba(10,108,255,.5), 0 0 64px rgba(18,216,255,.2)",
+            }}
+          >
+            <Sparkles size={28} className="text-white" />
           </div>
-          <button onClick={onVerComoLista}
-            className="mt-2 flex items-center gap-1.5 text-sm text-slate-500 hover:text-violet-700 transition-colors">
+
+          {/* Nome + tagline */}
+          <div>
+            <div
+              className="font-bold text-3xl leading-tight"
+              style={{
+                background: "linear-gradient(100deg,#0A6CFF 0%,#12D8FF 55%,#a5f3fc 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontFamily: "'Outfit', sans-serif",
+              }}
+            >
+              {APP_NAME}
+            </div>
+            <div className="text-sm mt-1" style={{ color: "var(--vx-muted)" }}>
+              {t("chrome.tagline")}
+            </div>
+          </div>
+
+          {/* Link "ver como lista" */}
+          <button
+            onClick={onVerComoLista}
+            className="flex items-center gap-1.5 text-sm transition-colors"
+            style={{ color: "var(--vx-dim)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--vx-cyan)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--vx-dim)")}
+          >
             <List size={14} />{t("chrome.verComoLista")}
           </button>
         </div>
 
-        <InsightDoDia texto={insight} tone={insightTone} />
+        {/* Insight do dia */}
+        <div style={{ animation: "vxFadeUp 500ms 80ms var(--vx-e) both" }}>
+          <InsightDoDia texto={insight} tone={insightTone} />
+        </div>
 
+        {/* Grid de tiles por grupo */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {ICON_GROUPS.map((group) => (
-            <div key={group.title} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{t(`group.${group.id}`)}</div>
-              <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} />
-            </div>
-          ))}
+          {ICON_GROUPS.map((group, gi) => {
+            const alertas = alertasPorGrupo[group.id] ?? 0;
+            return (
+              <div
+                key={group.id}
+                className="landing-tile rounded-xl p-4 flex flex-col gap-3"
+                style={{
+                  background: "linear-gradient(140deg,rgba(10,20,48,.92),rgba(5,10,22,.88))",
+                  border: "1px solid var(--vx-line)",
+                  boxShadow: "0 4px 20px rgba(0,0,0,.4), inset 0 1px 0 rgba(160,200,255,.06)",
+                  backdropFilter: "blur(12px)",
+                  animation: `vxFadeUp 400ms ${gi * 55}ms var(--vx-e) both`,
+                }}
+              >
+                {/* cabeçalho do tile */}
+                <div className="flex items-center justify-between">
+                  <div
+                    className="text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: "var(--vx-dim)" }}
+                  >
+                    {t(`group.${group.id}`)}
+                  </div>
+                  {alertas > 0 && (
+                    <span
+                      className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                      style={{
+                        background: "rgba(220,38,38,.15)",
+                        border: "1px solid rgba(220,38,38,.3)",
+                        color: "#fb7185",
+                      }}
+                    >
+                      {alertas}
+                    </span>
+                  )}
+                </div>
+                <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={onSelect} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
