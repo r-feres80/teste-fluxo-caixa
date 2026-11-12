@@ -44,7 +44,7 @@ export default function PasswordGate({ children }) {
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "linear-gradient(160deg,#7C3AED 0%,#0A6CFF 55%,#12D8FF 100%)" }}
+      style={{ background: "linear-gradient(160deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}
     >
       <div className="w-full max-w-sm flex flex-col items-center gap-6">
 
@@ -104,7 +104,7 @@ export default function PasswordGate({ children }) {
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 140, objectFit: "contain", filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.3))" }}
+          style={{ width: 220, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.25))" }}
         />
 
         <p className="text-white/40 text-xs text-center">
