@@ -353,80 +353,29 @@ function grupoDoId(id) {
   return ICON_GROUPS.find((g) => g.ids.includes(id))?.title;
 }
 
-// Sidebar escura com bead deslizante estilo Meniscus:
-// — fundo #070D1A, bead (pill absoluto) desliza verticalmente com spring ao trocar de item
-// — left accent bar (3px) + glow no ícone ativo
-// — tooltip flutuante aparece só no modo colapsado
+// Sidebar estilo Conta Azul — estrutura limpa, fundo degradê roxo→azul→ciano
 function SidebarNav({ view, irPara, saude, expanded }) {
   const { t } = useLanguage();
   const [tooltip, setTooltip] = React.useState(null);
-  const navRef = React.useRef(null);
-  const wrapperRefs = React.useRef({});
-  const [bead, setBead] = React.useState({ top: 0, height: 36, ready: false });
-
-  // Mede a posição do item ativo dentro do nav scrollável
-  React.useLayoutEffect(() => {
-    const wrapper = wrapperRefs.current[view];
-    const nav = navRef.current;
-    if (!wrapper || !nav) return;
-    // Percorre offsetParent até chegar no nav (que é position:relative)
-    let top = 0;
-    let el = wrapper;
-    while (el && el !== nav) {
-      top += el.offsetTop;
-      el = el.offsetParent;
-    }
-    setBead({ top, height: wrapper.offsetHeight, ready: true });
-  }, [view, expanded]);
 
   return (
-    <nav ref={navRef} className="flex-1 py-2 overflow-y-auto overflow-x-hidden relative">
+    <nav className="flex-1 py-2 overflow-y-auto overflow-x-hidden">
 
-      {/* ── Bead deslizante (pill de fundo) ── */}
-      {bead.ready && (
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: bead.top + 2,
-            height: bead.height - 4,
-            left: 8,
-            right: 8,
-            borderRadius: 8,
-            background: "rgba(10,108,255,.08)",
-            border: "1px solid rgba(10,108,255,.18)",
-            boxShadow: "0 0 12px rgba(10,108,255,.08)",
-            transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
-            zIndex: 0,
-          }}
-        />
-      )}
-
-      {/* ── Accent bar esquerda ── */}
-      {bead.ready && (
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: bead.top + Math.round((bead.height - 20) / 2),
-            height: 20,
-            left: 0,
-            width: 3,
-            borderRadius: "0 3px 3px 0",
-            background: "linear-gradient(180deg,#7C3AED,#0A6CFF,#12D8FF)",
-            boxShadow: "0 0 8px rgba(10,108,255,.5)",
-            transition: "top 420ms cubic-bezier(0.34,1.56,0.64,1)",
-            zIndex: 1,
-          }}
-        />
-      )}
-
-      {ICON_GROUPS.map((group) => (
+      {ICON_GROUPS.map((group, gi) => (
         <div key={group.title}>
-          <div
-            className="px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest whitespace-nowrap transition-opacity duration-200"
-            style={{ opacity: expanded ? 1 : 0, color: "#94a3b8" }}
-          >
-            {t(`group.${group.id}`)}
-          </div>
+          {/* Separador entre grupos */}
+          {gi > 0 && (
+            <div style={{ height: 1, margin: "6px 12px", background: "rgba(255,255,255,0.15)" }} />
+          )}
+          {/* Label do grupo */}
+          {expanded && (
+            <div
+              className="px-4 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest whitespace-nowrap"
+              style={{ color: "rgba(255,255,255,0.5)" }}
+            >
+              {t(`group.${group.id}`)}
+            </div>
+          )}
           {group.ids.map((id) => {
             const item = ALL_NAV_ITEMS.find((n) => n.id === id);
             if (!item) return null;
@@ -435,48 +384,51 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             const status = saude?.[id];
             const label = t(`nav.${id}`);
             return (
-              <div
-                key={id}
-                ref={(el) => { wrapperRefs.current[id] = el; }}
-                className="px-2 py-0.5"
-              >
+              <div key={id} className="px-2 py-0.5">
                 <button
                   onClick={() => irPara(id)}
-                  className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors duration-150"
+                  className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-150"
                   style={{
-                    color: active ? "#0A6CFF" : "#475569",
-                    background: "transparent",
-                    zIndex: 1,
+                    color: "rgba(255,255,255,0.95)",
+                    background: active ? "rgba(255,255,255,0.18)" : "transparent",
+                    boxShadow: active ? "inset 0 0 0 1px rgba(255,255,255,0.25)" : "none",
                   }}
                   onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.color = "#0A6CFF";
+                    if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.10)";
                     if (!expanded) {
                       const rect = e.currentTarget.getBoundingClientRect();
                       setTooltip({ id, y: rect.top + rect.height / 2 });
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.color = "#475569";
+                    if (!active) e.currentTarget.style.background = "transparent";
                     setTooltip(null);
                   }}
                 >
-                  <span className="relative shrink-0">
-                    <Icon
-                      size={16}
-                      style={active
-                        ? { color: "#0A6CFF", filter: "drop-shadow(0 0 6px rgba(10,108,255,.4))" }
-                        : {}}
+                  {/* Barra esquerda no item ativo */}
+                  {active && (
+                    <span
+                      className="absolute left-0 top-1/2 -translate-y-1/2"
+                      style={{
+                        width: 3, height: 20,
+                        borderRadius: "0 3px 3px 0",
+                        background: "#fff",
+                        opacity: 0.9,
+                      }}
                     />
+                  )}
+                  <span className="relative shrink-0">
+                    <Icon size={16} style={{ opacity: active ? 1 : 0.75 }} />
                     {status && (
                       <span
                         className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${STATUS_DOT[status]}`}
-                        style={{ border: "1px solid #F0F6FF" }}
+                        style={{ border: "1px solid rgba(255,255,255,0.3)" }}
                       />
                     )}
                   </span>
                   <span
                     className="whitespace-nowrap truncate font-medium transition-opacity duration-200"
-                    style={{ opacity: expanded ? 1 : 0, pointerEvents: expanded ? "auto" : "none" }}
+                    style={{ opacity: expanded ? 1 : 0, pointerEvents: expanded ? "auto" : "none", fontWeight: active ? 600 : 400 }}
                   >
                     {label}
                   </span>
@@ -699,35 +651,35 @@ export default function App() {
           className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
           style={{
             width: sidebarExpanded ? 240 : 64,
-            background: "linear-gradient(160deg, #F7F4FF 0%, #F0F6FF 55%, #EDFCFF 100%)",
-            borderRight: "1px solid #e2e8f0",
+            background: "linear-gradient(180deg, #7C3AED 0%, #0A6CFF 55%, #12D8FF 100%)",
+            borderRight: "none",
           }}
         >
           {/* Logo + toggle */}
           <div
             className="px-3 py-4 flex items-center justify-between"
-            style={{ borderBottom: "1px solid #e2e8f0" }}
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.15)" }}
           >
-            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity flex-1 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0">
+            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-90 transition-opacity flex-1 min-w-0">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(4px)" }}>
                 <Sparkles size={15} className="text-white" />
               </div>
               <div
                 className="overflow-hidden transition-opacity duration-200"
                 style={{ opacity: sidebarExpanded ? 1 : 0 }}
               >
-                <div className="font-semibold text-sm leading-none whitespace-nowrap" style={{ color: "#1e293b" }}>{APP_NAME}</div>
-                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "#94a3b8" }}>{t("chrome.subtitle")}</div>
+                <div className="font-bold text-sm leading-none whitespace-nowrap text-white">{APP_NAME}</div>
+                <div className="text-[10px] mt-0.5 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.6)" }}>{t("chrome.subtitle")}</div>
               </div>
             </button>
             {/* Botão toggle */}
             <button
               onClick={() => setSidebarExpanded((v) => !v)}
               className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
-              style={{ color: "#cbd5e1" }}
+              style={{ color: "rgba(255,255,255,0.5)" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#0A6CFF"; e.currentTarget.style.background = "rgba(10,108,255,0.08)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#cbd5e1"; e.currentTarget.style.background = "transparent"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent"; }}
             >
               <ChevronLeft
                 size={14}
@@ -741,9 +693,9 @@ export default function App() {
 
           <div
             className="px-3 py-3"
-            style={{ borderTop: "1px solid #e2e8f0" }}
+            style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}
           >
-            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "#94a3b8" }}>
+            <div className="flex items-center gap-2 text-[11px] overflow-hidden" style={{ color: "rgba(255,255,255,0.55)" }}>
               <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-400" : ""}`} />
               <span
                 className="whitespace-nowrap truncate transition-opacity duration-200"
