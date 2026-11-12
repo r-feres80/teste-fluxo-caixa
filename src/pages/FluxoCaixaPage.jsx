@@ -149,7 +149,7 @@ export default function FluxoCaixaPage({ data }) {
           <ComposedChart data={agregada} margin={{ top: 5, right: 28, left: 4, bottom: 0 }}>
             <XAxis dataKey="label" stroke="#64748b" fontSize={10} tickLine={false} interval={Math.max(0, Math.floor(agregada.length / 14))} />
             <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+            <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="3 3" />
             {parametros.caixaMinimo != null && <ReferenceLine y={parametros.caixaMinimo} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: "Mínimo", fill: "#f59e0b", fontSize: 10 }} />}
@@ -165,7 +165,7 @@ export default function FluxoCaixaPage({ data }) {
           <ComposedChart data={evolucaoMensal}>
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
             <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+            <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
             <Bar dataKey="entradas" name="Entradas" fill="#10b981" radius={[3, 3, 0, 0]} />
             <Bar dataKey="saidas" name="Saídas" fill="#f97316" radius={[0, 0, 3, 3]} />
@@ -180,14 +180,14 @@ export default function FluxoCaixaPage({ data }) {
           <div className="max-h-[260px] overflow-y-auto -mx-1 px-1">
             {Object.entries(porClassificacao).map(([classif, linhas]) => linhas.length > 0 && (
               <div key={classif} className="mb-3">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1">{CLASSIF_LABEL[classif]}</div>
+                <div className="text-[11px] font-semibold text-vel-text-muted uppercase tracking-wide mb-1">{CLASSIF_LABEL[classif]}</div>
                 <table className="w-full text-xs">
                   <tbody>
                     {linhas.map((l) => (
-                      <tr key={l.id} className="border-b border-slate-100">
-                        <td className="py-1.5 pr-2 text-slate-600">{l.descricao}</td>
-                        <td className="py-1.5 text-right font-mono tabular-nums text-slate-800">{fmtBRL(l.real)}</td>
-                        <td className={`py-1.5 pl-2 text-right font-mono tabular-nums text-[11px] ${l.varPct == null ? "text-slate-400" : l.varPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                      <tr key={l.id} className="border-b border-vel-border/50">
+                        <td className="py-1.5 pr-2 text-vel-text-sub">{l.descricao}</td>
+                        <td className="py-1.5 text-right font-mono tabular-nums text-vel-text">{fmtBRL(l.real)}</td>
+                        <td className={`py-1.5 pl-2 text-right font-mono tabular-nums text-[11px] ${l.varPct == null ? "text-vel-text-muted" : l.varPct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                           {l.varPct == null ? "não comparável" : `${l.varPct >= 0 ? "+" : ""}${l.varPct.toFixed(1)}%`}
                         </td>
                       </tr>
@@ -196,7 +196,7 @@ export default function FluxoCaixaPage({ data }) {
                 </table>
               </div>
             ))}
-            {dfcPorConta.length === 0 && <span className="text-sm text-slate-400">Sem movimento no período.</span>}
+            {dfcPorConta.length === 0 && <span className="text-sm text-vel-text-muted">Sem movimento no período.</span>}
           </div>
         </Panel>
 
@@ -211,9 +211,9 @@ export default function FluxoCaixaPage({ data }) {
                 { label: "= Variação de Caixa", valor: dfc.variacaoCaixa, destaque: true },
                 { label: "= Caixa Final", valor: dfc.caixaFinal, destaque: true },
               ].map((l) => (
-                <tr key={l.label} className={`border-b border-slate-100 ${l.destaque ? "font-semibold" : ""}`}>
-                  <td className="py-2.5 pr-4 text-slate-700">{l.label}</td>
-                  <td className={`py-2.5 text-right font-mono tabular-nums ${l.valor >= 0 ? "text-slate-800" : "text-rose-600"}`}>{fmtBRL(l.valor)}</td>
+                <tr key={l.label} className={`border-b border-vel-border/50 ${l.destaque ? "font-semibold" : ""}`}>
+                  <td className="py-2.5 pr-4 text-vel-text">{l.label}</td>
+                  <td className={`py-2.5 text-right font-mono tabular-nums ${l.valor >= 0 ? "text-vel-text" : "text-rose-400"}`}>{fmtBRL(l.valor)}</td>
                 </tr>
               ))}
             </tbody>

@@ -10,8 +10,8 @@ const GRUPO_LABEL = { Operacional: "Atividades Operacionais", Investimento: "Ati
 const NOMES_MES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
 function Valor({ v }) {
-  if (v === 0) return <span className="text-slate-300">—</span>;
-  return <span className={v < 0 ? "text-rose-600" : "text-slate-700"} title={fmtBRL(v)}>{fmtBRLShort(v)}</span>;
+  if (v === 0) return <span className="text-vel-text-muted">—</span>;
+  return <span className={v < 0 ? "text-rose-400" : "text-vel-text-sub"} title={fmtBRL(v)}>{fmtBRLShort(v)}</span>;
 }
 
 // DFC Direto é módulo de FATO (Realizado sempre por Data de baixa, nunca por
@@ -85,9 +85,9 @@ export default function DFCDiretoPage({ data }) {
         title="DFC"
         right={
           <div className="flex items-center gap-2">
-            <button onClick={() => irParaMes(-1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Mês Passado</button>
-            <button onClick={() => irParaMes(0)} disabled={mesEhCorrente} className={`px-2.5 py-1.5 rounded text-xs border ${mesEhCorrente ? "border-emerald-300 bg-emerald-50 text-emerald-700" : "border-slate-300 text-slate-600 hover:bg-slate-50"}`}>Mês Atual</button>
-            <button onClick={() => irParaMes(1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Próximo Mês</button>
+            <button onClick={() => irParaMes(-1)} className="px-2.5 py-1.5 rounded text-xs border border-vel-border text-vel-text-sub hover:bg-vel-surface-alt">Mês Passado</button>
+            <button onClick={() => irParaMes(0)} disabled={mesEhCorrente} className={`px-2.5 py-1.5 rounded text-xs border ${mesEhCorrente ? "border-emerald-700/40 bg-emerald-900/20 text-emerald-400" : "border-vel-border text-vel-text-sub hover:bg-vel-surface-alt"}`}>Mês Atual</button>
+            <button onClick={() => irParaMes(1)} className="px-2.5 py-1.5 rounded text-xs border border-vel-border text-vel-text-sub hover:bg-vel-surface-alt">Próximo Mês</button>
             <select value={mesSel} onChange={(e) => setMesSel(Number(e.target.value))} className={selectCls + " w-auto"}>
               {NOMES_MES.map((nome, i) => <option key={nome} value={i}>{nome}</option>)}
             </select>
@@ -98,30 +98,30 @@ export default function DFCDiretoPage({ data }) {
         }
       >
         {arvore.length === 0 ? (
-          <span className="text-sm text-slate-400">Sem movimento Realizado em {NOMES_MES[mesSel]}/{anoSel} para os filtros atuais.</span>
+          <span className="text-sm text-vel-text-muted">Sem movimento Realizado em {NOMES_MES[mesSel]}/{anoSel} para os filtros atuais.</span>
         ) : (
           <div className="overflow-x-auto">
             <table className="text-xs border-collapse w-full">
               <thead>
-                <tr className="text-slate-500 uppercase border-b border-slate-200">
-                  <th className="sticky left-0 bg-white py-2 pr-4 text-left min-w-[220px] z-10">Conta</th>
+                <tr className="text-vel-text-muted uppercase border-b border-vel-border">
+                  <th className="sticky left-0 bg-vel-surface py-2 pr-4 text-left min-w-[220px] z-10">Conta</th>
                   {dias.map((d) => <th key={d} className="py-2 px-1.5 text-right font-mono min-w-[48px]">{d.slice(8, 10)}</th>)}
-                  <th className="py-2 px-3 text-right min-w-[100px] border-l border-slate-200">Total Real.</th>
+                  <th className="py-2 px-3 text-right min-w-[100px] border-l border-vel-border">Total Real.</th>
                   <th className="py-2 px-3 text-right min-w-[100px]">Total Prev.</th>
                 </tr>
               </thead>
               <tbody>
                 {arvore.map((grupo) => (
                   <React.Fragment key={grupo.nome}>
-                    <tr className="bg-slate-50 font-semibold border-b border-slate-200">
-                      <td className="sticky left-0 bg-slate-50 py-2 pr-4 z-10">
-                        <button onClick={() => toggle(grupo.nome)} className="flex items-center gap-1.5 text-slate-800">
+                    <tr className="bg-vel-surface-alt font-semibold border-b border-vel-border">
+                      <td className="sticky left-0 bg-vel-surface-alt py-2 pr-4 z-10">
+                        <button onClick={() => toggle(grupo.nome)} className="flex items-center gap-1.5 text-vel-text">
                           {aberto(grupo.nome) ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                           {GRUPO_LABEL[grupo.nome]}
                         </button>
                       </td>
                       {grupo.porDia.map((v, i) => <td key={i} className="py-2 px-1.5 text-right"><Valor v={v} /></td>)}
-                      <td className="py-2 px-3 text-right border-l border-slate-200"><Valor v={grupo.totalRealizado} /></td>
+                      <td className="py-2 px-3 text-right border-l border-vel-border"><Valor v={grupo.totalRealizado} /></td>
                       <td className="py-2 px-3 text-right"><Valor v={grupo.totalPrevisto} /></td>
                     </tr>
 
@@ -129,22 +129,22 @@ export default function DFCDiretoPage({ data }) {
                       const subKey = `${grupo.nome}::${sub.nome}`;
                       return (
                         <React.Fragment key={subKey}>
-                          <tr className="border-b border-slate-100">
-                            <td className="sticky left-0 bg-white py-1.5 pr-4 pl-5 z-10">
-                              <button onClick={() => toggle(subKey)} className="flex items-center gap-1.5 text-slate-600">
+                          <tr className="border-b border-vel-border/50">
+                            <td className="sticky left-0 bg-vel-surface py-1.5 pr-4 pl-5 z-10">
+                              <button onClick={() => toggle(subKey)} className="flex items-center gap-1.5 text-vel-text-sub">
                                 {aberto(subKey) ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                                 {sub.nome}
                               </button>
                             </td>
                             {sub.porDia.map((v, i) => <td key={i} className="py-1.5 px-1.5 text-right"><Valor v={v} /></td>)}
-                            <td className="py-1.5 px-3 text-right border-l border-slate-200"><Valor v={sub.totalRealizado} /></td>
+                            <td className="py-1.5 px-3 text-right border-l border-vel-border"><Valor v={sub.totalRealizado} /></td>
                             <td className="py-1.5 px-3 text-right"><Valor v={sub.totalPrevisto} /></td>
                           </tr>
                           {aberto(subKey) && sub.contas.map((conta) => (
-                            <tr key={conta.id} className="border-b border-slate-50">
-                              <td className="sticky left-0 bg-white py-1 pr-4 pl-10 text-slate-500 z-10">{conta.nome}</td>
+                            <tr key={conta.id} className="border-b border-vel-border/30">
+                              <td className="sticky left-0 bg-vel-surface py-1 pr-4 pl-10 text-vel-text-muted z-10">{conta.nome}</td>
                               {conta.porDia.map((v, i) => <td key={i} className="py-1 px-1.5 text-right"><Valor v={v} /></td>)}
-                              <td className="py-1 px-3 text-right border-l border-slate-100"><Valor v={conta.totalRealizado} /></td>
+                              <td className="py-1 px-3 text-right border-l border-vel-border/50"><Valor v={conta.totalRealizado} /></td>
                               <td className="py-1 px-3 text-right"><Valor v={conta.totalPrevisto} /></td>
                             </tr>
                           ))}
@@ -153,15 +153,15 @@ export default function DFCDiretoPage({ data }) {
                     })}
                   </React.Fragment>
                 ))}
-                <tr className="border-t-2 border-slate-300">
-                  <td className="sticky left-0 bg-white py-2 pr-4 text-slate-500 z-10">Caixa Inicial</td>
+                <tr className="border-t-2 border-vel-border">
+                  <td className="sticky left-0 bg-vel-surface py-2 pr-4 text-vel-text-muted z-10">Caixa Inicial</td>
                   {dias.map((_, i) => <td key={i} />)}
-                  <td className="py-2 px-3 text-right border-l border-slate-200 font-mono tabular-nums text-slate-500" colSpan={2}>{fmtBRL(caixaInicialMes)}</td>
+                  <td className="py-2 px-3 text-right border-l border-vel-border font-mono tabular-nums text-vel-text-muted" colSpan={2}>{fmtBRL(caixaInicialMes)}</td>
                 </tr>
-                <tr className="font-semibold bg-slate-50 border-b-2 border-slate-300">
-                  <td className="sticky left-0 bg-slate-50 py-2 pr-4 z-10">Saldo Final (Caixa Inicial + Total Real.)</td>
+                <tr className="font-semibold bg-vel-surface-alt border-b-2 border-vel-border">
+                  <td className="sticky left-0 bg-vel-surface-alt py-2 pr-4 z-10">Saldo Final (Caixa Inicial + Total Real.)</td>
                   {dias.map((_, i) => <td key={i} />)}
-                  <td className="py-2 px-3 text-right border-l border-slate-200 font-mono tabular-nums" colSpan={2}>{fmtBRL(saldoFinalCalculado)}</td>
+                  <td className="py-2 px-3 text-right border-l border-vel-border font-mono tabular-nums" colSpan={2}>{fmtBRL(saldoFinalCalculado)}</td>
                 </tr>
               </tbody>
             </table>

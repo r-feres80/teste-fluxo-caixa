@@ -21,9 +21,9 @@ function TooltipSparklineCambio({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="bg-white border border-slate-200 rounded shadow-sm px-2 py-1 text-[11px] leading-tight">
-      <div className="text-slate-500">{fmtData(p.data)}</div>
-      <div className="font-mono font-semibold text-slate-800">{fmtTaxaCambio(p.valor)}</div>
+    <div className="bg-vel-surface border border-vel-border rounded shadow-sm px-2 py-1 text-[11px] leading-tight">
+      <div className="text-vel-text-muted">{fmtData(p.data)}</div>
+      <div className="font-mono font-semibold text-vel-text">{fmtTaxaCambio(p.valor)}</div>
     </div>
   );
 }
@@ -65,45 +65,45 @@ function CambioMoeda({ nome, d }) {
   if (!d || d.indisponivel) {
     return (
       <div className="flex flex-col gap-1">
-        <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
-        <span className="text-sm text-slate-400">indisponível</span>
+        <span className="text-xs text-vel-text-muted uppercase tracking-wide">{nome}</span>
+        <span className="text-sm text-vel-text-muted">indisponível</span>
       </div>
     );
   }
   const alta = d.variacaoPct != null && d.variacaoPct >= 0;
   const tituloEMA5 = `Estimativa estatística de curtíssimo prazo (média móvel exponencial de 5 pregões) — não é cotação futura oficial nem previsão de mercado.${d.ema5AmostraReduzida ? ` Amostra reduzida: ${d.ema5AmostraTamanho} dia(s).` : ""}`;
   const temHistorico = d.ultimosDias && d.ultimosDias.length > 0;
-  const blocoCls = "rounded border border-slate-200 bg-slate-50/60 p-2.5";
+  const blocoCls = "rounded border border-vel-border bg-vel-surface-alt/60 p-2.5";
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs text-slate-500 uppercase tracking-wide">{nome}</span>
+      <span className="text-xs text-vel-text-muted uppercase tracking-wide">{nome}</span>
 
       {/* Linha 1: dois quadrados lado a lado — cotação do dia | últimos 5 pregões */}
       <div className="grid grid-cols-2 gap-2">
         <div className={`${blocoCls} flex flex-col gap-1`}>
           <div className="flex items-baseline gap-2">
-            <span className="font-mono tabular-nums text-lg font-semibold text-slate-800">{fmtTaxaCambio(d.hoje)}</span>
+            <span className="font-mono tabular-nums text-lg font-semibold text-vel-text">{fmtTaxaCambio(d.hoje)}</span>
             {d.variacaoPct != null && (
-              <span className={`text-xs font-mono ${alta ? "text-emerald-600" : "text-rose-600"}`}>{alta ? "+" : ""}{d.variacaoPct.toFixed(2)}%</span>
+              <span className={`text-xs font-mono ${alta ? "text-emerald-400" : "text-rose-400"}`}>{alta ? "+" : ""}{d.variacaoPct.toFixed(2)}%</span>
             )}
           </div>
-          <span className="text-[11px] text-slate-400">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
-          <span className="text-[11px] text-slate-500 leading-snug">
+          <span className="text-[11px] text-vel-text-muted">Semana anterior: {fmtTaxaCambio(d.semanaAnterior)}</span>
+          <span className="text-[11px] text-vel-text-sub leading-snug">
             {nome.split(" ")[0]} — projeção próximo dia útil (EMA5):{" "}
             <span className="font-mono whitespace-nowrap">{fmtTaxaCambio(d.ema5)}</span>
-            <Info size={10} className="inline-block text-slate-300 align-middle ml-1 cursor-help" title={tituloEMA5} />
+            <Info size={10} className="inline-block text-vel-text-muted align-middle ml-1 cursor-help" title={tituloEMA5} />
           </span>
         </div>
 
         <div className={`${blocoCls} flex flex-col gap-1.5`}>
-          <span className="text-[10px] text-slate-400 uppercase tracking-wide">Últimos {temHistorico ? d.ultimosDias.length : 0} pregões</span>
+          <span className="text-[10px] text-vel-text-muted uppercase tracking-wide">Últimos {temHistorico ? d.ultimosDias.length : 0} pregões</span>
           {temHistorico ? (
             <table className="w-auto self-start text-[11px]">
               <tbody>
                 {d.ultimosDias.map((p, i) => {
                   const maisRecente = i === d.ultimosDias.length - 1;
                   return (
-                    <tr key={p.data} className={maisRecente ? "text-slate-800 font-semibold" : "text-slate-500"}>
+                    <tr key={p.data} className={maisRecente ? "text-vel-text font-semibold" : "text-vel-text-sub"}>
                       <td className="pr-3 leading-tight">{fmtData(p.data)}</td>
                       <td className="text-right font-mono tabular-nums leading-tight">{fmtTaxaCambio(p.valor)}</td>
                     </tr>
@@ -112,7 +112,7 @@ function CambioMoeda({ nome, d }) {
               </tbody>
             </table>
           ) : (
-            <span className="text-[11px] text-slate-400">Sem histórico.</span>
+            <span className="text-[11px] text-vel-text-muted">Sem histórico.</span>
           )}
         </div>
       </div>
@@ -199,19 +199,19 @@ export default function TesourariaPage({ data }) {
         <KPI label="Movimento de Hoje"
           value={
             <span className="flex items-baseline gap-2 text-lg whitespace-nowrap">
-              <span className="text-emerald-600">{fmtBRL(previstoHoje.entradas)}</span>
-              <span className="text-slate-300">|</span>
-              <span className="text-rose-600">{fmtBRL(previstoHoje.saidas)}</span>
+              <span className="text-emerald-400">{fmtBRL(previstoHoje.entradas)}</span>
+              <span className="text-vel-text-muted">|</span>
+              <span className="text-rose-400">{fmtBRL(previstoHoje.saidas)}</span>
             </span>
           }
           sub="Previsto p/ hoje (ainda não baixado) — Entradas | Saídas"
           tone="neutral" icon={ArrowUpRight} basis="caixa" />
       </div>
 
-      <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
-        {cambioCarregando ? <span className="text-sm text-slate-400">Carregando cotações…</span> : (
+      <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-vel-text-muted" />}>
+        {cambioCarregando ? <span className="text-sm text-vel-text-muted">Carregando cotações…</span> : (
           <div className="grid grid-cols-2 gap-x-10">
-            <div className="pr-5 border-r border-slate-100"><CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} /></div>
+            <div className="pr-5 border-r border-vel-border"><CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} /></div>
             <div className="pl-5"><CambioMoeda nome="Euro (EUR)" d={cambioDados?.EUR} /></div>
           </div>
         )}
@@ -220,13 +220,13 @@ export default function TesourariaPage({ data }) {
       <div className="grid grid-cols-2 gap-4">
         <Panel title="Saldo por Conta">
           <table className="w-full text-sm">
-            <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Conta</th><th className="py-2 pr-4">Banco</th><th className="py-2 pr-4 text-right">Saldo</th></tr></thead>
+            <thead><tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border"><th className="py-2 pr-4">Conta</th><th className="py-2 pr-4">Banco</th><th className="py-2 pr-4 text-right">Saldo</th></tr></thead>
             <tbody>
               {posicao.saldos.map(({ conta, saldo }) => (
-                <tr key={conta.id} className="border-b border-slate-100">
-                  <td className="py-2 pr-4 text-slate-700">{conta.apelido} {conta.semLiquidez === "true" && <span className="text-[10px] text-amber-600 ml-1">(sem liquidez)</span>}</td>
-                  <td className="py-2 pr-4 text-slate-500 text-xs">{entidades.bancos.find((b) => b.id === conta.bancoId)?.nome}</td>
-                  <td className={`py-2 pr-4 text-right font-mono tabular-nums ${saldo >= 0 ? "text-slate-800" : "text-rose-600"}`}>{fmtBRL(saldo)}</td>
+                <tr key={conta.id} className="border-b border-vel-border/50">
+                  <td className="py-2 pr-4 text-vel-text">{conta.apelido} {conta.semLiquidez === "true" && <span className="text-[10px] text-amber-400 ml-1">(sem liquidez)</span>}</td>
+                  <td className="py-2 pr-4 text-vel-text-sub text-xs">{entidades.bancos.find((b) => b.id === conta.bancoId)?.nome}</td>
+                  <td className={`py-2 pr-4 text-right font-mono tabular-nums ${saldo >= 0 ? "text-vel-text" : "text-rose-400"}`}>{fmtBRL(saldo)}</td>
                 </tr>
               ))}
             </tbody>
@@ -236,16 +236,16 @@ export default function TesourariaPage({ data }) {
         <Panel title="Saldo por Banco e por Empresa">
           <div className="flex flex-col gap-4">
             <div>
-              <div className="text-xs text-slate-500 uppercase mb-1.5">Por Banco</div>
+              <div className="text-xs text-vel-text-muted uppercase mb-1.5">Por Banco</div>
               {Array.from(porBanco.entries()).map(([bancoId, saldo]) => (
-                <div key={bancoId} className="flex justify-between text-sm py-1"><span className="text-slate-600">{entidades.bancos.find((b) => b.id === bancoId)?.nome}</span><span className="font-mono tabular-nums">{fmtBRL(saldo)}</span></div>
+                <div key={bancoId} className="flex justify-between text-sm py-1"><span className="text-vel-text-sub">{entidades.bancos.find((b) => b.id === bancoId)?.nome}</span><span className="font-mono tabular-nums">{fmtBRL(saldo)}</span></div>
               ))}
             </div>
-            <div className="h-px bg-slate-100" />
+            <div className="h-px bg-vel-border" />
             <div>
-              <div className="text-xs text-slate-500 uppercase mb-1.5">Por Empresa</div>
+              <div className="text-xs text-vel-text-muted uppercase mb-1.5">Por Empresa</div>
               {Array.from(porEmpresa.entries()).map(([empresaId, saldo]) => (
-                <div key={empresaId} className="flex justify-between text-sm py-1"><span className="text-slate-600">{entidades.empresas.find((e) => e.id === empresaId)?.nome}</span><span className="font-mono tabular-nums">{fmtBRL(saldo)}</span></div>
+                <div key={empresaId} className="flex justify-between text-sm py-1"><span className="text-vel-text-sub">{entidades.empresas.find((e) => e.id === empresaId)?.nome}</span><span className="font-mono tabular-nums">{fmtBRL(saldo)}</span></div>
               ))}
             </div>
           </div>
@@ -254,11 +254,11 @@ export default function TesourariaPage({ data }) {
 
       <div className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-slate-800 font-semibold text-sm flex items-center gap-1">
+          <h2 className="text-vel-text font-semibold text-sm flex items-center gap-1">
             Composição do Caixa
-            <Info size={12} className="text-slate-300 shrink-0 cursor-help" title="Sem janela de tempo: considera TODOS os lançamentos Realizados até hoje, desde o início da base — não é limitado aos últimos 30 dias. Esse recorte de 30 dias só existe no gráfico 'Composição do Recebimento' abaixo." />
+            <Info size={12} className="text-vel-text-muted shrink-0 cursor-help" title="Sem janela de tempo: considera TODOS os lançamentos Realizados até hoje, desde o início da base — não é limitado aos últimos 30 dias. Esse recorte de 30 dias só existe no gráfico 'Composição do Recebimento' abaixo." />
           </h2>
-          <span className="text-xs text-slate-400">Antecipado (baixa antes do vencimento) / Em dia (no vencimento) / Atrasado (depois) — Entradas e Saídas Realizadas, exclui transferências</span>
+          <span className="text-xs text-vel-text-muted">Antecipado (baixa antes do vencimento) / Em dia (no vencimento) / Atrasado (depois) — Entradas e Saídas Realizadas, exclui transferências</span>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
@@ -268,14 +268,14 @@ export default function TesourariaPage({ data }) {
         </div>
 
         <div className="flex items-center gap-2 -mb-2">
-          <span className="text-xs text-slate-500">Mês de referência dos 2 gráficos abaixo:</span>
+          <span className="text-xs text-vel-text-sub">Mês de referência dos 2 gráficos abaixo:</span>
           <select value={mesSelCompo} onChange={(e) => setMesSelCompo(Number(e.target.value))} className={selectCls + " w-auto"}>
             {MESES.map((m, i) => <option key={m} value={i}>{m}</option>)}
           </select>
           <select value={anoSelCompo} onChange={(e) => setAnoSelCompo(Number(e.target.value))} className={selectCls + " w-auto"}>
             {[2024, 2025, 2026, 2027].map((a) => <option key={a} value={a}>{a}</option>)}
           </select>
-          {!ehMesAtualCompo && <span className="text-[11px] text-slate-400">(KPIs "Antecipado/Em dia/Atrasado" acima não seguem esse filtro — são sempre a base inteira)</span>}
+          {!ehMesAtualCompo && <span className="text-[11px] text-vel-text-muted">(KPIs "Antecipado/Em dia/Atrasado" acima não seguem esse filtro — são sempre a base inteira)</span>}
         </div>
 
         <Panel title="Composição do Recebimento" subtitle={ehMesAtualCompo ? "Só Entrada (AR), dias úteis dos últimos 30 dias até hoje, por Data de baixa" : `Só Entrada (AR), dias úteis dos últimos 30 dias até ${fmtData(dataFimCompo)}, por Data de baixa`}>
@@ -283,7 +283,7 @@ export default function TesourariaPage({ data }) {
             <BarChart data={composicao30dias}>
               <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-              <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
               <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
@@ -297,7 +297,7 @@ export default function TesourariaPage({ data }) {
             <BarChart data={composicaoMensal}>
               <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-              <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} />
               <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} />
@@ -308,13 +308,13 @@ export default function TesourariaPage({ data }) {
       </div>
 
       <Panel title="Transferências Internas" subtitle="Movimentos entre contas próprias — não entram em Entradas/Saídas operacionais">
-        {transferencias.length === 0 ? <span className="text-sm text-slate-400">Nenhuma transferência registrada.</span> : (
+        {transferencias.length === 0 ? <span className="text-sm text-vel-text-muted">Nenhuma transferência registrada.</span> : (
           <div className="flex flex-col gap-2">
             {transferencias.map((grupo) => (
-              <div key={grupo.id} className="text-sm flex items-center gap-2 text-slate-600">
+              <div key={grupo.id} className="text-sm flex items-center gap-2 text-vel-text-sub">
                 <ArrowDownCircle size={14} className="text-brand-violet" />
                 {grupo.itens.map((i) => `${entidades.contasBancarias.find((c) => c.id === i.contaBancariaId)?.apelido} (${i.tipo})`).join(" → ")}
-                <span className="font-mono text-xs text-slate-500 ml-auto">{fmtBRL(grupo.itens[0]?.valor)}</span>
+                <span className="font-mono text-xs text-vel-text-muted ml-auto">{fmtBRL(grupo.itens[0]?.valor)}</span>
               </div>
             ))}
           </div>

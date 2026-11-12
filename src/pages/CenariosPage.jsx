@@ -82,7 +82,7 @@ export default function CenariosPage({ data }) {
             <BarChart data={chartEbitda}>
               <XAxis dataKey="cenario" stroke="#64748b" fontSize={11} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="EBITDA" fill="#4f46e5" radius={[3, 3, 0, 0]} />
               <Bar dataKey="Resultado" fill="#10b981" radius={[3, 3, 0, 0]} />
@@ -94,7 +94,7 @@ export default function CenariosPage({ data }) {
             <BarChart data={chartCaixa}>
               <XAxis dataKey="cenario" stroke="#64748b" fontSize={11} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Menor Ponto" fill="#f59e0b" radius={[3, 3, 0, 0]} />
               <Bar dataKey="Caixa (90d)" fill="#10b981" radius={[3, 3, 0, 0]} />

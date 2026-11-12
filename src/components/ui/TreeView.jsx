@@ -24,15 +24,15 @@ export function TreeView({ itens, paiIdField, colunas = [], onAddChild, onAddRoo
     const aberto = expandidos.has(no.id);
     return (
       <>
-        <div className={`flex items-center gap-2 py-2 border-b border-slate-100 hover:bg-slate-50 ${!no.ativo ? "opacity-50" : ""}`}
+        <div className={`flex items-center gap-2 py-2 border-b border-vel-border/50 hover:bg-vel-surface-alt ${!no.ativo ? "opacity-50" : ""}`}
           style={{ paddingLeft: `${profundidade * 20 + 8}px` }}>
-          <button onClick={() => temFilhosVisiveis && toggle(no.id)} className="w-4 shrink-0 text-slate-400">
+          <button onClick={() => temFilhosVisiveis && toggle(no.id)} className="w-4 shrink-0 text-vel-text-muted">
             {temFilhosVisiveis ? (aberto ? <ChevronDown size={14} /> : <ChevronRight size={14} />) : null}
           </button>
-          <span className="font-mono text-xs text-slate-400 w-20 shrink-0">{no.codigo}</span>
-          <span className="text-sm text-slate-800 flex-1 min-w-0 truncate">{no.descricao || no.nome}</span>
+          <span className="font-mono text-xs text-vel-text-muted w-20 shrink-0">{no.codigo}</span>
+          <span className="text-sm text-vel-text flex-1 min-w-0 truncate">{no.descricao || no.nome}</span>
           <div className="flex items-center gap-2 shrink-0">
-            {colunas.map((c) => <span key={c.key} className="text-xs text-slate-500 w-32 truncate">{c.render(no)}</span>)}
+            {colunas.map((c) => <span key={c.key} className="text-xs text-vel-text-sub w-32 truncate">{c.render(no)}</span>)}
             <Toggle value={no.ativo} onChange={() => onToggleAtivo(no)} />
           </div>
           <div className="flex items-center gap-0.5 shrink-0">
@@ -50,9 +50,9 @@ export function TreeView({ itens, paiIdField, colunas = [], onAddChild, onAddRoo
     <div>
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-2">
-          <button onClick={() => setExpandidos(new Set(itens.map((i) => i.id)))} className="text-xs text-slate-500 hover:text-slate-800">Expandir tudo</button>
-          <span className="text-slate-300">|</span>
-          <button onClick={() => setExpandidos(new Set())} className="text-xs text-slate-500 hover:text-slate-800">Recolher tudo</button>
+          <button onClick={() => setExpandidos(new Set(itens.map((i) => i.id)))} className="text-xs text-vel-text-sub hover:text-vel-text">Expandir tudo</button>
+          <span className="text-vel-text-muted">|</span>
+          <button onClick={() => setExpandidos(new Set())} className="text-xs text-vel-text-sub hover:text-vel-text">Recolher tudo</button>
         </div>
         <button onClick={onAddRoot} className="px-3 py-1.5 rounded text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1">
           <Plus size={13} /> {labelNovaRaiz}

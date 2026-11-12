@@ -42,7 +42,7 @@ export function SimpleCadastroTable({ titulo, subtitulo, campos, itens, onAdd, o
             </Field>
           ))}
           <div className="flex gap-2 col-span-6 justify-end">
-            {editingId && <button onClick={cancelEdit} className="px-3 py-1.5 rounded text-sm text-slate-500 hover:text-slate-800 flex items-center gap-1"><X size={14} /> Cancelar</button>}
+            {editingId && <button onClick={cancelEdit} className="px-3 py-1.5 rounded text-sm text-vel-text-sub hover:text-vel-text flex items-center gap-1"><X size={14} /> Cancelar</button>}
             <button onClick={submit} className="px-4 py-1.5 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1.5">
               {editingId ? <Check size={14} /> : <Plus size={14} />}{editingId ? "Salvar alterações" : "Adicionar"}
             </button>
@@ -57,7 +57,7 @@ export function SimpleCadastroTable({ titulo, subtitulo, campos, itens, onAdd, o
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-slate-500 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr className="text-left text-vel-text-muted text-xs uppercase tracking-wide border-b border-vel-border">
                   {campos.map((c) => <th key={c.key} className="py-2 pr-4">{c.label}</th>)}
                   <th className="py-2 pr-4">Situação</th>
                   <th className="py-2 pr-2"></th>
@@ -65,9 +65,9 @@ export function SimpleCadastroTable({ titulo, subtitulo, campos, itens, onAdd, o
               </thead>
               <tbody>
                 {itens.map((item) => (
-                  <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50 group">
+                  <tr key={item.id} className="border-b border-vel-border/50 hover:bg-vel-surface-alt group">
                     {campos.map((c) => (
-                      <td key={c.key} className="py-2 pr-4 text-slate-700">
+                      <td key={c.key} className="py-2 pr-4 text-vel-text">
                         {c.tipo === "select" ? (c.opcoes.find((o) => o.value === item[c.key])?.label ?? "—") : c.tipo === "toggle" ? null : (item[c.key] || "—")}
                       </td>
                     ))}

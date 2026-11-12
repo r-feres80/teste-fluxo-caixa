@@ -3,12 +3,12 @@ import { Info, AlertTriangle, X } from "lucide-react";
 
 export function Panel({ title, subtitle, right, children, className = "" }) {
   return (
-    <div className={`bg-white border border-slate-200 rounded-lg shadow-sm ${className}`}>
+    <div className={`bg-vel-surface border border-vel-border rounded-xl shadow-sm ${className}`}>
       {(title || right) && (
-        <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-200">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-vel-border">
           <div>
-            {title && <h3 className="text-slate-800 font-semibold text-sm tracking-wide uppercase">{title}</h3>}
-            {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
+            {title && <h3 className="text-vel-text font-semibold text-sm tracking-wide uppercase">{title}</h3>}
+            {subtitle && <p className="text-vel-text-sub text-xs mt-0.5">{subtitle}</p>}
           </div>
           {right}
         </div>
@@ -29,22 +29,22 @@ export const BASIS_LABEL = {
 
 export function BasisHint({ basis }) {
   if (!basis || !BASIS_LABEL[basis]) return null;
-  return <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={BASIS_LABEL[basis]} />;
+  return <Info size={11} className="text-vel-text-muted shrink-0 cursor-help" title={BASIS_LABEL[basis]} />;
 }
 
 export function KPI({ label, value, sub, tone = "neutral", icon: Icon, basis, tooltip }) {
-  const toneColor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : "text-slate-800";
+  const toneColor = tone === "positive" ? "text-emerald-400" : tone === "negative" ? "text-rose-400" : "text-vel-text";
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col gap-2">
+    <div className="bg-vel-surface border border-vel-border rounded-xl shadow-sm p-5 flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide flex items-center gap-1">
+        <span className="text-vel-text-muted text-xs font-medium uppercase tracking-wide flex items-center gap-1">
           {label}<BasisHint basis={basis} />
-          {tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+          {tooltip && <Info size={11} className="text-vel-text-muted shrink-0 cursor-help" title={tooltip} />}
         </span>
-        {Icon && <Icon size={16} className="text-slate-400" />}
+        {Icon && <Icon size={16} className="text-vel-text-muted" />}
       </div>
       <span className={`font-mono tabular-nums text-2xl font-semibold ${toneColor}`}>{value}</span>
-      {sub && <span className="text-xs text-slate-500">{sub}</span>}
+      {sub && <span className="text-xs text-vel-text-sub">{sub}</span>}
     </div>
   );
 }
@@ -67,11 +67,11 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
   const cx = 110, cy = 100, r = 82, espessura = 18;
   if (value == null) {
     return (
-      <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-1">
-        <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
-          {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+      <div className="bg-vel-surface border border-vel-border rounded-xl shadow-sm p-5 flex flex-col items-center gap-1">
+        <span className="text-vel-text-muted text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
+          {label}{tooltip && <Info size={11} className="text-vel-text-muted shrink-0 cursor-help" title={tooltip} />}
         </span>
-        <div className="h-[110px] flex items-center justify-center text-slate-300 text-sm">Sem dados</div>
+        <div className="h-[110px] flex items-center justify-center text-vel-text-muted text-sm">Sem dados</div>
       </div>
     );
   }
@@ -97,39 +97,39 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
   const metaP2 = metaAngulo != null ? pontoVelocimetro(cx, cy, r + 3, metaAngulo) : null;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-0.5">
-      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
-        {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+    <div className="bg-vel-surface border border-vel-border rounded-xl shadow-sm p-5 flex flex-col items-center gap-0.5">
+      <span className="text-vel-text-muted text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
+        {label}{tooltip && <Info size={11} className="text-vel-text-muted shrink-0 cursor-help" title={tooltip} />}
       </span>
       <svg viewBox="0 0 220 112" width="100%" height="112">
         {segmentos}
-        {metaP1 && metaP2 && <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y} stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />}
-        <line x1={cx} y1={cy} x2={ponteiro.x} y2={ponteiro.y} stroke="#1e293b" strokeWidth={3} strokeLinecap="round" />
-        <circle cx={cx} cy={cy} r={5} fill="#1e293b" />
+        {metaP1 && metaP2 && <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y} stroke="#B8ADDA" strokeWidth={2} strokeDasharray="1 2" />}
+        <line x1={cx} y1={cy} x2={ponteiro.x} y2={ponteiro.y} stroke="#F1EDFC" strokeWidth={3} strokeLinecap="round" />
+        <circle cx={cx} cy={cy} r={5} fill="#F1EDFC" />
       </svg>
-      <span className="font-mono tabular-nums text-xl font-semibold text-slate-800 -mt-3">{formatValue(value)}</span>
-      {meta != null && <span className="text-[11px] text-slate-400">Meta: {formatValue(meta)}</span>}
-      {sub && <span className="text-xs text-slate-500">{sub}</span>}
+      <span className="font-mono tabular-nums text-xl font-semibold text-vel-text -mt-3">{formatValue(value)}</span>
+      {meta != null && <span className="text-[11px] text-vel-text-muted">Meta: {formatValue(meta)}</span>}
+      {sub && <span className="text-xs text-vel-text-sub">{sub}</span>}
     </div>
   );
 }
 
 export function Badge({ children, tone = "slate" }) {
   const map = {
-    emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    amber: "bg-amber-50 text-amber-700 border-amber-200",
-    rose: "bg-rose-50 text-rose-700 border-rose-200",
-    slate: "bg-slate-100 text-slate-600 border-slate-200",
-    indigo: "bg-brand-lilac/20 text-brand-violet-deep border-brand-lilac/50",
+    emerald: "bg-emerald-900/30 text-emerald-400 border-emerald-700/40",
+    amber: "bg-amber-900/30 text-amber-400 border-amber-700/40",
+    rose: "bg-rose-900/30 text-rose-400 border-rose-700/40",
+    slate: "bg-vel-surface-alt text-vel-text-sub border-vel-border",
+    indigo: "bg-brand-purple/20 text-brand-lilac border-brand-purple/40",
   };
   return <span className={`text-[11px] px-2 py-0.5 rounded border font-medium ${map[tone]}`}>{children}</span>;
 }
 
 export function IconBtn({ onClick, title, children, tone = "slate", disabled = false }) {
   const map = {
-    slate: "hover:bg-slate-100 text-slate-400 hover:text-slate-800",
-    rose: "hover:bg-rose-50 text-slate-500 hover:text-rose-600",
-    emerald: "hover:bg-emerald-50 text-slate-500 hover:text-emerald-600",
+    slate: "hover:bg-vel-surface-alt text-vel-text-muted hover:text-vel-text",
+    rose: "hover:bg-rose-900/20 text-vel-text-muted hover:text-rose-400",
+    emerald: "hover:bg-emerald-900/20 text-vel-text-muted hover:text-emerald-400",
   };
   return (
     <button onClick={onClick} title={title} disabled={disabled}
@@ -140,7 +140,7 @@ export function IconBtn({ onClick, title, children, tone = "slate", disabled = f
 }
 
 export function InfoNote({ children, tone = "slate" }) {
-  const cls = tone === "amber" ? "text-amber-700 border-amber-200 bg-amber-50" : "text-slate-500 border-slate-200 bg-slate-50";
+  const cls = tone === "amber" ? "text-amber-400 border-amber-700/40 bg-amber-900/20" : "text-vel-text-sub border-vel-border bg-vel-surface-alt";
   return (
     <div className={`flex items-start gap-2 text-xs rounded px-3 py-2 border ${cls}`}>
       <Info size={13} className="mt-0.5 shrink-0" />
@@ -149,7 +149,7 @@ export function InfoNote({ children, tone = "slate" }) {
   );
 }
 
-export const inputCls = "w-full bg-white border border-slate-300 rounded px-2.5 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500";
+export const inputCls = "w-full bg-vel-surface-alt border border-vel-border rounded-lg px-2.5 py-1.5 text-sm text-vel-text placeholder:text-vel-text-muted focus:outline-none focus:ring-2 focus:ring-brand-purple/50 focus:border-brand-purple";
 export const selectCls = inputCls;
 
 const isoParaBR = (iso) => {
@@ -194,7 +194,7 @@ export function DateInputBR({ value, onChange, className = "" }) {
 export function Field({ label, children, className = "" }) {
   return (
     <div className={className}>
-      <label className="block text-slate-500 text-[11px] uppercase tracking-wide mb-1">{label}</label>
+      <label className="block text-vel-text-muted text-[11px] uppercase tracking-wide mb-1">{label}</label>
       {children}
     </div>
   );
@@ -203,8 +203,8 @@ export function Field({ label, children, className = "" }) {
 export function EmptyState({ titulo, descricao, acao }) {
   return (
     <div className="flex flex-col items-center justify-center text-center py-12 gap-2">
-      <div className="text-slate-800 font-medium text-sm">{titulo}</div>
-      {descricao && <div className="text-slate-500 text-xs max-w-sm">{descricao}</div>}
+      <div className="text-vel-text font-medium text-sm">{titulo}</div>
+      {descricao && <div className="text-vel-text-sub text-xs max-w-sm">{descricao}</div>}
       {acao && <div className="mt-2">{acao}</div>}
     </div>
   );
@@ -215,18 +215,18 @@ export function ConfirmDialog({ open, titulo, mensagem, onConfirm, onCancel, ton
   if (!open) return null;
   const toneBtn = tone === "rose" ? "bg-rose-600 hover:bg-rose-500" : "bg-emerald-600 hover:bg-emerald-500";
   return (
-    <div className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50" onClick={onCancel}>
-      <div className="bg-white rounded-lg shadow-xl border border-slate-200 w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onCancel}>
+      <div className="bg-vel-surface rounded-xl shadow-2xl border border-vel-border w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start gap-3">
-          <AlertTriangle size={20} className="text-rose-500 shrink-0 mt-0.5" />
+          <AlertTriangle size={20} className="text-rose-400 shrink-0 mt-0.5" />
           <div>
-            <div className="text-slate-800 font-semibold text-sm">{titulo}</div>
-            <div className="text-slate-500 text-xs mt-1">{mensagem}</div>
+            <div className="text-vel-text font-semibold text-sm">{titulo}</div>
+            <div className="text-vel-text-sub text-xs mt-1">{mensagem}</div>
           </div>
         </div>
         <div className="flex justify-end gap-2 mt-5">
-          <button onClick={onCancel} className="px-3 py-1.5 rounded text-sm text-slate-600 hover:bg-slate-100">Cancelar</button>
-          <button onClick={onConfirm} className={`px-3 py-1.5 rounded text-sm text-white font-medium ${toneBtn}`}>Confirmar</button>
+          <button onClick={onCancel} className="px-3 py-1.5 rounded-lg text-sm text-vel-text-sub hover:bg-vel-surface-alt">Cancelar</button>
+          <button onClick={onConfirm} className={`px-3 py-1.5 rounded-lg text-sm text-white font-medium ${toneBtn}`}>Confirmar</button>
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@ export function useConfirm() {
 export function Toggle({ value, onChange, onLabel = "Ativo", offLabel = "Inativo" }) {
   return (
     <button onClick={() => onChange(!value)}
-      className={`text-[11px] px-2 py-0.5 rounded border font-medium ${value ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-slate-100 text-slate-500 border-slate-200"}`}>
+      className={`text-[11px] px-2 py-0.5 rounded border font-medium ${value ? "bg-emerald-900/30 text-emerald-400 border-emerald-700/40" : "bg-vel-surface-alt text-vel-text-muted border-vel-border"}`}>
       {value ? onLabel : offLabel}
     </button>
   );
@@ -260,12 +260,12 @@ export function EditableCell({ value, onChange }) {
       <input autoFocus type="number" value={temp} onChange={(e) => setTemp(e.target.value)}
         onBlur={() => { onChange(Number(temp) || 0); setEditing(false); }}
         onKeyDown={(e) => { if (e.key === "Enter") { onChange(Number(temp) || 0); setEditing(false); } }}
-        className="w-20 bg-white border border-emerald-600 rounded px-1 py-0.5 text-right font-mono tabular-nums text-xs text-slate-800 focus:outline-none" />
+        className="w-20 bg-vel-surface-alt border border-brand-purple rounded px-1 py-0.5 text-right font-mono tabular-nums text-xs text-vel-text focus:outline-none" />
     );
   }
   return (
     <button onClick={() => { setTemp(String(value)); setEditing(true); }}
-      className={`w-20 text-right font-mono tabular-nums text-xs px-1 py-0.5 rounded hover:bg-slate-100 ${value < 0 ? "text-rose-600" : "text-slate-700"}`}>
+      className={`w-20 text-right font-mono tabular-nums text-xs px-1 py-0.5 rounded hover:bg-vel-surface-alt ${value < 0 ? "text-rose-400" : "text-vel-text-sub"}`}>
       {value === 0 ? "—" : value.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}
     </button>
   );

@@ -14,17 +14,17 @@ function LinhaConta({ conta, profundidade, expandidos, toggle }) {
   const temFilhos = conta.filhos.length > 0;
   return (
     <>
-      <tr className={`border-b border-slate-100 hover:bg-slate-50 ${temFilhos ? "cursor-pointer" : ""}`} onClick={() => temFilhos && toggle(conta.id)}>
+      <tr className={`border-b border-vel-border/50 hover:bg-vel-surface-alt ${temFilhos ? "cursor-pointer" : ""}`} onClick={() => temFilhos && toggle(conta.id)}>
         <td className="py-2 pr-4" style={{ paddingLeft: `${profundidade * 18 + 12}px` }}>
-          <span className="inline-flex items-center gap-1.5 text-slate-700">
-            {temFilhos ? (aberto ? <ChevronDown size={13} className="text-slate-400" /> : <ChevronRight size={13} className="text-slate-400" />) : <span className="w-3" />}
-            <span className="font-mono text-xs text-slate-400">{conta.codigo}</span> {conta.descricao}
+          <span className="inline-flex items-center gap-1.5 text-vel-text">
+            {temFilhos ? (aberto ? <ChevronDown size={13} className="text-vel-text-muted" /> : <ChevronRight size={13} className="text-vel-text-muted" />) : <span className="w-3" />}
+            <span className="font-mono text-xs text-vel-text-muted">{conta.codigo}</span> {conta.descricao}
           </span>
         </td>
         <td className="py-2 pr-4"><Badge tone={conta.tipo === "Sintética" ? "slate" : "emerald"}>{conta.tipo}</Badge></td>
-        <td className="py-2 pr-4 text-slate-500 text-xs">{conta.natureza}</td>
-        <td className="py-2 pr-4 text-slate-500 text-xs">{conta.classificacaoDRE}</td>
-        <td className="py-2 pr-4 text-slate-500 text-xs">{conta.classificacaoDFC}{conta.subgrupoDFC ? ` / ${conta.subgrupoDFC}` : ""}</td>
+        <td className="py-2 pr-4 text-vel-text-sub text-xs">{conta.natureza}</td>
+        <td className="py-2 pr-4 text-vel-text-sub text-xs">{conta.classificacaoDRE}</td>
+        <td className="py-2 pr-4 text-vel-text-sub text-xs">{conta.classificacaoDFC}{conta.subgrupoDFC ? ` / ${conta.subgrupoDFC}` : ""}</td>
         <td className="py-2 pr-4 text-center">{conta.centroCustoObrigatorio ? <Badge tone="amber">obrigatório</Badge> : ""}</td>
         <td className="py-2 pr-4 text-center">{conta.aceitaOrcamento ? <Badge tone="emerald">sim</Badge> : ""}</td>
       </tr>
@@ -50,7 +50,7 @@ export default function PlanoDeContasPage({ data }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+              <tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border">
                 <th className="py-2 pr-4">Conta</th>
                 <th className="py-2 pr-4">Tipo</th>
                 <th className="py-2 pr-4">Natureza</th>

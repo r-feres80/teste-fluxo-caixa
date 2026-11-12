@@ -11,7 +11,7 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { getDataAtualSistema, parseISO, mesesDoPeriodo } from "../utils/dateUtils.js";
 import { MESES } from "../config/appConfig.js";
 
-const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5e" };
+const COR_WATERFALL = { total: "#6B2BD9", positivo: "#10b981", negativo: "#f43f5e" };
 
 // Transforma o DFC do mês (Caixa Inicial + FCO + FCI + FCF = Caixa Final) em
 // dados de waterfall: cada barra intermediária "flutua" a partir do saldo
@@ -46,15 +46,15 @@ function toneDeSaude(cor) {
 }
 
 function KpiCard({ label, value, sub, tone = "neutral", basis, tooltip }) {
-  const cor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : tone === "warning" ? "text-amber-600" : "text-slate-900";
+  const cor = tone === "positive" ? "text-emerald-400" : tone === "negative" ? "text-rose-400" : tone === "warning" ? "text-amber-400" : "text-vel-text";
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 flex flex-col gap-1">
-      <span className="text-[11px] text-slate-500 uppercase tracking-wide flex items-center gap-1">
+    <div className="bg-vel-surface border border-vel-border rounded-xl shadow-sm p-4 flex flex-col gap-1">
+      <span className="text-[11px] text-vel-text-muted uppercase tracking-wide flex items-center gap-1">
         {label}<BasisHint basis={basis} />
-        {tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
+        {tooltip && <Info size={11} className="text-vel-text-muted shrink-0 cursor-help" title={tooltip} />}
       </span>
       <span className={`font-mono tabular-nums text-xl font-semibold ${cor}`}>{value}</span>
-      {sub && <span className="text-[11px] text-slate-400">{sub}</span>}
+      {sub && <span className="text-[11px] text-vel-text-muted">{sub}</span>}
     </div>
   );
 }
@@ -143,28 +143,28 @@ export default function DashboardPage({ data }) {
       <Panel title="Comparativo Mensal" subtitle={`${MESES[mesRefIdx]}/${anoRefComp} vs. ${MESES[mesAnteriorIdx]}/${mesAnteriorAno} — Regime de Competência, use o filtro Mês/Ano acima pra escolher outro mês`}>
         <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-1">
-            <span className="text-[11px] text-slate-500 uppercase tracking-wide">Receita Bruta</span>
+            <span className="text-[11px] text-vel-text-sub uppercase tracking-wide">Receita Bruta</span>
             <div className="flex items-baseline gap-3">
-              <span className="font-mono tabular-nums text-xl font-semibold text-slate-900">{fmtBRL(comparativoMensal.atual.receitaBruta)}</span>
+              <span className="font-mono tabular-nums text-xl font-semibold text-vel-text">{fmtBRL(comparativoMensal.atual.receitaBruta)}</span>
               {comparativoMensal.deltaReceitaPct != null && (
-                <span className={`text-sm font-medium ${comparativoMensal.deltaReceitaPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                <span className={`text-sm font-medium ${comparativoMensal.deltaReceitaPct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                   {comparativoMensal.deltaReceitaPct >= 0 ? "▲" : "▼"} {Math.abs(comparativoMensal.deltaReceitaPct).toFixed(0)}%
                 </span>
               )}
             </div>
-            <span className="text-[11px] text-slate-400">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.receitaBruta)}</span>
+            <span className="text-[11px] text-vel-text-muted">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.receitaBruta)}</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-[11px] text-slate-500 uppercase tracking-wide">EBITDA</span>
+            <span className="text-[11px] text-vel-text-sub uppercase tracking-wide">EBITDA</span>
             <div className="flex items-baseline gap-3">
-              <span className={`font-mono tabular-nums text-xl font-semibold ${comparativoMensal.atual.ebitda >= 0 ? "text-slate-900" : "text-rose-600"}`}>{fmtBRL(comparativoMensal.atual.ebitda)}</span>
+              <span className={`font-mono tabular-nums text-xl font-semibold ${comparativoMensal.atual.ebitda >= 0 ? "text-vel-text" : "text-rose-400"}`}>{fmtBRL(comparativoMensal.atual.ebitda)}</span>
               {comparativoMensal.deltaEbitdaPct != null && (
-                <span className={`text-sm font-medium ${comparativoMensal.deltaEbitdaPct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                <span className={`text-sm font-medium ${comparativoMensal.deltaEbitdaPct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                   {comparativoMensal.deltaEbitdaPct >= 0 ? "▲" : "▼"} {Math.abs(comparativoMensal.deltaEbitdaPct).toFixed(0)}%
                 </span>
               )}
             </div>
-            <span className="text-[11px] text-slate-400">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.ebitda)}</span>
+            <span className="text-[11px] text-vel-text-muted">{MESES[mesAnteriorIdx]}/{mesAnteriorAno}: {fmtBRL(comparativoMensal.anterior.ebitda)}</span>
           </div>
         </div>
       </Panel>
@@ -206,11 +206,11 @@ export default function DashboardPage({ data }) {
           <BarChart data={waterfallData} margin={{ top: 20 }}>
             <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
             <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
+            <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
             <Bar dataKey="base" stackId="wf" fill="transparent" />
             <Bar dataKey="delta" stackId="wf" radius={[3, 3, 3, 3]}>
               {waterfallData.map((d, i) => <Cell key={i} fill={COR_WATERFALL[d.cor]} />)}
-              <LabelList dataKey="valorReal" position="top" formatter={fmtBRLShort} style={{ fontSize: 11, fill: "#475569" }} />
+              <LabelList dataKey="valorReal" position="top" formatter={fmtBRLShort} style={{ fontSize: 11, fill: "#B8ADDA" }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -218,16 +218,16 @@ export default function DashboardPage({ data }) {
 
       <Panel title="Alertas Executivos" subtitle={resumo.alertas.length === 0 ? "Nenhum alerta sustentado pelos dados atuais" : `${resumo.alertas.length} ponto(s) de atenção`}>
         <InfoNote>
-          Cada linha aponta pro card/tela onde o número completo está. Severidade <span className="text-rose-600 font-medium">Alta</span> = liquidez
+          Cada linha aponta pro card/tela onde o número completo está. Severidade <span className="text-rose-400 font-medium">Alta</span> = liquidez
           projetada fica negativa, caixa consolidado ATUAL abaixo do mínimo configurado, ou título já vencido; <span className="text-amber-600 font-medium">Média</span> = caixa
           projetado (futuro) abaixo do mínimo, pagamento/recebimento relevante próximo, concentração de carteira acima de {parametros.limiteConcentracaoPct}%,
           ou desvio orçamentário acima de {fmtBRL(parametros.materialidadeValor)} e {parametros.materialidadePct}% ao mesmo tempo — cortes configuráveis em Governança;
           <span className="text-brand-violet-deep font-medium"> Informativa</span> = evento de rotina (ex.: sweep automático de caixa), não é risco.
         </InfoNote>
-        {resumo.alertas.length === 0 ? <span className="text-sm text-slate-400">Sem alertas no momento.</span> : (
+        {resumo.alertas.length === 0 ? <span className="text-sm text-vel-text-muted">Sem alertas no momento.</span> : (
           <div className="flex flex-col gap-2 mt-3">
             {resumo.alertas.map((a, i) => {
-              const cor = a.severidade === "Alta" ? "text-rose-600" : a.severidade === "Média" ? "text-amber-600" : "text-brand-violet-deep";
+              const cor = a.severidade === "Alta" ? "text-rose-400" : a.severidade === "Média" ? "text-amber-600" : "text-brand-violet-deep";
               const tone = a.severidade === "Alta" ? "rose" : a.severidade === "Média" ? "amber" : "indigo";
               const Icon = a.severidade === "Informativa" ? Info : AlertTriangle;
               return (
@@ -258,7 +258,7 @@ export default function DashboardPage({ data }) {
                   max]. Não mexemos em buildFluxoCaixaDiario — os valores
                   continuam os mesmos, só a escala do eixo mudou. */}
               <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} domain={["dataMin", "dataMax"]} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
               <Area type="monotone" dataKey="saldo" stroke="#10b981" fill="url(#gradDash)" strokeWidth={1.75} />
             </AreaChart>
@@ -269,7 +269,7 @@ export default function DashboardPage({ data }) {
             <BarChart data={resumo.despesasPorCentroCusto} layout="vertical" margin={{ left: 20 }}>
               <XAxis type="number" stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
               <YAxis type="category" dataKey="nome" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} width={90} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Bar dataKey="valor" fill="#f43f5e" radius={[0, 3, 3, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -279,15 +279,15 @@ export default function DashboardPage({ data }) {
       <div className="grid grid-cols-2 gap-4">
         <Panel title="Top Clientes (em aberto)">
           {resumo.contasReceber.concentracaoTop5.map((c) => (
-            <div key={c.id} className="flex justify-between text-sm py-1 border-b border-slate-100"><span className="text-slate-600">{c.nome}</span><span className="font-mono">{fmtBRL(c.valor)}</span></div>
+            <div key={c.id} className="flex justify-between text-sm py-1 border-b border-vel-border"><span className="text-vel-text-sub">{c.nome}</span><span className="font-mono">{fmtBRL(c.valor)}</span></div>
           ))}
         </Panel>
         <Panel title="Top Fornecedores (em aberto)">
           {resumo.contasPagar.concentracaoTop5.map((c) => (
-            <div key={c.id} className="flex justify-between text-sm py-1 border-b border-slate-100"><span className="text-slate-600">{c.nome}</span><span className="font-mono">{fmtBRL(c.valor)}</span></div>
+            <div key={c.id} className="flex justify-between text-sm py-1 border-b border-vel-border"><span className="text-vel-text-sub">{c.nome}</span><span className="font-mono">{fmtBRL(c.valor)}</span></div>
           ))}
           {resumo.contasPagar.despesasInternas > 0 && (
-            <div className="flex justify-between text-xs text-slate-400 pt-2 mt-1">
+            <div className="flex justify-between text-xs text-vel-text-muted pt-2 mt-1">
               <span>Despesas internas (sem fornecedor vinculado)</span><span className="font-mono">{fmtBRL(resumo.contasPagar.despesasInternas)}</span>
             </div>
           )}

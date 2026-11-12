@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Lock, AlertTriangle } from "lucide-react";
+import { Sparkles, AlertTriangle } from "lucide-react";
 import { APP_NAME, APP_TAGLINE } from "../config/appConfig.js";
-import { inputCls } from "./ui/Primitives.jsx";
 
 // ---------------------------------------------------------------------
 // REMENDO TEMPORÁRIO — proteção por senha única e compartilhada (não é
@@ -25,28 +24,20 @@ function jaDesbloqueadoNestaSessao() {
   try {
     return window.sessionStorage.getItem(CHAVE_SESSAO) === "1";
   } catch {
-    return false; // sessionStorage indisponível (ex.: modo privado restrito) — pede senha de novo
+    return false;
   }
 }
 
 function marcarDesbloqueado() {
   try {
     window.sessionStorage.setItem(CHAVE_SESSAO, "1");
-  } catch {
-    // Sem sessionStorage a sessão simplesmente não persiste entre reloads — não é crítico.
-  }
+  } catch {}
 }
 
-// Usado pelo botão "Sair" em App.jsx — encerra a sessão autenticada. Quem
-// chama ainda precisa recarregar a página (window.location.reload()) pra
-// PasswordGate remontar e voltar a pedir a senha; só limpar a chave não
-// tira a tela atual, já que o estado "desbloqueado" vive no componente.
 export function limparSessaoDesbloqueio() {
   try {
     window.sessionStorage.removeItem(CHAVE_SESSAO);
-  } catch {
-    // Sem sessionStorage não há sessão pra limpar.
-  }
+  } catch {}
 }
 
 export default function PasswordGate({ children }) {
@@ -70,40 +61,56 @@ export default function PasswordGate({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-white border border-slate-200 rounded-lg shadow-sm p-6 flex flex-col gap-4">
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"><Lock size={18} className="text-slate-500" /></div>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #a78bfa 0%, #6366f1 25%, #3b82f6 50%, #38bdf8 75%, #67e8f9 100%)" }}>
+
+      <div className="absolute inset-0 opacity-30"
+        style={{ background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.3) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(99,102,241,0.4) 0%, transparent 50%)" }} />
+
+      <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-sm">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg">
+            <Sparkles size={24} className="text-white" />
+          </div>
           <div>
-            <div className="text-slate-900 font-semibold text-sm">{APP_NAME}</div>
-            <div className="text-slate-400 text-[11px] mt-0.5">{APP_TAGLINE}</div>
+            <h1 className="text-white font-bold text-2xl tracking-tight drop-shadow-lg">{APP_NAME}</h1>
+            <p className="text-white/70 text-sm mt-1">{APP_TAGLINE}</p>
           </div>
         </div>
 
-        {semSenhaConfigurada ? (
-          <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
-            <AlertTriangle size={15} className="mt-0.5 shrink-0" />
-            <span>Senha de acesso não configurada (VITE_APP_PASSWORD ausente neste build). Contate quem administra o projeto.</span>
-          </div>
-        ) : (
-          <form onSubmit={tentar} className="flex flex-col gap-3">
-            <input
-              type="password"
-              autoFocus
-              value={senha}
-              onChange={(e) => { setSenha(e.target.value); setErro(false); }}
-              placeholder="Senha de acesso"
-              className={inputCls}
-            />
-            {erro && <span className="text-xs text-rose-600">Senha incorreta.</span>}
-            <button type="submit" className="px-4 py-2 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium">
-              Entrar
-            </button>
-          </form>
-        )}
+        <div className="w-full bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-6 shadow-2xl">
+          {semSenhaConfigurada ? (
+            <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-500/20 border border-amber-400/30 rounded-lg px-3 py-2">
+              <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+              <span>Senha de acesso não configurada (VITE_APP_PASSWORD ausente neste build). Contate quem administra o projeto.</span>
+            </div>
+          ) : (
+            <form onSubmit={tentar} className="flex flex-col gap-3">
+              <input
+                type="password"
+                autoFocus
+                value={senha}
+                onChange={(e) => { setSenha(e.target.value); setErro(false); }}
+                placeholder="Senha de acesso"
+                className="w-full bg-white/90 border-0 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-inner"
+              />
+              {erro && <span className="text-xs text-rose-200 font-medium">Senha incorreta.</span>}
+              <button type="submit" className="px-4 py-3 rounded-xl text-sm bg-white hover:bg-white/90 text-blue-600 font-bold transition-colors shadow-lg">
+                Entrar
+              </button>
+            </form>
+          )}
+        </div>
 
-        <p className="text-[10px] text-slate-300 text-center leading-snug">
-          Proteção temporária por senha única — será substituída por autenticação por usuário (Supabase) numa próxima fase.
+        <img
+          src="/cfobot.png"
+          alt="CFO Bot"
+          className="w-40 drop-shadow-2xl"
+          style={{ filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.18))" }}
+        />
+
+        <p className="text-[10px] text-white/50 text-center leading-snug">
+          Proteção temporária por senha única — será substituída por autenticação Supabase em breve.
         </p>
       </div>
     </div>

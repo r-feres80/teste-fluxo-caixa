@@ -95,12 +95,12 @@ export default function InadimplenciaPage({ data }) {
         <Panel title="PDD por Faixa de Atraso" subtitle="Percentuais configuráveis em Governança">
           <div className="flex flex-col gap-1 text-xs">
             {pdd.porFaixa.filter((f) => f.saldo > 0).map((f) => (
-              <div key={f.key} className="flex justify-between text-slate-600">
+              <div key={f.key} className="flex justify-between text-vel-text-sub">
                 <span>{f.label} dias ({f.pct}%)</span>
                 <span className="font-mono tabular-nums">{fmtBRL(f.provisao)}</span>
               </div>
             ))}
-            {pdd.porFaixa.every((f) => f.saldo === 0) && <span className="text-slate-400">Nenhum título vencido em aberto.</span>}
+            {pdd.porFaixa.every((f) => f.saldo === 0) && <span className="text-vel-text-muted">Nenhum título vencido em aberto.</span>}
           </div>
         </Panel>
       </div>
@@ -120,7 +120,7 @@ export default function InadimplenciaPage({ data }) {
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => `${v.toFixed(1)}%`} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => `${v.toFixed(1)}%`} />
               <Line type="monotone" dataKey="pct" name="Inadimplência" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
@@ -133,19 +133,19 @@ export default function InadimplenciaPage({ data }) {
             <BarChart data={chartData}>
               <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
 
         <Panel title="Top 5 Devedores (Vencido)" subtitle="Concentração só sobre títulos vencidos em aberto">
-          {concentracaoVencidos.length === 0 ? <span className="text-sm text-slate-400">Nenhum título vencido em aberto.</span> : (
+          {concentracaoVencidos.length === 0 ? <span className="text-sm text-vel-text-muted">Nenhum título vencido em aberto.</span> : (
             <div className="flex flex-col gap-2">
               {concentracaoVencidos.map((c) => (
                 <div key={c.id} className="flex items-center justify-between text-sm">
-                  <span className="text-slate-600">{entidades.clientes.find((p) => p.id === c.id)?.nome ?? "—"}</span>
-                  <span className="font-mono tabular-nums text-slate-700">{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
+                  <span className="text-vel-text-sub">{entidades.clientes.find((p) => p.id === c.id)?.nome ?? "—"}</span>
+                  <span className="font-mono tabular-nums text-vel-text">{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
                 </div>
               ))}
             </div>
@@ -154,12 +154,12 @@ export default function InadimplenciaPage({ data }) {
       </div>
 
       <Panel title="Aging de Vencidos Recebidos" subtitle="Títulos Realizados liquidados com atraso — dias_atraso = Data de baixa − Vencimento">
-        {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
+        {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-vel-text-muted">Nenhum título Realizado com atraso na liquidação.</span> : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartAgingRecebidos}>
               <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
             </BarChart>
           </ResponsiveContainer>
@@ -178,7 +178,7 @@ export default function InadimplenciaPage({ data }) {
               })}
             </select>
             <DateInputBR value={fDataDe} onChange={setFDataDe} className={selectCls + " w-auto"} />
-            <span className="text-slate-400 text-xs">até</span>
+            <span className="text-vel-text-muted text-xs">até</span>
             <DateInputBR value={fDataAte} onChange={setFDataAte} className={selectCls + " w-auto"} />
             <select value={fClienteId} onChange={(e) => setFClienteId(e.target.value)} className={selectCls + " w-auto"}>
               <option value="TODOS">Todos os clientes</option>
@@ -194,20 +194,20 @@ export default function InadimplenciaPage({ data }) {
         {vencidosFiltrados.length === 0 ? <InfoNote>Nenhum título vencido para os filtros atuais.</InfoNote> : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">Cliente</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4 text-right">Dias em Atraso</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
+              <thead><tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">Cliente</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4 text-right">Dias em Atraso</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
                 {vencidosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
-                  <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
-                    <td className="py-2 pr-4 text-slate-700">{entidades.clientes.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
-                    <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>
-                    <td className="py-2 pr-4 text-right font-mono tabular-nums text-rose-600">{diffDaysISO(l.dataVencimento, hoje)}</td>
+                  <tr key={l.id} className="border-b border-vel-border/50 hover:bg-vel-surface-alt">
+                    <td className="py-2 pr-4 text-vel-text-sub font-mono text-xs">{fmtData(l.dataVencimento)}</td>
+                    <td className="py-2 pr-4 text-vel-text">{entidades.clientes.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
+                    <td className="py-2 pr-4 text-vel-text-sub text-xs">{l.documento}</td>
+                    <td className="py-2 pr-4 text-right font-mono tabular-nums text-rose-400">{diffDaysISO(l.dataVencimento, hoje)}</td>
                     <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-between items-center text-sm font-medium text-slate-600 mt-3 pt-3 border-t border-slate-200">
+            <div className="flex justify-between items-center text-sm font-medium text-vel-text-sub mt-3 pt-3 border-t border-vel-border">
               <span>{vencidosFiltrados.length} título(s)</span>
               <span className="font-mono tabular-nums">{fmtBRL(totalFiltrado)}</span>
             </div>

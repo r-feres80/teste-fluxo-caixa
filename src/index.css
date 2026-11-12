@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --vel-bg: #0F0A1F;
+  --vel-surface: #1A1333;
+  --vel-surface-alt: #221A40;
+  --vel-border: #2D2255;
+  --vel-border-light: #382D66;
+  --vel-text: #F1EDFC;
+  --vel-text-sub: #B8ADDA;
+  --vel-text-muted: #7A6FA0;
+  --vel-accent: #6B2BD9;
+  --vel-accent-hover: #7C3AED;
+  --vel-cyan: #2EDFEA;
+  --vel-blue: #2D7FE0;
+}
+
 html, body, #root { height: 100%; }
-body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--vel-bg);
+  color: var(--vel-text);
+}
 
 /* Landing page: pequena transição quando a ordenação por uso muda (App.jsx, IconGroupGrid). */
 @keyframes landingTileReorder {

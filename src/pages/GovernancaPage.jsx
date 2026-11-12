@@ -65,18 +65,18 @@ export default function GovernancaPage({ data }) {
             <Sparkles size={15} /> Carregar Dados Demonstrativos
           </button>
           <button onClick={exportarBackup} disabled={totalRegistros === 0}
-            className="px-4 py-2 rounded text-sm bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white">
+            className="px-4 py-2 rounded text-sm bg-vel-surface-alt border border-vel-border hover:bg-vel-surface text-vel-text font-medium flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
             <Download size={15} /> Exportar Backup (JSON)
           </button>
-          <button onClick={confirmarLimpeza} className="px-4 py-2 rounded text-sm bg-white border border-rose-300 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2">
+          <button onClick={confirmarLimpeza} className="px-4 py-2 rounded text-sm bg-vel-surface-alt border border-rose-700/40 hover:bg-rose-900/20 text-rose-400 font-medium flex items-center gap-2">
             <Trash2 size={15} /> Limpar Base
           </button>
-          <button onClick={confirmarResetTudo} className="px-4 py-2 rounded text-sm bg-white border border-rose-300 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2">
+          <button onClick={confirmarResetTudo} className="px-4 py-2 rounded text-sm bg-vel-surface-alt border border-rose-700/40 hover:bg-rose-900/20 text-rose-400 font-medium flex items-center gap-2">
             <Trash2 size={15} /> Resetar Tudo
           </button>
-          <div className="text-xs text-slate-500 flex items-center gap-1.5"><Database size={13} /> {totalRegistros} registro(s) na base atual ({totalLancamentos} lançamento(s))</div>
+          <div className="text-xs text-vel-text-sub flex items-center gap-1.5"><Database size={13} /> {totalRegistros} registro(s) na base atual ({totalLancamentos} lançamento(s))</div>
         </div>
-        <div className="text-xs text-slate-400 mt-3">
+        <div className="text-xs text-vel-text-muted mt-3">
           <strong>Limpar Base</strong> reseta só dado transacional (lançamentos, contas bancárias, clientes/fornecedores...) e preserva Empresas/Bancos/Plano de Contas.{" "}
           <strong>Resetar Tudo</strong> apaga também a configuração — use só pra recomeçar do zero de verdade.
         </div>
@@ -146,24 +146,24 @@ export default function GovernancaPage({ data }) {
           disponível à parte, fora deste ciclo automático.
         </InfoNote>
         {(!entidades.sweepLog || entidades.sweepLog.length === 0) ? (
-          <span className="text-sm text-slate-400 mt-3 block">Nenhuma execução registrada ainda.</span>
+          <span className="text-sm text-vel-text-muted mt-3 block">Nenhuma execução registrada ainda.</span>
         ) : (
           <table className="w-full text-sm mt-3">
-            <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+            <thead><tr className="text-left text-vel-text-sub text-xs uppercase border-b border-vel-border">
               <th className="py-2 pr-4">Data</th><th className="py-2 pr-4">Executado em</th><th className="py-2 pr-4">Resultado</th>
               <th className="py-2 pr-4 text-right">Valor varrido</th><th className="py-2 pr-4">Mínimo vigente</th><th className="py-2">Movimentos (origem → destino)</th>
             </tr></thead>
             <tbody>
               {[...entidades.sweepLog].reverse().map((r) => (
-                <tr key={r.id} className="border-b border-slate-100 align-top">
-                  <td className="py-2 pr-4 text-slate-700 whitespace-nowrap">{fmtData(r.dataExecucao)}</td>
-                  <td className="py-2 pr-4 text-slate-500 text-xs whitespace-nowrap">{fmtDataHora(r.timestamp)}</td>
+                <tr key={r.id} className="border-b border-vel-border/50 align-top">
+                  <td className="py-2 pr-4 text-vel-text whitespace-nowrap">{fmtData(r.dataExecucao)}</td>
+                  <td className="py-2 pr-4 text-vel-text-sub text-xs whitespace-nowrap">{fmtDataHora(r.timestamp)}</td>
                   <td className="py-2 pr-4">
-                    {r.executado ? <span className="text-emerald-600 font-medium">Executado</span> : <span className="text-slate-400">Sem excedente</span>}
+                    {r.executado ? <span className="text-emerald-400 font-medium">Executado</span> : <span className="text-vel-text-muted">Sem excedente</span>}
                   </td>
                   <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(r.valorTotalVarrido)}</td>
-                  <td className="py-2 pr-4 font-mono tabular-nums text-slate-500">{fmtBRL(r.caixaMinimoVigente)}</td>
-                  <td className="py-2 text-xs text-slate-600">
+                  <td className="py-2 pr-4 font-mono tabular-nums text-vel-text-sub">{fmtBRL(r.caixaMinimoVigente)}</td>
+                  <td className="py-2 text-xs text-vel-text-sub">
                     {r.movimentos.length === 0 ? "—" : r.movimentos.map((m, i) => (
                       <div key={i}>
                         {entidades.contasBancarias.find((c) => c.id === m.contaOrigemId)?.apelido ?? m.contaOrigemId}

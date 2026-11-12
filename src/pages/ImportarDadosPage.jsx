@@ -71,10 +71,10 @@ export default function ImportarDadosPage({ data }) {
             <Upload size={15} /> Selecionar arquivo
             <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={handleFile} />
           </label>
-          <button onClick={baixarTemplate} className="px-4 py-2 rounded text-sm bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium flex items-center gap-2">
+          <button onClick={baixarTemplate} className="px-4 py-2 rounded text-sm bg-vel-surface-alt border border-vel-border hover:bg-vel-surface text-vel-text font-medium flex items-center gap-2">
             <Download size={15} /> Baixar template (XLSX)
           </button>
-          {nomeArquivo && <span className="text-xs text-slate-500">{nomeArquivo}</span>}
+          {nomeArquivo && <span className="text-xs text-vel-text-sub">{nomeArquivo}</span>}
         </div>
         {importado && <div className="mt-3"><InfoNote tone="amber">{quantidadeImportada} lançamento(s) importado(s) com sucesso.</InfoNote></div>}
       </Panel>
@@ -85,17 +85,17 @@ export default function ImportarDadosPage({ data }) {
         >
           <div className="overflow-x-auto max-h-96 overflow-y-auto">
             <table className="w-full text-xs">
-              <thead><tr className="text-left text-slate-500 uppercase border-b border-slate-200"><th className="py-2 pr-3">#</th><th className="py-2 pr-3">Status</th><th className="py-2 pr-3">Empresa</th><th className="py-2 pr-3">Documento</th><th className="py-2 pr-3">Valor</th><th className="py-2 pr-3">Avisos</th><th className="py-2 pr-3">Erros</th></tr></thead>
+              <thead><tr className="text-left text-vel-text-sub uppercase border-b border-vel-border"><th className="py-2 pr-3">#</th><th className="py-2 pr-3">Status</th><th className="py-2 pr-3">Empresa</th><th className="py-2 pr-3">Documento</th><th className="py-2 pr-3">Valor</th><th className="py-2 pr-3">Avisos</th><th className="py-2 pr-3">Erros</th></tr></thead>
               <tbody>
                 {linhas.map((l, i) => (
-                  <tr key={i} className="border-b border-slate-100">
-                    <td className="py-1.5 pr-3 text-slate-400">{i + 1}</td>
+                  <tr key={i} className="border-b border-vel-border/50">
+                    <td className="py-1.5 pr-3 text-vel-text-muted">{i + 1}</td>
                     <td className="py-1.5 pr-3">{l.lancamento ? <Badge tone="emerald">Válida</Badge> : <Badge tone="rose">Inválida</Badge>}</td>
-                    <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Empresa"]}</td>
-                    <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Documento"]}</td>
-                    <td className="py-1.5 pr-3 text-slate-600">{l.linhaOriginal["Valor"]}</td>
+                    <td className="py-1.5 pr-3 text-vel-text-sub">{l.linhaOriginal["Empresa"]}</td>
+                    <td className="py-1.5 pr-3 text-vel-text-sub">{l.linhaOriginal["Documento"]}</td>
+                    <td className="py-1.5 pr-3 text-vel-text-sub">{l.linhaOriginal["Valor"]}</td>
                     <td className="py-1.5 pr-3 text-blue-600 text-xs">{l.avisos?.length > 0 ? l.avisos.join("; ") : ""}</td>
-                    <td className="py-1.5 pr-3 text-rose-600">{l.erros.join("; ")}</td>
+                    <td className="py-1.5 pr-3 text-rose-400">{l.erros.join("; ")}</td>
                   </tr>
                 ))}
               </tbody>

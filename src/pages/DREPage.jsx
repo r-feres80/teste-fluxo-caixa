@@ -96,17 +96,17 @@ export default function DREPage({ data }) {
     <div className="flex flex-col gap-6">
       <Panel title="DRE Gerencial" subtitle="Realizado x Forecast (Realizado + Previsto) x Orçado, por Competência">
         <table className="w-full text-sm">
-          <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Linha</th><th className="py-2 pr-4 text-right">Realizado</th><th className="py-2 pr-4 text-right">Forecast</th><th className="py-2 pr-4 text-right">Orçado</th><th className="py-2 pr-4 text-right">Δ Forecast x Orçado</th></tr></thead>
+          <thead><tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border"><th className="py-2 pr-4">Linha</th><th className="py-2 pr-4 text-right">Realizado</th><th className="py-2 pr-4 text-right">Forecast</th><th className="py-2 pr-4 text-right">Orçado</th><th className="py-2 pr-4 text-right">Δ Forecast x Orçado</th></tr></thead>
           <tbody>
             {linhasReal.map((l, i) => {
               const delta = linhasForecast[i].valor - linhasOrc[i].valor;
               return (
-                <tr key={l.label} className={`border-b border-slate-100 ${l.destaque ? "font-semibold bg-slate-50" : ""}`}>
-                  <td className="py-2 pr-4 text-slate-700">{l.label}</td>
+                <tr key={l.label} className={`border-b border-vel-border/50 ${l.destaque ? "font-semibold bg-vel-surface-alt" : ""}`}>
+                  <td className="py-2 pr-4 text-vel-text">{l.label}</td>
                   <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
                   <td className="py-2 pr-4 text-right font-mono tabular-nums text-brand-violet-deep">{fmtBRL(linhasForecast[i].valor)}</td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-500">{fmtBRL(linhasOrc[i].valor)}</td>
-                  <td className={`py-2 pr-4 text-right font-mono tabular-nums ${delta >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{fmtBRL(delta)}</td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-vel-text-sub">{fmtBRL(linhasOrc[i].valor)}</td>
+                  <td className={`py-2 pr-4 text-right font-mono tabular-nums ${delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>{fmtBRL(delta)}</td>
                 </tr>
               );
             })}
@@ -122,15 +122,15 @@ export default function DREPage({ data }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
-                <th className="py-2 pr-4 sticky left-0 bg-white">Conta</th>
+              <tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border">
+                <th className="py-2 pr-4 sticky left-0 bg-vel-surface">Conta</th>
                 {comparativoMensal.map((m) => <th key={m.label} className="py-2 px-3 text-right whitespace-nowrap">{m.label}</th>)}
               </tr>
             </thead>
             <tbody>
               {LINHAS_COMPARATIVO.map((linha) => (
-                <tr key={linha.campo} className={`border-b border-slate-100 ${linha.destaque ? "font-semibold bg-slate-50" : ""}`}>
-                  <td className="py-2 pr-4 text-slate-700 sticky left-0 bg-white whitespace-nowrap">{linha.label}</td>
+                <tr key={linha.campo} className={`border-b border-vel-border/50 ${linha.destaque ? "font-semibold bg-vel-surface-alt" : ""}`}>
+                  <td className="py-2 pr-4 text-vel-text sticky left-0 bg-vel-surface whitespace-nowrap">{linha.label}</td>
                   {comparativoMensal.map((m) => (
                     <td key={m.label} className="py-2 px-3 text-right font-mono tabular-nums whitespace-nowrap">{fmtBRL(m[linha.campo])}</td>
                   ))}

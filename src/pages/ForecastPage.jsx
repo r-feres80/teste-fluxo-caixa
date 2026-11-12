@@ -37,7 +37,7 @@ export default function ForecastPage({ data }) {
             <defs><linearGradient id="gradForecast" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4f46e5" stopOpacity={0.2} /><stop offset="100%" stopColor="#4f46e5" stopOpacity={0} /></linearGradient></defs>
             <XAxis dataKey="data" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} minTickGap={20} />
             <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+            <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
             <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
             <Area type="monotone" dataKey="saldo" stroke="#4f46e5" fill="url(#gradForecast)" strokeWidth={1.75} />
           </AreaChart>

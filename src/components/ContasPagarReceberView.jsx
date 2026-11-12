@@ -109,7 +109,7 @@ export function ContasPagarReceberView({ data, tipo }) {
           <BarChart data={regua}>
             <XAxis dataKey="data" tickFormatter={(d) => fmtData(d).slice(0, 5)} stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} />
             <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-            <Tooltip labelFormatter={(d) => fmtData(d)} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+            <Tooltip labelFormatter={(d) => fmtData(d)} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} />
             <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
           </BarChart>
         </ResponsiveContainer>
@@ -121,25 +121,25 @@ export function ContasPagarReceberView({ data, tipo }) {
             <BarChart data={chartData}>
               <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
               <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
 
         <Panel title={`Concentração por ${rotuloParceiro}`} subtitle={`Top 5 — alerta configurado em ${parametros.limiteConcentracaoPct}%`}>
-          {concentracao.length === 0 ? <span className="text-sm text-slate-400">Nenhum título em aberto.</span> : (
+          {concentracao.length === 0 ? <span className="text-sm text-vel-text-muted">Nenhum título em aberto.</span> : (
             <div className="flex flex-col gap-2">
               {concentracao.map((c) => (
                 <div key={c.id} className="flex items-center justify-between text-sm">
-                  <span className="text-slate-600">{listaParceiros.find((p) => p.id === c.id)?.nome ?? "—"}</span>
-                  <span className={`font-mono tabular-nums ${c.pct >= parametros.limiteConcentracaoPct ? "text-rose-600" : "text-slate-700"}`}>{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
+                  <span className="text-vel-text-sub">{listaParceiros.find((p) => p.id === c.id)?.nome ?? "—"}</span>
+                  <span className={`font-mono tabular-nums ${c.pct >= parametros.limiteConcentracaoPct ? "text-rose-400" : "text-vel-text"}`}>{fmtBRL(c.valor)} ({c.pct.toFixed(0)}%)</span>
                 </div>
               ))}
             </div>
           )}
           {despesasInternas > 0 && (
-            <div className="flex items-center justify-between text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between text-xs text-vel-text-muted mt-3 pt-3 border-t border-vel-border/50">
               <span>Despesas internas (sem {rotuloParceiro.toLowerCase()} vinculado)</span>
               <span className="font-mono tabular-nums">{fmtBRL(despesasInternas)}</span>
             </div>
@@ -155,7 +155,7 @@ export function ContasPagarReceberView({ data, tipo }) {
       {tipo === "Entrada" && (
         <div className="grid grid-cols-2 gap-4">
           <Panel title="Composição do Recebido" subtitle="Antecipado / Em dia / Atrasado — baixa (recebimento) vs. vencimento, títulos Realizados">
-            {composicaoRecebido.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado no momento.</span> : (
+            {composicaoRecebido.total === 0 ? <span className="text-sm text-vel-text-muted">Nenhum título Realizado no momento.</span> : (
               <div className="flex flex-col gap-3">
                 <div className="w-full h-6 rounded overflow-hidden flex">
                   {composicaoRecebido.antecipadoPct > 0 && <div className="bg-emerald-500" style={{ width: `${composicaoRecebido.antecipadoPct}%` }} title="Antecipado" />}
@@ -163,22 +163,22 @@ export function ContasPagarReceberView({ data, tipo }) {
                   {composicaoRecebido.atrasadoPct > 0 && <div className="bg-rose-500" style={{ width: `${composicaoRecebido.atrasadoPct}%` }} title="Atrasado" />}
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />Antecipado <span className="font-mono">{composicaoRecebido.antecipadoPct.toFixed(0)}%</span></span>
-                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-brand-violet inline-block" />Em dia <span className="font-mono">{composicaoRecebido.emDiaPct.toFixed(0)}%</span></span>
-                  <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block" />Atrasado <span className="font-mono">{composicaoRecebido.atrasadoPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-vel-text-sub"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />Antecipado <span className="font-mono">{composicaoRecebido.antecipadoPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-vel-text-sub"><span className="w-2.5 h-2.5 rounded-sm bg-brand-violet inline-block" />Em dia <span className="font-mono">{composicaoRecebido.emDiaPct.toFixed(0)}%</span></span>
+                  <span className="flex items-center gap-1.5 text-vel-text-sub"><span className="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block" />Atrasado <span className="font-mono">{composicaoRecebido.atrasadoPct.toFixed(0)}%</span></span>
                 </div>
               </div>
             )}
           </Panel>
 
           <Panel title="Composição do Recebido por Dia da Semana" subtitle="Soma do valor Realizado por dia da semana da Data de baixa (mín. Seg-Sex)">
-            {composicaoPorDiaSemana.every((d) => d.valor === 0) ? <span className="text-sm text-slate-400">Nenhum título Realizado no momento.</span> : (
+            {composicaoPorDiaSemana.every((d) => d.valor === 0) ? <span className="text-sm text-vel-text-muted">Nenhum título Realizado no momento.</span> : (
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={composicaoPorDiaSemana}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2D2255" />
                   <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
                   <YAxis stroke="#64748b" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-                  <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+                  <Tooltip contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} formatter={(v) => fmtBRL(v)} />
                   <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
                 </BarChart>
               </ResponsiveContainer>
@@ -193,11 +193,11 @@ export function ContasPagarReceberView({ data, tipo }) {
       >
         <ResponsiveContainer width="100%" height={240}>
           <ComposedChart data={previstoRealizado}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2D2255" />
             <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
             <YAxis yAxisId="valor" stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
             <YAxis yAxisId="pct" orientation="right" stroke="#94a3b8" fontSize={10} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} width={44} />
-            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v, n) => n === "% Aderência" ? (v == null ? "—" : `${v.toFixed(0)}%`) : fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v, n) => n === "% Aderência" ? (v == null ? "—" : `${v.toFixed(0)}%`) : fmtBRL(v)} contentStyle={{ background: "#1A1333", border: "1px solid #2D2255", borderRadius: 6, fontSize: 12, color: "#F1EDFC" }} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
             <Bar yAxisId="valor" dataKey="previsto" name="Venceu no Dia" fill="#818cf8" radius={[3, 3, 0, 0]} />
             <Bar yAxisId="valor" dataKey="realizado" name={tipo === "Entrada" ? "Já Recebido (do que venceu no dia)" : "Já Pago (do que venceu no dia)"} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} radius={[3, 3, 0, 0]} />
@@ -206,9 +206,9 @@ export function ContasPagarReceberView({ data, tipo }) {
         </ResponsiveContainer>
         <InfoNote>
           Cada dia representa a coorte de títulos com Vencimento naquele dia (a "safra" que venceu ali).{" "}
-          <span className="font-medium text-slate-600">Venceu no Dia</span> é o total dessa safra;{" "}
-          <span className="font-medium text-slate-600">{tipo === "Entrada" ? "Já Recebido" : "Já Pago"}</span> é quanto dessa MESMA safra já está com situação Realizado, não importa quando foi liquidado;{" "}
-          <span className="font-medium text-slate-600">% Aderência</span> é a razão entre os dois — por isso fica sempre entre 0% e 100%, nunca acima. Dias recentes tendem a % baixo porque ainda não deu tempo de liquidar; isso não é atraso.
+          <span className="font-medium text-vel-text-sub">Venceu no Dia</span> é o total dessa safra;{" "}
+          <span className="font-medium text-vel-text-sub">{tipo === "Entrada" ? "Já Recebido" : "Já Pago"}</span> é quanto dessa MESMA safra já está com situação Realizado, não importa quando foi liquidado;{" "}
+          <span className="font-medium text-vel-text-sub">% Aderência</span> é a razão entre os dois — por isso fica sempre entre 0% e 100%, nunca acima. Dias recentes tendem a % baixo porque ainda não deu tempo de liquidar; isso não é atraso.
         </InfoNote>
       </Panel>
 
@@ -248,20 +248,20 @@ export function ContasPagarReceberView({ data, tipo }) {
         {abertosFiltrados.length === 0 ? <InfoNote>Nenhum título em aberto para os filtros atuais.</InfoNote> : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">{rotuloParceiro}</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4">Situação</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
+              <thead><tr className="text-left text-vel-text-sub text-xs uppercase border-b border-vel-border"><th className="py-2 pr-4">Vencimento</th><th className="py-2 pr-4">{rotuloParceiro}</th><th className="py-2 pr-4">Documento</th><th className="py-2 pr-4">Situação</th><th className="py-2 pr-4 text-right">Valor</th></tr></thead>
               <tbody>
                 {abertosFiltrados.sort((a, b) => (a.dataVencimento < b.dataVencimento ? -1 : 1)).map((l) => (
-                  <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="py-2 pr-4 text-slate-500 font-mono text-xs">{fmtData(l.dataVencimento)}</td>
-                    <td className="py-2 pr-4 text-slate-700">{listaParceiros.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
-                    <td className="py-2 pr-4 text-slate-500 text-xs">{l.documento}</td>
+                  <tr key={l.id} className="border-b border-vel-border/50 hover:bg-vel-surface-alt">
+                    <td className="py-2 pr-4 text-vel-text-sub font-mono text-xs">{fmtData(l.dataVencimento)}</td>
+                    <td className="py-2 pr-4 text-vel-text">{listaParceiros.find((p) => p.id === l.clienteFornecedorId)?.nome ?? "—"}</td>
+                    <td className="py-2 pr-4 text-vel-text-sub text-xs">{l.documento}</td>
                     <td className="py-2 pr-4 text-xs">{situacaoEfetiva(l, hoje)}</td>
                     <td className="py-2 pr-4 text-right font-mono tabular-nums">{fmtBRL(l.valor)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-between items-center text-sm font-medium text-slate-600 mt-3 pt-3 border-t border-slate-200">
+            <div className="flex justify-between items-center text-sm font-medium text-vel-text-sub mt-3 pt-3 border-t border-vel-border">
               <span>{abertosFiltrados.length} título(s)</span>
               <span className="font-mono tabular-nums">{fmtBRL(totalFiltrado)}</span>
             </div>

@@ -31,16 +31,16 @@ function LinhaOrcamento({ no, profundidade, expandidos, toggle, orcamentoItens, 
   if (ehGrupo) {
     return (
       <>
-        <tr className="border-b border-slate-100 bg-slate-50/60 hover:bg-slate-100/60 cursor-pointer font-medium" onClick={() => toggle(no.id)}>
-          <td className="py-2 pr-3 sticky left-0 bg-slate-50/60" style={{ paddingLeft: `${profundidade * 18 + 12}px` }}>
-            <span className="inline-flex items-center gap-1.5 text-slate-700">
-              {aberto ? <ChevronDown size={13} className="text-slate-400" /> : <ChevronRight size={13} className="text-slate-400" />}
+        <tr className="border-b border-vel-border/50 bg-vel-surface-alt/60 hover:bg-vel-surface-alt cursor-pointer font-medium" onClick={() => toggle(no.id)}>
+          <td className="py-2 pr-3 sticky left-0 bg-vel-surface-alt/60" style={{ paddingLeft: `${profundidade * 18 + 12}px` }}>
+            <span className="inline-flex items-center gap-1.5 text-vel-text">
+              {aberto ? <ChevronDown size={13} className="text-vel-text-muted" /> : <ChevronRight size={13} className="text-vel-text-muted" />}
               {no.codigo} {no.descricao}
             </span>
           </td>
           {MESES.map((_, mesIdx) => {
             const soma = orcaveis.reduce((s, c) => s + getValorOrcado(orcamentoItens, { ano, mes: mesIdx, contaGerencialId: c.id, empresaId: empresaSel }), 0);
-            return <td key={mesIdx} className="py-2 px-2 text-right font-mono tabular-nums text-slate-500">{soma !== 0 ? fmtBRL(soma) : "—"}</td>;
+            return <td key={mesIdx} className="py-2 px-2 text-right font-mono tabular-nums text-vel-text-sub">{soma !== 0 ? fmtBRL(soma) : "—"}</td>;
           })}
         </tr>
         {aberto && no.filhos.map((f) => (
@@ -51,8 +51,8 @@ function LinhaOrcamento({ no, profundidade, expandidos, toggle, orcamentoItens, 
   }
 
   return (
-    <tr className="border-b border-slate-100">
-      <td className="py-1.5 pr-3 text-slate-700 sticky left-0 bg-white whitespace-nowrap" style={{ paddingLeft: `${profundidade * 18 + 12}px` }}>{no.codigo} {no.descricao}</td>
+    <tr className="border-b border-vel-border/50">
+      <td className="py-1.5 pr-3 text-vel-text sticky left-0 bg-vel-surface whitespace-nowrap" style={{ paddingLeft: `${profundidade * 18 + 12}px` }}>{no.codigo} {no.descricao}</td>
       {MESES.map((_, mesIdx) => {
         const valor = getValorOrcado(orcamentoItens, { ano, mes: mesIdx, contaGerencialId: no.id, empresaId: empresaSel });
         return <td key={mesIdx} className="py-1.5 px-1"><EditableCell value={valor} onChange={(v) => atualizarValor(no.id, mesIdx, v)} /></td>;
@@ -92,7 +92,7 @@ export default function OrcamentoPage({ data }) {
         {!temAlgumOrcavel ? <InfoNote tone="amber">Nenhuma conta do Plano de Contas está marcada como "Aceita Orçamento".</InfoNote> : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200"><th className="py-2 pr-3 sticky left-0 bg-white">Conta</th>{MESES.map((m) => <th key={m} className="py-2 px-2 text-right">{m}</th>)}</tr></thead>
+              <thead><tr className="text-left text-vel-text-sub text-xs uppercase border-b border-vel-border"><th className="py-2 pr-3 sticky left-0 bg-vel-surface">Conta</th>{MESES.map((m) => <th key={m} className="py-2 px-2 text-right">{m}</th>)}</tr></thead>
               <tbody>
                 {arvore.map((no) => (
                   <LinhaOrcamento key={no.id} no={no} profundidade={0} expandidos={expandidos} toggle={toggle} orcamentoItens={entidades.orcamentoItens} ano={filtros.anoRef} empresaSel={empresaSel} atualizarValor={atualizarValor} />

@@ -37,7 +37,7 @@ export default function AplicacoesFinanceirasPage({ data }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-slate-500 text-xs uppercase border-b border-slate-200">
+              <tr className="text-left text-vel-text-muted text-xs uppercase border-b border-vel-border">
                 <th className="py-2 pr-4">Modalidade</th>
                 <th className="py-2 pr-4">Instituição</th>
                 <th className="py-2 pr-4">Empresa</th>
@@ -51,34 +51,34 @@ export default function AplicacoesFinanceirasPage({ data }) {
             </thead>
             <tbody>
               {linhas.map((l) => (
-                <tr key={l.id} className="border-b border-slate-100">
-                  <td className="py-2 pr-4 text-slate-700 font-medium">
-                    {l.modalidade ?? <span className="text-amber-600 flex items-center gap-1"><Info size={11} />sem modalidade cadastrada</span>}
-                    <div className="text-xs text-slate-400 font-normal">{l.apelido}</div>
+                <tr key={l.id} className="border-b border-vel-border/50">
+                  <td className="py-2 pr-4 text-vel-text font-medium">
+                    {l.modalidade ?? <span className="text-amber-400 flex items-center gap-1"><Info size={11} />sem modalidade cadastrada</span>}
+                    <div className="text-xs text-vel-text-muted font-normal">{l.apelido}</div>
                   </td>
-                  <td className="py-2 pr-4 text-slate-500 text-xs">{nomeBanco(l.bancoId)}</td>
-                  <td className="py-2 pr-4 text-slate-500 text-xs">{nomeEmpresa(l.empresaId)}</td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-800">{fmtBRL(l.principal)}</td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-emerald-600">{fmtBRL(l.rendimentoBruto)}</td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-slate-600">{l.prazoDias == null ? "—" : `${l.prazoDias} dias`}</td>
-                  <td className="py-2 pr-4 text-right text-slate-600 text-xs" title={l.faixaIR?.label}>
+                  <td className="py-2 pr-4 text-vel-text-sub text-xs">{nomeBanco(l.bancoId)}</td>
+                  <td className="py-2 pr-4 text-vel-text-sub text-xs">{nomeEmpresa(l.empresaId)}</td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-vel-text">{fmtBRL(l.principal)}</td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-emerald-400">{fmtBRL(l.rendimentoBruto)}</td>
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-vel-text-sub">{l.prazoDias == null ? "—" : `${l.prazoDias} dias`}</td>
+                  <td className="py-2 pr-4 text-right text-vel-text-sub text-xs" title={l.faixaIR?.label}>
                     {l.faixaIR ? `${(l.faixaIR.aliquota * 100).toFixed(1)}%` : "—"}
                   </td>
-                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-rose-600">{l.irCalculado == null ? "—" : fmtBRL(l.irCalculado)}</td>
-                  <td className="py-2 text-right font-mono tabular-nums font-semibold text-slate-800">
+                  <td className="py-2 pr-4 text-right font-mono tabular-nums text-rose-400">{l.irCalculado == null ? "—" : fmtBRL(l.irCalculado)}</td>
+                  <td className="py-2 text-right font-mono tabular-nums font-semibold text-vel-text">
                     {l.rendimentoLiquido == null ? fmtBRL(l.rendimentoBruto) : fmtBRL(l.rendimentoLiquido)}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr className="font-semibold text-slate-800 border-t-2 border-slate-200">
+              <tr className="font-semibold text-vel-text border-t-2 border-vel-border">
                 <td className="py-2.5 pr-4" colSpan={3}>Total</td>
                 <td className="py-2.5 pr-4 text-right font-mono tabular-nums">{fmtBRL(totais.principal)}</td>
-                <td className="py-2.5 pr-4 text-right font-mono tabular-nums text-emerald-600">{fmtBRL(totais.rendimentoBruto)}</td>
+                <td className="py-2.5 pr-4 text-right font-mono tabular-nums text-emerald-400">{fmtBRL(totais.rendimentoBruto)}</td>
                 <td className="py-2.5 pr-4" />
                 <td className="py-2.5 pr-4" />
-                <td className="py-2.5 pr-4 text-right font-mono tabular-nums text-rose-600">{fmtBRL(totais.irCalculado)}</td>
+                <td className="py-2.5 pr-4 text-right font-mono tabular-nums text-rose-400">{fmtBRL(totais.irCalculado)}</td>
                 <td className="py-2.5 text-right font-mono tabular-nums">{fmtBRL(totais.rendimentoLiquido)}</td>
               </tr>
             </tfoot>
