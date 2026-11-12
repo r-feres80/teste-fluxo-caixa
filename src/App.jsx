@@ -199,11 +199,11 @@ function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = fals
 // Faixa "Insight do dia" — frase curta derivada localmente do Resumo
 // Executivo (mesmos alertas do Dashboard), sem chamada externa.
 function InsightDoDia({ texto, tone }) {
-  const cores = INSIGHT_TONE[tone] ?? INSIGHT_TONE.green;
+  const iconColor = tone === "red" ? "#fca5a5" : tone === "amber" ? "#fcd34d" : "#6ee7b7";
   return (
-    <div className={`flex items-center gap-2.5 border rounded-lg px-4 py-2.5 text-sm ${cores.wrap}`}>
-      <Lightbulb size={16} className={`shrink-0 ${cores.icon}`} />
-      <span>{texto}</span>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 12, padding: "10px 16px" }}>
+      <Lightbulb size={16} style={{ color: iconColor, flexShrink: 0 }} />
+      <span style={{ fontSize: 14, color: "rgba(255,255,255,0.92)" }}>{texto}</span>
     </div>
   );
 }
@@ -232,7 +232,7 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
   }, [saude]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#f8fafc" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(160deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}>
       <LogoutButton onLogout={onLogout} />
 
       {/* ── Header ── */}
@@ -243,8 +243,8 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         >
           <Sparkles size={42} className="text-white" />
         </div>
-        <div className="font-extrabold text-4xl text-slate-800 tracking-tight">{APP_NAME}</div>
-        <div className="text-base text-slate-400 mt-2">{t("chrome.tagline")}</div>
+        <div className="font-extrabold text-4xl text-white tracking-tight">{APP_NAME}</div>
+        <div className="text-base mt-2" style={{ color: "rgba(255,255,255,0.75)" }}>{t("chrome.tagline")}</div>
       </div>
 
       {/* Insight */}
@@ -310,7 +310,7 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
           alt="CFO Bot"
           style={{ width: 160, objectFit: "contain", filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.18))" }}
         />
-        <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#94a3b8" }}>CFO Bot</div>
+        <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>CFO Bot</div>
       </div>
     </div>
   );
