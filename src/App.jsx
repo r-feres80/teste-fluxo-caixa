@@ -238,13 +238,13 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
       {/* ── Header ── */}
       <div className="flex flex-col items-center pt-10 pb-6 px-6">
         <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-3"
-          style={{ background: "linear-gradient(140deg,#7C3AED,#0A6CFF,#12D8FF)", boxShadow: "0 8px 24px rgba(10,108,255,.35)" }}
+          className="w-24 h-24 rounded-3xl flex items-center justify-center mb-4"
+          style={{ background: "linear-gradient(140deg,#7C3AED,#0A6CFF,#12D8FF)", boxShadow: "0 12px 36px rgba(10,108,255,.4)" }}
         >
-          <Sparkles size={26} className="text-white" />
+          <Sparkles size={42} className="text-white" />
         </div>
-        <div className="font-bold text-2xl text-slate-800">{APP_NAME}</div>
-        <div className="text-sm text-slate-400 mt-1">{t("chrome.tagline")}</div>
+        <div className="font-extrabold text-4xl text-slate-800 tracking-tight">{APP_NAME}</div>
+        <div className="text-base text-slate-400 mt-2">{t("chrome.tagline")}</div>
       </div>
 
       {/* Insight */}
@@ -254,7 +254,7 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
 
       {/* ── Grid Omie ── */}
       <div className="flex-1 px-8 pb-10">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20, maxWidth: 1100, margin: "0 auto" }}>
           {ICON_GROUPS.map((group, gi) => {
             const cfg = GROUP_TILE_CFG[group.id] ?? { bg: "#64748b", Icon: LayoutGrid };
             const TileIcon = cfg.Icon;
@@ -264,33 +264,36 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
               <button
                 key={group.id}
                 onClick={() => onSelect(firstId)}
-                className="rounded-2xl flex flex-col items-center justify-center gap-3 py-8 px-4 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98]"
+                className="rounded-2xl flex flex-col items-center justify-center gap-3 text-white relative transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98]"
                 style={{
                   background: cfg.bg,
-                  boxShadow: `0 4px 20px ${cfg.bg}55`,
+                  boxShadow: `0 6px 28px ${cfg.bg}66`,
                   animation: `vxFadeUp 350ms ${gi * 60}ms both`,
-                  minHeight: 160,
+                  minHeight: 220,
+                  width: "calc(33.333% - 14px)",
+                  minWidth: 240,
+                  padding: "32px 20px",
                 }}
               >
                 {alertas > 0 && (
-                  <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
+                  <span className="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
                     {alertas}
                   </span>
                 )}
-                <TileIcon size={40} strokeWidth={1.5} className="opacity-90" />
-                <span className="font-semibold text-sm text-center leading-tight opacity-95">
+                <TileIcon size={52} strokeWidth={1.4} className="opacity-90" />
+                <span className="font-bold text-base text-center leading-tight opacity-95">
                   {t(`group.${group.id}`)}
                 </span>
                 {/* Sub-itens como chips clicáveis */}
-                <div className="flex flex-wrap gap-1 justify-center mt-1">
+                <div className="flex flex-wrap gap-1.5 justify-center mt-1">
                   {group.ids.map((id) => (
                     <span
                       key={id}
                       onClick={(e) => { e.stopPropagation(); onSelect(id); }}
-                      className="text-[10px] px-2 py-0.5 rounded-full cursor-pointer transition-colors"
-                      style={{ background: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.9)" }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.35)"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.2)"}
+                      className="text-[11px] px-2.5 py-1 rounded-full cursor-pointer transition-colors font-medium"
+                      style={{ background: "rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.95)" }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.38)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.22)"}
                     >
                       {t(`nav.${id}`)}
                     </span>
@@ -665,32 +668,19 @@ export default function App() {
 
           {/* ── Mascote ── */}
           <div className="flex flex-col items-center py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
-            <svg viewBox="0 0 64 72" width={sidebarExpanded ? 64 : 36} className="transition-all duration-300 drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
-              {/* Corpo */}
-              <rect x="12" y="28" width="40" height="34" rx="10" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"/>
-              {/* Cabeça */}
-              <rect x="16" y="10" width="32" height="26" rx="10" fill="rgba(255,255,255,0.28)" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5"/>
-              {/* Antena */}
-              <line x1="32" y1="10" x2="32" y2="4" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeLinecap="round"/>
-              <circle cx="32" cy="3" r="2.5" fill="#12D8FF"/>
-              {/* Olhos */}
-              <rect x="21" y="17" width="8" height="6" rx="3" fill="#12D8FF" opacity="0.9"/>
-              <rect x="35" y="17" width="8" height="6" rx="3" fill="#12D8FF" opacity="0.9"/>
-              {/* Sorriso */}
-              <path d="M24 29 Q32 34 40 29" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-              {/* Gravatinha */}
-              <polygon points="32,38 29,43 32,42 35,43" fill="#12D8FF" opacity="0.8"/>
-              {/* Braços */}
-              <rect x="4" y="32" width="10" height="6" rx="3" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
-              <rect x="50" y="32" width="10" height="6" rx="3" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
-              {/* Pernas */}
-              <rect x="19" y="58" width="10" height="10" rx="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
-              <rect x="35" y="58" width="10" height="10" rx="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.35)" strokeWidth="1.2"/>
-              {/* Cifrão no peito */}
-              <text x="32" y="52" textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.65)" fontWeight="bold">$</text>
-            </svg>
+            <img
+              src="/cfobot.png"
+              alt="CFO Bot"
+              className="transition-all duration-300 drop-shadow-xl"
+              style={{
+                width: sidebarExpanded ? 100 : 44,
+                height: sidebarExpanded ? 100 : 44,
+                objectFit: "contain",
+                filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.3))",
+              }}
+            />
             {sidebarExpanded && (
-              <div className="text-[9px] mt-1 font-semibold tracking-wide" style={{ color: "rgba(255,255,255,0.45)" }}>CFO Bot</div>
+              <div className="text-[10px] mt-1.5 font-semibold tracking-wider uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>CFO Bot</div>
             )}
           </div>
 
