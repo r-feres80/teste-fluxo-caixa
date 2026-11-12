@@ -216,7 +216,7 @@ function LandingPage({ onSelect, onVerComoLista, onLogout, resumo, saude, usage 
   const insightTone = saude.dashboard ?? "green";
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-10">
+    <div data-theme="dark" className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center px-6 py-10">
       <LogoutButton onLogout={onLogout} />
       <div className="w-full max-w-6xl flex flex-col gap-6">
         <div className="flex flex-col items-center text-center gap-3">
@@ -419,7 +419,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex">
+    <div data-theme="dark" className="min-h-screen bg-slate-50 text-slate-800 flex">
       <NavModeToggle navMode={navMode} setNavMode={setNavMode} onLogout={sair} />
 
       {navMode === "sidebar" && (
