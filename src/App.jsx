@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
-  Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut,
+  Table2, AlertOctagon, List, Lightbulb, LogOut,
   PiggyBank, ChevronLeft,
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
@@ -140,62 +140,6 @@ const INSIGHT_TONE = {
   green: { wrap: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "text-emerald-500" },
 };
 
-// Memória entre montagens da LandingPage (ela desmonta a cada navegação, então
-// um "antes/depois" de posição em DOM não sobrevive entre uma visita e outra —
-// por isso a comparação de ordem fica aqui fora, no módulo, não em ref de
-// componente). Guarda a última ordem exibida por grupo para detectar mudança.
-const ultimaOrdemPorGrupo = {};
-
-// Grade interna de um bloco/categoria — mesmo componente visual usado na
-// Landing (cores por categoria, badge de saúde, reordenação por uso) e no
-// modo ícones compacto dentro de uma tela (toggle sidebar↔ícones) — só muda
-// a densidade (`compact`) e, no modo compacto, qual item está ativo
-// (`activeId`, sem efeito na Landing, que nunca passa essa prop). 2-3 ícones
-// por linha dentro do próprio bloco, com reordenação por uso (mais acessado
-// primeiro no grupo); quando a ordem muda em relação à última vez que esse
-// grid foi mostrado, os ícones entram com uma pequena transição em cascata.
-function IconGroupGrid({ group, usage, saude, onSelect, activeId, compact = false }) {
-  const { t } = useLanguage();
-  const idsOrdenados = useMemo(
-    () => [...group.ids].sort((a, b) => (usage[b] || 0) - (usage[a] || 0)),
-    [group.ids, usage]
-  );
-  const chaveOrdem = idsOrdenados.join(",");
-
-  const [ordemMudou] = useState(() => {
-    const anterior = ultimaOrdemPorGrupo[group.title];
-    return anterior != null && anterior !== chaveOrdem;
-  });
-  useEffect(() => { ultimaOrdemPorGrupo[group.title] = chaveOrdem; }, [group.title, chaveOrdem]);
-
-  const badgeSize = compact ? "w-9 h-9 rounded-lg" : "w-11 h-11 rounded-xl";
-  const iconSize = compact ? 16 : 19;
-
-  return (
-    <div className="grid grid-cols-3 gap-1.5">
-      {idsOrdenados.map((id, idx) => {
-        const item = ALL_NAV_ITEMS.find((n) => n.id === id);
-        if (!item) return null;
-        const Icon = item.icon;
-        const status = saude?.[id];
-        const ativo = activeId === id;
-        const label = t(`nav.${id}`);
-        return (
-          <button key={id} onClick={() => onSelect(id)} title={label}
-            className={`flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border text-center transition-colors ${ativo ? "border-violet-300 bg-violet-50" : "border-transparent hover:bg-slate-50 hover:border-slate-200"}${ordemMudou ? " landing-tile-reorder" : ""}`}
-            style={ordemMudou ? { animationDelay: `${idx * 35}ms` } : undefined}>
-            <div className="relative">
-              <div className={`${badgeSize} flex items-center justify-center text-white shadow-sm ${GROUP_ACCENT[group.title]}`}><Icon size={iconSize} /></div>
-              {status && <span className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${STATUS_DOT[status]}`} title={`Estado: ${status === "red" ? "atenção" : status === "amber" ? "monitorar" : "saudável"}`} />}
-            </div>
-            <span className={`text-[11px] leading-tight ${ativo ? "text-violet-700 font-medium" : "text-slate-600"}`}>{label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 // Faixa "Insight do dia" — frase curta derivada localmente do Resumo
 // Executivo (mesmos alertas do Dashboard), sem chamada externa.
 function InsightDoDia({ texto, tone }) {
@@ -322,23 +266,6 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         />
         <div className="text-xs font-semibold tracking-widest uppercase text-slate-400">CFO Bot</div>
       </div>
-    </div>
-  );
-}
-
-// Modo ícones compacto (toggle sidebar↔ícones dentro de uma tela) — mesmo
-// visual da Landing (blocos por categoria, cores, badge de saúde), só mais
-// denso, pra caber acima do conteúdo da página em vez de ocupar a tela toda.
-function IconGridNav({ view, setView, saude, usage }) {
-  const { t } = useLanguage();
-  return (
-    <div className="bg-white border-b border-slate-200 px-8 py-4 flex flex-wrap gap-3">
-      {ICON_GROUPS.map((group) => (
-        <div key={group.title} className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex flex-col gap-2">
-          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{t(`group.${group.id}`)}</div>
-          <IconGroupGrid group={group} usage={usage} saude={saude} onSelect={setView} activeId={view} compact />
-        </div>
-      ))}
     </div>
   );
 }
@@ -472,8 +399,8 @@ function SidebarNav({ view, irPara, saude, expanded }) {
 
 // Pills PT/EN/ES — Bloco 4 (item 1, escopo "só rótulos-chave": menu,
 // títulos, marca/tagline e KPI do Dashboard, sem tocar gráfico/tooltip/
-// tabela). Reaproveitado nos dois pontos fixos de topo (NavModeToggle e
-// LogoutButton — este último só existe sozinho na landing).
+// tabela). Usado no LogoutButton, o controle fixo de topo da landing e
+// das telas.
 function LanguageSwitcherPills() {
   const { idioma, setIdioma } = useLanguage();
   const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-violet-600 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
@@ -486,23 +413,9 @@ function LanguageSwitcherPills() {
   );
 }
 
-function NavModeToggle({ navMode, setNavMode, onLogout }) {
-  const { t } = useLanguage();
-  const pill = (active) => `flex items-center justify-center w-8 h-8 rounded-md transition-colors ${active ? "bg-violet-600 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
-  return (
-    <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
-      <LanguageSwitcherPills />
-      <span className="w-px h-5 bg-slate-200 mx-0.5" />
-      <button onClick={() => setNavMode("sidebar")} title={t("chrome.sidebar")} className={pill(navMode === "sidebar")}><PanelLeft size={15} /></button>
-      <button onClick={() => setNavMode("icons")} title={t("chrome.icons")} className={pill(navMode === "icons")}><LayoutGrid size={15} /></button>
-      <span className="w-px h-5 bg-slate-200 mx-0.5" />
-      <button onClick={onLogout} title={t("chrome.logout")} className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
-    </div>
-  );
-}
-
-// Mesmo controle de "Sair" (+ idioma) da NavModeToggle, mas sozinho — usado
-// na landing, que não tem o toggle sidebar/ícones (não existe tela ativa lá).
+// Controle fixo de topo: idioma + "Sair". Usado tanto na landing quanto
+// dentro das telas. Antes existia aqui um toggle sidebar↔ícones; o modo
+// ícones foi removido e a sidebar passou a ser a navegação única.
 function LogoutButton({ onLogout }) {
   const { t } = useLanguage();
   return (
@@ -519,7 +432,6 @@ export default function App() {
   // view=null é a tela de entrada (landing) — mostrada ao abrir o app e ao
   // clicar no logo/"Início". Selecionar qualquer tela sai da landing.
   const [view, setView] = useState(null);
-  const [navMode, setNavMode] = useState("sidebar");
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [usage, setUsage] = useState(lerUsoModulos);
   const appData = useAppData();
@@ -572,7 +484,7 @@ export default function App() {
         resumo={resumo}
         saude={saude}
         usage={usage}
-        onSelect={(id) => { irPara(id); setNavMode("sidebar"); }}
+        onSelect={irPara}
         onLogout={sair}
       />
     );
@@ -641,9 +553,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex">
-      <NavModeToggle navMode={navMode} setNavMode={setNavMode} onLogout={sair} />
+      <LogoutButton onLogout={sair} />
 
-      {navMode === "sidebar" && (
+      {(
         <aside
           className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
           style={{
@@ -723,20 +635,6 @@ export default function App() {
       )}
 
       <main className="flex-1 min-w-0">
-        {navMode === "icons" && (
-          <div className="bg-white border-b border-slate-200 px-8 py-3 flex items-center gap-2">
-            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-white" /></div>
-              <div>
-                <div className="text-slate-900 font-semibold text-sm leading-none">{APP_NAME}</div>
-                <div className="text-slate-400 text-[10px] mt-0.5">{t("chrome.tagline")}</div>
-              </div>
-            </button>
-          </div>
-        )}
-
-        {navMode === "icons" && <IconGridNav view={view} setView={irPara} saude={saude} usage={usage} />}
-
         {conteudo}
       </main>
 
