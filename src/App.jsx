@@ -358,16 +358,21 @@ function SidebarNav({ view, irPara, saude, expanded }) {
       {ICON_GROUPS.map((group, gi) => (
         <div key={group.title}>
           {/* Separador entre grupos */}
-          {gi > 0 && (
+          {/* Colapsado não tem rótulo, então o traço é o que separa os grupos.
+              Expandido, quem separa é a própria faixa do título. */}
+          {gi > 0 && !expanded && (
             <div style={{ height: 1, margin: "6px 12px", background: "#E7EAF3" }} />
           )}
-          {/* Label do grupo */}
+          {/* Faixa do grupo — mesmo tom da caixa de login. Em cinza claro
+              sobre branco esses títulos ficavam ilegíveis. */}
           {expanded && (
-            <div
-              className="px-4 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest whitespace-nowrap"
-              style={{ color: "#94A3B8" }}
-            >
-              {t(`group.${group.id}`)}
+            <div className="px-2 pt-3 pb-1.5">
+              <div
+                className="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest whitespace-nowrap text-white"
+                style={{ background: "linear-gradient(160deg,#9B9CFB 0%,#86B0FB 100%)" }}
+              >
+                {t(`group.${group.id}`)}
+              </div>
             </div>
           )}
           {group.ids.map((id) => {
