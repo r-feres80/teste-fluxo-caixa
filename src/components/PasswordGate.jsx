@@ -24,20 +24,28 @@ function jaDesbloqueadoNestaSessao() {
   try {
     return window.sessionStorage.getItem(CHAVE_SESSAO) === "1";
   } catch {
-    return false;
+    return false; // sessionStorage indisponível (ex.: modo privado restrito) — pede senha de novo
   }
 }
 
 function marcarDesbloqueado() {
   try {
     window.sessionStorage.setItem(CHAVE_SESSAO, "1");
-  } catch {}
+  } catch {
+    // Sem sessionStorage a sessão simplesmente não persiste entre reloads — não é crítico.
+  }
 }
 
+// Usado pelo botão "Sair" em App.jsx — encerra a sessão autenticada. Quem
+// chama ainda precisa recarregar a página (window.location.reload()) pra
+// PasswordGate remontar e voltar a pedir a senha; só limpar a chave não
+// tira a tela atual, já que o estado "desbloqueado" vive no componente.
 export function limparSessaoDesbloqueio() {
   try {
     window.sessionStorage.removeItem(CHAVE_SESSAO);
-  } catch {}
+  } catch {
+    // Sem sessionStorage não há sessão pra limpar.
+  }
 }
 
 export default function PasswordGate({ children }) {
@@ -61,26 +69,44 @@ export default function PasswordGate({ children }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #a78bfa 0%, #6366f1 25%, #3b82f6 50%, #38bdf8 75%, #67e8f9 100%)" }}>
-
-      <div className="absolute inset-0 opacity-30"
-        style={{ background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.3) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(99,102,241,0.4) 0%, transparent 50%)" }} />
-
-      <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-sm">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg">
-            <Sparkles size={24} className="text-white" />
+    // h-screen + overflow-hidden e o robô em flex-1/min-h-0: a tela de login
+    // inteira cabe na viewport sem rolagem em qualquer altura de monitor (o
+    // notebook do usuário é 1366x768, onde o layout antigo cortava o robô).
+    // O robô encolhe pra ocupar só o espaço que sobra; object-contain mantém
+    // a proporção. Não trocar por altura fixa — volta a estourar em tela baixa.
+    <div
+      className="h-screen overflow-hidden flex items-center justify-center px-4 py-6"
+      style={{ background: "linear-gradient(160deg, #a78bfa 0%, #60a5fa 55%, #67e8f9 100%)" }}
+    >
+      <div className="w-full max-w-sm h-full flex flex-col items-center justify-center gap-5">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-2 text-center shrink-0">
+          <div
+            className="w-16 h-16 rounded-3xl flex items-center justify-center"
+            style={{
+              background: "rgba(255,255,255,0.2)",
+              backdropFilter: "blur(8px)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+            }}
+          >
+            <Sparkles size={30} className="text-white" />
           </div>
-          <div>
-            <h1 className="text-white font-bold text-2xl tracking-tight drop-shadow-lg">{APP_NAME}</h1>
-            <p className="text-white/70 text-sm mt-1">{APP_TAGLINE}</p>
-          </div>
+          <div className="text-white font-extrabold text-2xl tracking-tight">{APP_NAME}</div>
+          <div className="text-white/70 text-sm">{APP_TAGLINE}</div>
         </div>
 
-        <div className="w-full bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-6 shadow-2xl">
+        {/* Form card */}
+        <div
+          className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
+          style={{
+            background: "rgba(255,255,255,0.15)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(255,255,255,0.3)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
+          }}
+        >
           {semSenhaConfigurada ? (
-            <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-500/20 border border-amber-400/30 rounded-lg px-3 py-2">
+            <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
               <AlertTriangle size={15} className="mt-0.5 shrink-0" />
               <span>Senha de acesso não configurada (VITE_APP_PASSWORD ausente neste build). Contate quem administra o projeto.</span>
             </div>
@@ -92,25 +118,40 @@ export default function PasswordGate({ children }) {
                 value={senha}
                 onChange={(e) => { setSenha(e.target.value); setErro(false); }}
                 placeholder="Senha de acesso"
-                className="w-full bg-white/90 border-0 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-inner"
+                className="w-full px-4 py-3 rounded-xl text-base outline-none"
+                style={{
+                  background: "rgba(255,255,255,0.9)",
+                  border: erro ? "2px solid #f43f5e" : "2px solid transparent",
+                  color: "#1e293b",
+                  fontSize: "1rem",
+                }}
               />
-              {erro && <span className="text-xs text-rose-200 font-medium">Senha incorreta.</span>}
-              <button type="submit" className="px-4 py-3 rounded-xl text-sm bg-white hover:bg-white/90 text-blue-600 font-bold transition-colors shadow-lg">
+              {erro && <span className="text-xs text-rose-200 -mt-2">Senha incorreta.</span>}
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: "rgba(255,255,255,0.95)",
+                  color: "#0a6cff",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                }}
+              >
                 Entrar
               </button>
             </form>
           )}
         </div>
 
+        {/* Robot — flex-1/min-h-0 faz ele encolher pro espaço que sobra */}
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          className="w-40 drop-shadow-2xl"
-          style={{ filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.18))" }}
+          className="flex-1 min-h-0 w-auto max-w-full object-contain"
+          style={{ maxHeight: 420, filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
         />
 
-        <p className="text-[10px] text-white/50 text-center leading-snug">
-          Proteção temporária por senha única — será substituída por autenticação Supabase em breve.
+        <p className="text-white/40 text-xs text-center shrink-0">
+          Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
     </div>
