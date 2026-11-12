@@ -3,7 +3,7 @@ import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
   Table2, AlertOctagon, PanelLeft, List, Lightbulb, LogOut,
-  PiggyBank,
+  PiggyBank, ChevronLeft,
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useLanguage } from "./i18n/LanguageContext.jsx";
@@ -353,10 +353,10 @@ function grupoDoId(id) {
   return ICON_GROUPS.find((g) => g.ids.includes(id))?.title;
 }
 
-// Sidebar com hover-expand: ícones sempre visíveis (w-16), texto aparece ao hover (w-60).
-// Grupos mostrados como separadores finos; sem accordion — todos os itens sempre visíveis.
-// Tooltip flutuante aparece no modo colapsado (ícone-only); indicador lateral animado no ativo.
-function SidebarNav({ view, irPara, saude }) {
+// Sidebar click-toggle: ícones sempre visíveis (w-16 collapsed), labels visíveis quando expanded (w-60).
+// Pill background ativo — linha branca/translúcida que percorre toda a largura do item.
+// Tooltip flutuante aparece só quando colapsado.
+function SidebarNav({ view, irPara, saude, expanded }) {
   const { t } = useLanguage();
   const [tooltip, setTooltip] = React.useState(null); // { id, y }
   const sidebarRef = React.useRef(null);
@@ -365,8 +365,11 @@ function SidebarNav({ view, irPara, saude }) {
     <nav ref={sidebarRef} className="flex-1 py-2 overflow-y-auto overflow-x-hidden relative">
       {ICON_GROUPS.map((group) => (
         <div key={group.title}>
-          {/* cabeçalho do grupo — só aparece quando expandido */}
-          <div className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400 whitespace-nowrap">
+          {/* cabeçalho do grupo — só visível quando expandido */}
+          <div
+            className="px-4 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400 whitespace-nowrap transition-opacity duration-200"
+            style={{ opacity: expanded ? 1 : 0 }}
+          >
             {t(`group.${group.id}`)}
           </div>
           {group.ids.map((id) => {
@@ -377,49 +380,49 @@ function SidebarNav({ view, irPara, saude }) {
             const status = saude?.[id];
             const label = t(`nav.${id}`);
             return (
-              <button
-                key={id}
-                onClick={() => irPara(id)}
-                onMouseEnter={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  setTooltip({ id, y: rect.top + rect.height / 2 });
-                }}
-                onMouseLeave={() => setTooltip(null)}
-                className={`relative w-full flex items-center gap-3 px-4 py-2 text-sm transition-all duration-200
-                  ${active
-                    ? "text-blue-400 bg-transparent"
-                    : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
-                  }`}
-              >
-                {/* indicador lateral animado */}
-                <span
-                  className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full transition-all duration-300 ease-out"
-                  style={{
-                    width: active ? 3 : 0,
-                    height: active ? 20 : 0,
-                    background: "linear-gradient(180deg,#0A6CFF,#12D8FF)",
-                    boxShadow: active ? "0 0 8px rgba(10,108,255,.7)" : "none",
-                    opacity: active ? 1 : 0,
+              <div key={id} className="px-2 py-0.5">
+                <button
+                  onClick={() => irPara(id)}
+                  onMouseEnter={(e) => {
+                    if (!expanded) {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setTooltip({ id, y: rect.top + rect.height / 2 });
+                    }
                   }}
-                />
-                <span className="relative shrink-0">
-                  <Icon size={16} className={active ? "drop-shadow-[0_0_6px_rgba(18,216,255,.5)]" : ""} />
-                  {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
-                </span>
-                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate font-medium">
-                  {label}
-                </span>
-              </button>
+                  onMouseLeave={() => setTooltip(null)}
+                  className={`relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200
+                    ${active
+                      ? "text-white"
+                      : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
+                    }`}
+                  style={active ? {
+                    background: "rgba(10,108,255,.18)",
+                    border: "1px solid rgba(10,108,255,.35)",
+                    boxShadow: "0 0 12px rgba(10,108,255,.18)",
+                  } : { border: "1px solid transparent" }}
+                >
+                  <span className="relative shrink-0">
+                    <Icon size={16} className={active ? "drop-shadow-[0_0_6px_rgba(18,216,255,.6)]" : ""} style={active ? { color: "#12D8FF" } : {}} />
+                    {status && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full border border-white ${STATUS_DOT[status]}`} />}
+                  </span>
+                  <span
+                    className="whitespace-nowrap truncate font-medium transition-opacity duration-200"
+                    style={{ opacity: expanded ? 1 : 0, pointerEvents: expanded ? "auto" : "none" }}
+                  >
+                    {label}
+                  </span>
+                </button>
+              </div>
             );
           })}
         </div>
       ))}
 
-      {/* Tooltip flutuante — aparece só no modo colapsado (ícone-only) */}
-      {tooltip && (
+      {/* Tooltip flutuante — só no modo colapsado */}
+      {tooltip && !expanded && (
         <div
-          className="pointer-events-none fixed z-[200] group-hover/sidebar:hidden"
-          style={{ top: tooltip.y, left: 68, transform: "translateY(-50%)" }}
+          className="pointer-events-none fixed z-[200]"
+          style={{ top: tooltip.y, left: 72, transform: "translateY(-50%)" }}
         >
           <div
             className="px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap"
@@ -498,6 +501,7 @@ export default function App() {
   // clicar no logo/"Início". Selecionar qualquer tela sai da landing.
   const [view, setView] = useState(null);
   const [navMode, setNavMode] = useState("sidebar");
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [usage, setUsage] = useState(lerUsoModulos);
   const appData = useAppData();
 
@@ -622,23 +626,44 @@ export default function App() {
       <NavModeToggle navMode={navMode} setNavMode={setNavMode} onLogout={sair} />
 
       {navMode === "sidebar" && (
-        <aside className="group/sidebar w-16 hover:w-60 shrink-0 bg-white border-r border-slate-200 flex flex-col overflow-hidden transition-[width] duration-[280ms] ease-[cubic-bezier(.4,0,.2,1)]">
-          <div className="px-3 py-4 border-b border-slate-200">
-            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity w-full">
+        <aside
+          className="shrink-0 bg-white border-r border-slate-200 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
+          style={{ width: sidebarExpanded ? 240 : 64 }}
+        >
+          <div className="px-3 py-4 border-b border-slate-200 flex items-center justify-between">
+            <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity flex-1 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-500 flex items-center justify-center shrink-0"><Sparkles size={15} className="text-white" /></div>
-              <div className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 overflow-hidden">
+              <div
+                className="overflow-hidden transition-opacity duration-200"
+                style={{ opacity: sidebarExpanded ? 1 : 0 }}
+              >
                 <div className="text-slate-900 font-semibold text-sm leading-none whitespace-nowrap">{APP_NAME}</div>
                 <div className="text-slate-500 text-[10px] mt-0.5 whitespace-nowrap">{t("chrome.subtitle")}</div>
               </div>
             </button>
+            {/* Botão toggle < / > */}
+            <button
+              onClick={() => setSidebarExpanded((v) => !v)}
+              className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all duration-200"
+              title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
+            >
+              <ChevronLeft
+                size={14}
+                className="transition-transform duration-300"
+                style={{ transform: sidebarExpanded ? "rotate(0deg)" : "rotate(180deg)" }}
+              />
+            </button>
           </div>
 
-          <SidebarNav view={view} irPara={irPara} saude={saude} />
+          <SidebarNav view={view} irPara={irPara} saude={saude} expanded={sidebarExpanded} />
 
           <div className="px-3 py-3 border-t border-slate-200">
             <div className="flex items-center gap-2 text-[11px] text-slate-500 overflow-hidden">
               <Save size={12} className={`shrink-0 ${appData.savedFlash ? "text-violet-500" : "text-slate-300"}`} />
-              <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-150 whitespace-nowrap truncate">
+              <span
+                className="whitespace-nowrap truncate transition-opacity duration-200"
+                style={{ opacity: sidebarExpanded ? 1 : 0 }}
+              >
                 {appData.savedFlash ? t("chrome.salvo") : `${t("chrome.ultimaAtualizacao")}: ${appData.lastUpdated ? fmtDataHora(appData.lastUpdated) : "—"}`}
               </span>
             </div>
