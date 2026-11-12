@@ -202,8 +202,8 @@ function InsightDoDia({ texto, tone }) {
   const iconColor = tone === "red" ? "#fca5a5" : tone === "amber" ? "#fcd34d" : "#6ee7b7";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 12, padding: "10px 16px" }}>
-      <Lightbulb size={16} style={{ color: iconColor, flexShrink: 0 }} />
-      <span style={{ fontSize: 14, color: "rgba(255,255,255,0.92)" }}>{texto}</span>
+      <Lightbulb size={18} style={{ color: iconColor, flexShrink: 0 }} />
+      <span style={{ fontSize: 16, color: "rgba(255,255,255,0.92)", lineHeight: 1.4 }}>{texto}</span>
     </div>
   );
 }
