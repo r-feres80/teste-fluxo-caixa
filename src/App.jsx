@@ -238,10 +238,10 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
       {/* ── Header ── */}
       <div className="flex flex-col items-center pt-10 pb-6 px-6">
         <div
-          className="w-24 h-24 rounded-3xl flex items-center justify-center mb-4"
-          style={{ background: "linear-gradient(140deg,#7C3AED,#0A6CFF,#12D8FF)", boxShadow: "0 12px 36px rgba(10,108,255,.4)" }}
+          className="w-20 h-20 rounded-3xl flex items-center justify-center mb-4"
+          style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", boxShadow: "0 8px 32px rgba(0,0,0,0.2)" }}
         >
-          <Sparkles size={42} className="text-white" />
+          <Sparkles size={36} className="text-white" />
         </div>
         <div className="font-extrabold text-4xl text-white tracking-tight">{APP_NAME}</div>
         <div className="text-base mt-2" style={{ color: "rgba(255,255,255,0.75)" }}>{t("chrome.tagline")}</div>
@@ -308,7 +308,7 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
         <img
           src="/cfobot.png"
           alt="CFO Bot"
-          style={{ width: 160, objectFit: "contain", filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.18))" }}
+          style={{ width: 340, objectFit: "contain", filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.2))" }}
         />
         <div className="text-xs font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>CFO Bot</div>
       </div>
