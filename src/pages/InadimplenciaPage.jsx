@@ -8,6 +8,10 @@ import {
 } from "../financial-engine/aging.js";
 import { diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
 import { PDD_FAIXAS_PADRAO, MESES } from "../config/appConfig.js";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA,
+  tooltipProps, linhaProps, gradienteBarraStops,
+} from "../utils/chartTheme.js";
 
 // Inadimplência é módulo de FATO (mesma base de Contas a Receber): aging e
 // vencimentos sempre a partir de "hoje" real — ver getDataAtualSistema.
@@ -110,18 +114,18 @@ export default function InadimplenciaPage({ data }) {
           label="Inadimplência"
           value={inadimplenciaPct}
           min={0} max={20}
-          bands={[{ upTo: 5, color: "#10b981" }, { upTo: 10, color: "#f59e0b" }, { upTo: 20, color: "#f43f5e" }]}
+          bands={[{ upTo: 5, color: SEMANTIC.verdeClaro }, { upTo: 10, color: SEMANTIC.laranjaClaro }, { upTo: 20, color: SEMANTIC.vermelhoClaro }]}
           formatValue={(v) => `${v.toFixed(1)}%`}
           sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
         />
         <Panel title="Evolução Mensal de Inadimplência (%)" subtitle="Últimos 6 meses, por Data de Vencimento">
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={evolucaoInadimplencia}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => `${v.toFixed(1)}%`} />
-              <Line type="monotone" dataKey="pct" name="Inadimplência" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="label" {...EIXO} fontSize={11} />
+              <YAxis {...EIXO} fontSize={11} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} />
+              <Tooltip {...tooltipProps()} formatter={(v) => `${v.toFixed(1)}%`} />
+              <Line type="monotone" dataKey="pct" name="Inadimplência" stroke={SEMANTIC.vermelho} strokeWidth={2.25} dot={false} activeDot={{ r: 5, fill: SEMANTIC.vermelho, stroke: "#fff", strokeWidth: 2 }} />
             </LineChart>
           </ResponsiveContainer>
         </Panel>
@@ -131,10 +135,10 @@ export default function InadimplenciaPage({ data }) {
         <Panel title="Aging da Carteira" subtitle="Vencido em aberto, por faixa de dias">
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData}>
-              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+              <XAxis dataKey="faixa" {...EIXO} fontSize={10} interval={0} angle={-40} textAnchor="end" height={50} />
+              <YAxis {...EIXO} fontSize={11} tickFormatter={fmtBRLShort} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" radius={RAIO_BARRA} fill="url(#inadAging)" {...ANIM} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
@@ -157,10 +161,10 @@ export default function InadimplenciaPage({ data }) {
         {agingVencidosRecebidos.total === 0 ? <span className="text-sm text-slate-400">Nenhum título Realizado com atraso na liquidação.</span> : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartAgingRecebidos}>
-              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-30} textAnchor="end" height={45} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+              <XAxis dataKey="faixa" {...EIXO} fontSize={10} interval={0} angle={-30} textAnchor="end" height={45} />
+              <YAxis {...EIXO} fontSize={11} tickFormatter={fmtBRLShort} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" radius={RAIO_BARRA} fill="url(#inadAging)" {...ANIM} />
             </BarChart>
           </ResponsiveContainer>
         )}

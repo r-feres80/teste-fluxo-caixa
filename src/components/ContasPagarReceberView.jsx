@@ -11,6 +11,10 @@ import {
 } from "../financial-engine/aging.js";
 import { situacaoEfetiva } from "../financial-engine/lancamentos.js";
 import { addDaysISO, diffDaysISO, getDataAtualSistema } from "../utils/dateUtils.js";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA,
+  tooltipProps, linhaProps, gradienteBarraStops,
+} from "../utils/chartTheme.js";
 
 // Contas a Pagar/Receber são módulos de FATO: aging e vencimentos sempre
 // contam a partir de "hoje" real, nunca da Data de Referência editável —
@@ -107,10 +111,15 @@ export function ContasPagarReceberView({ data, tipo }) {
       >
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={regua}>
-            <XAxis dataKey="data" tickFormatter={(d) => fmtData(d).slice(0, 5)} stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-            <Tooltip labelFormatter={(d) => fmtData(d)} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
-            <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
+            <defs>
+              <linearGradient id="cprEntrada" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.verde).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprSaida" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.vermelho).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprNeutro" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.roxo).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+            </defs>
+            <XAxis dataKey="data" tickFormatter={(d) => fmtData(d).slice(0, 5)} {...EIXO} fontSize={10} />
+            <YAxis {...EIXO} fontSize={11} tickFormatter={fmtBRLShort} />
+            <Tooltip labelFormatter={(d) => fmtData(d)} formatter={(v) => fmtBRL(v)} {...tooltipProps()} />
+            <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "url(#cprEntrada)" : "url(#cprSaida)"} />
           </BarChart>
         </ResponsiveContainer>
       </Panel>
@@ -119,10 +128,15 @@ export function ContasPagarReceberView({ data, tipo }) {
         <Panel title={tipo === "Entrada" ? "Aging AR" : "Aging AP"}>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={chartData}>
-              <XAxis dataKey="faixa" stroke="#64748b" fontSize={10} tickLine={false} interval={0} angle={-40} textAnchor="end" height={50} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} />
+            <defs>
+              <linearGradient id="cprEntrada" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.verde).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprSaida" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.vermelho).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprNeutro" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.roxo).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+            </defs>
+              <XAxis dataKey="faixa" {...EIXO} fontSize={10} interval={0} angle={-40} textAnchor="end" height={50} />
+              <YAxis {...EIXO} fontSize={11} tickFormatter={fmtBRLShort} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill={tipo === "Entrada" ? "url(#cprEntrada)" : "url(#cprSaida)"} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
@@ -175,11 +189,16 @@ export function ContasPagarReceberView({ data, tipo }) {
             {composicaoPorDiaSemana.every((d) => d.valor === 0) ? <span className="text-sm text-slate-400">Nenhum título Realizado no momento.</span> : (
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={composicaoPorDiaSemana}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-                  <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-                  <Bar dataKey="valor" radius={[3, 3, 0, 0]} fill="#10b981" />
+            <defs>
+              <linearGradient id="cprEntrada" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.verde).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprSaida" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.vermelho).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprNeutro" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.roxo).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+            </defs>
+                  <CartesianGrid {...GRID} />
+                  <XAxis dataKey="label" {...EIXO} fontSize={11} />
+                  <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+                  <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+                  <Bar dataKey="valor" radius={RAIO_BARRA} fill="url(#cprNeutro)" {...ANIM} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -193,14 +212,19 @@ export function ContasPagarReceberView({ data, tipo }) {
       >
         <ResponsiveContainer width="100%" height={240}>
           <ComposedChart data={previstoRealizado}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis yAxisId="valor" stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <YAxis yAxisId="pct" orientation="right" stroke="#94a3b8" fontSize={10} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} width={44} />
-            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v, n) => n === "% Aderência" ? (v == null ? "—" : `${v.toFixed(0)}%`) : fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+            <defs>
+              <linearGradient id="cprEntrada" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.verde).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprSaida" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.vermelho).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+              <linearGradient id="cprNeutro" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.roxo).map((g) => <stop key={g.offset} {...g} />)}</linearGradient>
+            </defs>
+            <CartesianGrid {...GRID} />
+            <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} {...EIXO} fontSize={10} />
+            <YAxis yAxisId="valor" {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+            <YAxis yAxisId="pct" orientation="right" {...EIXO} fontSize={10} tickFormatter={(v) => `${v.toFixed(0)}%`} tickLine={false} axisLine={false} width={44} />
+            <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v, n) => n === "% Aderência" ? (v == null ? "—" : `${v.toFixed(0)}%`) : fmtBRL(v)} {...tooltipProps()} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
             <Bar yAxisId="valor" dataKey="previsto" name="Venceu no Dia" fill="#818cf8" radius={[3, 3, 0, 0]} />
-            <Bar yAxisId="valor" dataKey="realizado" name={tipo === "Entrada" ? "Já Recebido (do que venceu no dia)" : "Já Pago (do que venceu no dia)"} fill={tipo === "Entrada" ? "#10b981" : "#f43f5e"} radius={[3, 3, 0, 0]} />
+            <Bar yAxisId="valor" dataKey="realizado" name={tipo === "Entrada" ? "Já Recebido (do que venceu no dia)" : "Já Pago (do que venceu no dia)"} fill={tipo === "Entrada" ? "url(#cprEntrada)" : "url(#cprSaida)"} radius={[3, 3, 0, 0]} />
             <Line yAxisId="pct" type="monotone" dataKey="aderenciaPct" name="% Aderência" stroke="#f97316" strokeWidth={2} dot={false} connectNulls />
           </ComposedChart>
         </ResponsiveContainer>

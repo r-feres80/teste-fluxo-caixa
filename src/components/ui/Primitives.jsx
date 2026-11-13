@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Info, AlertTriangle, X } from "lucide-react";
+import { SOMBRA_CARD, SOMBRA_CARD_HOVER, BORDA_CARD, BORDA_CARD_HOVER } from "../../utils/chartTheme.js";
 
+// Superfície padrão de todo painel/gráfico. A borda e a sombra puxam para o
+// roxo da marca em vez de cinza neutro — é o que tira o aspecto de "retângulo
+// branco solto" sem precisar encher a tela de cor.
 export function Panel({ title, subtitle, right, children, className = "" }) {
   return (
-    <div className={`bg-white border border-slate-200 rounded-lg shadow-sm ${className}`}>
+    <div
+      className={`bg-white rounded-xl transition-[box-shadow,border-color] duration-200 ${className}`}
+      style={{ border: `1px solid ${BORDA_CARD}`, boxShadow: SOMBRA_CARD }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD_HOVER;
+        e.currentTarget.style.borderColor = BORDA_CARD_HOVER;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD;
+        e.currentTarget.style.borderColor = BORDA_CARD;
+      }}
+    >
       {(title || right) && (
-        <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-200">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3" style={{ borderBottom: `1px solid ${BORDA_CARD}` }}>
           <div>
             {title && <h3 className="text-slate-800 font-semibold text-sm tracking-wide uppercase">{title}</h3>}
             {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}

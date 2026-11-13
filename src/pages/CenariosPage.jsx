@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA, tooltipProps, gradienteBarraStops,
+} from "../utils/chartTheme.js";
 import { Panel, Field, inputCls, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort } from "../utils/formatUtils.js";
 import { mesesDoPeriodo } from "../utils/dateUtils.js";
@@ -80,24 +83,34 @@ export default function CenariosPage({ data }) {
         <Panel title="Impacto sobre EBITDA e Resultado">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={chartEbitda}>
-              <XAxis dataKey="cenario" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <defs>
+                <linearGradient id="cenEbitda" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.roxo).map((s) => <stop key={s.offset} {...s} />)}</linearGradient>
+                <linearGradient id="cenResultado" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.verde).map((s) => <stop key={s.offset} {...s} />)}</linearGradient>
+              </defs>
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="cenario" {...EIXO} />
+              <YAxis {...EIXO} tickFormatter={fmtBRLShort} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="EBITDA" fill="#4f46e5" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="Resultado" fill="#10b981" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="EBITDA" fill="url(#cenEbitda)" radius={RAIO_BARRA} {...ANIM} />
+              <Bar dataKey="Resultado" fill="url(#cenResultado)" radius={RAIO_BARRA} {...ANIM} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
         <Panel title="Impacto sobre o Caixa (90 dias)">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={chartCaixa}>
-              <XAxis dataKey="cenario" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+              <defs>
+                <linearGradient id="cenMenor" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}</linearGradient>
+                <linearGradient id="cenCaixa" x1="0" y1="0" x2="0" y2="1">{gradienteBarraStops(BRAND.ciano).map((s) => <stop key={s.offset} {...s} />)}</linearGradient>
+              </defs>
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="cenario" {...EIXO} />
+              <YAxis {...EIXO} tickFormatter={fmtBRLShort} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Menor Ponto" fill="#f59e0b" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="Caixa (90d)" fill="#10b981" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="Menor Ponto" fill="url(#cenMenor)" radius={RAIO_BARRA} {...ANIM} />
+              <Bar dataKey="Caixa (90d)" fill="url(#cenCaixa)" radius={RAIO_BARRA} {...ANIM} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>

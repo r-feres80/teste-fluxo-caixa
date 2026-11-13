@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid } from "recharts";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, tooltipProps, gradienteBarraStops,
+} from "../utils/chartTheme.js";
 import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
@@ -11,7 +14,7 @@ import { getDataAtualSistema, parseISO, endOfMonthISO, diffDaysISO } from "../ut
 import { MESES } from "../config/appConfig.js";
 import { useCambio } from "../hooks/useCambio.js";
 
-const CORES_COMPOSICAO = { antecipado: "#10b981", emDia: "#818cf8", atrasado: "#f43f5e" };
+const CORES_COMPOSICAO = { antecipado: SEMANTIC.verde, emDia: BRAND.roxo, atrasado: SEMANTIC.vermelho };
 
 // Tooltip do sparkline — mesma informação (Data + Valor) já disponível na
 // tabela ao lado, só que sob hover no gráfico. Conteúdo customizado (em vez
@@ -39,7 +42,7 @@ function SparklineCambio({ dias }) {
   const CorDot = (props) => {
     const { cx, cy, index } = props;
     const anterior = index > 0 ? dias[index - 1].valor : null;
-    const cor = anterior == null ? "#94a3b8" : dias[index].valor >= anterior ? "#10b981" : "#f43f5e";
+    const cor = anterior == null ? SEMANTIC.cinza : dias[index].valor >= anterior ? SEMANTIC.verde : SEMANTIC.vermelho;
     return <circle key={`dot-${index}`} cx={cx} cy={cy} r={3} fill={cor} stroke="none" />;
   };
   return (
@@ -53,7 +56,7 @@ function SparklineCambio({ dias }) {
         <YAxis hide domain={["dataMin", "dataMax"]} />
         <ReferenceLine y={media} stroke="#cbd5e1" strokeDasharray="2 2" />
         <Tooltip content={<TooltipSparklineCambio />} cursor={{ stroke: "#cbd5e1", strokeDasharray: "2 2" }} />
-        <Line type="monotone" dataKey="valor" stroke="#64748b" strokeWidth={1.5} dot={CorDot} activeDot={{ r: 4 }} isAnimationActive animationBegin={100} animationDuration={800} animationEasing="ease-out" />
+        <Line type="monotone" dataKey="valor" stroke={BRAND.roxo} strokeWidth={1.75} dot={CorDot} activeDot={{ r: 4 }} isAnimationActive animationBegin={100} animationDuration={800} animationEasing="ease-out" />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -283,9 +286,10 @@ export default function TesourariaPage({ data }) {
         <Panel title="Composição do Recebimento" subtitle={ehMesAtualCompo ? "Só Entrada (AR), dias úteis dos últimos 30 dias até hoje, por Data de baixa" : `Só Entrada (AR), dias úteis dos últimos 30 dias até ${fmtData(dataFimCompo)}, por Data de baixa`}>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={composicao30dias}>
-              <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-              <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="data" tickFormatter={(d) => d.slice(8, 10)} {...EIXO} fontSize={10} />
+              <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+              <Tooltip labelFormatter={(d) => d.split("-").reverse().join("/")} formatter={(v) => fmtBRL(v)} {...tooltipProps()} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} key={`a-${animKey}`} isAnimationActive animationBegin={100} animationDuration={700} animationEasing="ease-out" />
               <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} key={`b-${animKey}`} isAnimationActive animationBegin={150} animationDuration={750} animationEasing="ease-out" />
@@ -297,9 +301,10 @@ export default function TesourariaPage({ data }) {
         <Panel title="Composição Mensal" subtitle={`Últimos 6 meses até ${MESES[mesSelCompo]}/${anoSelCompo}`}>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={composicaoMensal}>
-              <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-              <Tooltip formatter={(v) => fmtBRL(v)} contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} />
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="label" {...EIXO} />
+              <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+              <Tooltip formatter={(v) => fmtBRL(v)} {...tooltipProps()} />
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="antecipado" name="Antecipado" stackId="c" fill={CORES_COMPOSICAO.antecipado} key={`ma-${animKey}`} isAnimationActive animationBegin={100} animationDuration={700} animationEasing="ease-out" />
               <Bar dataKey="emDia" name="Em dia" stackId="c" fill={CORES_COMPOSICAO.emDia} key={`mb-${animKey}`} isAnimationActive animationBegin={150} animationDuration={750} animationEasing="ease-out" />

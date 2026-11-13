@@ -1,5 +1,10 @@
 import React, { useMemo } from "react";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar, Cell, LabelList } from "recharts";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, BarChart, Bar, Cell, LabelList, CartesianGrid } from "recharts";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA_H, RAIO_BARRA_CHEIA,
+  tooltipProps, areaProps, gradienteStops, gradienteBarraStops,
+  KPI_ACENTO, SOMBRA_CARD, SOMBRA_CARD_HOVER, BORDA_CARD, BORDA_CARD_HOVER,
+} from "../utils/chartTheme.js";
 import { AlertTriangle, Info } from "lucide-react";
 import { Panel, Badge, BasisHint, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
@@ -11,7 +16,9 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { getDataAtualSistema, parseISO, mesesDoPeriodo } from "../utils/dateUtils.js";
 import { MESES } from "../config/appConfig.js";
 
-const COR_WATERFALL = { total: "#475569", positivo: "#10b981", negativo: "#f43f5e" };
+// Total em cor de marca; positivo/negativo seguem a semântica (a cor aqui é
+// informação, não decoração — não trocar por cor de marca).
+const COR_WATERFALL = { total: BRAND.roxo, positivo: SEMANTIC.verde, negativo: SEMANTIC.vermelho };
 
 // Transforma o DFC do mês (Caixa Inicial + FCO + FCI + FCF = Caixa Final) em
 // dados de waterfall: cada barra intermediária "flutua" a partir do saldo
@@ -45,10 +52,25 @@ function toneDeSaude(cor) {
   return cor === "red" ? "negative" : cor === "amber" ? "warning" : "positive";
 }
 
+// Faixa de 2px no topo na cor do tom + leve elevação no hover. A faixa dá
+// leitura periférica do status (verde/vermelho/âmbar) antes de ler o número.
 function KpiCard({ label, value, sub, tone = "neutral", basis, tooltip }) {
   const cor = tone === "positive" ? "text-emerald-600" : tone === "negative" ? "text-rose-600" : tone === "warning" ? "text-amber-600" : "text-slate-900";
+  const acento = KPI_ACENTO[tone] ?? KPI_ACENTO.neutral;
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 flex flex-col gap-1">
+    <div
+      className="bg-white rounded-xl p-4 pt-[18px] flex flex-col gap-1 relative overflow-hidden transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5"
+      style={{ border: `1px solid ${BORDA_CARD}`, boxShadow: SOMBRA_CARD }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD_HOVER;
+        e.currentTarget.style.borderColor = BORDA_CARD_HOVER;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD;
+        e.currentTarget.style.borderColor = BORDA_CARD;
+      }}
+    >
+      <span className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: acento }} />
       <span className="text-[11px] text-slate-500 uppercase tracking-wide flex items-center gap-1">
         {label}<BasisHint basis={basis} />
         {tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
@@ -178,7 +200,7 @@ export default function DashboardPage({ data }) {
           value={resumo.caixa.indiceLiquidezSeca}
           min={0} max={3}
           meta={parametros.metaLiquidezSeca}
-          bands={[{ upTo: parametros.metaLiquidezSeca * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezSeca, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          bands={[{ upTo: parametros.metaLiquidezSeca * 0.67, color: SEMANTIC.vermelhoClaro }, { upTo: parametros.metaLiquidezSeca, color: SEMANTIC.laranjaClaro }, { upTo: 3, color: SEMANTIC.verdeClaro }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
           sub={`(Caixa Disponível + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezSeca.toFixed(2)}x configurável em Governança`}
           tooltip="O que já é caixa ou vai virar caixa via cobrança, sem contar aplicações."
@@ -188,7 +210,7 @@ export default function DashboardPage({ data }) {
           value={resumo.caixa.indiceLiquidezCorrente}
           min={0} max={3}
           meta={parametros.metaLiquidezCorrente}
-          bands={[{ upTo: parametros.metaLiquidezCorrente * 0.67, color: "#f43f5e" }, { upTo: parametros.metaLiquidezCorrente, color: "#f59e0b" }, { upTo: 3, color: "#10b981" }]}
+          bands={[{ upTo: parametros.metaLiquidezCorrente * 0.67, color: SEMANTIC.vermelhoClaro }, { upTo: parametros.metaLiquidezCorrente, color: SEMANTIC.laranjaClaro }, { upTo: 3, color: SEMANTIC.verdeClaro }]}
           formatValue={(v) => `${v.toFixed(2)}x`}
           sub={`(Caixa Disponível + Aplicações + Contas a Receber em aberto) ÷ Contas a Pagar em aberto — meta ${parametros.metaLiquidezCorrente.toFixed(2)}x configurável em Governança`}
           tooltip="Tudo somado, incluindo o que pode ser resgatado de aplicações."
@@ -198,7 +220,7 @@ export default function DashboardPage({ data }) {
           value={resumo.contasReceber.inadimplenciaPct}
           min={0} max={20}
           meta={16}
-          bands={[{ upTo: 5, color: "#10b981" }, { upTo: 10, color: "#f59e0b" }, { upTo: 20, color: "#f43f5e" }]}
+          bands={[{ upTo: 5, color: SEMANTIC.verdeClaro }, { upTo: 10, color: SEMANTIC.laranjaClaro }, { upTo: 20, color: SEMANTIC.vermelhoClaro }]}
           formatValue={(v) => `${v.toFixed(1)}%`}
           sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
         />
@@ -207,12 +229,22 @@ export default function DashboardPage({ data }) {
       <Panel title="Composição do Caixa do Mês" subtitle={`Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final — Data-base: ${fmtData(resumo.dataReferencia)} (sempre o mês corrente real, não segue o filtro Mês/Ano abaixo)`}>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={waterfallData} margin={{ top: 20 }}>
-            <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
+            {/* Um gradiente por cor do waterfall: topo saturado, base mais
+                clara. Dá volume à barra sem sombra, que em barra fica suja. */}
+            <defs>
+              {Object.entries(COR_WATERFALL).map(([k, cor]) => (
+                <linearGradient key={k} id={`gradWf-${k}`} x1="0" y1="0" x2="0" y2="1">
+                  {gradienteBarraStops(cor).map((s) => <stop key={s.offset} {...s} />)}
+                </linearGradient>
+              ))}
+            </defs>
+            <CartesianGrid {...GRID} />
+            <XAxis dataKey="label" {...EIXO} />
+            <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+            <Tooltip {...tooltipProps()} formatter={(v, name, props) => name === "delta" ? [fmtBRL(props.payload.valorReal), "Valor"] : [null, null]} />
             <Bar dataKey="base" stackId="wf" fill="transparent" isAnimationActive={false} />
-            <Bar dataKey="delta" stackId="wf" radius={[3, 3, 3, 3]} key={animKey} isAnimationActive animationBegin={150} animationDuration={700} animationEasing="ease-out">
-              {waterfallData.map((d, i) => <Cell key={i} fill={COR_WATERFALL[d.cor]} />)}
+            <Bar dataKey="delta" stackId="wf" radius={RAIO_BARRA_CHEIA} key={animKey} {...ANIM}>
+              {waterfallData.map((d, i) => <Cell key={i} fill={`url(#gradWf-${d.cor})`} />)}
               <LabelList dataKey="valorReal" position="top" formatter={fmtBRLShort} style={{ fontSize: 11, fill: "#475569" }} />
             </Bar>
           </BarChart>
@@ -249,8 +281,13 @@ export default function DashboardPage({ data }) {
         <Panel title="Evolução do Caixa (30 dias)" className="col-span-2">
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={sparkData}>
-              <defs><linearGradient id="gradDash" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity={0.25} /><stop offset="100%" stopColor="#10b981" stopOpacity={0} /></linearGradient></defs>
-              <XAxis dataKey="data" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+              <defs>
+                <linearGradient id="gradDash" x1="0" y1="0" x2="0" y2="1">
+                  {gradienteStops(BRAND.ciano).map((s) => <stop key={s.offset} {...s} />)}
+                </linearGradient>
+              </defs>
+              <CartesianGrid {...GRID} />
+              <XAxis dataKey="data" {...EIXO} fontSize={10} />
               {/* Achado (comando dashboard-causa-raiz, 2b): a série diária JÁ
                   oscila de verdade dia a dia (entradas/saídas reais variam)
                   — o que achatava a linha era o eixo Y partindo de 0 por
@@ -260,20 +297,27 @@ export default function DashboardPage({ data }) {
                   dataMin/dataMax em vez de deixar o Recharts assumir [0,
                   max]. Não mexemos em buildFluxoCaixaDiario — os valores
                   continuam os mesmos, só a escala do eixo mudou. */}
-              <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} domain={["dataMin", "dataMax"]} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
-              <Area type="monotone" dataKey="saldo" stroke="#10b981" fill="url(#gradDash)" strokeWidth={1.75} key={animKey} isAnimationActive animationBegin={100} animationDuration={900} animationEasing="ease-out" />
+              <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} domain={["dataMin", "dataMax"]} />
+              <Tooltip {...tooltipProps({ linha: true })} formatter={(v) => fmtBRL(v)} />
+              <ReferenceLine y={0} stroke={SEMANTIC.vermelho} strokeDasharray="2 4" />
+              <Area dataKey="saldo" key={animKey} {...areaProps(BRAND.ciano, "gradDash")} />
             </AreaChart>
           </ResponsiveContainer>
         </Panel>
         <Panel title="Despesas por Centro de Custo (Top 6)">
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={resumo.despesasPorCentroCusto} layout="vertical" margin={{ left: 20 }}>
-              <XAxis type="number" stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-              <YAxis type="category" dataKey="nome" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} width={90} />
-              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-              <Bar dataKey="valor" fill="#f43f5e" radius={[0, 3, 3, 0]} key={animKey} isAnimationActive animationBegin={200} animationDuration={750} animationEasing="ease-out" />
+              {/* Barra horizontal: gradiente no eixo X, saturado na origem */}
+              <defs>
+                <linearGradient id="gradCC" x1="0" y1="0" x2="1" y2="0">
+                  {gradienteBarraStops(BRAND.roxo, { topo: 1, base: 0.55 }).map((s) => <stop key={s.offset} {...s} />)}
+                </linearGradient>
+              </defs>
+              <CartesianGrid {...GRID} vertical horizontal={false} />
+              <XAxis type="number" {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} />
+              <YAxis type="category" dataKey="nome" {...EIXO} fontSize={10} width={90} />
+              <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+              <Bar dataKey="valor" fill="url(#gradCC)" radius={RAIO_BARRA_H} key={animKey} {...ANIM} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>

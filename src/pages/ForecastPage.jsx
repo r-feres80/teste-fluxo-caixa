@@ -7,6 +7,10 @@ import { mesesDoPeriodo } from "../utils/dateUtils.js";
 import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
 import { buildFluxoCaixaDiario, menorPontoDaSerie } from "../financial-engine/fluxoCaixa.js";
 import { construirOrcadoRealizado } from "../financial-engine/orcadoRealizado.js";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA,
+  tooltipProps, linhaProps, gradienteBarraStops, gradienteStops,
+} from "../utils/chartTheme.js";
 
 export default function ForecastPage({ data }) {
   const { entidades, filtros, parametros } = data;
@@ -34,12 +38,12 @@ export default function ForecastPage({ data }) {
       <Panel title="Projeção de Caixa — 90 dias" subtitle={`Menor posição: ${fmtBRL(menor.saldo)} em ${fmtData(menor.data)}`}>
         <ResponsiveContainer width="100%" height={240}>
           <AreaChart data={chartData}>
-            <defs><linearGradient id="gradForecast" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4f46e5" stopOpacity={0.2} /><stop offset="100%" stopColor="#4f46e5" stopOpacity={0} /></linearGradient></defs>
-            <XAxis dataKey="data" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} minTickGap={20} />
-            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
-            <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="2 4" />
-            <Area type="monotone" dataKey="saldo" stroke="#4f46e5" fill="url(#gradForecast)" strokeWidth={1.75} />
+            <defs><linearGradient id="gradForecast" x1="0" y1="0" x2="0" y2="1">{gradienteStops(BRAND.roxo).map((g) => <stop key={g.offset} {...g} />)}</linearGradient></defs>
+            <XAxis dataKey="data" {...EIXO} fontSize={10} minTickGap={20} />
+            <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+            <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
+            <ReferenceLine y={0} stroke={SEMANTIC.vermelho} strokeDasharray="2 4" />
+            <Area type="monotone" dataKey="saldo" stroke={BRAND.roxo} fill="url(#gradForecast)" strokeWidth={1.75} />
           </AreaChart>
         </ResponsiveContainer>
       </Panel>

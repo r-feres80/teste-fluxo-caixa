@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, Legend, ReferenceLine } from "recharts";
+import { ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, Legend, ReferenceLine, CartesianGrid } from "recharts";
+import {
+  BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA,
+  tooltipProps, linhaProps, gradienteBarraStops,
+} from "../utils/chartTheme.js";
 import { Wallet, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
@@ -147,15 +151,24 @@ export default function FluxoCaixaPage({ data }) {
       <Panel title={`Evolução do Caixa (${granularidade})`} subtitle={`Menor posição no horizonte: ${fmtBRL(menor.saldo)} em ${fmtData(menor.data)}`}>
         <ResponsiveContainer width="100%" height={340}>
           <ComposedChart data={agregada} margin={{ top: 5, right: 28, left: 4, bottom: 0 }}>
-            <XAxis dataKey="label" stroke="#64748b" fontSize={10} tickLine={false} interval={Math.max(0, Math.floor(agregada.length / 14))} />
-            <YAxis stroke="#64748b" fontSize={11} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+            <defs>
+              <linearGradient id="fcEntradas" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.verde).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+              <linearGradient id="fcSaidas" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.vermelho).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+            </defs>
+            <CartesianGrid {...GRID} />
+            <XAxis dataKey="label" {...EIXO} fontSize={10} interval={Math.max(0, Math.floor(agregada.length / 14))} />
+            <YAxis {...EIXO} tickFormatter={fmtBRLShort} />
+            <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <ReferenceLine y={0} stroke="#f43f5e" strokeDasharray="3 3" />
-            {parametros.caixaMinimo != null && <ReferenceLine y={parametros.caixaMinimo} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: "Mínimo", fill: "#f59e0b", fontSize: 10 }} />}
-            <Bar dataKey="entradas" fill="#10b981" radius={[2, 2, 0, 0]} name="Entradas" />
-            <Bar dataKey="saidas" fill="#f43f5e" radius={[2, 2, 0, 0]} name="Saídas" />
-            <Line type="monotone" dataKey="saldoFim" stroke="#4f46e5" strokeWidth={2} dot={false} name="Saldo" />
+            <ReferenceLine y={0} stroke={SEMANTIC.vermelho} strokeDasharray="3 3" />
+            {parametros.caixaMinimo != null && <ReferenceLine y={parametros.caixaMinimo} stroke={SEMANTIC.laranjaClaro} strokeDasharray="3 3" label={{ value: "Mínimo", fill: SEMANTIC.laranja, fontSize: 10 }} />}
+            <Bar dataKey="entradas" fill="url(#fcEntradas)" radius={RAIO_BARRA} name="Entradas" {...ANIM} />
+            <Bar dataKey="saidas" fill="url(#fcSaidas)" radius={RAIO_BARRA} name="Saídas" {...ANIM} />
+            <Line dataKey="saldoFim" name="Saldo" {...linhaProps(BRAND.roxo)} />
           </ComposedChart>
         </ResponsiveContainer>
       </Panel>
@@ -163,13 +176,22 @@ export default function FluxoCaixaPage({ data }) {
       <Panel title="Evolução Mensal do Fluxo de Caixa" subtitle="Realizado — 6 meses até o Mês/Ano do Filtro Global (comparativo entre meses)">
         <ResponsiveContainer width="100%" height={260}>
           <ComposedChart data={evolucaoMensal}>
-            <XAxis dataKey="label" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={10} tickFormatter={fmtBRLShort} tickLine={false} axisLine={false} width={56} />
-            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 12 }} formatter={(v) => fmtBRL(v)} />
+            <defs>
+              <linearGradient id="fcmEntradas" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.verde).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+              <linearGradient id="fcmSaidas" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+            </defs>
+            <CartesianGrid {...GRID} />
+            <XAxis dataKey="label" {...EIXO} fontSize={10} />
+            <YAxis {...EIXO} fontSize={10} tickFormatter={fmtBRLShort} width={56} />
+            <Tooltip {...tooltipProps()} formatter={(v) => fmtBRL(v)} />
             <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Bar dataKey="entradas" name="Entradas" fill="#10b981" radius={[3, 3, 0, 0]} />
-            <Bar dataKey="saidas" name="Saídas" fill="#f97316" radius={[0, 0, 3, 3]} />
-            <Line type="monotone" dataKey="saldoLiquido" name="Saldo líquido" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} />
+            <Bar dataKey="entradas" name="Entradas" fill="url(#fcmEntradas)" radius={RAIO_BARRA} {...ANIM} />
+            <Bar dataKey="saidas" name="Saídas" fill="url(#fcmSaidas)" radius={RAIO_BARRA} {...ANIM} />
+            <Line dataKey="saldoLiquido" name="Saldo líquido" {...linhaProps(BRAND.roxo)} />
           </ComposedChart>
         </ResponsiveContainer>
       </Panel>
