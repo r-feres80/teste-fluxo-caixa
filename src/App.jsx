@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
-  Table2, AlertOctagon, List, Lightbulb, LogOut,
+  Table2, AlertOctagon, List, Lightbulb, LogOut, CreditCard,
   PiggyBank, ChevronLeft,
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
@@ -20,6 +20,7 @@ import GovernancaPage from "./pages/GovernancaPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import TesourariaPage from "./pages/TesourariaPage.jsx";
 import AplicacoesFinanceirasPage from "./pages/AplicacoesFinanceirasPage.jsx";
+import CartoesPage from "./pages/CartoesPage.jsx";
 import ContasAPagarPage from "./pages/ContasAPagarPage.jsx";
 import ContasAReceberPage from "./pages/ContasAReceberPage.jsx";
 import FluxoCaixaPage from "./pages/FluxoCaixaPage.jsx";
@@ -54,6 +55,7 @@ const NAV = [
   { id: "dashboard", label: "Dashboard Executivo", icon: LayoutGrid, Page: DashboardPage },
   { id: "tesouraria", label: "Tesouraria", icon: Landmark, Page: TesourariaPage },
   { id: "aplicacoes-financeiras", label: "Aplicações Financeiras", icon: PiggyBank, Page: AplicacoesFinanceirasPage },
+  { id: "cartoes", label: "Cartões Corporativos", icon: CreditCard, Page: CartoesPage },
   { id: "fluxo-caixa", label: "Fluxo de Caixa", icon: TrendingUp, Page: FluxoCaixaPage },
   { id: "dfc-direto", label: "DFC", icon: Table2, Page: DFCDiretoPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
@@ -81,7 +83,7 @@ const NAV = [
 // YTD continuam sempre "hoje real" (não usam o filtro), mas o novo painel
 // "Comparativo Mensal" precisa do seletor Mês/Ano visível — ver
 // DashboardPage.jsx.
-const NAV_FATO = new Set(["tesouraria", "aplicacoes-financeiras", "dfc-direto", "contas-pagar", "contas-receber", "inadimplencia"]);
+const NAV_FATO = new Set(["tesouraria", "aplicacoes-financeiras", "cartoes", "dfc-direto", "contas-pagar", "contas-receber", "inadimplencia"]);
 
 // Governança é roteada à parte de NAV (ver JSX), mas entra no modo ícones
 // como mais um item do grupo Dados — por isso precisa de ícone/label aqui.
@@ -94,7 +96,7 @@ const ALL_NAV_ITEMS = [...NAV, GOVERNANCA_ITEM];
 // "title" é só o fallback em português.
 const ICON_GROUPS = [
   { id: "visao-geral", title: "Visão Geral", ids: ["dashboard"] },
-  { id: "controle-caixa", title: "Controle de Caixa", ids: ["tesouraria", "aplicacoes-financeiras", "fluxo-caixa", "dfc-direto"] },
+  { id: "controle-caixa", title: "Controle de Caixa", ids: ["tesouraria", "aplicacoes-financeiras", "cartoes", "fluxo-caixa", "dfc-direto"] },
   { id: "ap-ar", title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
   { id: "planejamento", title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
   { id: "dados", title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },

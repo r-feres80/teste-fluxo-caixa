@@ -5,6 +5,7 @@ import {
   tooltipProps, areaProps, gradienteStops, gradienteBarraStops,
   KPI_ACENTO, SOMBRA_CARD, SOMBRA_CARD_HOVER, BORDA_CARD, BORDA_CARD_HOVER,
 } from "../utils/chartTheme.js";
+import { calcularPosicaoCartoes, consolidarCartoes } from "../financial-engine/cartoes.js";
 import { AlertTriangle, Info } from "lucide-react";
 import { Panel, Badge, BasisHint, Gauge, InfoNote } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
@@ -13,7 +14,7 @@ import { calcularDRE } from "../financial-engine/dre.js";
 import { excluirTransferencias } from "../financial-engine/lancamentos.js";
 import { classificarInadimplencia } from "../utils/moduleHealth.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
-import { getDataAtualSistema, parseISO, mesesDoPeriodo } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO, mesesDoPeriodo, diffDaysISO } from "../utils/dateUtils.js";
 import { MESES } from "../config/appConfig.js";
 
 // Total em cor de marca; positivo/negativo seguem a semântica (a cor aqui é
@@ -103,6 +104,64 @@ const TEXTO_ALERTA = {
 // a mesma fonte usada pelo Finance Copilot (IA). Isso garante que o número que o usuário vê
 // na tela é sempre o mesmo que a IA usa para explicar causa-raiz; nenhum dos dois recalcula
 // por conta própria.
+// Resumo de cartões no Dashboard: limite, utilizado e vencimento da próxima
+// fatura. Fica fora dos KPIs de caixa de propósito — cartão é passivo, não
+// disponibilidade, e misturá-lo ali induziria a somar com o caixa.
+function ResumoCartoes({ entidades, filtros }) {
+  const hoje = getDataAtualSistema();
+  const consolidado = React.useMemo(() => {
+    const f = filtros.empresaId && filtros.empresaId !== "TODAS" ? { empresaId: filtros.empresaId } : {};
+    return consolidarCartoes(calcularPosicaoCartoes(entidades.cartoes, entidades.despesasCartao, hoje, f));
+  }, [entidades.cartoes, entidades.despesasCartao, filtros.empresaId, hoje]);
+
+  if (!consolidado.qtdCartoes) return null;
+
+  const { limite, utilizado, disponivel, pctUtilizado, proximoVencimento, valorProximaFatura, cartaoProximaFatura } = consolidado;
+  const cor = pctUtilizado >= 85 ? SEMANTIC.vermelho : pctUtilizado >= 60 ? SEMANTIC.laranja : SEMANTIC.verde;
+  const dias = proximoVencimento ? diffDaysISO(hoje, proximoVencimento) : null;
+
+  return (
+    <Panel
+      title="Cartões Corporativos"
+      subtitle="Posição viva — não entra no caixa; a saída ocorre no pagamento da fatura"
+      right={<Badge tone={pctUtilizado >= 85 ? "rose" : pctUtilizado >= 60 ? "amber" : "emerald"}>{pctUtilizado.toFixed(1)}% do limite</Badge>}
+    >
+      <div className="grid grid-cols-4 gap-5 items-start">
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-slate-500">Limite total</div>
+          <div className="font-mono tabular-nums text-lg font-semibold text-slate-800 mt-1">{fmtBRL(limite)}</div>
+          <div className="text-[11px] text-slate-400 mt-0.5">{consolidado.qtdCartoes} cartão(ões)</div>
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-slate-500">Utilizado</div>
+          <div className="font-mono tabular-nums text-lg font-semibold mt-1" style={{ color: cor }}>{fmtBRL(utilizado)}</div>
+          <div className="w-full h-1.5 rounded-full overflow-hidden mt-1.5" style={{ background: "#EEF0F7" }}>
+            <div className="h-full rounded-full" style={{ width: `${Math.min(100, pctUtilizado)}%`, background: cor }} />
+          </div>
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-slate-500">Disponível</div>
+          <div className="font-mono tabular-nums text-lg font-semibold text-emerald-600 mt-1">{fmtBRL(disponivel)}</div>
+          <div className="text-[11px] text-slate-400 mt-0.5">Para novas compras</div>
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-slate-500">Próxima fatura</div>
+          <div className="font-mono tabular-nums text-lg font-semibold text-slate-800 mt-1">
+            {proximoVencimento ? fmtData(proximoVencimento) : "—"}
+          </div>
+          <div className="text-[11px] mt-0.5" style={{ color: dias != null && dias <= 5 ? SEMANTIC.laranja : "#94A3B8" }}>
+            {valorProximaFatura > 0 && `${fmtBRL(valorProximaFatura)}`}
+            {dias != null && ` · ${dias === 0 ? "vence hoje" : dias > 0 ? `em ${dias} dias` : `vencida há ${-dias} dias`}`}
+          </div>
+          {cartaoProximaFatura && (
+            <div className="text-[11px] text-slate-400 truncate">{cartaoProximaFatura.apelido}</div>
+          )}
+        </div>
+      </div>
+    </Panel>
+  );
+}
+
 export default function DashboardPage({ data }) {
   const { entidades, filtros, parametros } = data;
   const { t } = useLanguage();
@@ -225,6 +284,8 @@ export default function DashboardPage({ data }) {
           sub="Vencido ÷ Carteira AR — <5% verde, 5-10% amarelo, >10% vermelho"
         />
       </div>
+
+      <ResumoCartoes entidades={entidades} filtros={filtros} />
 
       <Panel title="Composição do Caixa do Mês" subtitle={`Caixa Inicial → Operacional → Investimentos → Financiamentos → Caixa Final — Data-base: ${fmtData(resumo.dataReferencia)} (sempre o mês corrente real, não segue o filtro Mês/Ano abaixo)`}>
         <ResponsiveContainer width="100%" height={240}>

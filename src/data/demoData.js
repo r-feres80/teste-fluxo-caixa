@@ -278,3 +278,127 @@ export const demoContasBancarias = demoContasBancariasBase;
 // Etapa 1B (2026-11-06): orçamento sintético coerente com o Realizado (±10-15%),
 // gerado por scripts/regenerar-1a.mjs em src/data/orcamentoItensGerados.json.
 export const demoOrcamentoItens = orcamentoItensGerados;
+
+// ─────────────────────────────────────────────────────────────────────────
+// Cartões de crédito corporativos (comando cartao-corporativo, 13/11/2026)
+//
+// Dado fictício, pedido pelo usuário para validar a tela antes da
+// importação real. Fica em coleção PRÓPRIA (demoDespesasCartao), fora de
+// `lancamentos`, por decisão explícita de manter o módulo isolado: compra
+// de cartão não sai do caixa na data da compra, e injetá-la no motor de
+// lançamentos distorceria DPO, projeção de fluxo e liquidez sem ninguém
+// ter pedido.
+//
+// As datas são geradas a partir da data CORRENTE do sistema, não fixas —
+// o módulo nasce imune à regressão de datas fixas que afeta a massa antiga
+// (ver "Prioridade atual" no CLAUDE.md).
+// ─────────────────────────────────────────────────────────────────────────
+
+export const demoCartoes = [
+  { id: "cart1", bancoId: "b2", empresaId: "e1", apelido: "Visa Corporativo",      final: "4162", titular: "Marina Souza",   limite: 120000, diaFechamento: 20, diaVencimento: 28, ativo: true },
+  { id: "cart2", bancoId: "b1", empresaId: "e1", apelido: "Mastercard Compras",    final: "7734", titular: "Rafael Torres",  limite:  80000, diaFechamento: 25, diaVencimento:  5, ativo: true },
+  { id: "cart3", bancoId: "b3", empresaId: "e2", apelido: "Visa Infinite Diretoria", final: "9021", titular: "Paulo Ribeiro", limite: 150000, diaFechamento: 15, diaVencimento: 22, ativo: true },
+  { id: "cart4", bancoId: "b5", empresaId: "e2", apelido: "Mastercard Operações",  final: "5508", titular: "Camila Duarte",  limite:  60000, diaFechamento: 10, diaVencimento: 18, ativo: true },
+];
+
+function gerarDespesasCartao() {
+  const hoje = new Date();
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  // Perfil de gasto por cartão: quais centros de custo ele costuma usar e
+  // que tipo de despesa aparece. Mantém o dado plausível em vez de aleatório.
+  const perfis = {
+    cart1: { ccs: ["cc1100", "cc1200", "cc1300"], descr: ["Assinatura software financeiro", "Material de escritório", "Treinamento equipe", "Taxa cartório", "Certificado digital"] },
+    cart2: { ccs: ["cc2100", "cc2200"], descr: ["Anúncios online", "Feira setorial — estande", "Brindes para clientes", "Viagem comercial", "Hospedagem equipe vendas"] },
+    cart3: { ccs: ["cc1000", "cc2000", "cc3000"], descr: ["Passagem aérea diretoria", "Hotel — reunião conselho", "Consultoria avulsa", "Almoço de negócios", "Assinatura de pesquisa setorial"] },
+    cart4: { ccs: ["cc3100", "cc3200"], descr: ["Combustível frota", "Peça de reposição urgente", "Frete expresso", "EPI — reposição", "Manutenção empilhadeira"] },
+  };
+
+  // Semente fixa: a base demo precisa ser reproduzível entre recargas.
+  let semente = 20261113;
+  const rnd = () => { semente = (semente * 1103515245 + 12345) % 2147483648; return semente / 2147483648; };
+
+  const out = [];
+  let seq = 0;
+  for (const cartao of demoCartoes) {
+    const perfil = perfis[cartao.id];
+    // 75 dias para trás cobre ciclo corrente + fatura fechada em aberto +
+    // ao menos uma fatura já paga, que é o que dá sentido ao "em aberto".
+    for (let diasAtras = 75; diasAtras >= 0; diasAtras--) {
+      const d = new Date(hoje);
+      d.setDate(d.getDate() - diasAtras);
+      const dow = d.getDay();
+      if (dow === 0 || dow === 6) continue;          // compra corporativa em dia útil
+      if (rnd() > 0.45) continue;                     // nem todo dia tem compra
+
+      const data = iso(d);
+      const cc = perfil.ccs[Math.floor(rnd() * perfil.ccs.length)];
+      const descricao = perfil.descr[Math.floor(rnd() * perfil.descr.length)];
+      // Valor proporcional ao limite, para o utilizado ficar em faixa sadia
+      // (45%-70% do limite) em vez de estourar ou ficar irrisório.
+      const base = cartao.limite / 170;
+      const valor = Math.round((base * (0.35 + rnd() * 1.5)) * 100) / 100;
+
+      out.push({
+        id: `dc${++seq}`,
+        cartaoId: cartao.id,
+        empresaId: cartao.empresaId,
+        data,
+        descricao,
+        valor,
+        centroCustoId: cc,
+        // faturaPaga é resolvido abaixo, por ciclo
+      });
+    }
+  }
+  return out;
+}
+
+// Uma fatura está paga quando o VENCIMENTO dela já passou. Marcar por
+// "as N mais antigas" produzia fatura fechada vencida há duas semanas e
+// ainda em aberto — cenário implausível, e fazia "próximo vencimento"
+// apontar para o passado.
+// Em aberto fica, portanto: o ciclo corrente + a fatura já fechada cujo
+// vencimento ainda não chegou. Quais cartões têm as duas coisas depende do
+// dia de fechamento de cada um, o que exercita os dois caminhos do cálculo.
+function marcarFaturasPagas(despesas) {
+  const hojeISO = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; })();
+
+  for (const d of despesas) {
+    const c = demoCartoes.find((x) => x.id === d.cartaoId);
+    const dt = new Date(d.data + "T00:00:00");
+    let ano = dt.getFullYear(), mes = dt.getMonth();
+    if (dt.getDate() > c.diaFechamento) { mes += 1; if (mes > 11) { mes = 0; ano += 1; } }
+    d.ciclo = `${ano}-${String(mes + 1).padStart(2, "0")}`;
+
+    // vencimento do ciclo: se o dia de vencimento é <= o de fechamento,
+    // ele cai no mês seguinte ao do ciclo
+    let va = ano, vm = mes;
+    if (c.diaVencimento <= c.diaFechamento) { vm += 1; if (vm > 11) { vm = 0; va += 1; } }
+    const ultimo = new Date(va, vm + 1, 0).getDate();
+    const venc = `${va}-${String(vm + 1).padStart(2, "0")}-${String(Math.min(c.diaVencimento, ultimo)).padStart(2, "0")}`;
+
+    if (venc < hojeISO) d.faturaPaga = true;
+  }
+  return despesas;
+}
+
+// Ajusta as despesas EM ABERTO de cada cartão para a utilização cair numa
+// faixa sadia (45%-68% do limite), variando por cartão. Sem isso o valor
+// depende de quantos dias úteis caíram no ciclo, e a tela nasce ora com 12%
+// ora estourando o limite.
+function calibrarUtilizacao(despesas) {
+  let semente = 777;
+  const rnd = () => { semente = (semente * 1103515245 + 12345) % 2147483648; return semente / 2147483648; };
+  for (const c of demoCartoes) {
+    const abertas = despesas.filter((d) => d.cartaoId === c.id && !d.faturaPaga);
+    const soma = abertas.reduce((s, d) => s + d.valor, 0);
+    if (soma <= 0) continue;
+    const alvo = c.limite * (0.45 + rnd() * 0.23);
+    const fator = alvo / soma;
+    for (const d of abertas) d.valor = Math.round(d.valor * fator * 100) / 100;
+  }
+  return despesas;
+}
+
+export const demoDespesasCartao = calibrarUtilizacao(marcarFaturasPagas(gerarDespesasCartao()));

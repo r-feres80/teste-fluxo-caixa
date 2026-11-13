@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { CreditCard } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ComposedChart, Legend, Line } from "recharts";
 import { Panel, KPI, InfoNote, selectCls, DateInputBR } from "./ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
@@ -15,6 +16,7 @@ import {
   BRAND, SEMANTIC, EIXO, GRID, ANIM, RAIO_BARRA,
   tooltipProps, linhaProps, gradienteBarraStops,
 } from "../utils/chartTheme.js";
+import { calcularPosicaoCartoes, consolidarCartoes } from "../financial-engine/cartoes.js";
 
 // Contas a Pagar/Receber são módulos de FATO: aging e vencimentos sempre
 // contam a partir de "hoje" real, nunca da Data de Referência editável —
@@ -90,8 +92,46 @@ export function ContasPagarReceberView({ data, tipo }) {
   // (Etapa 2 item 3) — não recalcular aqui.
   const previstoRealizado = useMemo(() => calcularPrevistoRealizadoDiario(lancamentosDoTipo, hoje, 30), [lancamentosDoTipo, hoje]);
 
+  // Cartão corporativo em Contas a Pagar: exibido como INFORMAÇÃO, fora dos
+  // KPIs e dos gráficos. A fatura não vira título no motor de lançamentos
+  // (decisão de manter o módulo isolado), então somá-la a "Total da Carteira"
+  // misturaria duas bases e quebraria a conciliação com o aging logo abaixo.
+  const cartoesAPagar = useMemo(() => {
+    // Testa por "não é Entrada" em vez de comparar com "Saída": a string tem
+    // acento, e errar a grafia faz o bloco sumir em silêncio.
+    if (tipo === "Entrada") return null;
+    const f = filtros.empresaId && filtros.empresaId !== "TODAS" ? { empresaId: filtros.empresaId } : {};
+    const c = consolidarCartoes(calcularPosicaoCartoes(entidades.cartoes, entidades.despesasCartao, hoje, f));
+    return c.qtdCartoes ? c : null;
+  }, [tipo, entidades.cartoes, entidades.despesasCartao, filtros.empresaId, hoje]);
+
   return (
     <div className="flex flex-col gap-6">
+      {cartoesAPagar && (
+        <div
+          className="rounded-xl px-5 py-4 flex items-center justify-between gap-4 flex-wrap"
+          style={{ background: "#F8FAFF", border: "1px solid #DBE4FF" }}
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <CreditCard size={18} style={{ color: BRAND.roxo }} className="shrink-0" />
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-slate-800">
+                Cartões corporativos — total a pagar {fmtBRL(cartoesAPagar.totalAPagar)}
+              </div>
+              <div className="text-[11px] text-slate-500">
+                {cartoesAPagar.qtdCartoes} cartão(ões) · próxima fatura{" "}
+                {cartoesAPagar.proximoVencimento ? fmtData(cartoesAPagar.proximoVencimento) : "—"}
+                {cartoesAPagar.valorProximaFatura > 0 && ` · ${fmtBRL(cartoesAPagar.valorProximaFatura)}`}
+              </div>
+            </div>
+          </div>
+          <span className="text-[11px] text-slate-400 max-w-md">
+            Não somado aos KPIs abaixo: a fatura não é título do contas a pagar, e incluí-la
+            distorceria carteira, aging e prazo médio.
+          </span>
+        </div>
+      )}
+
       <div className="grid grid-cols-4 gap-4">
         <KPI label="Total da Carteira (em aberto)" value={fmtBRL(totalCarteira)} tone="neutral" />
         <KPI label="Vencido" value={fmtBRL(totalVencido)} tone={totalVencido > 0 ? "negative" : "neutral"} />

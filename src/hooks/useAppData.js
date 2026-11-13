@@ -6,7 +6,7 @@ import { uid } from "../utils/formatUtils.js";
 import { calcularSweepCaixa } from "../financial-engine/sweepCaixa.js";
 import {
   demoEmpresas, demoUnidades, demoClientes, demoFornecedores, demoBancos,
-  demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoOrcamentoItens,
+  demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoCartoes, demoDespesasCartao, demoOrcamentoItens,
 } from "../data/demoData.js";
 
 // Fábrica (nunca um objeto único compartilhado): o importador cria Empresa/
@@ -19,6 +19,9 @@ const criarEntidadesVazias = () => ({
   empresas: [], unidades: [], clientes: [], fornecedores: [], bancos: [],
   contasBancarias: [], projetos: [], planoDeContas: [], centrosCusto: [],
   lancamentos: [], orcamentoItens: [], sweepLog: [],
+  // Cartão de crédito: coleções próprias, fora de `lancamentos`, por decisão
+  // de manter o módulo isolado (ver financial-engine/cartoes.js).
+  cartoes: [], despesasCartao: [],
 });
 
 // anoRef/mesRef sempre derivados da Data de Referência (nunca de new Date()
@@ -42,6 +45,7 @@ const demoFresco = () => ({
     bancos: [...demoBancos], contasBancarias: [...demoContasBancarias], projetos: [...demoProjetos],
     planoDeContas: [...demoPlanoDeContas], centrosCusto: [...demoCentrosCusto],
     lancamentos: [...demoLancamentos], orcamentoItens: [...demoOrcamentoItens], sweepLog: [],
+    cartoes: [...demoCartoes], despesasCartao: [...demoDespesasCartao],
   },
   origemBase: "demo", demoGeradoEm: HOJE_ISO,
 });
