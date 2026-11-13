@@ -98,9 +98,21 @@ export function useAppData() {
           });
         } else {
           origemBaseRef.current = s.origemBase ?? null;
-          // sweepLog: default defensivo pra sessão salva antes deste campo
-          // existir (comando sweep-automatico-b) não quebrar com undefined.
-          setEntidades(s.entidades ? { sweepLog: [], ...s.entidades } : criarEntidadesVazias());
+          // Espalha o molde vazio INTEIRO por baixo do estado salvo, em vez
+          // de listar campo a campo. Antes era `{ sweepLog: [], ...s.entidades }`
+          // — remendo pontual de quando sweepLog nasceu. O mesmo buraco
+          // reapareceu com `cartoes`: sessão salva antes do módulo existir
+          // devolvia a chave como undefined e a tela subia vazia. Assim
+          // qualquer entidade futura já nasce com default.
+          let salvas = s.entidades ? { ...criarEntidadesVazias(), ...s.entidades } : criarEntidadesVazias();
+
+          // Migração de base demo anterior ao módulo de cartões: sem isto o
+          // usuário precisaria recarregar a base demonstrativa à mão só
+          // porque um módulo novo entrou.
+          if (s.origemBase === "demo" && salvas.cartoes.length === 0) {
+            salvas = { ...salvas, cartoes: [...demoCartoes], despesasCartao: [...demoDespesasCartao] };
+          }
+          setEntidades(salvas);
         }
         setFiltros(s.filtros ?? DEFAULT_FILTROS);
         setParametros(s.parametros ? { ...DEFAULT_PARAMETROS, ...s.parametros } : DEFAULT_PARAMETROS);
