@@ -278,9 +278,68 @@ function grupoDoId(id) {
 function SidebarNav({ view, irPara, saude, expanded }) {
   const { t } = useLanguage();
   const [tooltip, setTooltip] = React.useState(null);
+  // Hover em estado, não em e.currentTarget.style: a versão anterior limpava
+  // o fundo só `if (!active)`, então o item que virava ativo sob o cursor
+  // guardava o cinza do hover para sempre. Ficava escondido sob o fundo do
+  // ativo; com a pílula, apareceu.
+  const [hoverId, setHoverId] = React.useState(null);
+
+  // ── Pílula deslizante ───────────────────────────────────────────────────
+  // Em vez de cada item pintar o próprio fundo quando ativo, existe UM
+  // retângulo que viaja até o item selecionado. O destaque deixa de piscar
+  // de um lugar pro outro e passa a mostrar o caminho percorrido.
+  const navRef = React.useRef(null);
+  const itemRefs = React.useRef(new Map());
+  const [pilula, setPilula] = React.useState(null);
+  const [animar, setAnimar] = React.useState(false);
+
+  React.useLayoutEffect(() => {
+    const nav = navRef.current;
+    const alvo = view ? itemRefs.current.get(view) : null;
+    if (!nav || !alvo) { setPilula(null); setAnimar(false); return; }
+
+    const medir = () => {
+      // getBoundingClientRect + scrollTop em vez de offsetTop: o botão tem
+      // position:relative, então offsetParent muda conforme o ancestral
+      // posicionado — a diferença de rects não depende disso.
+      const rn = nav.getBoundingClientRect();
+      const ra = alvo.getBoundingClientRect();
+      setPilula({ top: ra.top - rn.top + nav.scrollTop, height: ra.height });
+    };
+    medir();
+
+    // Só anima a partir do SEGUNDO posicionamento: ao abrir a tela a pílula
+    // deve nascer no lugar, não voar desde o topo.
+    const raf = requestAnimationFrame(() => setAnimar(true));
+    window.addEventListener("resize", medir);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", medir); };
+  }, [view, expanded, t]);
 
   return (
-    <nav className="flex-1 py-2 overflow-y-auto overflow-x-hidden">
+    <nav ref={navRef} className="relative flex-1 py-2 overflow-y-auto overflow-x-hidden">
+
+      {pilula && (
+        <span
+          aria-hidden
+          className="absolute pointer-events-none rounded-lg"
+          style={{
+            left: 8, right: 8,
+            top: 0, height: pilula.height,
+            transform: `translateY(${pilula.top}px)`,
+            background: "#EEF3FF",
+            boxShadow: "inset 0 0 0 1px #D6E2FF",
+            transition: animar
+              ? "transform 320ms cubic-bezier(.4,0,.2,1), height 320ms cubic-bezier(.4,0,.2,1)"
+              : "none",
+          }}
+        >
+          {/* A barra de acento viaja junto, dentro da pílula */}
+          <span
+            className="absolute left-0 top-1/2 -translate-y-1/2"
+            style={{ width: 3, height: 20, borderRadius: "0 3px 3px 0", background: "linear-gradient(180deg,#A78BFA,#0A6CFF)" }}
+          />
+        </span>
+      )}
 
       {ICON_GROUPS.map((group, gi) => (
         <div key={group.title}>
@@ -312,36 +371,25 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             return (
               <div key={id} className="px-2 py-0.5">
                 <button
+                  ref={(el) => { if (el) itemRefs.current.set(id, el); else itemRefs.current.delete(id); }}
                   onClick={() => irPara(id)}
-                  className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-150"
+                  className="relative w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors duration-150"
                   style={{
+                    // Fundo e anel do ativo agora são da pílula. O item só
+                    // muda de cor — se pintasse fundo também, haveria dois
+                    // destaques competindo durante a transição.
                     color: active ? "#0A6CFF" : "#475569",
-                    background: active ? "#EEF3FF" : "transparent",
-                    boxShadow: active ? "inset 0 0 0 1px #D6E2FF" : "none",
+                    background: !active && hoverId === id ? "#F4F6FB" : "transparent",
                   }}
                   onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.background = "#F4F6FB";
+                    setHoverId(id);
                     if (!expanded) {
                       const rect = e.currentTarget.getBoundingClientRect();
                       setTooltip({ id, y: rect.top + rect.height / 2 });
                     }
                   }}
-                  onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.background = "transparent";
-                    setTooltip(null);
-                  }}
+                  onMouseLeave={() => { setHoverId(null); setTooltip(null); }}
                 >
-                  {/* Barra esquerda no item ativo */}
-                  {active && (
-                    <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2"
-                      style={{
-                        width: 3, height: 20,
-                        borderRadius: "0 3px 3px 0",
-                        background: "linear-gradient(180deg,#A78BFA,#0A6CFF)",
-                      }}
-                    />
-                  )}
                   <span className="relative shrink-0">
                     <Icon size={16} style={{ opacity: active ? 1 : 0.92 }} />
                     {status && (
