@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { Info, AlertTriangle, X } from "lucide-react";
 import { SOMBRA_CARD, SOMBRA_CARD_HOVER, BORDA_CARD, BORDA_CARD_HOVER } from "../../utils/chartTheme.js";
 
@@ -100,6 +100,9 @@ function pontoVelocimetro(cx, cy, r, t) {
 export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => String(v), sub, meta, tooltip }) {
   const cx = 110, cy = 100, r = 82, espessura = 18;
   const needleLen = r - espessura / 2 - 8; // 65px
+  // Há 3 velocímetros na mesma tela: sem id próprio por instância, os
+  // gradientes colidiriam e todos herdariam a paleta do primeiro.
+  const uid = useId().replace(/:/g, "");
 
   // Animação do ponteiro: começa apontando para mínimo (-90°) e gira até o valor real.
   // Alpha = t - 90 onde t = ((value-min)/(max-min)) * 180
@@ -114,7 +117,10 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
 
   if (value == null) {
     return (
-      <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-1">
+      <div
+        className="bg-white rounded-xl p-5 flex flex-col items-center gap-1"
+        style={{ border: `1px solid ${BORDA_CARD}`, boxShadow: SOMBRA_CARD }}
+      >
         <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
           {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
         </span>
@@ -124,15 +130,42 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
   }
   const paraAngulo = (v) => ((v - min) / (max - min)) * 180;
 
+  // Faixa em que o valor caiu. A cor dela vai para o ponteiro e para o número —
+  // antes a cor vivia só no arco, então era preciso comparar a posição do
+  // ponteiro com o arco pra saber se o indicador estava bom ou ruim.
+  const clamped = Math.max(min, Math.min(value, max));
+  const faixaAtiva = bands.find((b) => clamped <= b.upTo) ?? bands[bands.length - 1];
+  const corAtiva = faixaAtiva.color;
+
+  // Vão angular entre faixas: com ponta arredondada, encostar uma na outra
+  // vira um borrão. O vão deixa a leitura das zonas explícita.
+  const VAO = 1.6;
   let anterior = min;
   const segmentos = bands.map((b, i) => {
-    const t1 = paraAngulo(anterior);
-    const t2 = paraAngulo(Math.min(b.upTo, max));
+    const bruto1 = paraAngulo(anterior);
+    const bruto2 = paraAngulo(Math.min(b.upTo, max));
     anterior = b.upTo;
+    const t1 = i === 0 ? bruto1 : bruto1 + VAO;
+    const t2 = i === bands.length - 1 ? bruto2 : bruto2 - VAO;
+    if (t2 <= t1) return null;
     const p1 = pontoVelocimetro(cx, cy, r, t1);
     const p2 = pontoVelocimetro(cx, cy, r, t2);
-    return <path key={i} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`} stroke={b.color} strokeWidth={espessura} fill="none" />;
+    return (
+      <path
+        key={i}
+        d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`}
+        stroke={`url(#gaugeBand-${uid}-${i})`}
+        strokeWidth={espessura}
+        strokeLinecap="round"
+        fill="none"
+      />
+    );
   });
+
+  // Trilho discreto por baixo: fecha a volta mesmo onde há vão, para o arco
+  // ler como um instrumento e não como três traços soltos.
+  const trilhoP1 = pontoVelocimetro(cx, cy, r, 0);
+  const trilhoP2 = pontoVelocimetro(cx, cy, r, 180);
 
   // Marcador de meta: traço radial curto sobre o arco
   const metaClamped = meta != null ? Math.max(min, Math.min(meta, max)) : null;
@@ -141,17 +174,44 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
   const metaP2 = metaAngulo != null ? pontoVelocimetro(cx, cy, r + 3, metaAngulo) : null;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col items-center gap-0.5">
+    <div
+      className="bg-white rounded-xl p-5 flex flex-col items-center gap-0.5 transition-[box-shadow,border-color] duration-200"
+      style={{ border: `1px solid ${BORDA_CARD}`, boxShadow: SOMBRA_CARD }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD_HOVER;
+        e.currentTarget.style.borderColor = BORDA_CARD_HOVER;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = SOMBRA_CARD;
+        e.currentTarget.style.borderColor = BORDA_CARD;
+      }}
+    >
       <span className="text-slate-500 text-xs font-medium uppercase tracking-wide self-start flex items-center gap-1">
         {label}{tooltip && <Info size={11} className="text-slate-300 shrink-0 cursor-help" title={tooltip} />}
       </span>
       <svg viewBox="0 0 220 112" width="100%" height="112">
+        <defs>
+          {bands.map((b, i) => (
+            <linearGradient key={i} id={`gaugeBand-${uid}-${i}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={b.color} stopOpacity={1} />
+              <stop offset="100%" stopColor={b.color} stopOpacity={0.72} />
+            </linearGradient>
+          ))}
+        </defs>
+
+        <path
+          d={`M ${trilhoP1.x} ${trilhoP1.y} A ${r} ${r} 0 0 1 ${trilhoP2.x} ${trilhoP2.y}`}
+          stroke="#EEF0F7" strokeWidth={espessura} strokeLinecap="round" fill="none"
+        />
         {segmentos}
+
         {metaP1 && metaP2 && (
           <line x1={metaP1.x} y1={metaP1.y} x2={metaP2.x} y2={metaP2.y}
-            stroke="#1e293b" strokeWidth={2} strokeDasharray="1 2" />
+            stroke="#475569" strokeWidth={1.5} strokeDasharray="2 2" strokeLinecap="round" />
         )}
-        {/* Ponteiro com animação spring — rotaciona em torno de (cx, cy) */}
+
+        {/* Ponteiro afilado na cor da faixa atual. O triângulo lê como agulha
+            de instrumento; a linha reta anterior lia como risco solto. */}
         <g
           style={{
             transformOrigin: `${cx}px ${cy}px`,
@@ -159,15 +219,20 @@ export function Gauge({ label, value, min = 0, max, bands, formatValue = (v) => 
             transition: "transform 1100ms cubic-bezier(0.34,1.56,0.64,1)",
           }}
         >
-          <line
-            x1={cx} y1={cy}
-            x2={cx} y2={cy - needleLen}
-            stroke="#1e293b" strokeWidth={3} strokeLinecap="round"
+          <polygon
+            points={`${cx - 4.5},${cy} ${cx},${cy - needleLen} ${cx + 4.5},${cy}`}
+            fill={corAtiva}
           />
         </g>
-        <circle cx={cx} cy={cy} r={5} fill="#1e293b" />
+        <circle cx={cx} cy={cy} r={7} fill="#fff" />
+        <circle cx={cx} cy={cy} r={5} fill={corAtiva} />
+        <circle cx={cx} cy={cy} r={2} fill="#fff" />
       </svg>
-      <span className="font-mono tabular-nums text-xl font-semibold text-slate-800 -mt-3">{formatValue(value)}</span>
+      {/* mt-1 e não -mt-3: o eixo do ponteiro fica em cy=100 de um viewBox de
+          112, então margem negativa jogava o número em cima do eixo. */}
+      <span className="font-mono tabular-nums text-2xl font-bold mt-1" style={{ color: corAtiva }}>
+        {formatValue(value)}
+      </span>
       {meta != null && <span className="text-[11px] text-slate-400">Meta: {formatValue(meta)}</span>}
       {sub && <span className="text-xs text-slate-500">{sub}</span>}
     </div>
