@@ -10,11 +10,11 @@
 // ── Paleta ────────────────────────────────────────────────────────────────
 // Marca: usada para séries neutras (receita, saldo, volume).
 export const BRAND = {
-  roxo: "#7C3AED",
-  roxoClaro: "#9F67F5",
+  roxo: "#1D4ED8",
+  roxoClaro: "#3B82F6",
   azul: "#2563EB",
   ciano: "#06B6D4",
-  lilas: "#8B5CF6",
+  lilas: "#0EA5E9",
 };
 
 // Semântica: usada quando a série TEM significado de bom/ruim/atenção.
@@ -44,7 +44,7 @@ export const EIXO = {
 };
 
 export const GRID = {
-  stroke: "rgba(100,80,180,0.09)",
+  stroke: "rgba(29,78,216,0.09)",
   strokeDasharray: "3 3",
   vertical: false,
 };
@@ -52,15 +52,15 @@ export const GRID = {
 // ── Tooltip ───────────────────────────────────────────────────────────────
 export const TOOLTIP_STYLE = {
   background: "#ffffff",
-  border: "1px solid rgba(124,58,237,0.18)",
+  border: "1px solid rgba(29,78,216,0.18)",
   borderRadius: 8,
   padding: "8px 10px",
   fontSize: 12,
-  boxShadow: "0 4px 16px rgba(124,58,237,0.14)",
+  boxShadow: "0 4px 16px rgba(29,78,216,0.14)",
 };
 
-export const TOOLTIP_CURSOR = { fill: "rgba(124,58,237,0.06)" };
-export const TOOLTIP_CURSOR_LINHA = { stroke: "rgba(124,58,237,0.35)", strokeWidth: 1 };
+export const TOOLTIP_CURSOR = { fill: "rgba(29,78,216,0.06)" };
+export const TOOLTIP_CURSOR_LINHA = { stroke: "rgba(29,78,216,0.35)", strokeWidth: 1 };
 
 export const TOOLTIP_LABEL_STYLE = { color: "#1A1535", fontWeight: 600, marginBottom: 2 };
 export const TOOLTIP_ITEM_STYLE = { color: "#6B6888", padding: 0 };
@@ -125,10 +125,10 @@ export function gradienteStops(cor, { topo = 0.28, base = 0.02 } = {}) {
 // ── Superfícies ───────────────────────────────────────────────────────────
 // Sombra levemente arroxeada em vez de cinza neutro: é o que faz o card
 // "pertencer" à paleta em vez de parecer um retângulo branco solto.
-export const SOMBRA_CARD = "0 1px 6px rgba(124,58,237,0.05)";
-export const SOMBRA_CARD_HOVER = "0 4px 16px rgba(124,58,237,0.10)";
-export const BORDA_CARD = "rgba(100,80,180,0.12)";
-export const BORDA_CARD_HOVER = "rgba(100,80,180,0.24)";
+export const SOMBRA_CARD = "0 1px 6px rgba(29,78,216,0.05)";
+export const SOMBRA_CARD_HOVER = "0 4px 16px rgba(29,78,216,0.10)";
+export const BORDA_CARD = "rgba(29,78,216,0.12)";
+export const BORDA_CARD_HOVER = "rgba(29,78,216,0.24)";
 
 // Faixa de 2px no topo do KPI — a cor carrega o significado do número.
 export const KPI_ACENTO = {

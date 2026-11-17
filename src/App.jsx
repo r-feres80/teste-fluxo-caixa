@@ -184,14 +184,14 @@ function LandingPage({ onSelect, onLogout, resumo, saude, usage }) {
       <div className="flex flex-col items-center pt-10 pb-6 px-6">
         <div
           className="w-20 h-20 rounded-3xl flex items-center justify-center mb-4"
-          style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)", boxShadow: "0 10px 30px rgba(96,165,250,0.35)" }}
+          style={{ background: "linear-gradient(140deg,#1D4ED8 0%,#0EA5E9 55%,#67E8F9 100%)", boxShadow: "0 10px 30px rgba(96,165,250,0.35)" }}
         >
           <Sparkles size={36} className="text-white" />
         </div>
         <div
           className="font-extrabold text-4xl tracking-tight"
           style={{
-            background: "linear-gradient(90deg,#A78BFA 0%,#60A5FA 55%,#22D3EE 100%)",
+            background: "linear-gradient(90deg,#1D4ED8 0%,#0EA5E9 55%,#22D3EE 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
@@ -572,7 +572,7 @@ export default function App() {
             style={{ borderBottom: "1px solid #E7EAF3" }}
           >
             <button onClick={() => setView(null)} title={t("chrome.inicio")} className="flex items-center gap-2 text-left hover:opacity-90 transition-opacity flex-1 min-w-0">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)" }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(140deg,#1D4ED8 0%,#0EA5E9 55%,#67E8F9 100%)" }}>
                 <Sparkles size={15} className="text-white" />
               </div>
               <div
