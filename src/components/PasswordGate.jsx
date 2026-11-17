@@ -44,12 +44,9 @@ export default function PasswordGate({ children }) {
   return (
     // h-screen + overflow-hidden, com o mascote em flex-1/min-h-0: a tela
     // inteira cabe na viewport sem rolagem em qualquer altura de monitor.
-    // Antes era min-h-screen com o mascote em largura fixa (340px), o que
-    // cortava o robô em telas baixas (o notebook do usuário é 1366x768).
-    // Não voltar pra altura/largura fixa — estoura de novo em tela baixa.
     <div
       className="h-screen overflow-hidden flex items-center justify-center px-4 py-6"
-      style={{ background: "#ffffff" }}
+      style={{ background: "linear-gradient(145deg,#1E3A8A 0%,#1D4ED8 55%,#0EA5E9 100%)" }}
     >
       <div className="w-full max-w-sm h-full flex flex-col items-center justify-center gap-5">
 
@@ -57,30 +54,22 @@ export default function PasswordGate({ children }) {
         <div className="flex flex-col items-center gap-2 text-center shrink-0">
           <div
             className="w-16 h-16 rounded-3xl flex items-center justify-center"
-            style={{ background: "linear-gradient(140deg,#1D4ED8 0%,#0EA5E9 55%,#BFDBFE 100%)", boxShadow: "0 10px 30px rgba(29,78,216,0.35)" }}
+            style={{ background: "rgba(255,255,255,0.18)", boxShadow: "0 8px 32px rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.3)" }}
           >
             <Sparkles size={30} className="text-white" />
           </div>
           <div>
-            <div
-              className="font-extrabold text-2xl tracking-tight"
-              style={{
-                background: "linear-gradient(90deg,#1E3A8A 0%,#1D4ED8 55%,#0EA5E9 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
+            <div className="font-extrabold text-2xl tracking-tight text-white drop-shadow">
               {APP_NAME}
             </div>
-            <div className="text-slate-500 text-sm mt-1">{APP_TAGLINE}</div>
+            <div className="text-blue-100 text-sm mt-1 opacity-80">{APP_TAGLINE}</div>
           </div>
         </div>
 
         {/* Card de login */}
         <div
           className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
-          style={{ background: "linear-gradient(160deg,#DBEAFE 0%,#EFF6FF 100%)", border: "1px solid rgba(29,78,216,0.18)", boxShadow: "0 10px 34px rgba(29,78,216,0.22)" }}
+          style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", boxShadow: "0 16px 48px rgba(0,0,0,0.25)", backdropFilter: "blur(16px)" }}
         >
           {semSenhaConfigurada ? (
             <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-900/30 border border-amber-400/40 rounded-lg px-3 py-2">
@@ -97,17 +86,17 @@ export default function PasswordGate({ children }) {
                 placeholder="Senha de acesso"
                 className="w-full px-4 py-3 rounded-xl text-base outline-none"
                 style={{
-                  background: "rgba(255,255,255,0.9)",
+                  background: "rgba(255,255,255,0.92)",
                   border: erro ? "2px solid #f87171" : "2px solid transparent",
                   color: "#1e293b",
                   fontSize: "1rem",
                 }}
               />
-              {erro && <span className="text-sm font-semibold" style={{ color: "#7F1D1D" }}>Senha incorreta.</span>}
+              {erro && <span className="text-sm font-semibold text-red-200">Senha incorreta.</span>}
               <button
                 type="submit"
                 className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-                style={{ background: "rgba(255,255,255,0.95)", color: "#1D4ED8", boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}
+                style={{ background: "linear-gradient(135deg,#ffffff 0%,#DBEAFE 100%)", color: "#1D4ED8", boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}
               >
                 Entrar
               </button>
@@ -115,16 +104,16 @@ export default function PasswordGate({ children }) {
           )}
         </div>
 
-        {/* Mascote centralizado abaixo do login — flex-1/min-h-0 faz ele
-            encolher pro espaço que sobra, sem nunca estourar a viewport */}
+        {/* Mascote — hue-rotate(-45deg) desloca roxo (~270°) → azul (~225°)
+            preservando o corpo branco/cinza. */}
         <img
           src="/cfobot.png"
           alt="CFO Bot"
           className="flex-1 min-h-0 w-auto max-w-full object-contain"
-          style={{ maxHeight: 420 }}
+          style={{ maxHeight: 420, filter: "hue-rotate(-45deg) saturate(1.2)" }}
         />
 
-        <p className="text-slate-400 text-xs text-center shrink-0">
+        <p className="text-blue-200 text-xs text-center opacity-70 shrink-0">
           Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
