@@ -51,7 +51,7 @@ function CartaoCard({ pos, nomeBanco }) {
       {/* Faixa superior com a identidade do cartão */}
       <div
         className="px-5 py-4 flex items-start justify-between gap-3"
-        style={{ background: "linear-gradient(135deg,#7C3AED 0%,#2563EB 55%,#06B6D4 100%)" }}
+        style={{ background: "linear-gradient(135deg,#065F46 0%,#0891B2 55%,#22D3EE 100%)" }}
       >
         <div className="min-w-0">
           <div className="text-white font-semibold text-sm truncate">{cartao.apelido}</div>

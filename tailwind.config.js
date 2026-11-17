@@ -5,11 +5,11 @@ export default {
     extend: {
       colors: {
         brand: {
-          indigo: "#241B4E",
-          "violet-deep": "#7C3AED",
-          violet: "#8B5CF6",
-          cyan: "#22D3EE",
-          lilac: "#C4B5FD",
+          indigo: "#022C22",          /* dark emerald (era indigo escuro) */
+          "violet-deep": "#065F46",   /* emerald-800 — light primary       */
+          violet: "#10B981",          /* emerald-500 — light accent         */
+          cyan: "#22D3EE",            /* cyan-400    — dark accent (inalterado) */
+          lilac: "#A7F3D0",           /* emerald-200 — light tint (era lilac) */
         },
       },
     },

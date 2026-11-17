@@ -107,7 +107,7 @@ export default function PasswordGate({ children }) {
               <button
                 type="submit"
                 className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-                style={{ background: "rgba(255,255,255,0.95)", color: "#0A6CFF", boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}
+                style={{ background: "rgba(255,255,255,0.95)", color: "#065F46", boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}
               >
                 Entrar
               </button>
