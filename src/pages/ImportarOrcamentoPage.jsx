@@ -58,7 +58,7 @@ export default function ImportarOrcamentoPage({ data }) {
 
       <Panel title="Importar Orçamentos (XLSX ou CSV)">
         <div className="flex items-center gap-3">
-          <label className="px-4 py-2 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2 cursor-pointer">
+          <label className="px-4 py-2 rounded text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-2 cursor-pointer">
             <Upload size={15} /> Selecionar arquivo
             <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={handleFile} />
           </label>
@@ -72,7 +72,7 @@ export default function ImportarOrcamentoPage({ data }) {
 
       {linhas && (
         <Panel title="Prévia da Importação" subtitle={`${linhas.length} linha(s) lida(s) — ${validos.length} válida(s), ${invalidos.length} inválida(s)`}
-          right={validos.length > 0 && <button onClick={confirmarImportacao} className="px-4 py-1.5 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium">Confirmar importação de {validos.length} orçamento(s)</button>}
+          right={validos.length > 0 && <button onClick={confirmarImportacao} className="px-4 py-1.5 rounded text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium">Confirmar importação de {validos.length} orçamento(s)</button>}
         >
           <div className="overflow-x-auto max-h-96 overflow-y-auto">
             <table className="w-full text-xs">

@@ -65,7 +65,7 @@ export default function FinanceCopilotWidget({ data }) {
         <button
           onClick={() => setAberto(true)}
           title="Finance Copilot"
-          className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 shadow-lg flex items-center justify-center transition-colors"
+          className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 shadow-lg flex items-center justify-center transition-colors"
         >
           <Sparkles size={22} className="text-slate-950" />
         </button>
@@ -75,7 +75,7 @@ export default function FinanceCopilotWidget({ data }) {
         <div className="fixed bottom-6 right-6 z-40 w-[380px] h-[560px] bg-white border border-slate-200 rounded-xl shadow-2xl flex flex-col overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-900">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded bg-emerald-500 flex items-center justify-center"><Sparkles size={14} className="text-slate-950" /></div>
+              <div className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center"><Sparkles size={14} className="text-white" /></div>
               <div>
                 <div className="text-white font-semibold text-sm leading-none">Finance Copilot</div>
                 <div className="text-slate-400 text-[10px] mt-0.5">IA sobre os dados deste painel</div>
@@ -90,7 +90,7 @@ export default function FinanceCopilotWidget({ data }) {
                 <p className="text-slate-500 text-xs">Pergunte algo sobre a situação financeira atual. Exemplos:</p>
                 {SUGESTOES.map((s) => (
                   <button key={s} onClick={() => enviarPergunta(s)}
-                    className="text-left text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+                    className="text-left text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-400 hover:text-blue-700 transition-colors">
                     {s}
                   </button>
                 ))}
@@ -133,7 +133,7 @@ export default function FinanceCopilotWidget({ data }) {
             <button
               type="submit"
               disabled={carregando || !pergunta.trim()}
-              className="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
+              className="w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
             >
               <Send size={15} className="text-slate-950" />
             </button>

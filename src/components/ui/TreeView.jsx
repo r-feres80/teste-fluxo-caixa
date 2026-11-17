@@ -54,7 +54,7 @@ export function TreeView({ itens, paiIdField, colunas = [], onAddChild, onAddRoo
           <span className="text-slate-300">|</span>
           <button onClick={() => setExpandidos(new Set())} className="text-xs text-slate-500 hover:text-slate-800">Recolher tudo</button>
         </div>
-        <button onClick={onAddRoot} className="px-3 py-1.5 rounded text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1">
+        <button onClick={onAddRoot} className="px-3 py-1.5 rounded text-xs bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-1">
           <Plus size={13} /> {labelNovaRaiz}
         </button>
       </div>

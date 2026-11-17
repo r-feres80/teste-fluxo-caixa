@@ -21,11 +21,11 @@ h1, h2, h3,
    DESIGN TOKENS  (reference: restaurant-dashboard)
    ───────────────────────────────────────────────────── */
 :root {
-  /* ── Light mode (Esmeralda Petróleo) ── */
-  --vx-lt-bg:      #F0FDF4;   /* green-50  */
-  --vx-lt-primary: #065F46;   /* emerald-800 — afastado ~26° do iFinance #006B78 */
-  --vx-lt-accent:  #10B981;   /* emerald-500 */
-  --vx-lt-dark:    #022C22;   /* dark text */
+  /* ── Light mode (Azul Profundo) ── */
+  --vx-lt-bg:      #F8FAFF;   /* blue-50/white leve */
+  --vx-lt-primary: #1D4ED8;   /* blue-700 — afastado ~38° do iFinance #006B78 */
+  --vx-lt-accent:  #0EA5E9;   /* sky-500 */
+  --vx-lt-dark:    #1E3A8A;   /* navy-900 — dark text / títulos */
 
   /* ── Dark mode (Dark Ciano) ── */
   --vx-bg:    #0A0A0A;

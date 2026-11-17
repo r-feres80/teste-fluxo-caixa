@@ -61,7 +61,7 @@ export default function GovernancaPage({ data }) {
 
       <Panel title="Dados" subtitle="Carregue o cenário demonstrativo, exporte um backup da base atual, ou comece do zero">
         <div className="flex items-center gap-4 flex-wrap">
-          <button onClick={confirmarCargaDemo} className="px-4 py-2 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2">
+          <button onClick={confirmarCargaDemo} className="px-4 py-2 rounded text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-2">
             <Sparkles size={15} /> Carregar Dados Demonstrativos
           </button>
           <button onClick={exportarBackup} disabled={totalRegistros === 0}

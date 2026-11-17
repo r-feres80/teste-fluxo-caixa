@@ -51,7 +51,7 @@ function CartaoCard({ pos, nomeBanco }) {
       {/* Faixa superior com a identidade do cartão */}
       <div
         className="px-5 py-4 flex items-start justify-between gap-3"
-        style={{ background: "linear-gradient(135deg,#065F46 0%,#0891B2 55%,#22D3EE 100%)" }}
+        style={{ background: "linear-gradient(135deg,#1D4ED8 0%,#0EA5E9 55%,#BFDBFE 100%)" }}
       >
         <div className="min-w-0">
           <div className="text-white font-semibold text-sm truncate">{cartao.apelido}</div>
@@ -81,7 +81,7 @@ function CartaoCard({ pos, nomeBanco }) {
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div>
             <div className="text-slate-500 text-[11px] uppercase tracking-wide">Disponível</div>
-            <div className="font-mono tabular-nums font-semibold text-emerald-600 mt-0.5">{fmtBRL(disponivel)}</div>
+            <div className="font-mono tabular-nums font-semibold text-blue-700 mt-0.5">{fmtBRL(disponivel)}</div>
           </div>
           <div>
             <div className="text-slate-500 text-[11px] uppercase tracking-wide flex items-center gap-1">

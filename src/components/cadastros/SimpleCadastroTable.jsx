@@ -43,7 +43,7 @@ export function SimpleCadastroTable({ titulo, subtitulo, campos, itens, onAdd, o
           ))}
           <div className="flex gap-2 col-span-6 justify-end">
             {editingId && <button onClick={cancelEdit} className="px-3 py-1.5 rounded text-sm text-slate-500 hover:text-slate-800 flex items-center gap-1"><X size={14} /> Cancelar</button>}
-            <button onClick={submit} className="px-4 py-1.5 rounded text-sm bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1.5">
+            <button onClick={submit} className="px-4 py-1.5 rounded text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-1.5">
               {editingId ? <Check size={14} /> : <Plus size={14} />}{editingId ? "Salvar alterações" : "Adicionar"}
             </button>
           </div>

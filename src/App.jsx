@@ -104,7 +104,7 @@ const ICON_GROUPS = [
 
 // Classes literais (não interpoladas) para o Tailwind JIT conseguir detectar.
 const GROUP_ACCENT = {
-  "Visão Geral": "bg-emerald-700",
+  "Visão Geral": "bg-blue-700",
   "Controle de Caixa": "bg-blue-500",
   "AP/AR": "bg-amber-500",
   "Planejamento (FP&A)": "bg-cyan-500",
@@ -156,7 +156,7 @@ function InsightDoDia({ texto, tone }) {
 
 // Config de cor e ícone representativo por grupo (estilo Omie)
 const GROUP_TILE_CFG = {
-  "visao-geral":    { bg: "#065F46", Icon: LayoutGrid },
+  "visao-geral":    { bg: "#1D4ED8", Icon: LayoutGrid },
   "controle-caixa": { bg: "#0891B2", Icon: Landmark },
   "ap-ar":          { bg: "#F59E0B", Icon: Scale },
   "planejamento":   { bg: "#0D9488", Icon: TrendingUp },
@@ -338,7 +338,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
           {/* A barra de acento viaja junto, dentro da pílula */}
           <span
             className="absolute left-0 top-1/2 -translate-y-1/2"
-            style={{ width: 3, height: 20, borderRadius: "0 3px 3px 0", background: "linear-gradient(180deg,#34D399,#065F46)" }}
+            style={{ width: 3, height: 20, borderRadius: "0 3px 3px 0", background: "linear-gradient(180deg,#0EA5E9,#1D4ED8)" }}
           />
         </span>
       )}
@@ -380,7 +380,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
                     // Fundo e anel do ativo agora são da pílula. O item só
                     // muda de cor — se pintasse fundo também, haveria dois
                     // destaques competindo durante a transição.
-                    color: active ? "#065F46" : "#475569",
+                    color: active ? "#1D4ED8" : "#475569",
                     background: !active && hoverId === id ? "#F4F6FB" : "transparent",
                   }}
                   onMouseEnter={(e) => {
@@ -424,8 +424,8 @@ function SidebarNav({ view, irPara, saude, expanded }) {
             className="px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap"
             style={{
               background: "#fff",
-              color: "#065F46",
-              border: "1px solid rgba(6,95,70,.25)",
+              color: "#1D4ED8",
+              border: "1px solid rgba(29,78,216,.25)",
               boxShadow: "0 4px 16px rgba(6,95,70,.25)",
             }}
           >
@@ -453,7 +453,7 @@ function SidebarNav({ view, irPara, saude, expanded }) {
 // das telas.
 function LanguageSwitcherPills() {
   const { idioma, setIdioma } = useLanguage();
-  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-emerald-700 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
+  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-blue-700 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
   return (
     <>
       {IDIOMAS.map((l) => (
@@ -579,7 +579,7 @@ export default function App() {
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 select-none"
           style={{
-            background: "linear-gradient(140deg,#065F46,#10B981)",
+            background: "linear-gradient(140deg,#1D4ED8,#0EA5E9)",
             color: "#fff",
             boxShadow: "0 0 12px rgba(6,95,70,.35)",
           }}
@@ -637,7 +637,7 @@ export default function App() {
               className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
               style={{ color: "#94A3B8" }}
               title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#065F46"; e.currentTarget.style.background = "#F0FDF4"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#1D4ED8"; e.currentTarget.style.background = "#EFF6FF"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.background = "transparent"; }}
             >
               <ChevronLeft

@@ -86,7 +86,7 @@ export default function DFCDiretoPage({ data }) {
         right={
           <div className="flex items-center gap-2">
             <button onClick={() => irParaMes(-1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Mês Passado</button>
-            <button onClick={() => irParaMes(0)} disabled={mesEhCorrente} className={`px-2.5 py-1.5 rounded text-xs border ${mesEhCorrente ? "border-emerald-300 bg-emerald-50 text-emerald-700" : "border-slate-300 text-slate-600 hover:bg-slate-50"}`}>Mês Atual</button>
+            <button onClick={() => irParaMes(0)} disabled={mesEhCorrente} className={`px-2.5 py-1.5 rounded text-xs border ${mesEhCorrente ? "border-blue-300 bg-blue-50 text-blue-700" : "border-slate-300 text-slate-600 hover:bg-slate-50"}`}>Mês Atual</button>
             <button onClick={() => irParaMes(1)} className="px-2.5 py-1.5 rounded text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">Próximo Mês</button>
             <select value={mesSel} onChange={(e) => setMesSel(Number(e.target.value))} className={selectCls + " w-auto"}>
               {NOMES_MES.map((nome, i) => <option key={nome} value={i}>{nome}</option>)}

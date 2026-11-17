@@ -5,11 +5,11 @@ export default {
     extend: {
       colors: {
         brand: {
-          indigo: "#022C22",          /* dark emerald (era indigo escuro) */
-          "violet-deep": "#065F46",   /* emerald-800 — light primary       */
-          violet: "#10B981",          /* emerald-500 — light accent         */
-          cyan: "#22D3EE",            /* cyan-400    — dark accent (inalterado) */
-          lilac: "#A7F3D0",           /* emerald-200 — light tint (era lilac) */
+          indigo: "#1E3A8A",          /* navy-900 — dark text / títulos     */
+          "violet-deep": "#1D4ED8",   /* blue-700 — light primary           */
+          violet: "#0EA5E9",          /* sky-500  — light accent            */
+          cyan: "#22D3EE",            /* cyan-400 — dark accent (inalterado) */
+          lilac: "#DBEAFE",           /* blue-100 — light tint              */
         },
       },
     },

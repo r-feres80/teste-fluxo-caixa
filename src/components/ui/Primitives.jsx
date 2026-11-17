@@ -338,7 +338,7 @@ export function EmptyState({ titulo, descricao, acao }) {
 /** Diálogo de confirmação — usado antes de qualquer exclusão (item 22). */
 export function ConfirmDialog({ open, titulo, mensagem, onConfirm, onCancel, tone = "rose" }) {
   if (!open) return null;
-  const toneBtn = tone === "rose" ? "bg-rose-600 hover:bg-rose-500" : "bg-emerald-600 hover:bg-emerald-500";
+  const toneBtn = tone === "rose" ? "bg-rose-600 hover:bg-rose-500" : "bg-blue-600 hover:bg-blue-500";
   return (
     <div className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50" onClick={onCancel}>
       <div className="bg-white rounded-lg shadow-xl border border-slate-200 w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
