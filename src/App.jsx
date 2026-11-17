@@ -446,13 +446,17 @@ function SidebarNav({ view, irPara, saude, expanded }) {
   );
 }
 
-// Controle fixo de topo: apenas "Sair". Usado tanto na landing quanto
-// dentro das telas. LanguageSwitcherPills removido (comando tirar-pt-en).
+// Botão Sair — inline no header (não fixed). LanguageSwitcherPills removido.
 function LogoutButton({ onLogout }) {
   return (
-    <div className="fixed top-4 right-4 z-50 flex items-center bg-white border border-slate-200 rounded-lg shadow-sm p-1">
-      <button onClick={onLogout} title="Sair" className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
-    </div>
+    <button
+      onClick={onLogout}
+      title="Sair"
+      className="flex items-center gap-1.5 px-3 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all text-xs font-medium shrink-0"
+    >
+      <LogOut size={14} />
+      <span>Sair</span>
+    </button>
   );
 }
 
@@ -536,36 +540,7 @@ export default function App() {
           <span className="text-slate-800 font-semibold truncate">{tituloAtual}</span>
         </div>
 
-        {/* badge de alertas */}
-        {totalAlertas > 0 && (
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shrink-0"
-            style={{
-              background: "rgba(220,38,38,.12)",
-              border: "1px solid rgba(220,38,38,.25)",
-              color: "#fb7185",
-            }}
-            title={`${totalAlertas} módulo${totalAlertas > 1 ? "s" : ""} com alerta`}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"
-            />
-            {totalAlertas}
-          </div>
-        )}
-
-        {/* avatar com iniciais */}
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 select-none"
-          style={{
-            background: "linear-gradient(140deg,#1D4ED8,#0EA5E9)",
-            color: "#fff",
-            boxShadow: "0 0 12px rgba(6,95,70,.35)",
-          }}
-          title="Velmetryx"
-        >
-          CF
-        </div>
+        <LogoutButton onLogout={sair} />
       </header>
 
       {/* filter bar separada — linha própria abaixo do header */}
@@ -582,8 +557,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex">
-      <LogoutButton onLogout={sair} />
-
       {(
         <aside
           className="shrink-0 flex flex-col overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
