@@ -104,13 +104,22 @@ export default function PasswordGate({ children }) {
           )}
         </div>
 
-        {/* Mascote — hue-rotate(-45deg) desloca roxo (~270°) → azul (~225°)
-            preservando o corpo branco/cinza. */}
+        {/* Mascote — feBlend(mode=hue) substitui apenas o matiz das áreas
+            coloridas (roxo, verde) pelo azul da paleta, preservando o
+            branco/cinza do corpo e a transparência do PNG. */}
+        <svg style={{ display: "none" }} aria-hidden="true">
+          <defs>
+            <filter id="cfobot-blue-lines">
+              <feFlood floodColor="#1D4ED8" floodOpacity="1" result="blue" />
+              <feBlend in="blue" in2="SourceGraphic" mode="hue" />
+            </filter>
+          </defs>
+        </svg>
         <img
           src="/cfobot.png"
           alt="CFO Bot"
           className="flex-1 min-h-0 w-auto max-w-full object-contain"
-          style={{ maxHeight: 420, filter: "hue-rotate(-45deg) saturate(1.2)" }}
+          style={{ maxHeight: 420, filter: "url(#cfobot-blue-lines) saturate(1.3)" }}
         />
 
         <p className="text-xs text-center opacity-50 shrink-0" style={{ color: "#64748b" }}>
