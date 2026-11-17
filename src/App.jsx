@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useLanguage } from "./i18n/LanguageContext.jsx";
-import { IDIOMAS } from "./i18n/translations.js";
 import { useAppData } from "./hooks/useAppData.js";
 import { GlobalFilterBar } from "./components/ui/GlobalFilterBar.jsx";
 import { fmtDataHora } from "./utils/formatUtils.js";
@@ -447,32 +446,12 @@ function SidebarNav({ view, irPara, saude, expanded }) {
   );
 }
 
-// Pills PT/EN/ES — Bloco 4 (item 1, escopo "só rótulos-chave": menu,
-// títulos, marca/tagline e KPI do Dashboard, sem tocar gráfico/tooltip/
-// tabela). Usado no LogoutButton, o controle fixo de topo da landing e
-// das telas.
-function LanguageSwitcherPills() {
-  const { idioma, setIdioma } = useLanguage();
-  const pillLang = (active) => `flex items-center justify-center min-w-7 h-8 px-1 rounded-md text-[10px] font-semibold transition-colors ${active ? "bg-blue-700 text-white" : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"}`;
-  return (
-    <>
-      {IDIOMAS.map((l) => (
-        <button key={l} onClick={() => setIdioma(l)} title={l.toUpperCase()} className={pillLang(idioma === l)}>{l.toUpperCase()}</button>
-      ))}
-    </>
-  );
-}
-
-// Controle fixo de topo: idioma + "Sair". Usado tanto na landing quanto
-// dentro das telas. Antes existia aqui um toggle sidebar↔ícones; o modo
-// ícones foi removido e a sidebar passou a ser a navegação única.
+// Controle fixo de topo: apenas "Sair". Usado tanto na landing quanto
+// dentro das telas. LanguageSwitcherPills removido (comando tirar-pt-en).
 function LogoutButton({ onLogout }) {
-  const { t } = useLanguage();
   return (
-    <div className="fixed top-4 right-4 z-50 flex items-center gap-0.5 bg-white border border-slate-200 rounded-lg shadow-sm p-1">
-      <LanguageSwitcherPills />
-      <span className="w-px h-5 bg-slate-200 mx-0.5" />
-      <button onClick={onLogout} title={t("chrome.logout")} className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
+    <div className="fixed top-4 right-4 z-50 flex items-center bg-white border border-slate-200 rounded-lg shadow-sm p-1">
+      <button onClick={onLogout} title="Sair" className="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"><LogOut size={15} /></button>
     </div>
   );
 }
