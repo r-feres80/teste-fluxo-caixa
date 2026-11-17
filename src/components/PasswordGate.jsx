@@ -104,14 +104,19 @@ export default function PasswordGate({ children }) {
           )}
         </div>
 
-        {/* Mascote — feBlend(mode=hue) substitui apenas o matiz das áreas
-            coloridas (roxo, verde) pelo azul da paleta, preservando o
-            branco/cinza do corpo e a transparência do PNG. */}
+        {/* Mascote — filtro reforçado: dessatura primeiro, injeta matiz azul,
+            depois restaura luminosidade do original para preservar branco/cinza
+            e eliminar roxo/violeta residual. */}
         <svg style={{ display: "none" }} aria-hidden="true">
           <defs>
-            <filter id="cfobot-blue-lines">
+            <filter id="cfobot-blue-lines" colorInterpolationFilters="sRGB">
+              {/* 1. Suprime saturação de qualquer tom não-azul */}
+              <feColorMatrix type="saturate" values="0.3" result="dessaturado" />
+              {/* 2. Injeta matiz azul nas áreas coloridas restantes */}
               <feFlood floodColor="#1D4ED8" floodOpacity="1" result="blue" />
-              <feBlend in="blue" in2="SourceGraphic" mode="hue" />
+              <feBlend in="blue" in2="dessaturado" mode="hue" result="hued" />
+              {/* 3. Restaura luminosidade do original para não escurecer o branco */}
+              <feBlend in="hued" in2="SourceGraphic" mode="luminosity" />
             </filter>
           </defs>
         </svg>
@@ -119,7 +124,7 @@ export default function PasswordGate({ children }) {
           src="/cfobot.png"
           alt="CFO Bot"
           className="flex-1 min-h-0 w-auto max-w-full object-contain"
-          style={{ maxHeight: 420, filter: "url(#cfobot-blue-lines) saturate(1.3)" }}
+          style={{ maxHeight: 420, filter: "url(#cfobot-blue-lines) saturate(1.4)" }}
         />
 
         <p className="text-xs text-center opacity-50 shrink-0" style={{ color: "#64748b" }}>
