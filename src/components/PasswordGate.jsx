@@ -46,7 +46,7 @@ export default function PasswordGate({ children }) {
     // inteira cabe na viewport sem rolagem em qualquer altura de monitor.
     <div
       className="h-screen overflow-hidden flex items-center justify-center px-4 py-6"
-      style={{ background: "linear-gradient(145deg,#1E3A8A 0%,#1D4ED8 55%,#0EA5E9 100%)" }}
+      style={{ background: "#F8FAFF" }}
     >
       <div className="w-full max-w-sm h-full flex flex-col items-center justify-center gap-5">
 
@@ -54,25 +54,25 @@ export default function PasswordGate({ children }) {
         <div className="flex flex-col items-center gap-2 text-center shrink-0">
           <div
             className="w-16 h-16 rounded-3xl flex items-center justify-center"
-            style={{ background: "rgba(255,255,255,0.18)", boxShadow: "0 8px 32px rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.3)" }}
+            style={{ background: "linear-gradient(145deg,#1D4ED8,#0EA5E9)", boxShadow: "0 8px 24px rgba(29,78,216,0.35)" }}
           >
             <Sparkles size={30} className="text-white" />
           </div>
           <div>
-            <div className="font-extrabold text-2xl tracking-tight text-white drop-shadow">
+            <div className="font-extrabold text-2xl tracking-tight" style={{ color: "#1E3A8A" }}>
               {APP_NAME}
             </div>
-            <div className="text-blue-100 text-sm mt-1 opacity-80">{APP_TAGLINE}</div>
+            <div className="text-sm mt-1" style={{ color: "#64748b" }}>{APP_TAGLINE}</div>
           </div>
         </div>
 
         {/* Card de login */}
         <div
           className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
-          style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", boxShadow: "0 16px 48px rgba(0,0,0,0.25)", backdropFilter: "blur(16px)" }}
+          style={{ background: "#ffffff", border: "1px solid #BFDBFE", boxShadow: "0 8px 32px rgba(29,78,216,0.12)" }}
         >
           {semSenhaConfigurada ? (
-            <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-900/30 border border-amber-400/40 rounded-lg px-3 py-2">
+            <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
               <AlertTriangle size={15} className="mt-0.5 shrink-0" />
               <span>Senha não configurada (VITE_APP_PASSWORD ausente).</span>
             </div>
@@ -86,17 +86,17 @@ export default function PasswordGate({ children }) {
                 placeholder="Senha de acesso"
                 className="w-full px-4 py-3 rounded-xl text-base outline-none"
                 style={{
-                  background: "rgba(255,255,255,0.92)",
-                  border: erro ? "2px solid #f87171" : "2px solid transparent",
+                  background: "#F8FAFF",
+                  border: erro ? "2px solid #f87171" : "2px solid #BFDBFE",
                   color: "#1e293b",
                   fontSize: "1rem",
                 }}
               />
-              {erro && <span className="text-sm font-semibold text-red-200">Senha incorreta.</span>}
+              {erro && <span className="text-sm font-semibold" style={{ color: "#dc2626" }}>Senha incorreta.</span>}
               <button
                 type="submit"
                 className="w-full py-3 rounded-xl text-base font-bold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
-                style={{ background: "linear-gradient(135deg,#ffffff 0%,#DBEAFE 100%)", color: "#1D4ED8", boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}
+                style={{ background: "linear-gradient(135deg,#1D4ED8 0%,#0EA5E9 100%)", color: "#ffffff", boxShadow: "0 4px 16px rgba(29,78,216,0.4)" }}
               >
                 Entrar
               </button>
@@ -113,7 +113,7 @@ export default function PasswordGate({ children }) {
           style={{ maxHeight: 420, filter: "hue-rotate(-45deg) saturate(1.2)" }}
         />
 
-        <p className="text-blue-200 text-xs text-center opacity-70 shrink-0">
+        <p className="text-xs text-center opacity-50 shrink-0" style={{ color: "#64748b" }}>
           Proteção temporária — substituída por autenticação Supabase em breve.
         </p>
       </div>
