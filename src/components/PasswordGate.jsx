@@ -57,7 +57,7 @@ export default function PasswordGate({ children }) {
         <div className="flex flex-col items-center gap-2 text-center shrink-0">
           <div
             className="w-16 h-16 rounded-3xl flex items-center justify-center"
-            style={{ background: "linear-gradient(140deg,#A78BFA 0%,#60A5FA 55%,#67E8F9 100%)", boxShadow: "0 10px 30px rgba(96,165,250,0.35)" }}
+            style={{ background: "linear-gradient(140deg,#1D4ED8 0%,#0EA5E9 55%,#BFDBFE 100%)", boxShadow: "0 10px 30px rgba(29,78,216,0.35)" }}
           >
             <Sparkles size={30} className="text-white" />
           </div>
@@ -65,7 +65,7 @@ export default function PasswordGate({ children }) {
             <div
               className="font-extrabold text-2xl tracking-tight"
               style={{
-                background: "linear-gradient(90deg,#A78BFA 0%,#60A5FA 55%,#22D3EE 100%)",
+                background: "linear-gradient(90deg,#1E3A8A 0%,#1D4ED8 55%,#0EA5E9 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
@@ -80,7 +80,7 @@ export default function PasswordGate({ children }) {
         {/* Card de login */}
         <div
           className="w-full rounded-2xl p-5 flex flex-col gap-3 shrink-0"
-          style={{ background: "linear-gradient(160deg,#9B9CFB 0%,#86B0FB 100%)", border: "1px solid rgba(255,255,255,0.45)", boxShadow: "0 10px 34px rgba(96,165,250,0.35)" }}
+          style={{ background: "linear-gradient(160deg,#DBEAFE 0%,#EFF6FF 100%)", border: "1px solid rgba(29,78,216,0.18)", boxShadow: "0 10px 34px rgba(29,78,216,0.22)" }}
         >
           {semSenhaConfigurada ? (
             <div className="flex items-start gap-2 text-sm text-amber-200 bg-amber-900/30 border border-amber-400/40 rounded-lg px-3 py-2">
