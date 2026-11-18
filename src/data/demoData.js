@@ -14,14 +14,14 @@ import orcamentoItensGerados from "./orcamentoItensGerados.json" with { type: "j
 // disciplina completa em demoDataGenerator.js.
 
 export const demoEmpresas = [
-  { id: "e1", nome: "Comércio ABC Ltda", cnpj: "12.345.678/0001-01", ativo: true },
-  { id: "e2", nome: "Indústria XYZ S.A.", cnpj: "23.456.789/0001-02", ativo: true },
+  { id: "e1", nome: "Velmetryx Tintas e Vernizes Ltda", cnpj: "12.345.678/0001-01", ativo: true },
+  { id: "e2", nome: "Cromex Revestimentos S.A.", cnpj: "23.456.789/0001-02", ativo: true },
 ];
 
 export const demoUnidades = [
   { id: "u1", empresaId: "e1", nome: "Matriz - São Paulo", ativo: true },
-  { id: "u2", empresaId: "e1", nome: "Filial - Campinas", ativo: true },
-  { id: "u3", empresaId: "e2", nome: "Matriz - Curitiba", ativo: true },
+  { id: "u2", empresaId: "e1", nome: "CD - Guarulhos", ativo: true },
+  { id: "u3", empresaId: "e2", nome: "Fábrica - Santo André", ativo: true },
 ];
 
 // Expandido de 4 -> 10 (Bloco B/Etapa 1) para a carteira de ~2.000
@@ -31,28 +31,28 @@ export const demoUnidades = [
 // fornecedoresImportados.json (auto-criados pela função real de import,
 // scripts/mesmo fluxo de "Importar Dados").
 const demoClientesBase = [
-  { id: "c1", nome: "Mercado Central Ltda", documento: "12.345.678/0001-90", ativo: true, regiao: "Sudeste" },
-  { id: "c2", nome: "Distribuidora Sul Comércio", documento: "23.456.789/0001-11", ativo: true, regiao: "Sul" },
-  { id: "c3", nome: "Construtora Horizonte Ltda", documento: "34.567.890/0001-22", ativo: true, regiao: "Sudeste" },
-  { id: "c4", nome: "Farmácia Vida Saudável", documento: "45.678.901/0001-33", ativo: true, regiao: "Sudeste" },
-  { id: "c5", nome: "Supermercados Bom Preço", documento: "56.789.012/0001-44", ativo: true, regiao: "Nordeste" },
-  { id: "c6", nome: "Auto Peças Cruzeiro", documento: "67.890.123/0001-55", ativo: true, regiao: "Sul" },
-  { id: "c7", nome: "Rede Confiança de Farmácias", documento: "78.901.234/0001-66", ativo: true, regiao: "Centro-Oeste" },
-  { id: "c8", nome: "Papelaria Universo", documento: "89.012.345/0001-77", ativo: true, regiao: "Sudeste" },
-  { id: "c9", nome: "Móveis Planejados Cedro", documento: "90.123.456/0001-88", ativo: true, regiao: "Sul" },
-  { id: "c10", nome: "Comercial Nordeste Alimentos", documento: "01.234.567/0001-99", ativo: true, regiao: "Nordeste" },
+  { id: "c1", nome: "Construtora Delta Paulista Ltda", documento: "12.345.678/0001-90", ativo: true, regiao: "Sudeste" },
+  { id: "c2", nome: "Casa Nova Materiais de Construção", documento: "23.456.789/0001-11", ativo: true, regiao: "Sul" },
+  { id: "c3", nome: "Pinturas Horizonte Engenharia", documento: "34.567.890/0001-22", ativo: true, regiao: "Sudeste" },
+  { id: "c4", nome: "Rede Constrular Materiais Ltda", documento: "45.678.901/0001-33", ativo: true, regiao: "Sudeste" },
+  { id: "c5", nome: "Distribuidora Cores do Nordeste", documento: "56.789.012/0001-44", ativo: true, regiao: "Nordeste" },
+  { id: "c6", nome: "Construtora Meridional Sul Ltda", documento: "67.890.123/0001-55", ativo: true, regiao: "Sul" },
+  { id: "c7", nome: "Max Construções Centro-Oeste", documento: "78.901.234/0001-66", ativo: true, regiao: "Centro-Oeste" },
+  { id: "c8", nome: "Pinturas Especiais Paulistana", documento: "89.012.345/0001-77", ativo: true, regiao: "Sudeste" },
+  { id: "c9", nome: "Volare Empreendimentos Imobiliários", documento: "90.123.456/0001-88", ativo: true, regiao: "Sul" },
+  { id: "c10", nome: "Nordestão Materiais de Construção", documento: "01.234.567/0001-99", ativo: true, regiao: "Nordeste" },
 ];
 export const demoClientes = [...demoClientesBase, ...clientesImportados];
 
 const demoFornecedoresBase = [
-  { id: "f1", nome: "Fornecedor Atacadista Nacional", documento: "11.222.333/0001-44", ativo: true },
+  { id: "f1", nome: "Química Brasil Pigmentos e Resinas", documento: "11.222.333/0001-44", ativo: true },
   { id: "f2", nome: "Transportadora Rápido Brasil", documento: "22.333.444/0001-55", ativo: true },
-  { id: "f3", nome: "Gráfica Impressão Total", documento: "33.444.555/0001-66", ativo: true },
+  { id: "f3", nome: "Embalagens Metálicas Sul Ltda", documento: "33.444.555/0001-66", ativo: true },
   { id: "f4", nome: "Escritório Contábil Confiança", documento: "44.555.666/0001-77", ativo: true },
-  { id: "f5", nome: "Indústria de Embalagens Sul", documento: "55.666.777/0001-88", ativo: true },
-  { id: "f6", nome: "Distribuidora de Matéria-Prima Rocha", documento: "66.777.888/0001-99", ativo: true },
+  { id: "f5", nome: "Resina Polimérica Paulista Ltda", documento: "55.666.777/0001-88", ativo: true },
+  { id: "f6", nome: "TiO2 Brasil Pigmentos Especiais", documento: "66.777.888/0001-99", ativo: true },
   { id: "f7", nome: "Logística Expressa Brasil", documento: "77.888.999/0001-00", ativo: true },
-  { id: "f8", nome: "Manutenção Predial Ágil", documento: "88.999.000/0001-11", ativo: true },
+  { id: "f8", nome: "Manutenção Industrial Ágil Ltda", documento: "88.999.000/0001-11", ativo: true },
 ];
 export const demoFornecedores = [...demoFornecedoresBase, ...fornecedoresImportados];
 
@@ -107,8 +107,8 @@ const demoContasBancariasBase = [
 ];
 
 export const demoProjetos = [
-  { id: "p1", empresaId: "e1", nome: "Expansão Filial Campinas", ativo: true },
-  { id: "p2", empresaId: "e2", nome: "Modernização de Sistemas", ativo: true },
+  { id: "p1", empresaId: "e1", nome: "Lançamento Linha Premium Velmetryx", ativo: true },
+  { id: "p2", empresaId: "e2", nome: "Ampliação Capacidade Fabril 2026", ativo: true },
 ];
 
 // ---- Plano de Contas Gerencial (hierárquico) ----
@@ -286,10 +286,10 @@ export const demoOrcamentoItens = orcamentoItensGerados;
 // ─────────────────────────────────────────────────────────────────────────
 
 export const demoCartoes = [
-  { id: "cart1", bancoId: "b2", empresaId: "e1", apelido: "Visa Corporativo",      final: "4162", titular: "Marina Souza",   limite: 120000, diaFechamento: 20, diaVencimento: 28, ativo: true },
-  { id: "cart2", bancoId: "b1", empresaId: "e1", apelido: "Mastercard Compras",    final: "7734", titular: "Rafael Torres",  limite:  80000, diaFechamento: 25, diaVencimento:  5, ativo: true },
-  { id: "cart3", bancoId: "b3", empresaId: "e2", apelido: "Visa Infinite Diretoria", final: "9021", titular: "Paulo Ribeiro", limite: 150000, diaFechamento: 15, diaVencimento: 22, ativo: true },
-  { id: "cart4", bancoId: "b5", empresaId: "e2", apelido: "Mastercard Operações",  final: "5508", titular: "Camila Duarte",  limite:  60000, diaFechamento: 10, diaVencimento: 18, ativo: true },
+  { id: "cart1", bancoId: "b2", empresaId: "e1", apelido: "Visa Corporativo",        final: "4162", titular: "Fernanda Almeida", limite: 120000, diaFechamento: 20, diaVencimento: 28, ativo: true },
+  { id: "cart2", bancoId: "b1", empresaId: "e1", apelido: "Mastercard Comercial",   final: "7734", titular: "Ricardo Nunes",    limite:  80000, diaFechamento: 25, diaVencimento:  5, ativo: true },
+  { id: "cart3", bancoId: "b3", empresaId: "e2", apelido: "Visa Infinite Diretoria",final: "9021", titular: "André Monteiro",   limite: 150000, diaFechamento: 15, diaVencimento: 22, ativo: true },
+  { id: "cart4", bancoId: "b5", empresaId: "e2", apelido: "Mastercard Operações",   final: "5508", titular: "Bruno Fonseca",    limite:  60000, diaFechamento: 10, diaVencimento: 18, ativo: true },
 ];
 
 function gerarDespesasCartao() {
@@ -299,10 +299,10 @@ function gerarDespesasCartao() {
   // Perfil de gasto por cartão: quais centros de custo ele costuma usar e
   // que tipo de despesa aparece. Mantém o dado plausível em vez de aleatório.
   const perfis = {
-    cart1: { ccs: ["cc1100", "cc1200", "cc1300"], descr: ["Assinatura software financeiro", "Material de escritório", "Treinamento equipe", "Taxa cartório", "Certificado digital"] },
-    cart2: { ccs: ["cc2100", "cc2200"], descr: ["Anúncios online", "Feira setorial — estande", "Brindes para clientes", "Viagem comercial", "Hospedagem equipe vendas"] },
-    cart3: { ccs: ["cc1000", "cc2000", "cc3000"], descr: ["Passagem aérea diretoria", "Hotel — reunião conselho", "Consultoria avulsa", "Almoço de negócios", "Assinatura de pesquisa setorial"] },
-    cart4: { ccs: ["cc3100", "cc3200"], descr: ["Combustível frota", "Peça de reposição urgente", "Frete expresso", "EPI — reposição", "Manutenção empilhadeira"] },
+    cart1: { ccs: ["cc1100", "cc1200", "cc1300"], descr: ["Assinatura ERP financeiro", "Material de escritório", "Treinamento equipe financeira", "Taxa cartório", "Certificado digital A3"] },
+    cart2: { ccs: ["cc2100", "cc2200"], descr: ["Anúncios online tintas", "Feira Construção & Revestimento — estande", "Brindes para distribuidores", "Viagem comercial clientes", "Hospedagem equipe vendas"] },
+    cart3: { ccs: ["cc1000", "cc2000", "cc3000"], descr: ["Passagem aérea diretoria", "Hotel — reunião conselho", "Consultoria estratégica avulsa", "Almoço de negócios", "Assinatura de pesquisa setorial tintas"] },
+    cart4: { ccs: ["cc3100", "cc3200"], descr: ["Combustível frota entrega", "Peça de reposição dosadora", "EPI — reposição linha produção", "Manutenção misturador industrial", "Frete expresso matéria-prima"] },
   };
 
   // Semente fixa: a base demo precisa ser reproduzível entre recargas.
