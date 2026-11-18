@@ -45,12 +45,12 @@ function proximaEmissao(diaVencimento, hoje) {
 }
 
 export default function FaturamentoPage({ data }) {
-  const { entidades } = data ?? {};
   const hoje = getDataAtualSistema();
-
-  if (!entidades?.lancamentos) return null;
   const [anoFiltro, setAnoFiltro] = useState(Number(hoje.slice(0, 4)));
   const [mesFiltro, setMesFiltro] = useState(Number(hoje.slice(5, 7)) - 1); // 0-based
+
+  const { entidades } = data ?? {};
+  if (!entidades?.lancamentos) return null;
 
   const anoMesPfx = `${anoFiltro}-${String(mesFiltro + 1).padStart(2, "0")}`;
   const hojePfx = hoje.slice(0, 10);
