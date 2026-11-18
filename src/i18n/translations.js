@@ -14,6 +14,7 @@ export const TRANSLATIONS = {
     "nav.dfc-direto": "DFC",
     "nav.contas-pagar": "Contas a Pagar",
     "nav.contas-receber": "Contas a Receber",
+    "nav.faturamento": "Faturamento",
     "nav.inadimplencia": "Inadimplência",
     "nav.orcamento": "Orçamento",
     "nav.orcado-realizado": "Orçado x Realizado",
@@ -27,7 +28,7 @@ export const TRANSLATIONS = {
 
     "group.visao-geral": "Visão Geral",
     "group.controle-caixa": "Controle de Caixa",
-    "group.ap-ar": "AP/AR",
+    "group.ap-ar": "Financeiro",
     "group.planejamento": "Planejamento (FP&A)",
     "group.dados": "Dados",
 
@@ -40,7 +41,7 @@ export const TRANSLATIONS = {
     "kpi.desvioOrcamento": "Desvio vs. Orçamento (período)",
     "kpi.inadimplenciaReceber": "Inadimplência (Receber)",
 
-    "chrome.tagline": "Controle de Caixa • AP/AR • FP&A • Dados",
+    "chrome.tagline": "Controle de Caixa • Financeiro • FP&A • Dados",
     "chrome.subtitle": "Gestão Financeira Gerencial",
     "chrome.verComoLista": "Ver como lista",
     "chrome.inicio": "Início",
@@ -58,6 +59,7 @@ export const TRANSLATIONS = {
     "nav.dfc-direto": "DFC (Cash Flow Statement)",
     "nav.contas-pagar": "Accounts Payable",
     "nav.contas-receber": "Accounts Receivable",
+    "nav.faturamento": "Billing",
     "nav.inadimplencia": "Delinquency",
     "nav.orcamento": "Budget",
     "nav.orcado-realizado": "Budget vs. Actual",
@@ -71,7 +73,7 @@ export const TRANSLATIONS = {
 
     "group.visao-geral": "Overview",
     "group.controle-caixa": "Cash Control",
-    "group.ap-ar": "AP/AR",
+    "group.ap-ar": "Financeiro",
     "group.planejamento": "Planning (FP&A)",
     "group.dados": "Data",
 
@@ -84,7 +86,7 @@ export const TRANSLATIONS = {
     "kpi.desvioOrcamento": "Budget Variance (period)",
     "kpi.inadimplenciaReceber": "Delinquency (Receivables)",
 
-    "chrome.tagline": "Cash Control • AP/AR • FP&A • Data",
+    "chrome.tagline": "Cash Control • Financeiro • FP&A • Data",
     "chrome.subtitle": "Financial Management",
     "chrome.verComoLista": "View as list",
     "chrome.inicio": "Home",
@@ -102,6 +104,7 @@ export const TRANSLATIONS = {
     "nav.dfc-direto": "DFC (Estado de Flujo de Caja)",
     "nav.contas-pagar": "Cuentas por Pagar",
     "nav.contas-receber": "Cuentas por Cobrar",
+    "nav.faturamento": "Facturación",
     "nav.inadimplencia": "Morosidad",
     "nav.orcamento": "Presupuesto",
     "nav.orcado-realizado": "Presupuestado x Real",
@@ -115,7 +118,7 @@ export const TRANSLATIONS = {
 
     "group.visao-geral": "Visión General",
     "group.controle-caixa": "Control de Caja",
-    "group.ap-ar": "AP/AR",
+    "group.ap-ar": "Financeiro",
     "group.planejamento": "Planificación (FP&A)",
     "group.dados": "Datos",
 
@@ -128,7 +131,7 @@ export const TRANSLATIONS = {
     "kpi.desvioOrcamento": "Desvío vs. Presupuesto (período)",
     "kpi.inadimplenciaReceber": "Morosidad (Cuentas por Cobrar)",
 
-    "chrome.tagline": "Control de Caja • AP/AR • FP&A • Datos",
+    "chrome.tagline": "Control de Caja • Financeiro • FP&A • Datos",
     "chrome.subtitle": "Gestión Financiera Gerencial",
     "chrome.verComoLista": "Ver como lista",
     "chrome.inicio": "Inicio",
