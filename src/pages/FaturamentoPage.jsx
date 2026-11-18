@@ -161,7 +161,7 @@ export default function FaturamentoPage({ data }) {
               <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
-                    {gradienteBarraStops(BRAND.azul)}
+                    {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
                   </linearGradient>
                 </defs>
                 <CartesianGrid {...GRID} />
