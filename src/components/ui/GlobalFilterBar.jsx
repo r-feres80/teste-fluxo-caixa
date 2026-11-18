@@ -13,7 +13,8 @@ import { parseISO } from "../../utils/dateUtils.js";
 // cards de caixa/EBITDA YTD continuam hoje-real) continuam com o seletor
 // de período completo.
 export function GlobalFilterBar({ filtros, empresas, unidades, updateFiltros, mostrarPeriodo = true }) {
-  const unidadesDaEmpresa = filtros.empresaId === "TODAS" ? unidades : unidades.filter((u) => u.empresaId === filtros.empresaId);
+  // Empresa/Unidade removidos da barra global — sistema mono-empresa (Tintas ABC Ltda).
+  // Os filtros empresaId/unidadeId continuam no estado mas não são expostos na UI.
 
   // Ao trocar a Data de Referência, o filtro de Mês/Ano é realinhado junto —
   // evita telas mostrando um mês diferente do que a Data de Referência indica.
@@ -30,18 +31,6 @@ export function GlobalFilterBar({ filtros, empresas, unidades, updateFiltros, mo
           <DateInputBR value={filtros.dataReferencia} onChange={onChangeDataReferencia} className={inputCls} />
         </Field>
       )}
-      <Field label="Empresa" className="w-44">
-        <select value={filtros.empresaId} onChange={(e) => updateFiltros({ empresaId: e.target.value, unidadeId: "TODAS" })} className={selectCls}>
-          <option value="TODAS">Todas as empresas</option>
-          {empresas.filter((e) => e.ativo).map((e) => <option key={e.id} value={e.id}>{e.nome}</option>)}
-        </select>
-      </Field>
-      <Field label="Unidade" className="w-40">
-        <select value={filtros.unidadeId} onChange={(e) => updateFiltros({ unidadeId: e.target.value })} className={selectCls}>
-          <option value="TODAS">Todas as unidades</option>
-          {unidadesDaEmpresa.filter((u) => u.ativo).map((u) => <option key={u.id} value={u.id}>{u.nome}</option>)}
-        </select>
-      </Field>
       {mostrarPeriodo && (
         <>
           <Field label="Período" className="w-40">
