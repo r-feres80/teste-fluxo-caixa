@@ -3,10 +3,10 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   ResponsiveContainer, Cell, PieChart, Pie, Legend,
 } from "recharts";
-import { FileText, RefreshCw, TrendingUp, AlertCircle } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { Panel, KPI, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
-import { getDataAtualSistema, addMonthsISO } from "../utils/dateUtils.js";
+import { getDataAtualSistema } from "../utils/dateUtils.js";
 import {
   BRAND, SEMANTIC, tooltipProps, gradienteBarraStops,
   GRID, EIXO, ANIM, RAIO_BARRA,
@@ -45,8 +45,10 @@ function proximaEmissao(diaVencimento, hoje) {
 }
 
 export default function FaturamentoPage({ data }) {
-  const { entidades } = data;
+  const { entidades } = data ?? {};
   const hoje = getDataAtualSistema();
+
+  if (!entidades?.lancamentos) return null;
   const [anoFiltro, setAnoFiltro] = useState(Number(hoje.slice(0, 4)));
   const [mesFiltro, setMesFiltro] = useState(Number(hoje.slice(5, 7)) - 1); // 0-based
 
