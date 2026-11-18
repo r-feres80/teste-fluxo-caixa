@@ -2,7 +2,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24,7 +24,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -46,7 +46,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -68,7 +68,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -90,7 +90,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -134,7 +134,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -156,7 +156,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -178,7 +178,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -200,7 +200,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -222,7 +222,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -244,7 +244,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -266,7 +266,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -288,7 +288,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -310,7 +310,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -376,7 +376,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -398,7 +398,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -420,7 +420,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -442,7 +442,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -464,7 +464,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -486,7 +486,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -508,7 +508,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -530,7 +530,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -552,7 +552,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -574,7 +574,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -596,7 +596,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -618,7 +618,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -640,7 +640,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -662,7 +662,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -684,7 +684,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -706,7 +706,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -728,7 +728,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -750,7 +750,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -772,7 +772,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -794,7 +794,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -816,7 +816,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1718,7 +1718,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1740,7 +1740,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1784,7 +1784,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1806,7 +1806,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1828,7 +1828,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1850,7 +1850,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1872,7 +1872,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1894,7 +1894,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1916,7 +1916,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1960,7 +1960,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -1982,7 +1982,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2004,7 +2004,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2026,7 +2026,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2048,7 +2048,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2070,7 +2070,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2092,7 +2092,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2114,7 +2114,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2136,7 +2136,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2158,7 +2158,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2224,7 +2224,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2246,7 +2246,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2312,7 +2312,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2334,7 +2334,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2356,7 +2356,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2378,7 +2378,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2400,7 +2400,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2422,7 +2422,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2444,7 +2444,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2466,7 +2466,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2488,7 +2488,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2510,7 +2510,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -2532,7 +2532,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3434,7 +3434,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3456,7 +3456,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3478,7 +3478,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3500,7 +3500,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3544,7 +3544,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3566,7 +3566,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3588,7 +3588,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3610,7 +3610,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3632,7 +3632,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3654,7 +3654,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3698,7 +3698,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3720,7 +3720,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3742,7 +3742,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3764,7 +3764,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3808,7 +3808,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3830,7 +3830,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3874,7 +3874,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3918,7 +3918,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3940,7 +3940,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3962,7 +3962,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -3984,7 +3984,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4006,7 +4006,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4028,7 +4028,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4050,7 +4050,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4072,7 +4072,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4094,7 +4094,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4116,7 +4116,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4138,7 +4138,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4160,7 +4160,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4182,7 +4182,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4204,7 +4204,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4226,7 +4226,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -4248,7 +4248,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5128,7 +5128,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5150,7 +5150,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5172,7 +5172,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5216,7 +5216,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5238,7 +5238,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5260,7 +5260,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5282,7 +5282,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5304,7 +5304,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5326,7 +5326,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5370,7 +5370,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5392,7 +5392,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5436,7 +5436,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5458,7 +5458,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5480,7 +5480,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5546,7 +5546,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5568,7 +5568,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5590,7 +5590,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5656,7 +5656,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5678,7 +5678,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5700,7 +5700,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5722,7 +5722,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5744,7 +5744,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5766,7 +5766,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5788,7 +5788,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5810,7 +5810,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5832,7 +5832,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5854,7 +5854,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5876,7 +5876,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5898,7 +5898,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5920,7 +5920,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -5942,7 +5942,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -6866,7 +6866,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -6888,7 +6888,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -6910,7 +6910,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -6954,7 +6954,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -6998,7 +6998,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7020,7 +7020,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7042,7 +7042,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7086,7 +7086,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7108,7 +7108,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7130,7 +7130,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7152,7 +7152,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7174,7 +7174,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7196,7 +7196,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7218,7 +7218,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7240,7 +7240,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7262,7 +7262,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7306,7 +7306,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7328,7 +7328,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7350,7 +7350,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7394,7 +7394,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7416,7 +7416,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7438,7 +7438,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7460,7 +7460,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7482,7 +7482,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7504,7 +7504,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7526,7 +7526,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7548,7 +7548,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7570,7 +7570,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7592,7 +7592,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7614,7 +7614,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7636,7 +7636,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -7658,7 +7658,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8560,7 +8560,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8582,7 +8582,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8604,7 +8604,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8626,7 +8626,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8648,7 +8648,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8670,7 +8670,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8692,7 +8692,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8714,7 +8714,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8736,7 +8736,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8758,7 +8758,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8780,7 +8780,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8802,7 +8802,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8824,7 +8824,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8890,7 +8890,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -8978,7 +8978,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9000,7 +9000,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9022,7 +9022,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9044,7 +9044,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9088,7 +9088,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9110,7 +9110,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9132,7 +9132,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9154,7 +9154,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9176,7 +9176,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9198,7 +9198,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9220,7 +9220,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9242,7 +9242,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9264,7 +9264,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9286,7 +9286,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9308,7 +9308,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9330,7 +9330,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9352,7 +9352,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -9374,7 +9374,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10276,7 +10276,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10320,7 +10320,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10342,7 +10342,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10364,7 +10364,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10386,7 +10386,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10430,7 +10430,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10452,7 +10452,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10474,7 +10474,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10518,7 +10518,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10606,7 +10606,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10650,7 +10650,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10672,7 +10672,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10694,7 +10694,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10760,7 +10760,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10782,7 +10782,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10804,7 +10804,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10826,7 +10826,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10848,7 +10848,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10870,7 +10870,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10892,7 +10892,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10914,7 +10914,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10936,7 +10936,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10958,7 +10958,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -10980,7 +10980,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11002,7 +11002,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11024,7 +11024,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11046,7 +11046,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11068,7 +11068,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11090,7 +11090,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11970,7 +11970,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -11992,7 +11992,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12058,7 +12058,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12102,7 +12102,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12124,7 +12124,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12168,7 +12168,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12212,7 +12212,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12278,7 +12278,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12300,7 +12300,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12322,7 +12322,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12344,7 +12344,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12366,7 +12366,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12388,7 +12388,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12432,7 +12432,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12454,7 +12454,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12476,7 +12476,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12498,7 +12498,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12520,7 +12520,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12542,7 +12542,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12564,7 +12564,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12586,7 +12586,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12608,7 +12608,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12630,7 +12630,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12652,7 +12652,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12674,7 +12674,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12696,7 +12696,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12718,7 +12718,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12740,7 +12740,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12762,7 +12762,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -12784,7 +12784,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13752,7 +13752,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13774,7 +13774,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13796,7 +13796,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13818,7 +13818,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13840,7 +13840,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13862,7 +13862,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13884,7 +13884,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13950,7 +13950,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -13994,7 +13994,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14016,7 +14016,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14038,7 +14038,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14060,7 +14060,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14082,7 +14082,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14104,7 +14104,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14126,7 +14126,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14148,7 +14148,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14170,7 +14170,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14214,7 +14214,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14258,7 +14258,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14280,7 +14280,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14302,7 +14302,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14324,7 +14324,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14346,7 +14346,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14368,7 +14368,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14390,7 +14390,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14412,7 +14412,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14434,7 +14434,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14456,7 +14456,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -14478,7 +14478,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15380,7 +15380,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15424,7 +15424,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15446,7 +15446,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15468,7 +15468,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15512,7 +15512,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15578,7 +15578,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15600,7 +15600,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15622,7 +15622,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15644,7 +15644,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15666,7 +15666,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15710,7 +15710,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15732,7 +15732,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15754,7 +15754,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15776,7 +15776,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15798,7 +15798,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15820,7 +15820,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15842,7 +15842,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15864,7 +15864,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15886,7 +15886,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15974,7 +15974,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -15996,7 +15996,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16018,7 +16018,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16040,7 +16040,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16062,7 +16062,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16084,7 +16084,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16106,7 +16106,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16128,7 +16128,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16150,7 +16150,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16172,7 +16172,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -16194,7 +16194,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17074,7 +17074,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17096,7 +17096,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17140,7 +17140,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17162,7 +17162,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17184,7 +17184,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17206,7 +17206,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17228,7 +17228,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17250,7 +17250,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17316,7 +17316,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17338,7 +17338,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17382,7 +17382,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17426,7 +17426,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17470,7 +17470,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17492,7 +17492,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17514,7 +17514,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17536,7 +17536,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17580,7 +17580,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17624,7 +17624,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17646,7 +17646,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17668,7 +17668,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17690,7 +17690,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17712,7 +17712,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17734,7 +17734,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17756,7 +17756,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17778,7 +17778,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17800,7 +17800,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17822,7 +17822,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17844,7 +17844,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17866,7 +17866,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -17888,7 +17888,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18812,7 +18812,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18834,7 +18834,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18856,7 +18856,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18878,7 +18878,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18900,7 +18900,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18922,7 +18922,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -18944,7 +18944,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19010,7 +19010,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19032,7 +19032,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19076,7 +19076,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19120,7 +19120,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19142,7 +19142,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19164,7 +19164,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19186,7 +19186,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19208,7 +19208,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19252,7 +19252,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19274,7 +19274,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19296,7 +19296,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19318,7 +19318,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19340,7 +19340,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19362,7 +19362,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19384,7 +19384,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19406,7 +19406,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19428,7 +19428,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19450,7 +19450,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19472,7 +19472,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19494,7 +19494,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19516,7 +19516,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19538,7 +19538,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19560,7 +19560,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -19582,7 +19582,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20484,7 +20484,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20528,7 +20528,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20550,7 +20550,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20572,7 +20572,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20594,7 +20594,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20616,7 +20616,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20638,7 +20638,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20660,7 +20660,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20682,7 +20682,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20704,7 +20704,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20726,7 +20726,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20748,7 +20748,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20770,7 +20770,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20792,7 +20792,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20814,7 +20814,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20858,7 +20858,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20880,7 +20880,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20902,7 +20902,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20924,7 +20924,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20968,7 +20968,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -20990,7 +20990,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21012,7 +21012,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21034,7 +21034,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21078,7 +21078,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21100,7 +21100,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21122,7 +21122,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21144,7 +21144,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21166,7 +21166,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21188,7 +21188,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21210,7 +21210,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21232,7 +21232,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21254,7 +21254,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21276,7 +21276,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -21298,7 +21298,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22178,7 +22178,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22200,7 +22200,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22222,7 +22222,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22244,7 +22244,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22266,7 +22266,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22288,7 +22288,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22376,7 +22376,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22398,7 +22398,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22420,7 +22420,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22442,7 +22442,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22530,7 +22530,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22552,7 +22552,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22640,7 +22640,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22662,7 +22662,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22684,7 +22684,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22706,7 +22706,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22728,7 +22728,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22750,7 +22750,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22772,7 +22772,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22794,7 +22794,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22816,7 +22816,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22838,7 +22838,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22860,7 +22860,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22882,7 +22882,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22904,7 +22904,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22926,7 +22926,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22948,7 +22948,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22970,7 +22970,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -22992,7 +22992,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -23894,7 +23894,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -23916,7 +23916,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -23960,7 +23960,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -23982,7 +23982,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24004,7 +24004,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24026,7 +24026,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24048,7 +24048,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24070,7 +24070,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24092,7 +24092,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24114,7 +24114,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24136,7 +24136,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24158,7 +24158,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24202,7 +24202,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24246,7 +24246,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24268,7 +24268,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24290,7 +24290,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24378,7 +24378,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24400,7 +24400,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24422,7 +24422,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24444,7 +24444,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24466,7 +24466,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24488,7 +24488,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24510,7 +24510,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24532,7 +24532,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24554,7 +24554,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24576,7 +24576,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24598,7 +24598,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24620,7 +24620,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24642,7 +24642,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24664,7 +24664,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -24686,7 +24686,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25610,7 +25610,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25632,7 +25632,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25654,7 +25654,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25720,7 +25720,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25742,7 +25742,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25764,7 +25764,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25786,7 +25786,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25808,7 +25808,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25830,7 +25830,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25852,7 +25852,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25896,7 +25896,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -25984,7 +25984,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26006,7 +26006,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26028,7 +26028,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26050,7 +26050,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26072,7 +26072,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26094,7 +26094,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26116,7 +26116,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26138,7 +26138,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26160,7 +26160,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26182,7 +26182,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26204,7 +26204,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26226,7 +26226,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26248,7 +26248,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26270,7 +26270,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26292,7 +26292,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26314,7 +26314,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26336,7 +26336,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26358,7 +26358,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26380,7 +26380,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -26402,7 +26402,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27304,7 +27304,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27326,7 +27326,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27392,7 +27392,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27414,7 +27414,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27458,7 +27458,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27480,7 +27480,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27524,7 +27524,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27546,7 +27546,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27568,7 +27568,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27590,7 +27590,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27612,7 +27612,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27634,7 +27634,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27656,7 +27656,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27700,7 +27700,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27744,7 +27744,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27766,7 +27766,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27788,7 +27788,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27810,7 +27810,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27832,7 +27832,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27876,7 +27876,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27898,7 +27898,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27920,7 +27920,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27942,7 +27942,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27964,7 +27964,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -27986,7 +27986,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28008,7 +28008,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28030,7 +28030,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28052,7 +28052,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28074,7 +28074,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28096,7 +28096,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -28118,7 +28118,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29020,7 +29020,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29042,7 +29042,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29064,7 +29064,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29108,7 +29108,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29130,7 +29130,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29152,7 +29152,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29768,7 +29768,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29790,7 +29790,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29834,7 +29834,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29922,7 +29922,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -29966,7 +29966,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30032,7 +30032,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30054,7 +30054,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30076,7 +30076,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30120,7 +30120,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30164,7 +30164,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30208,7 +30208,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30230,7 +30230,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30252,7 +30252,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30274,7 +30274,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30296,7 +30296,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30318,7 +30318,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30340,7 +30340,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30362,7 +30362,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30450,7 +30450,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30472,7 +30472,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30494,7 +30494,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30582,7 +30582,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30604,7 +30604,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30626,7 +30626,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30692,7 +30692,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30714,7 +30714,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30736,7 +30736,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30758,7 +30758,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30846,7 +30846,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30868,7 +30868,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30890,7 +30890,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30912,7 +30912,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30934,7 +30934,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30956,7 +30956,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -30978,7 +30978,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31000,7 +31000,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31022,7 +31022,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31066,7 +31066,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31088,7 +31088,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31110,7 +31110,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31132,7 +31132,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31176,7 +31176,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31198,7 +31198,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31220,7 +31220,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31242,7 +31242,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31264,7 +31264,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31286,7 +31286,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31374,7 +31374,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31396,7 +31396,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31418,7 +31418,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31440,7 +31440,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31484,7 +31484,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31572,7 +31572,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31594,7 +31594,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31660,7 +31660,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31704,7 +31704,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31726,7 +31726,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31770,7 +31770,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31792,7 +31792,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31814,7 +31814,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31836,7 +31836,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31880,7 +31880,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31902,7 +31902,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31924,7 +31924,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31946,7 +31946,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31968,7 +31968,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -31990,7 +31990,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32034,7 +32034,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32078,7 +32078,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32144,7 +32144,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32166,7 +32166,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32188,7 +32188,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32210,7 +32210,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32232,7 +32232,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32276,7 +32276,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32364,7 +32364,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32430,7 +32430,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32452,7 +32452,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32474,7 +32474,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32540,7 +32540,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32562,7 +32562,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32584,7 +32584,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32650,7 +32650,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32694,7 +32694,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32738,7 +32738,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32826,7 +32826,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32870,7 +32870,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32892,7 +32892,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32936,7 +32936,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32958,7 +32958,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -32980,7 +32980,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33024,7 +33024,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33068,7 +33068,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33112,7 +33112,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33134,7 +33134,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33156,7 +33156,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33178,7 +33178,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33200,7 +33200,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33222,7 +33222,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33266,7 +33266,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33288,7 +33288,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33310,7 +33310,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33332,7 +33332,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33376,7 +33376,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33442,7 +33442,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33464,7 +33464,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33508,7 +33508,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33530,7 +33530,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33552,7 +33552,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33596,7 +33596,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33618,7 +33618,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33684,7 +33684,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33706,7 +33706,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33728,7 +33728,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33794,7 +33794,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33838,7 +33838,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33860,7 +33860,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -33926,7 +33926,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34014,7 +34014,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34036,7 +34036,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34102,7 +34102,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34146,7 +34146,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34190,7 +34190,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34212,7 +34212,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34256,7 +34256,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34300,7 +34300,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34344,7 +34344,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34366,7 +34366,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34410,7 +34410,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34432,7 +34432,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34454,7 +34454,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34498,7 +34498,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34542,7 +34542,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34564,7 +34564,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34608,7 +34608,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34630,7 +34630,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34674,7 +34674,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34718,7 +34718,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34762,7 +34762,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34784,7 +34784,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34806,7 +34806,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34850,7 +34850,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34872,7 +34872,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34938,7 +34938,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -34960,7 +34960,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35004,7 +35004,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35026,7 +35026,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35070,7 +35070,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35136,7 +35136,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35158,7 +35158,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35202,7 +35202,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35246,7 +35246,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35268,7 +35268,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35290,7 +35290,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35334,7 +35334,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35356,7 +35356,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35400,7 +35400,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35422,7 +35422,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35466,7 +35466,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35488,7 +35488,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35554,7 +35554,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35642,7 +35642,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35664,7 +35664,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35686,7 +35686,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35708,7 +35708,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35730,7 +35730,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35752,7 +35752,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35774,7 +35774,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35884,7 +35884,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35906,7 +35906,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35928,7 +35928,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -35950,7 +35950,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36016,7 +36016,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36060,7 +36060,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36082,7 +36082,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36126,7 +36126,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36170,7 +36170,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36192,7 +36192,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36214,7 +36214,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36258,7 +36258,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36302,7 +36302,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36346,7 +36346,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36368,7 +36368,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36390,7 +36390,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36412,7 +36412,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36456,7 +36456,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36478,7 +36478,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36500,7 +36500,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36522,7 +36522,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36544,7 +36544,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36610,7 +36610,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36654,7 +36654,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36676,7 +36676,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36698,7 +36698,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36808,7 +36808,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36852,7 +36852,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36918,7 +36918,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36962,7 +36962,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -36984,7 +36984,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37072,7 +37072,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37094,7 +37094,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37116,7 +37116,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37138,7 +37138,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.05",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37182,7 +37182,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37204,7 +37204,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37226,7 +37226,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37248,7 +37248,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37270,7 +37270,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37314,7 +37314,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.04",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37336,7 +37336,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37358,7 +37358,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37424,7 +37424,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37446,7 +37446,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37468,7 +37468,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u2",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37512,7 +37512,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37556,7 +37556,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37578,7 +37578,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37600,7 +37600,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u3",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.02",
     "centroCustoId": "cc3000",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37644,7 +37644,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.03",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
@@ -37666,7 +37666,7 @@
   {
     "empresaId": "e1",
     "unidadeId": "u1",
-    "contaGerencialId": "pc1.01.01",
+    "contaGerencialId": "pc1.01.01.01",
     "centroCustoId": "cc2100",
     "projetoId": null,
     "tipoParceiro": "Cliente",
