@@ -82,7 +82,7 @@ export const DEFAULT_PARAMETROS = {
   // (comando restaurar-e-prevenir, Grupo 2) — reaproveitado em vez de criar
   // um parâmetro novo: mesmo conceito já usado nos alertas de caixa abaixo
   // do mínimo e na linha de referência do Fluxo de Caixa.
-  caixaMinimo: 10000,
+  caixaMinimo: 5000,
   materialidadeValor: 20000,
   materialidadePct: 15,
   diasParaAlertas: 7,

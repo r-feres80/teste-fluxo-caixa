@@ -42,3 +42,68 @@ export function calcularSweepCaixa({ contasBancarias, lancamentos, hoje, caixaMi
 
   return { executar: movimentos.length > 0, totalLiquido, excedenteTotal, movimentos, restanteNaoVarrido: Math.max(0, restante) };
 }
+
+// Resgate automático: quando saldo líquido está abaixo do mínimo, resgata
+// da conta de Aplicação da empresa para cobrir o déficit.
+export function calcularResgateAutomatico({ contasBancarias, lancamentos, hoje, caixaMinimo }) {
+  const contasLiquidas = contasBancarias.filter((c) => c.ativo && c.semLiquidez !== "true");
+  const totalLiquido = contasLiquidas
+    .reduce((s, c) => s + calcularSaldoConta(c, lancamentos, hoje), 0);
+
+  const deficit = caixaMinimo - totalLiquido;
+  if (deficit <= 0.005) {
+    return { executar: false, totalLiquido, deficit: 0, movimentos: [] };
+  }
+
+  // Agrupa déficit por empresa: cada empresa resgata da própria Aplicação
+  const empresaIds = [...new Set(contasLiquidas.map((c) => c.empresaId))];
+  const contasAplicacao = contasBancarias.filter((c) => c.ativo && c.semLiquidez === "true");
+
+  let restante = deficit;
+  const movimentos = [];
+
+  for (const empresaId of empresaIds) {
+    if (restante <= 0.005) break;
+    const aplicacoes = contasAplicacao
+      .filter((c) => c.empresaId === empresaId)
+      .sort((a, b) => Number(a.id.slice(2)) - Number(b.id.slice(2)));
+    if (aplicacoes.length === 0) continue;
+
+    const saldoAplicacao = aplicacoes.reduce(
+      (s, c) => s + calcularSaldoConta(c, lancamentos, hoje), 0
+    );
+    if (saldoAplicacao <= 0) continue;
+
+    // Conta líquida principal da empresa (maior saldo)
+    const contaDestino = contasLiquidas
+      .filter((c) => c.empresaId === empresaId)
+      .sort((a, b) =>
+        calcularSaldoConta(b, lancamentos, hoje) - calcularSaldoConta(a, lancamentos, hoje)
+      )[0];
+    if (!contaDestino) continue;
+
+    // Resgata da aplicação com maior saldo primeiro
+    for (const contaAplic of aplicacoes) {
+      if (restante <= 0.005) break;
+      const saldoDisp = calcularSaldoConta(contaAplic, lancamentos, hoje);
+      if (saldoDisp <= 0) continue;
+      const valor = Number(Math.min(saldoDisp, restante).toFixed(2));
+      if (valor <= 0) continue;
+      movimentos.push({
+        contaOrigemId: contaAplic.id,
+        contaDestinoId: contaDestino.id,
+        empresaId,
+        valor,
+      });
+      restante -= valor;
+    }
+  }
+
+  return {
+    executar: movimentos.length > 0,
+    totalLiquido,
+    deficit,
+    movimentos,
+    deficitNaoAtendido: Math.max(0, restante),
+  };
+}

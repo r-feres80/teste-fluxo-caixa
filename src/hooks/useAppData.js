@@ -3,7 +3,7 @@ import { storageService } from "../services/storageService.js";
 import { STORAGE_KEY, DEFAULT_PARAMETROS } from "../config/appConfig.js";
 import { todayISO, parseISO } from "../utils/dateUtils.js";
 import { uid } from "../utils/formatUtils.js";
-import { calcularSweepCaixa } from "../financial-engine/sweepCaixa.js";
+import { calcularSweepCaixa, calcularResgateAutomatico } from "../financial-engine/sweepCaixa.js";
 import {
   demoEmpresas, demoUnidades, demoClientes, demoFornecedores, demoBancos,
   demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoCartoes, demoDespesasCartao, demoOrcamentoItens,
@@ -207,6 +207,75 @@ export function useAppData() {
       lancamentos: [...prev.lancamentos, ...novosLancamentos],
       sweepLog: [...prev.sweepLog, {
         ...registroBase, executado: true, valorTotalVarrido: resultado.excedenteTotal, movimentos: movimentosLog,
+      }],
+    }));
+  }, [loaded, entidades.contasBancarias, entidades.lancamentos, entidades.sweepLog, parametros.caixaMinimo]);
+
+  // ---- Resgate automático de caixa (Modelo B — complemento do sweep) ----
+  // Dispara 1x/dia quando o saldo líquido total cai abaixo do caixaMinimo.
+  // Resgata da conta de Aplicação para cobrir o déficit, priorizando a
+  // aplicação com maior saldo da mesma empresa. Mesmo padrão de idempotência
+  // do sweep: fonte da verdade = sweepLog (tipo "resgate"). Não roda se o
+  // sweep já rodou hoje (evita loop: sweep aplica → resgate resgata no mesmo dia).
+  const resgateChecadoParaRef = useRef(null);
+  useEffect(() => {
+    if (!loaded) return;
+    if (entidades.contasBancarias.length === 0) return;
+    if (parametros.caixaMinimo == null) return;
+    const hoje = todayISO();
+    const jaRodouHoje = (entidades.sweepLog || []).some(
+      (r) => r.dataExecucao === hoje && r.tipo === "resgate"
+    );
+    if (jaRodouHoje || resgateChecadoParaRef.current === hoje) return;
+    resgateChecadoParaRef.current = hoje;
+
+    const resultado = calcularResgateAutomatico({
+      contasBancarias: entidades.contasBancarias, lancamentos: entidades.lancamentos,
+      hoje, caixaMinimo: parametros.caixaMinimo,
+    });
+
+    const registroBase = {
+      id: uid(), dataExecucao: hoje, timestamp: new Date().toISOString(),
+      caixaMinimoVigente: parametros.caixaMinimo, tipo: "resgate",
+    };
+
+    if (!resultado.executar) {
+      setEntidades((prev) => ({
+        ...prev,
+        sweepLog: [...prev.sweepLog, { ...registroBase, executado: false, motivo: "sem déficit", valorTotalVarrido: 0, movimentos: [] }],
+      }));
+      return;
+    }
+
+    const novosLancamentos = [];
+    const movimentosLog = [];
+    resultado.movimentos.forEach((m) => {
+      const grupoId = uid();
+      const base = {
+        empresaId: m.empresaId, unidadeId: null, centroCustoId: null, projetoId: null,
+        tipoParceiro: null, clienteFornecedorId: null, bancoId: null,
+        dataEmissao: hoje, competencia: hoje.slice(0, 7), dataVencimento: hoje, dataPagamento: hoje,
+        situacao: "Realizado", valor: m.valor, transferencia: true, transferenciaGrupoId: grupoId,
+      };
+      const idSaida = uid(), idEntrada = uid();
+      novosLancamentos.push({
+        ...base, id: idSaida, contaBancariaId: m.contaOrigemId, tipo: "Saída",
+        documento: `RESGATE-${hoje.replace(/-/g, "")}-${m.contaOrigemId}-SAI`, contaGerencialId: "pc5.06",
+        observacao: "Gerado — resgate automático de aplicação para cobertura do caixa mínimo operacional",
+      });
+      novosLancamentos.push({
+        ...base, id: idEntrada, contaBancariaId: m.contaDestinoId, tipo: "Entrada",
+        documento: `RESGATE-${hoje.replace(/-/g, "")}-${m.contaOrigemId}-ENT`, contaGerencialId: null,
+        observacao: "Gerado — resgate automático de aplicação para cobertura do caixa mínimo operacional",
+      });
+      movimentosLog.push({ ...m, lancamentoIdSaida: idSaida, lancamentoIdEntrada: idEntrada });
+    });
+
+    setEntidades((prev) => ({
+      ...prev,
+      lancamentos: [...prev.lancamentos, ...novosLancamentos],
+      sweepLog: [...prev.sweepLog, {
+        ...registroBase, executado: true, valorTotalVarrido: resultado.deficit, movimentos: movimentosLog,
       }],
     }));
   }, [loaded, entidades.contasBancarias, entidades.lancamentos, entidades.sweepLog, parametros.caixaMinimo]);
