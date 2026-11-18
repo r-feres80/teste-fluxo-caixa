@@ -98,7 +98,7 @@ const ALL_NAV_ITEMS = [...NAV, GOVERNANCA_ITEM];
 const ICON_GROUPS = [
   { id: "visao-geral", title: "Visão Geral", ids: ["dashboard"] },
   { id: "controle-caixa", title: "Controle de Caixa", ids: ["tesouraria", "aplicacoes-financeiras", "cartoes", "fluxo-caixa", "dfc-direto"] },
-  { id: "ap-ar", title: "AP/AR", ids: ["contas-pagar", "contas-receber", "faturamento", "inadimplencia"] },
+  { id: "ap-ar", title: "Financeiro", ids: ["contas-pagar", "contas-receber", "faturamento", "inadimplencia"] },
   { id: "planejamento", title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
   { id: "dados", title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },
 ];
@@ -107,7 +107,7 @@ const ICON_GROUPS = [
 const GROUP_ACCENT = {
   "Visão Geral": "bg-blue-700",
   "Controle de Caixa": "bg-blue-500",
-  "AP/AR": "bg-amber-500",
+  "Financeiro": "bg-amber-500",
   "Planejamento (FP&A)": "bg-cyan-500",
   "Dados": "bg-slate-500",
 };

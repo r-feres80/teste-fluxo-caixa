@@ -177,6 +177,22 @@ export default function DashboardPage({ data }) {
   const sparkData = resumo.caixa.serieDiaria30dias.map((p) => ({ data: p.data.slice(8, 10), saldo: p.saldo }));
   const waterfallData = useMemo(() => construirWaterfall(resumo.dfcMesAtual), [resumo.dfcMesAtual]);
 
+  // ── Faturamento Hoje / Mês (caixa, lançamentos Entrada realizados) ────────
+  const hoje = getDataAtualSistema();
+  const anoMesPfxDash = `${hoje.slice(0, 7)}`;
+  const fatHojeDash = useMemo(
+    () => (entidades?.lancamentos ?? [])
+      .filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.dataPagamento === hoje)
+      .reduce((s, l) => s + l.valor, 0),
+    [entidades?.lancamentos, hoje]
+  );
+  const fatMesDash = useMemo(
+    () => (entidades?.lancamentos ?? [])
+      .filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoMesPfxDash))
+      .reduce((s, l) => s + l.valor, 0),
+    [entidades?.lancamentos, anoMesPfxDash]
+  );
+
   // Comparativo Mensal (Bloco 4, pendência 2): único trecho do Dashboard que
   // usa o filtro Mês/Ano — os cards de caixa/EBITDA YTD acima continuam
   // hoje-real (resumo, de resumoExecutivo.js, nunca lê filtros de período).
@@ -222,6 +238,10 @@ export default function DashboardPage({ data }) {
         <KpiCard label={t("kpi.desvioOrcamento")} value={fmtBRL(resumo.orcadoRealizado.desvioTotalVsOrcamento)} tone={resumo.orcadoRealizado.desvioTotalVsOrcamento >= 0 ? "positive" : "negative"} basis="competencia"
           tooltip="Número LÍQUIDO: soma o desvio (favorável menos desfavorável) dos 6 grupos do DRE. Grupos favoráveis podem mascarar grupos desfavoráveis — um total pequeno aqui não significa que todo grupo está dentro do orçado. Ver 'Alertas Executivos' abaixo para a composição por grupo." />
         <KpiCard label={t("kpi.inadimplenciaReceber")} value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
+      </div>
+      <div className="grid grid-cols-4 gap-4">
+        <KpiCard label="Faturamento Hoje" value={fmtBRL(fatHojeDash)} tone={fatHojeDash > 0 ? "positive" : "neutral"} sub={`Recebimentos realizados em ${fmtData(hoje)}`} basis="caixa" />
+        <KpiCard label={`Faturamento ${hoje.slice(0,7).replace("-","/")} `} value={fmtBRL(fatMesDash)} tone={fatMesDash > 0 ? "positive" : "neutral"} sub="Recebimentos realizados no mês" basis="caixa" />
       </div>
 
       <Panel title="Comparativo Mensal" subtitle={`${MESES[mesRefIdx]}/${anoRefComp} vs. ${MESES[mesAnteriorIdx]}/${mesAnteriorAno} — Regime de Competência, use o filtro Mês/Ano acima pra escolher outro mês`}>

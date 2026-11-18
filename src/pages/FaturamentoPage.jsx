@@ -109,14 +109,6 @@ export default function FaturamentoPage({ data }) {
       .sort((a, b) => b.valor - a.valor);
   }, [realizadasMes]);
 
-  // ── Lançamentos recentes (últimos 20 realizados) ──────────────────────────
-  const recentes = useMemo(
-    () => [...entradas.filter((l) => l.situacao === "Realizado")]
-            .sort((a, b) => (b.dataPagamento || "").localeCompare(a.dataPagamento || ""))
-            .slice(0, 20),
-    [entradas]
-  );
-
   const nomeCliente = (l) => {
     const c = entidades?.clientes?.find((x) => x.id === l.clienteFornecedorId);
     return c?.nome || l.clienteFornecedorId || "—";
@@ -238,34 +230,6 @@ export default function FaturamentoPage({ data }) {
                       {r.ativa ? "Ativo" : "Inativo"}
                     </span>
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Panel>
-
-      {/* Últimos lançamentos */}
-      <Panel title="Últimos Recebimentos Realizados">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-100">
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Data Pgto</th>
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Cliente</th>
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Linha de Produto</th>
-                <th className="text-right py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Valor</th>
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Doc.</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentes.map((l) => (
-                <tr key={l.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                  <td className="py-2 px-2 text-slate-600">{fmtData(l.dataPagamento)}</td>
-                  <td className="py-2 px-2 text-slate-700 max-w-[180px] truncate">{nomeCliente(l)}</td>
-                  <td className="py-2 px-2 text-slate-500 text-xs">{nomeConta(l.contaGerencialId)}</td>
-                  <td className="py-2 px-2 text-right font-medium text-slate-800">{fmtBRL(l.valor)}</td>
-                  <td className="py-2 px-2 text-slate-400 text-xs">{l.documento || "—"}</td>
                 </tr>
               ))}
             </tbody>
