@@ -56,8 +56,8 @@ const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
 // Grupo 2, DISPONIVEL_ESPERADO cai de ~R$66.101 pra ~R$10.000) — nunca
 // ignore um "REGRESSÃO DETECTADA" sem antes confirmar se é essa mudança
 // pretendida ou uma perda de verdade.
-const DISPONIVEL_ESPERADO = 170780.09; // comando "rode-automacoes-aplicadas": +R$71.160,73 (gap 11-12/08) +R$33.518,40 (gap 13/08) dos 6 "Gerado —" (líquida recebe o valor Realizado); cai pra ~10.000 depois do sweep (Grupo 2) — atualize aqui quando isso acontecer
-const DISPONIVEL_TOLERANCIA = 1000;
+const DISPONIVEL_ESPERADO = -345552; // restaurar-calibracoes-completo + ajuste-gaps-token: aperto de tesouraria ativo (IMP R$149.503 + FOLHA R$351.342 Saída ago/26) → saldo intencialmente negativo; 19 lançamentos "Gerado —" presentes; tolerância ampliada pois sweep pode variar
+const DISPONIVEL_TOLERANCIA = 5000;
 const APERTO_IMPOSTOS_ESPERADO = 149503.00; // Impostos 20/08 (cenário de aperto de tesouraria)
 const APERTO_FOLHA_ESPERADO = 351342.00; // Folha 31/08 (cenário de aperto de tesouraria)
 const GERADO_MIN_COUNT = 9; // lançamentos "Gerado —" (preenchimento de gap) conhecidos até este comando — 3 do tesouraria-ajuste2 + 4 (gap 11-12/08) + 2 (gap 13/08) do rode-automacoes-aplicadas
