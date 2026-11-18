@@ -14,14 +14,12 @@ import orcamentoItensGerados from "./orcamentoItensGerados.json" with { type: "j
 // disciplina completa em demoDataGenerator.js.
 
 export const demoEmpresas = [
-  { id: "e1", nome: "Velmetryx Tintas e Vernizes Ltda", cnpj: "12.345.678/0001-01", ativo: true },
-  { id: "e2", nome: "Cromex Revestimentos S.A.", cnpj: "23.456.789/0001-02", ativo: true },
+  { id: "e1", nome: "Tintas ABC Ltda", cnpj: "12.345.678/0001-01", ativo: true },
 ];
 
 export const demoUnidades = [
   { id: "u1", empresaId: "e1", nome: "Matriz - São Paulo", ativo: true },
   { id: "u2", empresaId: "e1", nome: "CD - Guarulhos", ativo: true },
-  { id: "u3", empresaId: "e2", nome: "Fábrica - Santo André", ativo: true },
 ];
 
 // Expandido de 4 -> 10 (Bloco B/Etapa 1) para a carteira de ~2.000
@@ -89,11 +87,11 @@ const demoContasBancariasBase = [
   { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 45000, semLiquidez: "false", ativo: true },
   { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 42000, semLiquidez: "false", ativo: true },
   { id: "cb3", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB", agencia: "1234", numero: "99887-1", saldoInicial: 150000, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2025-11-01" },
-  { id: "cb4", bancoId: "b3", empresaId: "e2", apelido: "Conta Movimento", agencia: "4321", numero: "34521-9", saldoInicial: 40000, semLiquidez: "false", ativo: true },
+  { id: "cb4", bancoId: "b3", empresaId: "e1", apelido: "Conta Movimento", agencia: "4321", numero: "34521-9", saldoInicial: 40000, semLiquidez: "false", ativo: true },
   { id: "cb5", bancoId: "b4", empresaId: "e1", apelido: "Conta Movimento", agencia: "9012", numero: "34567-8", saldoInicial: 38000, semLiquidez: "false", ativo: true },
-  { id: "cb6", bancoId: "b5", empresaId: "e2", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
+  { id: "cb6", bancoId: "b5", empresaId: "e1", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
   { id: "cb7", bancoId: "b1", empresaId: "e1", apelido: "Aplicação LCI", agencia: "5678", numero: "77123-4", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "LCI", taxaAnual: 10.8, dataAplicacao: "2026-06-01" },
-  { id: "cb8", bancoId: "b3", empresaId: "e2", apelido: "Aplicação Tesouro Selic", agencia: "4321", numero: "88456-2", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "Tesouro Selic", taxaAnual: 11.9, dataAplicacao: "2024-01-15" },
+  { id: "cb8", bancoId: "b3", empresaId: "e1", apelido: "Aplicação Tesouro Selic", agencia: "4321", numero: "88456-2", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "Tesouro Selic", taxaAnual: 11.9, dataAplicacao: "2024-01-15" },
   // cb9/cb10/cb11 — cenário "aperto de tesouraria" (comando
   // cenario-tesouraria-aperto): varredura de quase todo o saldo líquido
   // (cb1/cb2/cb4/cb5/cb6) pra 3 tranches de CDB, via aporte real
@@ -102,13 +100,13 @@ const demoContasBancariasBase = [
   // cb7/cb8. Resultado: Disponível cai pra R$10.000 (mínimo operacional),
   // Aplicações sobe na mesma proporção — nenhum caixa criado/destruído.
   { id: "cb9", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB - Tranche 1", agencia: "1234", numero: "55201-3", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-05-11" },
-  { id: "cb10", bancoId: "b3", empresaId: "e2", apelido: "Aplicação CDB - Tranche 2", agencia: "4321", numero: "55202-1", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-06-11" },
+  { id: "cb10", bancoId: "b1", empresaId: "e1", apelido: "Aplicação CDB - Tranche 2", agencia: "5678", numero: "55202-1", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-06-11" },
   { id: "cb11", bancoId: "b1", empresaId: "e1", apelido: "Aplicação CDB - Tranche 3", agencia: "5678", numero: "55203-8", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2026-07-31" },
 ];
 
 export const demoProjetos = [
-  { id: "p1", empresaId: "e1", nome: "Lançamento Linha Premium Velmetryx", ativo: true },
-  { id: "p2", empresaId: "e2", nome: "Ampliação Capacidade Fabril 2026", ativo: true },
+  { id: "p1", empresaId: "e1", nome: "Lançamento Linha Premium", ativo: true },
+  { id: "p2", empresaId: "e1", nome: "Expansão Canal Distribuição", ativo: true },
 ];
 
 // ---- Plano de Contas Gerencial (hierárquico) ----
@@ -288,8 +286,8 @@ export const demoOrcamentoItens = orcamentoItensGerados;
 export const demoCartoes = [
   { id: "cart1", bancoId: "b2", empresaId: "e1", apelido: "Visa Corporativo",        final: "4162", titular: "Fernanda Almeida", limite: 120000, diaFechamento: 20, diaVencimento: 28, ativo: true },
   { id: "cart2", bancoId: "b1", empresaId: "e1", apelido: "Mastercard Comercial",   final: "7734", titular: "Ricardo Nunes",    limite:  80000, diaFechamento: 25, diaVencimento:  5, ativo: true },
-  { id: "cart3", bancoId: "b3", empresaId: "e2", apelido: "Visa Infinite Diretoria",final: "9021", titular: "André Monteiro",   limite: 150000, diaFechamento: 15, diaVencimento: 22, ativo: true },
-  { id: "cart4", bancoId: "b5", empresaId: "e2", apelido: "Mastercard Operações",   final: "5508", titular: "Bruno Fonseca",    limite:  60000, diaFechamento: 10, diaVencimento: 18, ativo: true },
+  { id: "cart3", bancoId: "b3", empresaId: "e1", apelido: "Visa Infinite Diretoria",final: "9021", titular: "André Monteiro",   limite: 150000, diaFechamento: 15, diaVencimento: 22, ativo: true },
+  { id: "cart4", bancoId: "b5", empresaId: "e1", apelido: "Mastercard Operações",   final: "5508", titular: "Bruno Fonseca",    limite:  60000, diaFechamento: 10, diaVencimento: 18, ativo: true },
 ];
 
 function gerarDespesasCartao() {
