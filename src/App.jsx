@@ -3,7 +3,7 @@ import {
   LayoutGrid, Landmark, ArrowDownCircle, ArrowUpCircle, TrendingUp, FileText,
   Scale, Wallet, Activity, GitBranch, Upload, Settings2, Sparkles, Save,
   Table2, AlertOctagon, List, Lightbulb, LogOut, CreditCard,
-  PiggyBank, ChevronLeft,
+  PiggyBank, ChevronLeft, Receipt,
 } from "lucide-react";
 import { APP_NAME, APP_DISCLAIMER } from "./config/appConfig.js";
 import { useLanguage } from "./i18n/LanguageContext.jsx";
@@ -22,6 +22,7 @@ import AplicacoesFinanceirasPage from "./pages/AplicacoesFinanceirasPage.jsx";
 import CartoesPage from "./pages/CartoesPage.jsx";
 import ContasAPagarPage from "./pages/ContasAPagarPage.jsx";
 import ContasAReceberPage from "./pages/ContasAReceberPage.jsx";
+import FaturamentoPage from "./pages/FaturamentoPage.jsx";
 import FluxoCaixaPage from "./pages/FluxoCaixaPage.jsx";
 import DFCDiretoPage from "./pages/DFCDiretoPage.jsx";
 import DREPage from "./pages/DREPage.jsx";
@@ -59,6 +60,7 @@ const NAV = [
   { id: "dfc-direto", label: "DFC", icon: Table2, Page: DFCDiretoPage },
   { id: "contas-pagar", label: "Contas a Pagar", icon: ArrowDownCircle, Page: ContasAPagarPage },
   { id: "contas-receber", label: "Contas a Receber", icon: ArrowUpCircle, Page: ContasAReceberPage },
+  { id: "faturamento", label: "Faturamento", icon: Receipt, Page: FaturamentoPage },
   { id: "inadimplencia", label: "Inadimplência", icon: AlertOctagon, Page: InadimplenciaPage },
   { id: "orcamento", label: "Orçamento", icon: Wallet, Page: OrcamentoPage },
   { id: "orcado-realizado", label: "Orçado x Realizado", icon: Scale, Page: OrcadoRealizadoPage },
@@ -96,7 +98,7 @@ const ALL_NAV_ITEMS = [...NAV, GOVERNANCA_ITEM];
 const ICON_GROUPS = [
   { id: "visao-geral", title: "Visão Geral", ids: ["dashboard"] },
   { id: "controle-caixa", title: "Controle de Caixa", ids: ["tesouraria", "aplicacoes-financeiras", "cartoes", "fluxo-caixa", "dfc-direto"] },
-  { id: "ap-ar", title: "AP/AR", ids: ["contas-pagar", "contas-receber", "inadimplencia"] },
+  { id: "ap-ar", title: "AP/AR", ids: ["contas-pagar", "contas-receber", "faturamento", "inadimplencia"] },
   { id: "planejamento", title: "Planejamento (FP&A)", ids: ["orcamento", "orcado-realizado", "forecast", "cenarios", "dre"] },
   { id: "dados", title: "Dados", ids: ["plano-de-contas", "importar", "importar-orcamento", "governanca"] },
 ];
