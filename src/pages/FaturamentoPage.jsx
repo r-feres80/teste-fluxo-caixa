@@ -50,15 +50,14 @@ export default function FaturamentoPage({ data }) {
   const [mesFiltro, setMesFiltro] = useState(Number(hoje.slice(5, 7)) - 1); // 0-based
 
   const { entidades } = data ?? {};
-  if (!entidades?.lancamentos) return null;
 
   const anoMesPfx = `${anoFiltro}-${String(mesFiltro + 1).padStart(2, "0")}`;
   const hojePfx = hoje.slice(0, 10);
 
   // ── Base: só lançamentos de Entrada (receitas)
   const entradas = useMemo(
-    () => entidades.lancamentos.filter((l) => l.tipo === "Entrada" && !l.transferencia),
-    [entidades.lancamentos]
+    () => (entidades?.lancamentos ?? []).filter((l) => l.tipo === "Entrada" && !l.transferencia),
+    [entidades?.lancamentos]
   );
 
   // ── KPIs ─────────────────────────────────────────────────────────────────
@@ -119,7 +118,7 @@ export default function FaturamentoPage({ data }) {
   );
 
   const nomeCliente = (l) => {
-    const c = entidades.clientes?.find((x) => x.id === l.clienteFornecedorId);
+    const c = entidades?.clientes?.find((x) => x.id === l.clienteFornecedorId);
     return c?.nome || l.clienteFornecedorId || "—";
   };
   const nomeConta = (id) => LINHAS_PRODUTO.find((x) => x.id === id)?.label || id;
