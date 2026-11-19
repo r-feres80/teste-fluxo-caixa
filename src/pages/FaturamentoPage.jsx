@@ -234,19 +234,19 @@ export default function FaturamentoPage({ data }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
           {
-            label: `Mês a Mês — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
+            label: `M/M — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
             valor: fatMesAnterior,
             atual: fatMes,
             variacao: varMMA,
           },
           {
-            label: `Ano a Ano — ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
+            label: `A/A — vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
             valor: fatAnoAnteriorMes,
             atual: fatMes,
             variacao: varYoY,
           },
           {
-            label: `Acumulado do Ano ${anoFiltro} vs ${anoFiltro - 1}`,
+            label: `Acum. ${anoFiltro} vs ${anoFiltro - 1}`,
             valor: fatAnoAnteriorYTD,
             atual: fatYTD,
             variacao: varYTD,
