@@ -1,5 +1,41 @@
 # Notas de processo para builds de teste
 
+## ⚠️ REGRA DE CURADORIA — Comparações com mês em andamento
+
+**Origem (commit 473ed86 — nov/2026):** comparações percentuais (M/M, A/A, Acum.
+YTD) calculadas sobre o mês corrente comparavam mês INCOMPLETO vs mês CHEIO
+anterior — gerando distorções relevantes que induzem decisões erradas.
+
+**Regras obrigatórias — aplicar em TODOS os cards e telas com comparativos:**
+
+1. **Badge "em andamento":** sempre que o período selecionado = mês atual do
+   sistema (`mesFiltro === mesAtualSistema && anoFiltro === anoAtualSistema`),
+   exibir indicador visual ("em andamento") em TODOS os cards de comparação
+   (M/M, A/A, Acum.) — nunca omitir silenciosamente.
+
+2. **Acumulado YTD:** a comparação Acum. ano atual vs ano anterior DEVE usar
+   o mesmo corte de período em ambos os lados — `Jan–MêsFiltro` do ano anterior,
+   NUNCA o ano anterior completo (Jan–Dez). Usar filtro
+   `dataPagamento.slice(5,7) <= mesFiltro + 1` no ano anterior.
+
+3. **Gráfico anual:** nunca renderizar meses futuros no ano corrente —
+   limitar `totalMeses = anoFiltro < anoAtualSistema ? 12 : mesAtualSistema + 1`.
+
+4. **Linha Principal por cliente:** sempre calcular a conta dominante por
+   maior R$ acumulado — NUNCA usar o primeiro lançamento encontrado (pode ser
+   conta removida ou conta esporádica).
+
+5. **Extensão obrigatória:** qualquer nova tela que implementar comparativos
+   percentuais (DRE, Tesouraria, FP&A) herda essas mesmas regras desde o
+   primeiro commit — não deixar para "ajustar depois".
+
+**Variáveis de referência a manter no componente:**
+```js
+const anoAtualSistema = Number(hoje.slice(0, 4));
+const mesAtualSistema = Number(hoje.slice(5, 7)) - 1; // 0-based
+const mesEmAndamento  = mesFiltro === mesAtualSistema && anoFiltro === anoAtualSistema;
+```
+
 ## Regra permanente — Prevenção de TDZ em componentes React
 
 **Causa raiz (caso real — commit 2342e1d):** `const` declarada com `const`
@@ -223,3 +259,33 @@ Engine completa já prototipada em FaturamentoPage (seção "Faturamento Recorre
 - Comparativo mês selecionado vs mesmo mês do ano anterior (R$ e %)
 - Comparativo YTD atual vs YTD mesmo período ano anterior
 - Indicador visual de crescimento/queda
+
+## Backlog — DRE Gerencial (P-DRE)
+
+### P-DRE-1: DRE Gerencial por período
+- Estrutura: Receita Bruta → Deduções → Receita Líquida → CMV → Lucro Bruto → Despesas Operacionais → EBITDA → Resultado Líquido
+- Dados já existentes no dataset cobrem ~80% do DRE (receita, impostos, folha, despesas fixas/variáveis)
+- Comparativo: Realizado vs Orçado vs Mês anterior vs Mesmo mês ano anterior
+- Visão por empresa e consolidada
+
+### P-DRE-2: Linha CMV (dependência P-ESTOQUE-1)
+- CMV = Estoque Inicial + Compras de MP − Estoque Final
+- Sem CMV não há Lucro Bruto — bloqueia análise de margem por linha de produto
+- Implementar após módulo de Estoque
+
+## Backlog — Estoque e CMV (P-ESTOQUE)
+
+### P-ESTOQUE-1: Módulo de Estoque
+- Movimentação: Entrada (compra MP/produto acabado) · Saída (venda/baixa) · Saldo atual
+- Campos mínimos: produto, linha, unidade (L, kg, un), quantidade, custo unitário, data
+- Integração AP: compra de MP gera lançamento de saída no caixa automaticamente
+- Integração Faturamento: venda gera baixa no estoque
+- CMV calculado automaticamente por período → alimenta P-DRE-2
+
+### P-ESTOQUE-2: Margem por linha de produto
+- Com CMV disponível: Receita por linha − CMV por linha = Margem Bruta por linha
+- Visão de rentabilidade: Tintas Industriais vs Imobiliárias vs Vernizes etc.
+- Decisão estratégica: mix de produto por margem
+
+**Decisão arquitetural (19/11/2026):** construir P-DRE-1 antes do módulo de estoque,
+pois 80% do DRE já tem dados disponíveis. CMV entra na segunda fase com P-ESTOQUE-1.
