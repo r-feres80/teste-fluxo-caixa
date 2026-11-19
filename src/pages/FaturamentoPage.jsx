@@ -134,10 +134,12 @@ export default function FaturamentoPage({ data }) {
         const m = Number(l.dataPagamento.slice(5, 7)) - 1;
         mapMeta[m] = (mapMeta[m] || 0) + l.valor;
       });
-    // Fallback: se anoFiltro-1 === 2025 e mês sem dado real, usar histórico estático (Jan–Jun)
+    // Fallback: se anoFiltro-1 === 2025, substituir Jan–Jun por histórico estático
+    // Override incondicional: Jan-Jun/2025 não tem dados reais (entradas residuais como
+    // s76 eram espúrias e foram removidas; override garante linha de meta completa).
     if (anoFiltro - 1 === 2025) {
       Object.entries(META_HISTORICO_2025).forEach(([m, v]) => {
-        if (!mapMeta[Number(m)]) mapMeta[Number(m)] = v;
+        mapMeta[Number(m)] = v; // incondicional para Jan–Jun
       });
     }
     const totalMeses = anoFiltro < anoAtualSistema ? 12 : mesAtualSistema + 1;
@@ -433,64 +435,84 @@ export default function FaturamentoPage({ data }) {
         </ResponsiveContainer>
       </Panel>
 
-      {/* P-FAT-2 — Comparativo consolidado */}
-      <Panel title="Comparativo de Faturamento">
-        <div className="flex flex-col divide-y divide-slate-100">
-          {[
-            {
-              label: `M/M — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
-              valor: fatMesAnterior,
-              atual: fatMes,
-              variacao: varMMA,
-            },
-            {
-              label: `A/A — vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
-              valor: fatAnoAnteriorMes,
-              atual: fatMes,
-              variacao: varYoY,
-            },
-            {
-              label: `Acum. ${anoFiltro} vs ${anoFiltro - 1} (Jan–${MESES_LABEL_CURTO[mesFiltro]})`,
-              valor: fatAnoAnteriorYTD,
-              atual: fatYTD,
-              variacao: varYTD,
-            },
-          ].map(({ label, valor, atual, variacao }) => {
-            const delta    = atual - valor;
-            const positivo = variacao != null && variacao >= 0;
-            const semDados = variacao === null;
-            return (
-              <div key={label} className="flex items-center justify-between py-3 gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wide truncate">{label}</div>
-                  <div className="flex items-baseline gap-2 mt-0.5">
-                    <span className="text-base font-bold text-slate-800">{fmtBRL(atual)}</span>
-                    <span className="text-xs text-slate-400">ant: {valor > 0 ? fmtBRL(valor) : "—"}</span>
-                  </div>
-                </div>
-                {semDados ? (
-                  <span className="text-xs text-slate-400 italic">sem dados</span>
-                ) : (
-                  <div className={`flex items-center gap-1.5 shrink-0 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
-                    <span className="text-base font-bold">{positivo ? "▲" : "▼"} {Math.abs(variacao).toFixed(1)}%</span>
-                    <span className="text-xs font-medium">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
-                  </div>
-                )}
+      {/* P-FAT-2 — Comparativo consolidado — 3 KPI tiles independentes */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          {
+            key: "mm",
+            titulo: "Mês a Mês",
+            label: `vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
+            valor: fatMesAnterior,
+            atual: fatMes,
+            variacao: varMMA,
+            showAndamento: mesEmAndamento,
+          },
+          {
+            key: "aa",
+            titulo: "Ano a Ano",
+            label: `vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
+            valor: fatAnoAnteriorMes,
+            atual: fatMes,
+            variacao: varYoY,
+            showAndamento: mesEmAndamento,
+          },
+          {
+            key: "ytd",
+            titulo: `Acumulado ${anoFiltro}`,
+            label: `Jan–${MESES_LABEL_CURTO[mesFiltro]} vs ${anoFiltro - 1}`,
+            valor: fatAnoAnteriorYTD,
+            atual: fatYTD,
+            variacao: varYTD,
+            showAndamento: mesEmAndamento,
+          },
+        ].map(({ key, titulo, label, valor, atual, variacao, showAndamento }) => {
+          const delta    = atual - valor;
+          const positivo = variacao != null && variacao >= 0;
+          const semDados = variacao === null;
+          return (
+            <div key={key} className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col gap-2">
+              {/* Cabeçalho tile */}
+              <div>
+                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">{titulo}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{label}</div>
               </div>
-            );
-          })}
-        </div>
-        {mesEmAndamento && (
-          <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
-            <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">mês em andamento</span>
-            {projecaoMesFim && (
-              <span className="text-xs text-slate-500">
-                Projeção final: <span className="font-semibold text-slate-700">{fmtBRL(projecaoMesFim)}</span>
-              </span>
-            )}
-          </div>
-        )}
-      </Panel>
+              {/* Valor principal */}
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl font-extrabold text-slate-800 tabular-nums">{fmtBRL(atual)}</span>
+              </div>
+              {/* Comparativo anterior */}
+              <div className="text-xs text-slate-400">
+                anterior: <span className="font-medium text-slate-500">{valor > 0 ? fmtBRL(valor) : "—"}</span>
+              </div>
+              {/* Variação */}
+              {semDados ? (
+                <span className="text-xs text-slate-400 italic">sem dados anteriores</span>
+              ) : (
+                <div className={`flex items-center gap-2 mt-auto pt-2 border-t border-slate-100 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
+                  <span className="text-lg font-bold">{positivo ? "▲" : "▼"}{Math.abs(variacao).toFixed(1)}%</span>
+                  <span className="text-sm font-semibold">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
+                </div>
+              )}
+              {/* Badge mês em andamento */}
+              {showAndamento && key !== "ytd" && (
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">mês em andamento</span>
+                  {key === "mm" && projecaoMesFim && (
+                    <span className="text-[10px] text-slate-500">
+                      proj: <span className="font-semibold text-slate-700">{fmtBRL(projecaoMesFim)}</span>
+                    </span>
+                  )}
+                </div>
+              )}
+              {showAndamento && key === "ytd" && (
+                <div>
+                  <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">mês em andamento</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
       {/* Gráfico diário + Breakdown produto */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
