@@ -1,5 +1,30 @@
 # Notas de processo para builds de teste
 
+## Regra permanente — Prevenção de TDZ em componentes React
+
+**Causa raiz (caso real — commit 2342e1d):** `const` declarada com `const`
+dentro de um componente React e usada em `useMemo`/`useEffect`/`useCallback`
+antes de ser declarada causam `ReferenceError: Cannot access 'X' before
+initialization` em produção (minificador expõe o bug de Temporal Dead Zone
+que o dev pode não ver em dev mode).
+
+**Regra:** toda constante estática (arrays, objetos, strings, números fixos)
+que for referenciada em qualquer hook (`useMemo`, `useEffect`, `useCallback`)
+DEVE ser declarada em **escopo de módulo** (fora da função do componente),
+nunca dentro do componente.
+
+**Critério de revisão obrigatória antes do push:**
+- Mudança que toca `useMemo`, `useEffect`, `useCallback` → acionar
+  `revisor-qualidade` antes do commit.
+- Mudança que reutiliza variável declarada dentro do componente em um hook
+  → mover para escopo de módulo antes de prosseguir.
+- Mudança só de estilo/layout sem lógica de hooks → commit direto é aceitável.
+
+**Verificação automatizada disponível:** o script inline em `node -e "..."` em
+CLAUDE.md (histórico de sessão) varre todos os `.jsx` em `src/pages/` e
+reporta variáveis `UPPER_CASE` declaradas dentro do componente mas usadas em
+hooks antes da declaração. Rodar antes de cada PR.
+
 ## Senha de acesso (PasswordGate) em builds de teste
 
 O app é protegido por `src/components/PasswordGate.jsx`, gated pela env var
