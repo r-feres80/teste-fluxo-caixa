@@ -85,6 +85,49 @@ export default function FaturamentoPage({ data }) {
   );
   const ticketMedio = realizadasMes.length > 0 ? fatMes / realizadasMes.length : 0;
 
+  // ── Faturamento mensal acumulado (todos os meses do ano) ──────────────────
+  const fatMensal = useMemo(() => {
+    const map = {};
+    entradas
+      .filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro)))
+      .forEach((l) => {
+        const m = Number(l.dataPagamento.slice(5, 7)) - 1; // 0-based
+        map[m] = (map[m] || 0) + l.valor;
+      });
+    return Array.from({ length: 12 }, (_, i) => ({
+      mes: MESES_LABEL_CURTO[i],
+      valor: map[i] || 0,
+      atual: i === mesFiltro,
+    }));
+  }, [entradas, anoFiltro, mesFiltro]);
+
+  // ── Comparativo Mês/Ano anterior ─────────────────────────────────────────
+  const mesAnteriorPfx = (() => {
+    const d = new Date(anoFiltro, mesFiltro - 1, 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  })();
+  const anoAnteriorMesPfx = `${anoFiltro - 1}-${String(mesFiltro + 1).padStart(2, "0")}`;
+
+  const fatMesAnterior = useMemo(
+    () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(mesAnteriorPfx))
+                  .reduce((s, l) => s + l.valor, 0),
+    [entradas, mesAnteriorPfx]
+  );
+  const fatAnoAnteriorMes = useMemo(
+    () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoAnteriorMesPfx))
+                  .reduce((s, l) => s + l.valor, 0),
+    [entradas, anoAnteriorMesPfx]
+  );
+  const fatAnoAnteriorYTD = useMemo(
+    () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro - 1)))
+                  .reduce((s, l) => s + l.valor, 0),
+    [entradas, anoFiltro]
+  );
+
+  const varMMA  = fatMesAnterior  > 0 ? ((fatMes - fatMesAnterior)  / fatMesAnterior)  * 100 : null;
+  const varYoY  = fatAnoAnteriorMes > 0 ? ((fatMes - fatAnoAnteriorMes) / fatAnoAnteriorMes) * 100 : null;
+  const varYTD  = fatAnoAnteriorYTD > 0 ? ((fatYTD - fatAnoAnteriorYTD) / fatAnoAnteriorYTD) * 100 : null;
+
   // ── Gráfico diário do mês selecionado ────────────────────────────────────
   const graficoDiario = useMemo(() => {
     const map = {};
@@ -122,7 +165,8 @@ export default function FaturamentoPage({ data }) {
   }));
 
   const ANOS = [2024, 2025, 2026, 2027];
-  const MESES_LABEL = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+  const MESES_LABEL = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  const MESES_LABEL_CURTO = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 
   return (
     <div className="flex flex-col gap-6">
@@ -149,6 +193,87 @@ export default function FaturamentoPage({ data }) {
         <KPI label={`Faturamento ${MESES_LABEL[mesFiltro]}/${anoFiltro}`} value={fmtBRL(fatMes)} />
         <KPI label={`YTD ${anoFiltro}`}  value={fmtBRL(fatYTD)}         />
         <KPI label="Ticket Médio / NF"   value={fmtBRL(ticketMedio)}    />
+      </div>
+
+      {/* P-FAT-1 — Faturamento mensal acumulado (todos os meses do ano) */}
+      <Panel title={`Faturamento Mensal — ${anoFiltro}`} className="">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-slate-500">YTD {anoFiltro}:</span>
+            <span className="text-sm font-semibold text-slate-800">{fmtBRL(fatYTD)}</span>
+          </div>
+        </div>
+        <ResponsiveContainer width="100%" height={180}>
+          <BarChart data={fatMensal} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
+            onClick={(d) => { if (d?.activeTooltipIndex != null) setMesFiltro(d.activeTooltipIndex); }}>
+            <defs>
+              <linearGradient id="gradFatMensal" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+              <linearGradient id="gradFatMensalAtual" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
+            </defs>
+            <CartesianGrid {...GRID} />
+            <XAxis dataKey="mes" {...EIXO} tick={{ fontSize: 11 }} />
+            <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
+            <Tooltip {...tooltipProps()} formatter={(v) => [fmtBRL(v), "Faturado"]} />
+            <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM} cursor="pointer">
+              {fatMensal.map((entry, index) => (
+                <Cell key={index} fill={entry.atual ? "url(#gradFatMensalAtual)" : (entry.valor > 0 ? "url(#gradFatMensal)" : "#E2E8F0")} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </Panel>
+
+      {/* P-FAT-2 — Comparativo Mês / Ano anterior */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          {
+            label: `MoM — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
+            valor: fatMesAnterior,
+            atual: fatMes,
+            variacao: varMMA,
+          },
+          {
+            label: `YoY — ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
+            valor: fatAnoAnteriorMes,
+            atual: fatMes,
+            variacao: varYoY,
+          },
+          {
+            label: `YTD ${anoFiltro} vs ${anoFiltro - 1}`,
+            valor: fatAnoAnteriorYTD,
+            atual: fatYTD,
+            variacao: varYTD,
+          },
+        ].map(({ label, valor, atual, variacao }) => {
+          const delta = atual - valor;
+          const positivo = variacao != null && variacao >= 0;
+          const semDados = variacao === null;
+          return (
+            <div key={label} className="bg-white border border-slate-100 rounded-xl p-4 flex flex-col gap-2 shadow-sm">
+              <span className="text-xs font-medium text-slate-500 uppercase tracking-wide leading-tight">{label}</span>
+              <div className="flex items-end justify-between gap-2">
+                <div>
+                  <div className="text-lg font-bold text-slate-800">{fmtBRL(atual)}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">Anterior: {valor > 0 ? fmtBRL(valor) : "—"}</div>
+                </div>
+                {semDados ? (
+                  <span className="text-xs text-slate-400 italic">sem dados</span>
+                ) : (
+                  <div className={`flex flex-col items-end gap-0.5 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
+                    <span className="text-xl font-bold leading-none">{positivo ? "▲" : "▼"}</span>
+                    <span className="text-sm font-semibold">{Math.abs(variacao).toFixed(1)}%</span>
+                    <span className="text-xs">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Gráfico diário + Breakdown produto */}

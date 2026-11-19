@@ -160,3 +160,41 @@ O agente `arquiteto-desenvolvedor` está descontinuado (legado); não acioná-lo
 
 ### Prioridade atual
 Restaurar o Mini ERP existente na Vercel por meio de uma implantação de pré-visualização validada, antes de promover a versão para produção. A regressão relacionada às datas fixas dos dados demonstrativos permanece como pendência a ser tratada posteriormente.
+
+## Backlog — Engine de Geração Automática (P-ENGINE)
+
+### P-ENGINE-1: Geração automática de Contas a Pagar (AP)
+Gerar lançamentos de AP automaticamente a partir de:
+- Contratos de fornecimento recorrentes (mensalidade, aluguel, serviços fixos)
+- Regra: dia de vencimento + valor + fornecedor + conta gerencial
+- Trigger: virada de mês ou on-demand
+- Proteger lançamentos gerados com flag `geradoAutomaticamente: true` + rastro em `observacao`
+
+### P-ENGINE-2: Geração automática de Contas a Receber (AR)
+Gerar lançamentos de AR automaticamente a partir de:
+- Contratos de clientes recorrentes (já modelados em FaturamentoPage como RECORRENCIAS_DEMO)
+- Regra: dia de emissão + valor + cliente + conta gerencial
+- Trigger: virada de mês ou on-demand
+
+### P-ENGINE-3: Geração automática de Faturamento (NF/Cobrança)
+Engine completa já prototipada em FaturamentoPage (seção "Faturamento Recorrente — Contratos Ativos"):
+- Transformar RECORRENCIAS_DEMO em estrutura persistida no dataset
+- Ao gerar: criar lançamento AR + marcar como "Aguardando pagamento"
+- Integração futura: emissão de NF-e via API (escopo fora do MVP)
+
+### Escopo conjunto (P-ENGINE-1/2/3)
+- UI de cadastro de contratos recorrentes (AP e AR) com campos: descrição, valor, dia, fornecedor/cliente, conta gerencial, ativo/inativo
+- Preview "próximas emissões" antes de confirmar geração
+- Histórico de execuções com data/hora, qtd lançamentos criados, valor total
+- Proteção: nunca regerar lançamento do mesmo contrato no mesmo mês/período
+
+## Backlog — Faturamento (P-FAT)
+
+### P-FAT-1: Card faturamento total acumulado (todos os meses)
+- Card/painel em FaturamentoPage mostrando faturamento mês a mês do ano selecionado
+- Total acumulado YTD em destaque
+
+### P-FAT-2: Card comparativo Ano/Mês anterior
+- Comparativo mês selecionado vs mesmo mês do ano anterior (R$ e %)
+- Comparativo YTD atual vs YTD mesmo período ano anterior
+- Indicador visual de crescimento/queda
