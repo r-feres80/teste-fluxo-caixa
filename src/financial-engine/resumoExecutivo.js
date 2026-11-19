@@ -65,6 +65,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   const caixaProjetado15 = serie15[serie15.length - 1]?.saldo ?? posicao.disponivel;
   const caixaProjetado60 = serie60[serie60.length - 1]?.saldo ?? posicao.disponivel;
   const caixaProjetado90 = serie90[serie90.length - 1]?.saldo ?? posicao.disponivel;
+  const piorPonto90 = menorPontoDaSerie(serie90);
 
   // DFC do mês corrente, para o waterfall executivo — mesmo cálculo/período
   // do DFC Gerencial (calcularDFC), nunca duplicado com lógica própria.
@@ -153,6 +154,7 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
       projetado60dias: caixaProjetado60,
       projetado90dias: caixaProjetado90,
       menorPontoProjetado30dias: menor30 ?? null,
+      piorPontoProjetado90: piorPonto90 ?? null,
       serieDiaria30dias: serie30,
       indiceLiquidezCaixa: calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira),
       indiceLiquidezSeca: calcularLiquidezSeca(posicao.disponivel, agingAR.totalCarteira, agingAP.totalCarteira),
