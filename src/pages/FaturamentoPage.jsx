@@ -33,6 +33,10 @@ export default function FaturamentoPage({ data }) {
 
   const { entidades } = data ?? {};
 
+  const anoAtualSistema = Number(hoje.slice(0, 4));
+  const mesAtualSistema = Number(hoje.slice(5, 7)) - 1; // 0-based
+  const mesEmAndamento  = mesFiltro === mesAtualSistema && anoFiltro === anoAtualSistema;
+
   const anoMesPfx = `${anoFiltro}-${String(mesFiltro + 1).padStart(2, "0")}`;
   const hojePfx = hoje.slice(0, 10);
 
@@ -76,12 +80,14 @@ export default function FaturamentoPage({ data }) {
         const m = Number(l.dataPagamento.slice(5, 7)) - 1; // 0-based
         map[m] = (map[m] || 0) + l.valor;
       });
-    return Array.from({ length: 12 }, (_, i) => ({
+    // Não exibe meses futuros no ano corrente
+    const totalMeses = anoFiltro < anoAtualSistema ? 12 : mesAtualSistema + 1;
+    return Array.from({ length: totalMeses }, (_, i) => ({
       mes: MESES_LABEL_CURTO[i],
       valor: map[i] || 0,
       atual: i === mesFiltro,
     }));
-  }, [entradas, anoFiltro, mesFiltro]);
+  }, [entradas, anoFiltro, mesFiltro, anoAtualSistema, mesAtualSistema]);
 
   // ── Comparativo Mês/Ano anterior ─────────────────────────────────────────
   const mesAnteriorPfx = (() => {
@@ -100,10 +106,15 @@ export default function FaturamentoPage({ data }) {
                   .reduce((s, l) => s + l.valor, 0),
     [entradas, anoAnteriorMesPfx]
   );
+  // YTD do ano anterior até o mesmo mês (Jan–mesFiltro), para comparação justa
   const fatAnoAnteriorYTD = useMemo(
-    () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro - 1)))
-                  .reduce((s, l) => s + l.valor, 0),
-    [entradas, anoFiltro]
+    () => entradas
+      .filter((l) => {
+        if (l.situacao !== "Realizado" || !l.dataPagamento?.startsWith(String(anoFiltro - 1))) return false;
+        return Number(l.dataPagamento.slice(5, 7)) <= mesFiltro + 1;
+      })
+      .reduce((s, l) => s + l.valor, 0),
+    [entradas, anoFiltro, mesFiltro]
   );
 
   const varMMA  = fatMesAnterior  > 0 ? ((fatMes - fatMesAnterior)  / fatMesAnterior)  * 100 : null;
@@ -146,18 +157,19 @@ export default function FaturamentoPage({ data }) {
     realizadasMes.forEach((l) => {
       if (!l.clienteFornecedorId) return;
       if (!totais[l.clienteFornecedorId]) {
-        totais[l.clienteFornecedorId] = { valor: 0, contaId: l.contaGerencialId };
+        totais[l.clienteFornecedorId] = { valor: 0, contas: {} };
       }
       totais[l.clienteFornecedorId].valor += l.valor;
+      totais[l.clienteFornecedorId].contas[l.contaGerencialId] =
+        (totais[l.clienteFornecedorId].contas[l.contaGerencialId] || 0) + l.valor;
     });
     const total = Object.values(totais).reduce((acc, d) => acc + d.valor, 0);
     return Object.entries(totais)
-      .map(([id, d]) => ({
-        id,
-        valor: d.valor,
-        contaId: d.contaId,
-        pct: total > 0 ? (d.valor / total) * 100 : 0,
-      }))
+      .map(([id, d]) => {
+        // Linha principal = conta com maior valor faturado para este cliente
+        const contaId = Object.entries(d.contas).sort(([, a], [, b]) => b - a)[0][0];
+        return { id, valor: d.valor, contaId, pct: total > 0 ? (d.valor / total) * 100 : 0 };
+      })
       .sort((a, b) => b.valor - a.valor);
   }, [realizadasMes]);
 
@@ -231,26 +243,32 @@ export default function FaturamentoPage({ data }) {
             valor: fatMesAnterior,
             atual: fatMes,
             variacao: varMMA,
+            parcial: mesEmAndamento,
           },
           {
             label: `A/A — vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
             valor: fatAnoAnteriorMes,
             atual: fatMes,
             variacao: varYoY,
+            parcial: mesEmAndamento,
           },
           {
             label: `Acum. ${anoFiltro} vs ${anoFiltro - 1}`,
             valor: fatAnoAnteriorYTD,
             atual: fatYTD,
             variacao: varYTD,
+            parcial: mesEmAndamento,
           },
-        ].map(({ label, valor, atual, variacao }) => {
+        ].map(({ label, valor, atual, variacao, parcial }) => {
           const delta = atual - valor;
           const positivo = variacao != null && variacao >= 0;
           const semDados = variacao === null;
           return (
             <div key={label} className="bg-white border border-slate-100 rounded-xl p-4 flex flex-col gap-2 shadow-sm">
-              <span className="text-xs font-medium text-slate-500 uppercase tracking-wide leading-tight">{label}</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide leading-tight">{label}</span>
+                {parcial && <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">em andamento</span>}
+              </div>
               <div className="flex items-end justify-between gap-2">
                 <div>
                   <div className="text-lg font-bold text-slate-800">{fmtBRL(atual)}</div>
@@ -324,9 +342,9 @@ export default function FaturamentoPage({ data }) {
         {breakdownClientes.length === 0 ? (
           <p className="text-sm text-slate-400 py-6 text-center">Sem dados para o período.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
+          <div className="max-h-80 overflow-y-auto overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead className="sticky top-0 bg-white z-10">
                 <tr className="border-b border-slate-100">
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide pb-2 pr-4">Cliente</th>
                   <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide pb-2 pr-4">Linha Principal</th>
