@@ -365,7 +365,7 @@ export default function FaturamentoPage({ data }) {
           </div>
         </div>
         <ResponsiveContainer width="100%" height={190}>
-          <ComposedChart data={fatMensal} margin={{ top: 4, right: 8, left: 8, bottom: 0 }}
+          <ComposedChart data={fatMensal} margin={{ top: 4, right: 8, left: 2, bottom: 0 }}
             onClick={(d) => { if (d?.activeTooltipIndex != null) setMesFiltro(d.activeTooltipIndex); }}>
             <defs>
               <linearGradient id="gradFatMensal" x1="0" y1="0" x2="0" y2="1">
@@ -380,7 +380,7 @@ export default function FaturamentoPage({ data }) {
             </defs>
             <CartesianGrid {...GRID} />
             <XAxis dataKey="mes" {...EIXO} tick={{ fontSize: 11 }} />
-            <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={72} />
+            <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={65} />
             <Tooltip
               {...tooltipProps()}
               formatter={(v, name, props) => {
@@ -420,15 +420,6 @@ export default function FaturamentoPage({ data }) {
                 activeDot={{ r: 4 }}
                 connectNulls={false}
                 name="meta"
-              />
-            )}
-            {projecaoMesFim && (
-              <ReferenceLine
-                y={projecaoMesFim}
-                stroke={SEMANTIC.laranja}
-                strokeDasharray="5 3"
-                strokeWidth={1.5}
-                label={{ value: `Proj: ${fmtBRLShort(projecaoMesFim)}`, position: "insideTopRight", fontSize: 10, fill: SEMANTIC.laranja }}
               />
             )}
           </ComposedChart>
@@ -549,7 +540,7 @@ export default function FaturamentoPage({ data }) {
                   </defs>
                   <CartesianGrid {...GRID} />
                   <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
-                  <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={72} />
+                  <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={65} />
                   <Tooltip
                     {...tooltipProps()}
                     formatter={(v, _name, props) => {
