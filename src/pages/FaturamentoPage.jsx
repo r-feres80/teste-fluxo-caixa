@@ -193,7 +193,7 @@ export default function FaturamentoPage({ data }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KPI label="Faturamento Hoje"    value={fmtBRL(fatHoje)}        />
         <KPI label={`Faturamento ${MESES_LABEL[mesFiltro]}/${anoFiltro}`} value={fmtBRL(fatMes)} />
-        <KPI label={`YTD ${anoFiltro}`}  value={fmtBRL(fatYTD)}         />
+        <KPI label={`Acumulado ${anoFiltro}`}  value={fmtBRL(fatYTD)}         />
         <KPI label="Ticket Médio / NF"   value={fmtBRL(ticketMedio)}    />
       </div>
 
@@ -202,7 +202,7 @@ export default function FaturamentoPage({ data }) {
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-500">YTD {anoFiltro}:</span>
+            <span className="text-xs text-slate-500">Acumulado {anoFiltro}:</span>
             <span className="text-sm font-semibold text-slate-800">{fmtBRL(fatYTD)}</span>
           </div>
         </div>
@@ -234,19 +234,19 @@ export default function FaturamentoPage({ data }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
           {
-            label: `MoM — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
+            label: `Mês a Mês — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
             valor: fatMesAnterior,
             atual: fatMes,
             variacao: varMMA,
           },
           {
-            label: `YoY — ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
+            label: `Ano a Ano — ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
             valor: fatAnoAnteriorMes,
             atual: fatMes,
             variacao: varYoY,
           },
           {
-            label: `YTD ${anoFiltro} vs ${anoFiltro - 1}`,
+            label: `Acumulado do Ano ${anoFiltro} vs ${anoFiltro - 1}`,
             valor: fatAnoAnteriorYTD,
             atual: fatYTD,
             variacao: varYTD,
