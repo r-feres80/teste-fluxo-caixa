@@ -105,8 +105,7 @@ export default function FaturamentoPage({ data }) {
 
   // ── Faturamento mensal acumulado (todos os meses do ano) ──────────────────
   const fatMensal = useMemo(() => {
-    const mapValor = {};
-    const mapLitros = {};
+    const mapValor = {}, mapLitros = {}, mapMeta = {};
     entradas
       .filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro)))
       .forEach((l) => {
@@ -116,11 +115,19 @@ export default function FaturamentoPage({ data }) {
         const litros = lp ? l.valor * lp.litrosPorReal : l.valor / PRECO_MEDIO_L;
         mapLitros[m] = (mapLitros[m] || 0) + litros;
       });
+    // Meta = mesmo mês do ano anterior (linha de referência no gráfico)
+    entradas
+      .filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro - 1)))
+      .forEach((l) => {
+        const m = Number(l.dataPagamento.slice(5, 7)) - 1;
+        mapMeta[m] = (mapMeta[m] || 0) + l.valor;
+      });
     const totalMeses = anoFiltro < anoAtualSistema ? 12 : mesAtualSistema + 1;
     return Array.from({ length: totalMeses }, (_, i) => ({
-      mes: MESES_LABEL_CURTO[i],
+      mes:    MESES_LABEL_CURTO[i],
       valor:  mapValor[i]  || 0,
       litros: Math.round(mapLitros[i] || 0),
+      meta:   mapMeta[i]   || null, // referência ano anterior
       atual:  i === mesFiltro,
     }));
   }, [entradas, anoFiltro, mesFiltro, anoAtualSistema, mesAtualSistema]);
@@ -157,7 +164,7 @@ export default function FaturamentoPage({ data }) {
   const varYoY  = fatAnoAnteriorMes > 0 ? ((fatMes - fatAnoAnteriorMes) / fatAnoAnteriorMes) * 100 : null;
   const varYTD  = fatAnoAnteriorYTD > 0 ? ((fatYTD - fatAnoAnteriorYTD) / fatAnoAnteriorYTD) * 100 : null;
 
-  // ── Gráfico diário — auto-fill dias úteis sem lançamento ─────────────────
+  // ── Gráfico diário — apenas dias com lançamento real (+ hoje) ───────────
   const graficoDiario = useMemo(() => {
     // 1. Mapeia dias com dados reais
     const mapReal = {};
@@ -172,7 +179,7 @@ export default function FaturamentoPage({ data }) {
     const diaHoje    = Number(hojePfx.slice(8, 10));
     const diaFim     = isMesAtual ? diaHoje : ultimoDia;
 
-    // 3. Média diária dos dias com dados reais (exclui outliers >3× média)
+    // 3. Média dos dias reais (exclui outliers >3× média — só pra calcular cap)
     const valoresReais = Object.values(mapReal);
     const somaReal     = valoresReais.reduce((s, v) => s + v, 0);
     const mediaRaw     = valoresReais.length > 0 ? somaReal / valoresReais.length : 0;
@@ -181,24 +188,26 @@ export default function FaturamentoPage({ data }) {
       ? semOutlier.reduce((s, v) => s + v, 0) / semOutlier.length
       : mediaRaw;
 
-    // 4. Monta série completa de dias úteis
+    // 4. Só dias úteis com dado real (ou hoje)
     const result = [];
     for (let d = 1; d <= diaFim; d++) {
       const diaSemana = new Date(anoFiltro, mesFiltro, d).getDay();
-      if (diaSemana === 0 || diaSemana === 6) continue; // sem fim de semana
+      if (diaSemana === 0 || diaSemana === 6) continue;
 
-      const dStr     = String(d).padStart(2, "0");
+      const dStr    = String(d).padStart(2, "0");
+      const hasReal = mapReal[dStr] !== undefined;
+      const isHoje  = isMesAtual && d === diaHoje;
+
+      // Só inclui dias com dado real ou o dia atual (mesmo sem dado ainda)
+      if (!hasReal && !isHoje) continue;
+
       const label    = `${dStr}/${String(mesFiltro + 1).padStart(2, "0")}`;
-      const hasReal  = mapReal[dStr] !== undefined;
-      const isHoje   = isMesAtual && d === diaHoje;
+      const valorReal = hasReal ? mapReal[dStr] : 0;
+      const isOutlier = hasReal && valorReal > mediaDia * 3;
+      // Capa outlier para display — valor real aparece só no tooltip
+      const valor     = isOutlier ? Math.round(mediaDia * 3.05) : valorReal;
 
-      // Fator seeded: consistente por dia, variação ±25%
-      const seed  = Math.abs(Math.sin(d * 13.7 + mesFiltro * 7.3));
-      const fator = 0.75 + seed * 0.5;
-      const valor = hasReal ? mapReal[dStr] : Math.round(mediaDia * fator);
-
-      const isOutlier = hasReal && mapReal[dStr] > mediaDia * 3;
-      result.push({ dia: label, valor, estimado: !hasReal && !isHoje, isHoje, isOutlier });
+      result.push({ dia: label, valor, valorReal, isHoje, isOutlier });
     }
     return result;
   }, [realizadasMes, mesFiltro, anoFiltro, anoAtualSistema, mesAtualSistema, hojePfx]);
@@ -313,7 +322,15 @@ export default function FaturamentoPage({ data }) {
       {/* P-FAT-1 — Faturamento mensal acumulado (todos os meses do ano) */}
       <Panel title={`Faturamento Mensal — ${anoFiltro}`} className="">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
+            {fatMensal.some(m => m.meta) && (
+              <span className="flex items-center gap-1 text-xs text-slate-400">
+                <span className="inline-block w-6 border-t border-dashed" style={{ borderColor: "#8B5CF6" }} />
+                Meta ({anoFiltro - 1})
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-slate-500">Acumulado {anoFiltro}:</span>
@@ -327,8 +344,8 @@ export default function FaturamentoPage({ data }) {
             </div>
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={fatMensal} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
+        <ResponsiveContainer width="100%" height={190}>
+          <ComposedChart data={fatMensal} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
             onClick={(d) => { if (d?.activeTooltipIndex != null) setMesFiltro(d.activeTooltipIndex); }}>
             <defs>
               <linearGradient id="gradFatMensal" x1="0" y1="0" x2="0" y2="1">
@@ -337,6 +354,9 @@ export default function FaturamentoPage({ data }) {
               <linearGradient id="gradFatMensalAtual" x1="0" y1="0" x2="0" y2="1">
                 {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
               </linearGradient>
+              <linearGradient id="gradFatMensalMeta" x1="0" y1="0" x2="0" y2="1">
+                {gradienteBarraStops(SEMANTIC.verde).map((s) => <stop key={s.offset} {...s} />)}
+              </linearGradient>
             </defs>
             <CartesianGrid {...GRID} />
             <XAxis dataKey="mes" {...EIXO} tick={{ fontSize: 11 }} />
@@ -344,23 +364,44 @@ export default function FaturamentoPage({ data }) {
             <Tooltip
               {...tooltipProps()}
               formatter={(v, name, props) => {
+                if (name === "meta") return v ? [fmtBRL(v), `Meta (${anoFiltro - 1})`] : [null, null];
                 const litros = props?.payload?.litros ?? 0;
+                const bateu  = props?.payload?.meta && v >= props.payload.meta;
                 return [
                   <span key="v">
                     {fmtBRL(v)}
-                    <span style={{ display: "block", fontSize: 11, opacity: 0.75 }}>
-                      {litros.toLocaleString("pt-BR")} L
-                    </span>
+                    {litros > 0 && <span style={{ display: "block", fontSize: 11, opacity: 0.75 }}>{litros.toLocaleString("pt-BR")} L</span>}
+                    {bateu && <span style={{ display: "block", fontSize: 11, color: SEMANTIC.verde }}>✓ meta superada</span>}
                   </span>,
                   "Faturado",
                 ];
               }}
             />
             <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM} cursor="pointer">
-              {fatMensal.map((entry, index) => (
-                <Cell key={index} fill={entry.atual ? "url(#gradFatMensalAtual)" : (entry.valor > 0 ? "url(#gradFatMensal)" : "#E2E8F0")} />
-              ))}
+              {fatMensal.map((entry, index) => {
+                const bateuMeta = entry.meta && entry.valor >= entry.meta;
+                const fill = entry.atual
+                  ? "url(#gradFatMensalAtual)"
+                  : bateuMeta
+                    ? "url(#gradFatMensalMeta)"
+                    : entry.valor > 0 ? "url(#gradFatMensal)" : "#E2E8F0";
+                return <Cell key={index} fill={fill} />;
+              })}
             </Bar>
+            {/* Linha de meta (ano anterior) */}
+            {fatMensal.some(m => m.meta) && (
+              <Line
+                dataKey="meta"
+                type="monotone"
+                stroke="#8B5CF6"
+                strokeWidth={1.5}
+                strokeDasharray="5 3"
+                dot={{ fill: "#8B5CF6", r: 2.5, strokeWidth: 0 }}
+                activeDot={{ r: 4 }}
+                connectNulls={false}
+                name="meta"
+              />
+            )}
             {projecaoMesFim && (
               <ReferenceLine
                 y={projecaoMesFim}
@@ -370,7 +411,7 @@ export default function FaturamentoPage({ data }) {
                 label={{ value: `Proj: ${fmtBRLShort(projecaoMesFim)}`, position: "insideTopRight", fontSize: 10, fill: SEMANTIC.laranja }}
               />
             )}
-          </BarChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </Panel>
 
@@ -445,9 +486,6 @@ export default function FaturamentoPage({ data }) {
                 <span className="flex items-center gap-1 text-xs text-slate-500">
                   <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: BRAND.azul }} /> Realizado
                 </span>
-                <span className="flex items-center gap-1 text-xs text-slate-500">
-                  <span className="inline-block w-2.5 h-2.5 rounded-sm bg-slate-300" /> Estimado
-                </span>
                 {mesEmAndamento && (
                   <span className="flex items-center gap-1 text-xs text-slate-500">
                     <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: SEMANTIC.laranja }} /> Hoje
@@ -455,64 +493,45 @@ export default function FaturamentoPage({ data }) {
                 )}
                 {graficoDiario.some((d) => d.isOutlier) && (
                   <span className="flex items-center gap-1 text-xs text-slate-400">
-                    <span className="inline-block w-2.5 h-2.5 rounded-sm bg-slate-400" /> Pico (fora de escala)
+                    <span className="inline-block w-2.5 h-2.5 rounded-sm bg-slate-400" /> Pico (capado na escala — real no tooltip)
                   </span>
                 )}
               </div>
-              {/* Calcula yMax excluindo outliers (picos >3× média) da escala */}
-              {(() => {
-                const semOutliers = graficoDiario.filter((d) => !d.isOutlier).map((d) => d.valor);
-                const yMax = semOutliers.length > 0
-                  ? Math.max(...semOutliers) * 1.35
-                  : Math.max(...graficoDiario.map((d) => d.valor)) * 1.1;
-                const temOutlier = graficoDiario.some((d) => d.isOutlier);
-                return (
-                  <>
-                    {temOutlier && (
-                      <div className="text-xs text-slate-400 mb-1">
-                        ⚠ Pico fora de escala em {graficoDiario.find((d) => d.isOutlier)?.dia} — valor real no tooltip
-                      </div>
-                    )}
-                    <ResponsiveContainer width="100%" height={210}>
-                      <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
-                            {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
-                          </linearGradient>
-                          <linearGradient id="gradFatHoje" x1="0" y1="0" x2="0" y2="1">
-                            {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid {...GRID} />
-                        <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
-                        <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} domain={[0, yMax]} />
-                        <Tooltip
-                          {...tooltipProps()}
-                          formatter={(v, _name, props) => {
-                            const item = props?.payload;
-                            const sufixo = item?.isOutlier ? " ⚠ pico" : item?.estimado ? " (est.)" : item?.isHoje ? " (hoje)" : "";
-                            return [fmtBRL(v) + sufixo, "Faturado"];
-                          }}
-                        />
-                        <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM}>
-                          {graficoDiario.map((entry, i) => (
-                            <Cell
-                              key={i}
-                              fill={
-                                entry.isOutlier ? "#94A3B8"
-                                : entry.isHoje   ? "url(#gradFatHoje)"
-                                : entry.estimado ? "#CBD5E1"
-                                : "url(#gradFat)"
-                              }
-                              fillOpacity={entry.estimado ? 0.75 : 1}
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </>
-                );
-              })()}
+              <ResponsiveContainer width="100%" height={210}>
+                <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
+                      {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
+                    </linearGradient>
+                    <linearGradient id="gradFatHoje" x1="0" y1="0" x2="0" y2="1">
+                      {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...GRID} />
+                  <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
+                  <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
+                  <Tooltip
+                    {...tooltipProps()}
+                    formatter={(v, _name, props) => {
+                      const item = props?.payload;
+                      if (item?.isOutlier) return [fmtBRL(item.valorReal) + " ⚠ pico", "Faturado"];
+                      return [fmtBRL(v) + (item?.isHoje ? " (hoje)" : ""), "Faturado"];
+                    }}
+                  />
+                  <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM}>
+                    {graficoDiario.map((entry, i) => (
+                      <Cell
+                        key={i}
+                        fill={
+                          entry.isOutlier ? "#94A3B8"
+                          : entry.isHoje   ? "url(#gradFatHoje)"
+                          : "url(#gradFat)"
+                        }
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </>
           )}
         </Panel>
