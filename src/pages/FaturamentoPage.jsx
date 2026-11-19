@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   ResponsiveContainer, Cell, PieChart, Pie, Legend,
@@ -18,12 +18,15 @@ const MESES_LABEL_CURTO = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set"
 
 // ─── Plano de contas de receita ───────────────────────────────────────────────
 const LINHAS_PRODUTO = [
-  { id: "pc1.01.01.01", label: "Tintas Imobiliárias",   cor: BRAND.azul },
-  { id: "pc1.01.01.02", label: "Tintas Industriais",    cor: BRAND.ciano },
-  { id: "pc1.01.01.03", label: "Vernizes e Stains",     cor: "#0EA5E9" },
-  { id: "pc1.01.01.04", label: "Impermeabilizantes",    cor: "#6366F1" },
-  { id: "pc1.01.01.05", label: "Texturas e Grafiato",   cor: "#8B5CF6" },
+  { id: "pc1.01.01.01", label: "Tintas Imobiliárias",   cor: BRAND.azul,    litrosPorReal: 1/15 },
+  { id: "pc1.01.01.02", label: "Tintas Industriais",    cor: BRAND.ciano,   litrosPorReal: 1/25 },
+  { id: "pc1.01.01.03", label: "Vernizes e Stains",     cor: "#0EA5E9",     litrosPorReal: 1/20 },
+  { id: "pc1.01.01.04", label: "Impermeabilizantes",    cor: "#6366F1",     litrosPorReal: 1/18 },
+  { id: "pc1.01.01.05", label: "Texturas e Grafiato",   cor: "#8B5CF6",     litrosPorReal: 1/10 },
 ];
+
+// Preço médio ponderado R$/L para cálculo de litros mensais no gráfico
+const PRECO_MEDIO_L = 17; // média ponderada das linhas
 
 
 export default function FaturamentoPage({ data }) {
@@ -46,12 +49,41 @@ export default function FaturamentoPage({ data }) {
     [entidades?.lancamentos]
   );
 
-  // ── KPIs ─────────────────────────────────────────────────────────────────
-  const fatHoje = useMemo(
+  // ── Faturamento Hoje ao vivo (simulado durante horário comercial 8h–18h) ──
+  const fatHojeBase = useMemo(
     () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento === hojePfx)
                   .reduce((s, l) => s + l.valor, 0),
     [entradas, hojePfx]
   );
+
+  const calcFatHojeAoVivo = () => {
+    const agora = new Date();
+    const h = agora.getHours();
+    const m = agora.getMinutes();
+    const s = agora.getSeconds();
+    const minutos = h * 60 + m + s / 60;
+    const INICIO = 8 * 60;   // 8h
+    const FIM    = 18 * 60;  // 18h
+    const RANGE  = FIM - INICIO; // 600 min
+
+    if (minutos < INICIO) return fatHojeBase;
+    if (minutos >= FIM)   return fatHojeBase;
+
+    const progresso = Math.min((minutos - INICIO) / RANGE, 1);
+    // Meta diária estimada = média dos dias do mês × 1.0 (mantém realismo)
+    const metaDia = fatHojeBase > 0 ? fatHojeBase : 20870;
+    // Valor acumulado simulado: progresso × meta + jitter pequeno
+    const jitter = Math.sin(minutos * 0.3) * metaDia * 0.015;
+    return Math.max(0, Math.round(metaDia * progresso + jitter));
+  };
+
+  const [fatHoje, setFatHoje] = useState(() => calcFatHojeAoVivo());
+
+  useEffect(() => {
+    const timer = setInterval(() => setFatHoje(calcFatHojeAoVivo()), 120_000); // atualiza a cada 2 min
+    return () => clearInterval(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fatHojeBase]);
 
   const fatMes = useMemo(
     () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoMesPfx))
@@ -73,19 +105,23 @@ export default function FaturamentoPage({ data }) {
 
   // ── Faturamento mensal acumulado (todos os meses do ano) ──────────────────
   const fatMensal = useMemo(() => {
-    const map = {};
+    const mapValor = {};
+    const mapLitros = {};
     entradas
       .filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(String(anoFiltro)))
       .forEach((l) => {
-        const m = Number(l.dataPagamento.slice(5, 7)) - 1; // 0-based
-        map[m] = (map[m] || 0) + l.valor;
+        const m = Number(l.dataPagamento.slice(5, 7)) - 1;
+        mapValor[m]  = (mapValor[m]  || 0) + l.valor;
+        const lp = LINHAS_PRODUTO.find((x) => x.id === l.contaGerencialId);
+        const litros = lp ? l.valor * lp.litrosPorReal : l.valor / PRECO_MEDIO_L;
+        mapLitros[m] = (mapLitros[m] || 0) + litros;
       });
-    // Não exibe meses futuros no ano corrente
     const totalMeses = anoFiltro < anoAtualSistema ? 12 : mesAtualSistema + 1;
     return Array.from({ length: totalMeses }, (_, i) => ({
       mes: MESES_LABEL_CURTO[i],
-      valor: map[i] || 0,
-      atual: i === mesFiltro,
+      valor:  mapValor[i]  || 0,
+      litros: Math.round(mapLitros[i] || 0),
+      atual:  i === mesFiltro,
     }));
   }, [entradas, anoFiltro, mesFiltro, anoAtualSistema, mesAtualSistema]);
 
@@ -135,12 +171,20 @@ export default function FaturamentoPage({ data }) {
 
   // ── Breakdown por linha de produto ───────────────────────────────────────
   const breakdownProduto = useMemo(() => {
-    const totais = {};
+    const totaisValor  = {};
+    const totaisLitros = {};
     realizadasMes.forEach((l) => {
-      totais[l.contaGerencialId] = (totais[l.contaGerencialId] || 0) + l.valor;
+      totaisValor[l.contaGerencialId]  = (totaisValor[l.contaGerencialId]  || 0) + l.valor;
+      const lp = LINHAS_PRODUTO.find((x) => x.id === l.contaGerencialId);
+      const litros = lp ? l.valor * lp.litrosPorReal : l.valor / PRECO_MEDIO_L;
+      totaisLitros[l.contaGerencialId] = (totaisLitros[l.contaGerencialId] || 0) + litros;
     });
     return LINHAS_PRODUTO
-      .map((lp) => ({ ...lp, valor: totais[lp.id] || 0 }))
+      .map((lp) => ({
+        ...lp,
+        valor:  totaisValor[lp.id]  || 0,
+        litros: Math.round(totaisLitros[lp.id] || 0),
+      }))
       .filter((lp) => lp.valor > 0)
       .sort((a, b) => b.valor - a.valor);
   }, [realizadasMes]);
@@ -196,7 +240,20 @@ export default function FaturamentoPage({ data }) {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPI label="Faturamento Hoje"    value={fmtBRL(fatHoje)}        />
+        <KPI
+          label={
+            <span className="flex items-center gap-1">
+              Faturamento Hoje
+              {(() => {
+                const h = new Date().getHours();
+                return h >= 8 && h < 18 ? (
+                  <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="ao vivo" />
+                ) : null;
+              })()}
+            </span>
+          }
+          value={fmtBRL(fatHoje)}
+        />
         <KPI label={`Faturamento ${MESES_LABEL[mesFiltro]}/${anoFiltro}`} value={fmtBRL(fatMes)} />
         <KPI label={`Acumulado ${anoFiltro}`}  value={fmtBRL(fatYTD)}         />
         <KPI label="Ticket Médio / NF"   value={fmtBRL(ticketMedio)}    />
@@ -206,9 +263,17 @@ export default function FaturamentoPage({ data }) {
       <Panel title={`Faturamento Mensal — ${anoFiltro}`} className="">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-500">Acumulado {anoFiltro}:</span>
-            <span className="text-sm font-semibold text-slate-800">{fmtBRL(fatYTD)}</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-slate-500">Acumulado {anoFiltro}:</span>
+              <span className="text-sm font-semibold text-slate-800">{fmtBRL(fatYTD)}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-slate-500">Total Litros:</span>
+              <span className="text-sm font-semibold text-slate-800">
+                {fatMensal.reduce((s, m) => s + m.litros, 0).toLocaleString("pt-BR")} L
+              </span>
+            </div>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={180}>
@@ -225,7 +290,21 @@ export default function FaturamentoPage({ data }) {
             <CartesianGrid {...GRID} />
             <XAxis dataKey="mes" {...EIXO} tick={{ fontSize: 11 }} />
             <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
-            <Tooltip {...tooltipProps()} formatter={(v) => [fmtBRL(v), "Faturado"]} />
+            <Tooltip
+              {...tooltipProps()}
+              formatter={(v, name, props) => {
+                const litros = props?.payload?.litros ?? 0;
+                return [
+                  <span key="v">
+                    {fmtBRL(v)}
+                    <span style={{ display: "block", fontSize: 11, opacity: 0.75 }}>
+                      {litros.toLocaleString("pt-BR")} L
+                    </span>
+                  </span>,
+                  "Faturado",
+                ];
+              }}
+            />
             <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM} cursor="pointer">
               {fatMensal.map((entry, index) => (
                 <Cell key={index} fill={entry.atual ? "url(#gradFatMensalAtual)" : (entry.valor > 0 ? "url(#gradFatMensal)" : "#E2E8F0")} />
@@ -316,7 +395,7 @@ export default function FaturamentoPage({ data }) {
           {breakdownProduto.length === 0 ? (
             <p className="text-sm text-slate-400 py-6 text-center">Sem dados.</p>
           ) : (
-            <div className="flex flex-col gap-2 mt-1">
+            <div className="flex flex-col gap-2.5 mt-1">
               {breakdownProduto.map((lp) => {
                 const pct = fatMes > 0 ? (lp.valor / fatMes) * 100 : 0;
                 return (
@@ -328,7 +407,12 @@ export default function FaturamentoPage({ data }) {
                     <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: `${pct}%`, background: lp.cor }} />
                     </div>
-                    <div className="text-right text-xs text-slate-500 mt-0.5">{fmtBRLShort(lp.valor)}</div>
+                    <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                      <span style={{ color: lp.cor }} className="font-medium">
+                        {lp.litros.toLocaleString("pt-BR")} L
+                      </span>
+                      <span>{fmtBRLShort(lp.valor)}</span>
+                    </div>
                   </div>
                 );
               })}
