@@ -24,7 +24,6 @@ const LINHAS_PRODUTO = [
   { id: "pc1.01.01.03", label: "Vernizes e Stains",     cor: "#0EA5E9" },
   { id: "pc1.01.01.04", label: "Impermeabilizantes",    cor: "#6366F1" },
   { id: "pc1.01.01.05", label: "Texturas e Grafiato",   cor: "#8B5CF6" },
-  { id: "pc1.01.02",    label: "Serviços Técnicos",     cor: SEMANTIC.laranja },
 ];
 
 // ─── Recorrências sintéticas (contratos fixos mensais) ───────────────────────
@@ -35,7 +34,6 @@ const RECORRENCIAS_DEMO = [
   { id: "r2", descricao: "Pinturas Horizonte Engenharia — Contrato anual vernizes",              valor: 22500, diaVencimento: 20, contaId: "pc1.01.01.03", ativa: true },
   { id: "r3", descricao: "Max Construções Centro-Oeste — Impermeabilizantes trimestral",         valor: 31000, diaVencimento: 5,  contaId: "pc1.01.01.04", ativa: true },
   { id: "r4", descricao: "Distribuidora Cores do Nordeste — Repasse mensal linha industrial",    valor: 67000, diaVencimento: 28, contaId: "pc1.01.01.02", ativa: true },
-  { id: "r5", descricao: "Volare Empreendimentos — Serviços técnicos de aplicação",             valor: 15000, diaVencimento: 10, contaId: "pc1.01.02",    ativa: false },
 ];
 
 // Calcula próxima data de emissão a partir de hoje
