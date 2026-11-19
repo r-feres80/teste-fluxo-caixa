@@ -231,6 +231,21 @@ export default function DashboardPage({ data }) {
         <KpiCard label={t("kpi.caixaProjetado30")} value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
           tooltip="Projeção de caixa: parte do Caixa Disponível de hoje e soma/subtrai os títulos já cadastrados (Previsto/Vencido) com vencimento nos próximos 30 dias — não é o saldo real desses dias, é uma estimativa com a carteira atual." />
       </div>
+
+      {/* Horizonte de Caixa — Hoje / Semana / 15d / 30d / 60d / 90d */}
+      <div className="grid grid-cols-6 gap-3">
+        <KpiCard label="Hoje" value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub="Saldo disponível" basis="caixa" />
+        <KpiCard label="Semana (7d)" value={fmtBRL(resumo.caixa.projetado7dias)} tone={resumo.caixa.projetado7dias >= 0 ? "positive" : "negative"} sub="+7 dias" basis="caixa"
+          tooltip="Saldo projetado em 7 dias — títulos Previsto/Em aberto com vencimento nesse horizonte." />
+        <KpiCard label="15 dias" value={fmtBRL(resumo.caixa.projetado15dias)} tone={resumo.caixa.projetado15dias >= 0 ? "positive" : "negative"} sub="+15 dias" basis="caixa"
+          tooltip="Saldo projetado em 15 dias." />
+        <KpiCard label="30 dias" value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub="+30 dias" basis="caixa"
+          tooltip="Saldo projetado em 30 dias." />
+        <KpiCard label="60 dias" value={fmtBRL(resumo.caixa.projetado60dias)} tone={resumo.caixa.projetado60dias >= 0 ? "positive" : "negative"} sub="+60 dias" basis="caixa"
+          tooltip="Saldo projetado em 60 dias." />
+        <KpiCard label="90 dias" value={fmtBRL(resumo.caixa.projetado90dias)} tone={resumo.caixa.projetado90dias >= 0 ? "positive" : "negative"} sub="+90 dias" basis="caixa"
+          tooltip="Saldo projetado em 90 dias — horizonte de médio prazo, sensível à qualidade dos títulos Previsto cadastrados." />
+      </div>
       <div className="grid grid-cols-4 gap-4">
         <KpiCard label={t("kpi.receitaBrutaAno")} value={fmtBRL(resumo.dreYTD.receitaBruta)} tone="positive" basis="competencia"
           tooltip="Soma da Receita Bruta (DRE, regime de Competência) de todos os meses do ano corrente até hoje (Year-to-Date) — usa Data de Competência, não Data de Vencimento/Pagamento." />

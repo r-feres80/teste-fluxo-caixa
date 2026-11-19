@@ -56,6 +56,16 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
   const menor30 = menorPontoDaSerie(serie30);
   const caixaProjetado30 = serie30[serie30.length - 1]?.saldo ?? posicao.disponivel;
 
+  // Horizontes adicionais de projeção (7 / 15 / 60 / 90 dias)
+  const serie7  = buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel, dataReferencia, diasHorizonte: 7 });
+  const serie15 = buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel, dataReferencia, diasHorizonte: 15 });
+  const serie60 = buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel, dataReferencia, diasHorizonte: 60 });
+  const serie90 = buildFluxoCaixaDiario({ lancamentos: lancamentosFiltrados, saldoInicialConsolidado: posicao.disponivel, dataReferencia, diasHorizonte: 90 });
+  const caixaProjetado7  = serie7[serie7.length   - 1]?.saldo ?? posicao.disponivel;
+  const caixaProjetado15 = serie15[serie15.length - 1]?.saldo ?? posicao.disponivel;
+  const caixaProjetado60 = serie60[serie60.length - 1]?.saldo ?? posicao.disponivel;
+  const caixaProjetado90 = serie90[serie90.length - 1]?.saldo ?? posicao.disponivel;
+
   // DFC do mês corrente, para o waterfall executivo — mesmo cálculo/período
   // do DFC Gerencial (calcularDFC), nunca duplicado com lógica própria.
   // Comando DFC-caixa-real: caixaInicial é o Caixa Disponível (líquido), não
@@ -137,7 +147,11 @@ export function construirResumoExecutivo({ entidades, filtros, parametros }) {
     caixa: {
       disponivel: posicao.disponivel,
       totalConsolidado: posicao.total,
+      projetado7dias: caixaProjetado7,
+      projetado15dias: caixaProjetado15,
       projetado30dias: caixaProjetado30,
+      projetado60dias: caixaProjetado60,
+      projetado90dias: caixaProjetado90,
       menorPontoProjetado30dias: menor30 ?? null,
       serieDiaria30dias: serie30,
       indiceLiquidezCaixa: calcularIndiceLiquidezCaixa(posicao.disponivel, agingAP.totalCarteira),
