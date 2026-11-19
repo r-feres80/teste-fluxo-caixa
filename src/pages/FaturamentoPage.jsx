@@ -3,7 +3,6 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   ResponsiveContainer, Cell, PieChart, Pie, Legend,
 } from "recharts";
-import { RefreshCw } from "lucide-react";
 import { Panel, KPI, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { getDataAtualSistema } from "../utils/dateUtils.js";
@@ -26,26 +25,6 @@ const LINHAS_PRODUTO = [
   { id: "pc1.01.01.05", label: "Texturas e Grafiato",   cor: "#8B5CF6" },
 ];
 
-// ─── Recorrências sintéticas (contratos fixos mensais) ───────────────────────
-// Representam contratos de fornecimento recorrente — base para a engine
-// de faturamento automático (P3). Em produção virão do banco de dados.
-const RECORRENCIAS_DEMO = [
-  { id: "r1", descricao: "Construtora Delta Paulista — Fornecimento mensal tintas imobiliárias", valor: 48000, diaVencimento: 15, contaId: "pc1.01.01.01", ativa: true },
-  { id: "r2", descricao: "Pinturas Horizonte Engenharia — Contrato anual vernizes",              valor: 22500, diaVencimento: 20, contaId: "pc1.01.01.03", ativa: true },
-  { id: "r3", descricao: "Max Construções Centro-Oeste — Impermeabilizantes trimestral",         valor: 31000, diaVencimento: 5,  contaId: "pc1.01.01.04", ativa: true },
-  { id: "r4", descricao: "Distribuidora Cores do Nordeste — Repasse mensal linha industrial",    valor: 67000, diaVencimento: 28, contaId: "pc1.01.01.02", ativa: true },
-];
-
-// Calcula próxima data de emissão a partir de hoje
-function proximaEmissao(diaVencimento, hoje) {
-  const [ano, mes] = hoje.split("-").map(Number);
-  const diaAtual = Number(hoje.slice(8, 10));
-  const candidato = `${ano}-${String(mes).padStart(2, "0")}-${String(diaVencimento).padStart(2, "0")}`;
-  if (diaAtual <= diaVencimento) return candidato;
-  // já passou: próximo mês
-  const d = new Date(ano, mes, diaVencimento); // mes é 1-based aqui → Date usa 0-based, então mes = mes
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(diaVencimento).padStart(2, "0")}`;
-}
 
 export default function FaturamentoPage({ data }) {
   const hoje = getDataAtualSistema();
@@ -155,17 +134,33 @@ export default function FaturamentoPage({ data }) {
       .sort((a, b) => b.valor - a.valor);
   }, [realizadasMes]);
 
-  const nomeCliente = (l) => {
-    const c = entidades?.clientes?.find((x) => x.id === l.clienteFornecedorId);
-    return c?.nome || l.clienteFornecedorId || "—";
+  const nomeCliente = (id) => {
+    const c = entidades?.clientes?.find((x) => x.id === id);
+    return c?.nome || id || "—";
   };
   const nomeConta = (id) => LINHAS_PRODUTO.find((x) => x.id === id)?.label || id;
 
-  // ── Recorrências ─────────────────────────────────────────────────────────
-  const recorrencias = RECORRENCIAS_DEMO.map((r) => ({
-    ...r,
-    proximaData: proximaEmissao(r.diaVencimento, hoje),
-  }));
+  // ── Breakdown por cliente ─────────────────────────────────────────────────
+  const breakdownClientes = useMemo(() => {
+    const totais = {};
+    realizadasMes.forEach((l) => {
+      if (!l.clienteFornecedorId) return;
+      if (!totais[l.clienteFornecedorId]) {
+        totais[l.clienteFornecedorId] = { valor: 0, contaId: l.contaGerencialId };
+      }
+      totais[l.clienteFornecedorId].valor += l.valor;
+    });
+    const total = Object.values(totais).reduce((acc, d) => acc + d.valor, 0);
+    return Object.entries(totais)
+      .map(([id, d]) => ({
+        id,
+        valor: d.valor,
+        contaId: d.contaId,
+        pct: total > 0 ? (d.valor / total) * 100 : 0,
+      }))
+      .sort((a, b) => b.valor - a.valor);
+  }, [realizadasMes]);
+
 
 
   return (
@@ -299,7 +294,7 @@ export default function FaturamentoPage({ data }) {
           )}
         </Panel>
 
-        <Panel title="Por Linha de Produto">
+        <Panel title={`Por Linha de Produto — ${MESES_LABEL[mesFiltro]}/${anoFiltro}`}>
           {breakdownProduto.length === 0 ? (
             <p className="text-sm text-slate-400 py-6 text-center">Sem dados.</p>
           ) : (
@@ -324,42 +319,45 @@ export default function FaturamentoPage({ data }) {
         </Panel>
       </div>
 
-      {/* Contratos recorrentes */}
-      <Panel title="Faturamento Recorrente — Contratos Ativos">
-        <div className="flex items-center gap-2 mb-3 text-xs text-slate-500 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
-          <RefreshCw size={13} className="shrink-0 text-blue-400" />
-          <span>Engine de recorrência P3 — próximas emissões calculadas a partir de hoje ({fmtData(hoje)}). Em produção, os lançamentos serão gerados automaticamente.</span>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-100">
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Descrição</th>
-                <th className="text-right py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Valor</th>
-                <th className="text-left py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Conta</th>
-                <th className="text-center py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Próxima Emissão</th>
-                <th className="text-center py-2 px-2 text-xs font-semibold text-slate-500 uppercase">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recorrencias.map((r) => (
-                <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                  <td className="py-2 px-2 text-slate-700">{r.descricao}</td>
-                  <td className="py-2 px-2 text-right font-medium text-slate-800">{fmtBRL(r.valor)}</td>
-                  <td className="py-2 px-2 text-slate-500 text-xs">{nomeConta(r.contaId)}</td>
-                  <td className="py-2 px-2 text-center text-slate-600">{fmtData(r.proximaData)}</td>
-                  <td className="py-2 px-2 text-center">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                      r.ativa ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
-                    }`}>
-                      {r.ativa ? "Ativo" : "Inativo"}
-                    </span>
-                  </td>
+      {/* Clientes Faturados */}
+      <Panel title={`Clientes Faturados — ${MESES_LABEL[mesFiltro]}/${anoFiltro}`}>
+        {breakdownClientes.length === 0 ? (
+          <p className="text-sm text-slate-400 py-6 text-center">Sem dados para o período.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide pb-2 pr-4">Cliente</th>
+                  <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wide pb-2 pr-4">Linha Principal</th>
+                  <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wide pb-2 pr-4">Valor</th>
+                  <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wide pb-2">% do Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {breakdownClientes.map((c, idx) => (
+                  <tr key={c.id} className={idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
+                    <td className="py-2 pr-4 font-medium text-slate-800">{nomeCliente(c.id)}</td>
+                    <td className="py-2 pr-4 text-slate-500 text-xs">{nomeConta(c.contaId)}</td>
+                    <td className="py-2 pr-4 text-right font-semibold text-slate-800">{fmtBRL(c.valor)}</td>
+                    <td className="py-2 text-right">
+                      <span className={`inline-block text-xs font-medium px-1.5 py-0.5 rounded ${c.pct >= 20 ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600"}`}>
+                        {c.pct.toFixed(1)}%
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t border-slate-200">
+                  <td colSpan={2} className="pt-2 text-xs text-slate-500 font-medium">{breakdownClientes.length} cliente{breakdownClientes.length !== 1 ? "s" : ""}</td>
+                  <td className="pt-2 text-right font-bold text-slate-800">{fmtBRL(breakdownClientes.reduce((s, c) => s + c.valor, 0))}</td>
+                  <td className="pt-2 text-right text-xs font-medium text-slate-600">100%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
       </Panel>
 
     </div>
