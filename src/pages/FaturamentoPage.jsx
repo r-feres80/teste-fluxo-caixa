@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
-  ResponsiveContainer, Cell, PieChart, Pie, Legend,
+  ResponsiveContainer, Cell, ReferenceLine, ComposedChart, Line,
 } from "recharts";
 import { Panel, KPI, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
@@ -157,17 +157,67 @@ export default function FaturamentoPage({ data }) {
   const varYoY  = fatAnoAnteriorMes > 0 ? ((fatMes - fatAnoAnteriorMes) / fatAnoAnteriorMes) * 100 : null;
   const varYTD  = fatAnoAnteriorYTD > 0 ? ((fatYTD - fatAnoAnteriorYTD) / fatAnoAnteriorYTD) * 100 : null;
 
-  // ── Gráfico diário do mês selecionado ────────────────────────────────────
+  // ── Gráfico diário — auto-fill dias úteis sem lançamento ─────────────────
   const graficoDiario = useMemo(() => {
-    const map = {};
+    // 1. Mapeia dias com dados reais
+    const mapReal = {};
     realizadasMes.forEach((l) => {
       const dia = l.dataPagamento.slice(8, 10);
-      map[dia] = (map[dia] || 0) + l.valor;
+      mapReal[dia] = (mapReal[dia] || 0) + l.valor;
     });
-    return Object.entries(map)
-      .sort(([a], [b]) => Number(a) - Number(b))
-      .map(([dia, valor]) => ({ dia: `${dia}/${String(mesFiltro + 1).padStart(2, "0")}`, valor }));
-  }, [realizadasMes, mesFiltro]);
+
+    // 2. Limite de dias a exibir
+    const ultimoDia = new Date(anoFiltro, mesFiltro + 1, 0).getDate();
+    const isMesAtual = anoFiltro === anoAtualSistema && mesFiltro === mesAtualSistema;
+    const diaHoje    = Number(hojePfx.slice(8, 10));
+    const diaFim     = isMesAtual ? diaHoje : ultimoDia;
+
+    // 3. Média diária dos dias com dados reais (exclui outliers >3× média)
+    const valoresReais = Object.values(mapReal);
+    const somaReal     = valoresReais.reduce((s, v) => s + v, 0);
+    const mediaRaw     = valoresReais.length > 0 ? somaReal / valoresReais.length : 0;
+    const semOutlier   = valoresReais.filter((v) => v <= mediaRaw * 3);
+    const mediaDia     = semOutlier.length > 0
+      ? semOutlier.reduce((s, v) => s + v, 0) / semOutlier.length
+      : mediaRaw;
+
+    // 4. Monta série completa de dias úteis
+    const result = [];
+    for (let d = 1; d <= diaFim; d++) {
+      const diaSemana = new Date(anoFiltro, mesFiltro, d).getDay();
+      if (diaSemana === 0 || diaSemana === 6) continue; // sem fim de semana
+
+      const dStr     = String(d).padStart(2, "0");
+      const label    = `${dStr}/${String(mesFiltro + 1).padStart(2, "0")}`;
+      const hasReal  = mapReal[dStr] !== undefined;
+      const isHoje   = isMesAtual && d === diaHoje;
+
+      // Fator seeded: consistente por dia, variação ±25%
+      const seed  = Math.abs(Math.sin(d * 13.7 + mesFiltro * 7.3));
+      const fator = 0.75 + seed * 0.5;
+      const valor = hasReal ? mapReal[dStr] : Math.round(mediaDia * fator);
+
+      result.push({ dia: label, valor, estimado: !hasReal && !isHoje, isHoje });
+    }
+    return result;
+  }, [realizadasMes, mesFiltro, anoFiltro, anoAtualSistema, mesAtualSistema, hojePfx]);
+
+  // ── Projeção fim de mês (para mês em andamento) ───────────────────────────
+  const projecaoMesFim = useMemo(() => {
+    if (!mesEmAndamento || fatMes === 0) return null;
+    const diaHoje    = Number(hojePfx.slice(8, 10));
+    const ultimoDia  = new Date(anoFiltro, mesFiltro + 1, 0).getDate();
+    // Dias úteis corridos até hoje vs total do mês
+    let uteisCorridos = 0, uteisTotais = 0;
+    for (let d = 1; d <= ultimoDia; d++) {
+      const ds = new Date(anoFiltro, mesFiltro, d).getDay();
+      if (ds === 0 || ds === 6) continue;
+      uteisTotais++;
+      if (d <= diaHoje) uteisCorridos++;
+    }
+    if (uteisCorridos === 0) return null;
+    return Math.round((fatMes / uteisCorridos) * uteisTotais);
+  }, [fatMes, mesEmAndamento, hojePfx, anoFiltro, mesFiltro]);
 
   // ── Breakdown por linha de produto ───────────────────────────────────────
   const breakdownProduto = useMemo(() => {
@@ -256,7 +306,7 @@ export default function FaturamentoPage({ data }) {
         />
         <KPI label={`Faturamento ${MESES_LABEL[mesFiltro]}/${anoFiltro}`} value={fmtBRL(fatMes)} />
         <KPI label={`Acumulado ${anoFiltro}`}  value={fmtBRL(fatYTD)}         />
-        <KPI label="Ticket Médio / NF"   value={fmtBRL(ticketMedio)}    />
+        <KPI label="Ticket Médio — Mês"   value={fmtBRL(ticketMedio)}    />
       </div>
 
       {/* P-FAT-1 — Faturamento mensal acumulado (todos os meses do ano) */}
@@ -310,63 +360,77 @@ export default function FaturamentoPage({ data }) {
                 <Cell key={index} fill={entry.atual ? "url(#gradFatMensalAtual)" : (entry.valor > 0 ? "url(#gradFatMensal)" : "#E2E8F0")} />
               ))}
             </Bar>
+            {projecaoMesFim && (
+              <ReferenceLine
+                y={projecaoMesFim}
+                stroke={SEMANTIC.laranja}
+                strokeDasharray="5 3"
+                strokeWidth={1.5}
+                label={{ value: `Proj: ${fmtBRLShort(projecaoMesFim)}`, position: "insideTopRight", fontSize: 10, fill: SEMANTIC.laranja }}
+              />
+            )}
           </BarChart>
         </ResponsiveContainer>
       </Panel>
 
-      {/* P-FAT-2 — Comparativo Mês / Ano anterior */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          {
-            label: `M/M — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
-            valor: fatMesAnterior,
-            atual: fatMes,
-            variacao: varMMA,
-            parcial: mesEmAndamento,
-          },
-          {
-            label: `A/A — vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
-            valor: fatAnoAnteriorMes,
-            atual: fatMes,
-            variacao: varYoY,
-            parcial: mesEmAndamento,
-          },
-          {
-            label: `Acum. ${anoFiltro} vs ${anoFiltro - 1}`,
-            valor: fatAnoAnteriorYTD,
-            atual: fatYTD,
-            variacao: varYTD,
-            parcial: mesEmAndamento,
-          },
-        ].map(({ label, valor, atual, variacao, parcial }) => {
-          const delta = atual - valor;
-          const positivo = variacao != null && variacao >= 0;
-          const semDados = variacao === null;
-          return (
-            <div key={label} className="bg-white border border-slate-100 rounded-xl p-4 flex flex-col gap-2 shadow-sm">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide leading-tight">{label}</span>
-                {parcial && <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">em andamento</span>}
-              </div>
-              <div className="flex items-end justify-between gap-2">
-                <div>
-                  <div className="text-lg font-bold text-slate-800">{fmtBRL(atual)}</div>
-                  <div className="text-xs text-slate-400 mt-0.5">Anterior: {valor > 0 ? fmtBRL(valor) : "—"}</div>
+      {/* P-FAT-2 — Comparativo consolidado */}
+      <Panel title="Comparativo de Faturamento">
+        <div className="flex flex-col divide-y divide-slate-100">
+          {[
+            {
+              label: `M/M — vs ${MESES_LABEL[mesFiltro === 0 ? 11 : mesFiltro - 1]}/${mesFiltro === 0 ? anoFiltro - 1 : anoFiltro}`,
+              valor: fatMesAnterior,
+              atual: fatMes,
+              variacao: varMMA,
+            },
+            {
+              label: `A/A — vs ${MESES_LABEL[mesFiltro]}/${anoFiltro - 1}`,
+              valor: fatAnoAnteriorMes,
+              atual: fatMes,
+              variacao: varYoY,
+            },
+            {
+              label: `Acum. ${anoFiltro} vs ${anoFiltro - 1} (Jan–${MESES_LABEL_CURTO[mesFiltro]})`,
+              valor: fatAnoAnteriorYTD,
+              atual: fatYTD,
+              variacao: varYTD,
+            },
+          ].map(({ label, valor, atual, variacao }) => {
+            const delta    = atual - valor;
+            const positivo = variacao != null && variacao >= 0;
+            const semDados = variacao === null;
+            return (
+              <div key={label} className="flex items-center justify-between py-3 gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wide truncate">{label}</div>
+                  <div className="flex items-baseline gap-2 mt-0.5">
+                    <span className="text-base font-bold text-slate-800">{fmtBRL(atual)}</span>
+                    <span className="text-xs text-slate-400">ant: {valor > 0 ? fmtBRL(valor) : "—"}</span>
+                  </div>
                 </div>
                 {semDados ? (
                   <span className="text-xs text-slate-400 italic">sem dados</span>
                 ) : (
-                  <div className={`flex flex-col items-end gap-0.5 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
-                    <span className="text-xl font-bold leading-none">{positivo ? "▲" : "▼"}</span>
-                    <span className="text-sm font-semibold">{Math.abs(variacao).toFixed(1)}%</span>
-                    <span className="text-xs">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
+                  <div className={`flex items-center gap-1.5 shrink-0 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
+                    <span className="text-base font-bold">{positivo ? "▲" : "▼"} {Math.abs(variacao).toFixed(1)}%</span>
+                    <span className="text-xs font-medium">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
                   </div>
                 )}
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+        {mesEmAndamento && (
+          <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
+            <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">mês em andamento</span>
+            {projecaoMesFim && (
+              <span className="text-xs text-slate-500">
+                Projeção final: <span className="font-semibold text-slate-700">{fmtBRL(projecaoMesFim)}</span>
+              </span>
+            )}
+          </div>
+        )}
+      </Panel>
 
       {/* Gráfico diário + Breakdown produto */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -374,20 +438,54 @@ export default function FaturamentoPage({ data }) {
           {graficoDiario.length === 0 ? (
             <p className="text-sm text-slate-400 py-6 text-center">Sem dados para o período.</p>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
-                    {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
-                  </linearGradient>
-                </defs>
-                <CartesianGrid {...GRID} />
-                <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
-                <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
-                <Tooltip {...tooltipProps()} formatter={(v) => [fmtBRL(v), "Faturado"]} />
-                <Bar dataKey="valor" fill="url(#gradFat)" radius={RAIO_BARRA} {...ANIM} />
-              </BarChart>
-            </ResponsiveContainer>
+            <>
+              {/* Legenda */}
+              <div className="flex items-center gap-4 mb-2">
+                <span className="flex items-center gap-1 text-xs text-slate-500">
+                  <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: BRAND.azul }} /> Realizado
+                </span>
+                <span className="flex items-center gap-1 text-xs text-slate-500">
+                  <span className="inline-block w-2.5 h-2.5 rounded-sm bg-slate-300" /> Estimado
+                </span>
+                {mesEmAndamento && (
+                  <span className="flex items-center gap-1 text-xs text-slate-500">
+                    <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: SEMANTIC.laranja }} /> Hoje
+                  </span>
+                )}
+              </div>
+              <ResponsiveContainer width="100%" height={210}>
+                <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
+                      {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
+                    </linearGradient>
+                    <linearGradient id="gradFatHoje" x1="0" y1="0" x2="0" y2="1">
+                      {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...GRID} />
+                  <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
+                  <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
+                  <Tooltip
+                    {...tooltipProps()}
+                    formatter={(v, _name, props) => {
+                      const item = props?.payload;
+                      const sufixo = item?.estimado ? " (est.)" : item?.isHoje ? " (hoje)" : "";
+                      return [fmtBRL(v) + sufixo, "Faturado"];
+                    }}
+                  />
+                  <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM}>
+                    {graficoDiario.map((entry, i) => (
+                      <Cell
+                        key={i}
+                        fill={entry.isHoje ? "url(#gradFatHoje)" : entry.estimado ? "#CBD5E1" : "url(#gradFat)"}
+                        fillOpacity={entry.estimado ? 0.75 : 1}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </>
           )}
         </Panel>
 
