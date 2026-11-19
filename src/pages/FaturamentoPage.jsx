@@ -86,6 +86,22 @@ export default function FaturamentoPage({ data }) {
   );
   const ticketMedio = realizadasMes.length > 0 ? fatMes / realizadasMes.length : 0;
 
+  // ── Orçamento por mês (precisa estar antes de fatMensal — evitar TDZ) ─────
+  const orcItens = useMemo(
+    () => (entidades?.orcamentoItens ?? []).filter(
+      (o) => o.ano === anoFiltro && o.contaGerencialId.startsWith("pc1.01.01")
+    ),
+    [entidades?.orcamentoItens, anoFiltro]
+  );
+
+  const orcPorMes = useMemo(() => {
+    const map = {};
+    orcItens.forEach((o) => {
+      map[o.mes] = (map[o.mes] || 0) + o.valor;
+    });
+    return map;
+  }, [orcItens]);
+
   // ── Faturamento mensal acumulado (todos os meses do ano) ──────────────────
   const fatMensal = useMemo(() => {
     const mapValor = {}, mapLitros = {}, mapMeta = {};
@@ -119,9 +135,10 @@ export default function FaturamentoPage({ data }) {
       valor:  mapValor[i]  || 0,
       litros: Math.round(mapLitros[i] || 0),
       meta:   mapMeta[i]   || null, // referência ano anterior
+      orcado: orcPorMes[i] || 0,
       atual:  i === mesFiltro,
     }));
-  }, [entradas, anoFiltro, mesFiltro, anoAtualSistema, mesAtualSistema]);
+  }, [entradas, anoFiltro, mesFiltro, anoAtualSistema, mesAtualSistema, orcPorMes]);
 
   // ── Comparativo Mês/Ano anterior ─────────────────────────────────────────
   const mesAnteriorPfx = (() => {
@@ -154,6 +171,18 @@ export default function FaturamentoPage({ data }) {
   const varMMA  = fatMesAnterior  > 0 ? ((fatMes - fatMesAnterior)  / fatMesAnterior)  * 100 : null;
   const varYoY  = fatAnoAnteriorMes > 0 ? ((fatMes - fatAnoAnteriorMes) / fatAnoAnteriorMes) * 100 : null;
   const varYTD  = fatAnoAnteriorYTD > 0 ? ((fatYTD - fatAnoAnteriorYTD) / fatAnoAnteriorYTD) * 100 : null;
+
+  // ── Orçamento vs Realizado (orcItens/orcPorMes declarados acima de fatMensal) ─
+  const orcMes = orcPorMes[mesFiltro] ?? 0;
+
+  const orcYTD = useMemo(
+    () => Array.from({ length: mesFiltro + 1 }, (_, i) => orcPorMes[i] || 0)
+              .reduce((s, v) => s + v, 0),
+    [orcPorMes, mesFiltro]
+  );
+
+  const varOrcMes = orcMes > 0 ? ((fatMes - orcMes) / orcMes) * 100 : null;
+  const varOrcYTD = orcYTD > 0 ? ((fatYTD - orcYTD) / orcYTD) * 100 : null;
 
   // ── Gráfico diário — apenas dias com lançamento real (+ hoje) ───────────
   const graficoDiario = useMemo(() => {
@@ -315,12 +344,17 @@ export default function FaturamentoPage({ data }) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4 flex-wrap">
             <span className="text-xs text-slate-500">Clique no mês para filtrar</span>
-            {fatMensal.some(m => m.meta) && (
+            {orcMes > 0 || fatMensal.some(m => m.orcado > 0) ? (
+              <span className="flex items-center gap-1 text-xs text-slate-400">
+                <span className="inline-block w-6 border-t-2 border-dashed" style={{ borderColor: "#F59E0B" }} />
+                Orçado {anoFiltro}
+              </span>
+            ) : fatMensal.some(m => m.meta) ? (
               <span className="flex items-center gap-1 text-xs text-slate-400">
                 <span className="inline-block w-6 border-t border-dashed" style={{ borderColor: "#8B5CF6" }} />
                 Meta ({anoFiltro - 1})
               </span>
-            )}
+            ) : null}
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
@@ -355,14 +389,16 @@ export default function FaturamentoPage({ data }) {
             <Tooltip
               {...tooltipProps()}
               formatter={(v, name, props) => {
+                if (name === "orcado") return v ? [fmtBRL(v), `Orçado ${anoFiltro}`] : [null, null];
                 if (name === "meta") return v ? [fmtBRL(v), `Meta (${anoFiltro - 1})`] : [null, null];
                 const litros = props?.payload?.litros ?? 0;
-                const bateu  = props?.payload?.meta && v >= props.payload.meta;
+                const orcRef = props?.payload?.orcado;
+                const bateu  = orcRef > 0 ? v >= orcRef : (props?.payload?.meta && v >= props.payload.meta);
                 return [
                   <span key="v">
                     {fmtBRL(v)}
                     {litros > 0 && <span style={{ display: "block", fontSize: 11, opacity: 0.75 }}>{litros.toLocaleString("pt-BR")} L</span>}
-                    {bateu && <span style={{ display: "block", fontSize: 11, color: SEMANTIC.verde }}>✓ meta superada</span>}
+                    {bateu && <span style={{ display: "block", fontSize: 11, color: SEMANTIC.verde }}>✓ orçamento atingido</span>}
                   </span>,
                   "Faturado",
                 ];
@@ -379,8 +415,22 @@ export default function FaturamentoPage({ data }) {
                 return <Cell key={index} fill={fill} />;
               })}
             </Bar>
-            {/* Linha de meta (ano anterior) */}
-            {fatMensal.some(m => m.meta) && (
+            {/* Linha de orçado (orçamento do ano corrente) */}
+            {fatMensal.some(m => m.orcado > 0) && (
+              <Line
+                dataKey="orcado"
+                type="monotone"
+                stroke="#F59E0B"
+                strokeWidth={2}
+                strokeDasharray="6 3"
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls={true}
+                name="orcado"
+              />
+            )}
+            {/* Linha de meta (ano anterior) — fallback quando não há orçamento */}
+            {!fatMensal.some(m => m.orcado > 0) && fatMensal.some(m => m.meta) && (
               <Line
                 dataKey="meta"
                 type="monotone"
@@ -397,8 +447,63 @@ export default function FaturamentoPage({ data }) {
         </ResponsiveContainer>
       </Panel>
 
-      {/* P-FAT-2 — Comparativo consolidado — 3 KPI tiles independentes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* P-FAT-2 — Comparativo consolidado — 2 cards Orçado + 3 KPI tiles */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Cards Realizado vs Orçado */}
+        {[
+          {
+            key: "orc-mes",
+            titulo: `Realizado vs Orçado`,
+            label: `${MESES_LABEL[mesFiltro]}/${anoFiltro}`,
+            orçado: orcMes,
+            atual: fatMes,
+            variacao: varOrcMes,
+            showAndamento: mesEmAndamento,
+            destaque: true,
+          },
+          {
+            key: "orc-ytd",
+            titulo: `Acum. vs Orçado`,
+            label: `Jan–${MESES_LABEL_CURTO[mesFiltro]}/${anoFiltro}`,
+            orçado: orcYTD,
+            atual: fatYTD,
+            variacao: varOrcYTD,
+            showAndamento: mesEmAndamento,
+            destaque: true,
+          },
+        ].map(({ key, titulo, label, orçado, atual, variacao, showAndamento, destaque }) => {
+          const delta    = atual - orçado;
+          const positivo = variacao != null && variacao >= 0;
+          const semDados = variacao === null || orçado === 0;
+          return (
+            <div key={key} className={`rounded-xl border shadow-sm p-4 flex flex-col gap-2 ${destaque ? "bg-amber-50 border-amber-200" : "bg-white border-slate-200"}`}>
+              <div>
+                <div className="text-[11px] font-semibold text-amber-700 uppercase tracking-widest">{titulo}</div>
+                <div className="text-xs text-amber-600 mt-0.5">{label}</div>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl font-extrabold text-slate-800 tabular-nums">{fmtBRL(atual)}</span>
+              </div>
+              <div className="text-xs text-slate-400">
+                orçado: <span className="font-medium text-amber-700">{orçado > 0 ? fmtBRL(orçado) : "—"}</span>
+              </div>
+              {semDados ? (
+                <span className="text-xs text-slate-400 italic">sem orçamento</span>
+              ) : (
+                <div className={`flex items-center gap-2 mt-auto pt-2 border-t border-amber-100 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
+                  <span className="text-lg font-bold">{positivo ? "▲" : "▼"}{Math.abs(variacao).toFixed(1)}%</span>
+                  <span className="text-sm font-semibold">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
+                </div>
+              )}
+              {showAndamento && (
+                <div>
+                  <span className="text-[10px] font-medium bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded">mês em andamento</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {/* Cards M/M, A/A, Acum. YoY */}
         {[
           {
             key: "mm",
