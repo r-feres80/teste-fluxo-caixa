@@ -197,7 +197,8 @@ export default function FaturamentoPage({ data }) {
       const fator = 0.75 + seed * 0.5;
       const valor = hasReal ? mapReal[dStr] : Math.round(mediaDia * fator);
 
-      result.push({ dia: label, valor, estimado: !hasReal && !isHoje, isHoje });
+      const isOutlier = hasReal && mapReal[dStr] > mediaDia * 3;
+      result.push({ dia: label, valor, estimado: !hasReal && !isHoje, isHoje, isOutlier });
     }
     return result;
   }, [realizadasMes, mesFiltro, anoFiltro, anoAtualSistema, mesAtualSistema, hojePfx]);
@@ -440,7 +441,7 @@ export default function FaturamentoPage({ data }) {
           ) : (
             <>
               {/* Legenda */}
-              <div className="flex items-center gap-4 mb-2">
+              <div className="flex items-center gap-4 mb-2 flex-wrap">
                 <span className="flex items-center gap-1 text-xs text-slate-500">
                   <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: BRAND.azul }} /> Realizado
                 </span>
@@ -452,39 +453,66 @@ export default function FaturamentoPage({ data }) {
                     <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: SEMANTIC.laranja }} /> Hoje
                   </span>
                 )}
+                {graficoDiario.some((d) => d.isOutlier) && (
+                  <span className="flex items-center gap-1 text-xs text-slate-400">
+                    <span className="inline-block w-2.5 h-2.5 rounded-sm bg-slate-400" /> Pico (fora de escala)
+                  </span>
+                )}
               </div>
-              <ResponsiveContainer width="100%" height={210}>
-                <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
-                      {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
-                    </linearGradient>
-                    <linearGradient id="gradFatHoje" x1="0" y1="0" x2="0" y2="1">
-                      {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid {...GRID} />
-                  <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
-                  <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} />
-                  <Tooltip
-                    {...tooltipProps()}
-                    formatter={(v, _name, props) => {
-                      const item = props?.payload;
-                      const sufixo = item?.estimado ? " (est.)" : item?.isHoje ? " (hoje)" : "";
-                      return [fmtBRL(v) + sufixo, "Faturado"];
-                    }}
-                  />
-                  <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM}>
-                    {graficoDiario.map((entry, i) => (
-                      <Cell
-                        key={i}
-                        fill={entry.isHoje ? "url(#gradFatHoje)" : entry.estimado ? "#CBD5E1" : "url(#gradFat)"}
-                        fillOpacity={entry.estimado ? 0.75 : 1}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              {/* Calcula yMax excluindo outliers (picos >3× média) da escala */}
+              {(() => {
+                const semOutliers = graficoDiario.filter((d) => !d.isOutlier).map((d) => d.valor);
+                const yMax = semOutliers.length > 0
+                  ? Math.max(...semOutliers) * 1.35
+                  : Math.max(...graficoDiario.map((d) => d.valor)) * 1.1;
+                const temOutlier = graficoDiario.some((d) => d.isOutlier);
+                return (
+                  <>
+                    {temOutlier && (
+                      <div className="text-xs text-slate-400 mb-1">
+                        ⚠ Pico fora de escala em {graficoDiario.find((d) => d.isOutlier)?.dia} — valor real no tooltip
+                      </div>
+                    )}
+                    <ResponsiveContainer width="100%" height={210}>
+                      <BarChart data={graficoDiario} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                        <defs>
+                          <linearGradient id="gradFat" x1="0" y1="0" x2="0" y2="1">
+                            {gradienteBarraStops(BRAND.azul).map((s) => <stop key={s.offset} {...s} />)}
+                          </linearGradient>
+                          <linearGradient id="gradFatHoje" x1="0" y1="0" x2="0" y2="1">
+                            {gradienteBarraStops(SEMANTIC.laranja).map((s) => <stop key={s.offset} {...s} />)}
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid {...GRID} />
+                        <XAxis dataKey="dia" {...EIXO} tick={{ fontSize: 10 }} />
+                        <YAxis {...EIXO} tickFormatter={fmtBRLShort} width={62} domain={[0, yMax]} />
+                        <Tooltip
+                          {...tooltipProps()}
+                          formatter={(v, _name, props) => {
+                            const item = props?.payload;
+                            const sufixo = item?.isOutlier ? " ⚠ pico" : item?.estimado ? " (est.)" : item?.isHoje ? " (hoje)" : "";
+                            return [fmtBRL(v) + sufixo, "Faturado"];
+                          }}
+                        />
+                        <Bar dataKey="valor" radius={RAIO_BARRA} {...ANIM}>
+                          {graficoDiario.map((entry, i) => (
+                            <Cell
+                              key={i}
+                              fill={
+                                entry.isOutlier ? "#94A3B8"
+                                : entry.isHoje   ? "url(#gradFatHoje)"
+                                : entry.estimado ? "#CBD5E1"
+                                : "url(#gradFat)"
+                              }
+                              fillOpacity={entry.estimado ? 0.75 : 1}
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </>
+                );
+              })()}
             </>
           )}
         </Panel>
