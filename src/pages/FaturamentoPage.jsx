@@ -12,6 +12,11 @@ import {
   GRID, EIXO, ANIM, RAIO_BARRA,
 } from "../utils/chartTheme.js";
 
+// ─── Constantes de período ────────────────────────────────────────────────────
+const ANOS = [2024, 2025, 2026, 2027];
+const MESES_LABEL = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const MESES_LABEL_CURTO = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+
 // ─── Plano de contas de receita ───────────────────────────────────────────────
 const LINHAS_PRODUTO = [
   { id: "pc1.01.01.01", label: "Tintas Imobiliárias",   cor: BRAND.azul },
@@ -164,9 +169,6 @@ export default function FaturamentoPage({ data }) {
     proximaData: proximaEmissao(r.diaVencimento, hoje),
   }));
 
-  const ANOS = [2024, 2025, 2026, 2027];
-  const MESES_LABEL = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-  const MESES_LABEL_CURTO = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 
   return (
     <div className="flex flex-col gap-6">
