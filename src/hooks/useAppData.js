@@ -7,6 +7,7 @@ import { calcularSweepCaixa, calcularResgateAutomatico } from "../financial-engi
 import {
   demoEmpresas, demoUnidades, demoClientes, demoFornecedores, demoBancos,
   demoContasBancarias, demoProjetos, demoPlanoDeContas, demoCentrosCusto, demoLancamentos, demoCartoes, demoDespesasCartao, demoOrcamentoItens,
+  DEMO_DATA_VERSION,
 } from "../data/demoData.js";
 
 // Fábrica (nunca um objeto único compartilhado): o importador cria Empresa/
@@ -76,7 +77,7 @@ export function useAppData() {
         // 100% dado fictício (nunca real do usuário), é seguro regenerar
         // silenciosamente aqui — nunca faríamos isso se origemBase for
         // "usuario".
-        if (s.origemBase === "demo" && s.demoGeradoEm !== HOJE_ISO) {
+        if (s.origemBase === "demo" && (s.demoGeradoEm !== HOJE_ISO || s.demoDataVersion !== DEMO_DATA_VERSION)) {
           const fresco = demoFresco();
           origemBaseRef.current = fresco.origemBase;
           // Achado do comando sweep-automatico-b: essa regeneração silenciosa
@@ -130,6 +131,7 @@ export function useAppData() {
       await storageService.setItem(STORAGE_KEY, {
         entidades, filtros, parametros, lastUpdated: now,
         origemBase: origemBaseRef.current, demoGeradoEm: origemBaseRef.current === "demo" ? HOJE_ISO : undefined,
+        demoDataVersion: origemBaseRef.current === "demo" ? DEMO_DATA_VERSION : undefined,
       });
       setLastUpdated(now);
       setSavedFlash(true);

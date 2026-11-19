@@ -2,6 +2,11 @@
 // Construído para exercitar toda a hierarquia de Plano de Contas e Centro
 // de Custo desde a Fase 1. Lançamentos reais de movimento entram na Fase 2.
 
+// Versão do bundle de dados demo. Incrementar sempre que lancamentosImportados.json
+// ou qualquer dado demo for atualizado. useAppData verifica na carga: se o valor
+// armazenado no localStorage difere deste, força regeneração automática do demoFresco().
+export const DEMO_DATA_VERSION = "2026-11-19-v3";
+
 import lancamentosImportadosRaw from "./lancamentosImportados.json" with { type: "json" };
 import clientesImportados from "./clientesImportados.json" with { type: "json" };
 import fornecedoresImportados from "./fornecedoresImportados.json" with { type: "json" };
