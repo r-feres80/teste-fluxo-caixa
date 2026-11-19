@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   ResponsiveContainer, Cell, ReferenceLine, ComposedChart, Line,
@@ -61,41 +61,12 @@ export default function FaturamentoPage({ data }) {
     [entidades?.lancamentos]
   );
 
-  // ── Faturamento Hoje ao vivo (simulado durante horário comercial 8h–18h) ──
-  const fatHojeBase = useMemo(
+  // ── Faturamento Hoje — valor real realizado (mesmo critério do Dashboard) ──
+  const fatHoje = useMemo(
     () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento === hojePfx)
                   .reduce((s, l) => s + l.valor, 0),
     [entradas, hojePfx]
   );
-
-  const calcFatHojeAoVivo = () => {
-    const agora = new Date();
-    const h = agora.getHours();
-    const m = agora.getMinutes();
-    const s = agora.getSeconds();
-    const minutos = h * 60 + m + s / 60;
-    const INICIO = 8 * 60;   // 8h
-    const FIM    = 18 * 60;  // 18h
-    const RANGE  = FIM - INICIO; // 600 min
-
-    if (minutos < INICIO) return fatHojeBase;
-    if (minutos >= FIM)   return fatHojeBase;
-
-    const progresso = Math.min((minutos - INICIO) / RANGE, 1);
-    // Meta diária estimada = média dos dias do mês × 1.0 (mantém realismo)
-    const metaDia = fatHojeBase > 0 ? fatHojeBase : 20870;
-    // Valor acumulado simulado: progresso × meta + jitter pequeno
-    const jitter = Math.sin(minutos * 0.3) * metaDia * 0.015;
-    return Math.max(0, Math.round(metaDia * progresso + jitter));
-  };
-
-  const [fatHoje, setFatHoje] = useState(() => calcFatHojeAoVivo());
-
-  useEffect(() => {
-    const timer = setInterval(() => setFatHoje(calcFatHojeAoVivo()), 120_000); // atualiza a cada 2 min
-    return () => clearInterval(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fatHojeBase]);
 
   const fatMes = useMemo(
     () => entradas.filter((l) => l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoMesPfx))
