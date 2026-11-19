@@ -476,28 +476,28 @@ export default function FaturamentoPage({ data }) {
           const positivo = variacao != null && variacao >= 0;
           const semDados = variacao === null || orçado === 0;
           return (
-            <div key={key} className={`rounded-xl border shadow-sm p-4 flex flex-col gap-2 ${destaque ? "bg-cyan-50 border-cyan-200" : "bg-white border-slate-200"}`}>
+            <div key={key} className={`rounded-xl border shadow-sm p-4 flex flex-col gap-2 ${destaque ? "bg-white border-cyan-100" : "bg-white border-slate-200"}`}>
               <div>
-                <div className="text-[11px] font-semibold text-cyan-700 uppercase tracking-widest">{titulo}</div>
-                <div className="text-xs text-cyan-600 mt-0.5">{label}</div>
+                <div className="text-[11px] font-semibold text-cyan-600 uppercase tracking-widest">{titulo}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{label}</div>
               </div>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-extrabold text-slate-800 tabular-nums">{fmtBRL(atual)}</span>
               </div>
               <div className="text-xs text-slate-400">
-                orçado: <span className="font-medium text-cyan-700">{orçado > 0 ? fmtBRL(orçado) : "—"}</span>
+                orçado: <span className="font-medium text-slate-500">{orçado > 0 ? fmtBRL(orçado) : "—"}</span>
               </div>
               {semDados ? (
                 <span className="text-xs text-slate-400 italic">sem orçamento</span>
               ) : (
-                <div className={`flex items-center gap-2 mt-auto pt-2 border-t border-cyan-100 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
+                <div className={`flex items-center gap-2 mt-auto pt-2 border-t border-slate-100 ${positivo ? "text-emerald-600" : "text-red-500"}`}>
                   <span className="text-lg font-bold">{positivo ? "▲" : "▼"}{Math.abs(variacao).toFixed(1)}%</span>
                   <span className="text-sm font-semibold">{positivo ? "+" : ""}{fmtBRLShort(delta)}</span>
                 </div>
               )}
               {showAndamento && (
                 <div>
-                  <span className="text-[10px] font-medium bg-cyan-100 text-cyan-800 px-1.5 py-0.5 rounded">mês em andamento</span>
+                  <span className="text-[10px] font-medium bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">mês em andamento</span>
                 </div>
               )}
             </div>
