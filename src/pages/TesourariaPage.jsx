@@ -7,6 +7,7 @@ import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign,
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, listarTransferencias } from "../financial-engine/tesouraria.js";
+import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 import { calcularComposicaoDiaria, calcularComposicaoMensal } from "../financial-engine/composicaoCaixa.js";
 import { calcularComposicaoRecebido, calcularCarteiraEAging } from "../financial-engine/aging.js";
 import { estaRealizado, excluirTransferencias } from "../financial-engine/lancamentos.js";
@@ -15,6 +16,16 @@ import { MESES } from "../config/appConfig.js";
 import { useCambio } from "../hooks/useCambio.js";
 
 const CORES_COMPOSICAO = { antecipado: SEMANTIC.verde, emDia: BRAND.roxo, atrasado: SEMANTIC.vermelho };
+
+// Horizons declarados em escopo de módulo — TDZ rule (CLAUDE.md)
+const HORIZONTES_CAIXA = [
+  { label: "Hoje",  key: "disponivel",     dias: null },
+  { label: "+7d",   key: "projetado7dias",  dias: 7   },
+  { label: "+15d",  key: "projetado15dias", dias: 15  },
+  { label: "+30d",  key: "projetado30dias", dias: 30  },
+  { label: "+60d",  key: "projetado60dias", dias: 60  },
+  { label: "+90d",  key: "projetado90dias", dias: 90  },
+];
 
 // Tooltip do sparkline — mesma informação (Data + Valor) já disponível na
 // tabela ao lado, só que sob hover no gráfico. Conteúdo customizado (em vez
@@ -165,6 +176,13 @@ export default function TesourariaPage({ data }) {
   }, [entidades.lancamentos, filtros.empresaId, hoje]);
   const transferencias = useMemo(() => listarTransferencias(entidades.lancamentos), [entidades.lancamentos]);
 
+  // Projeção de caixa por horizonte — calculada aqui (Option B) para não
+  // depender de App.jsx passar resumo como prop extra a TesourariaPage.
+  const resumoHoriz = useMemo(
+    () => construirResumoExecutivo({ entidades, filtros, parametros: data.parametros }),
+    [entidades, filtros, data.parametros]
+  );
+
   const realizados = useMemo(() => excluirTransferencias(entidades.lancamentos)
     .filter((l) => estaRealizado(l) && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)),
     [entidades.lancamentos, filtros.empresaId]);
@@ -212,6 +230,27 @@ export default function TesourariaPage({ data }) {
           sub="Previsto p/ hoje (ainda não baixado) — Entradas | Saídas"
           tone="neutral" icon={ArrowUpRight} basis="caixa" />
       </div>
+
+      <Panel title="Projeção de Caixa" subtitle="Saldo disponível projetado por horizonte (sem aplicações) — baseado em lançamentos Previstos e Realizados">
+        <div className="grid grid-cols-6 gap-4">
+          {HORIZONTES_CAIXA.map(({ label, key, dias }) => {
+            const valor = key === "disponivel"
+              ? resumoHoriz?.caixa?.disponivel ?? posicao.disponivel
+              : resumoHoriz?.caixa?.[key] ?? null;
+            const tone = valor == null ? "neutral" : valor < 0 ? "negative" : "positive";
+            return (
+              <KPI
+                key={label}
+                label={label}
+                value={valor != null ? fmtBRL(valor) : "—"}
+                tone={tone}
+                sub={dias ? `D+${dias}` : "Data-base atual"}
+                basis="caixa"
+              />
+            );
+          })}
+        </div>
+      </Panel>
 
       <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
         {cambioCarregando ? <span className="text-sm text-slate-400">Carregando cotações…</span> : (

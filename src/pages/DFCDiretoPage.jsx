@@ -253,6 +253,14 @@ export default function DFCDiretoPage({ data }) {
         "Total Previsto" vem do Orçamento do mês selecionado.
       </InfoNote>
 
+      {arvore.length > 0 && arvore.every((g) => g.totalRealizado === 0) && (
+        <InfoNote tone="amber">
+          Nenhum lançamento Realizado encontrado para {NOMES_MES[mesSel]}/{anoSel} com os filtros atuais.
+          Os valores "—" na tabela refletem que os títulos ainda não foram baixados (somente Previsto disponível).
+          Verifique se há lançamentos com Data de Pagamento neste período em Contas a Pagar/Receber.
+        </InfoNote>
+      )}
+
       <Panel
         title="DFC"
         right={
