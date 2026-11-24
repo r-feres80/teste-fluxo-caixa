@@ -3,7 +3,7 @@ import { BarChart, Bar, LineChart, Line, ReferenceLine, XAxis, YAxis, Tooltip, L
 import {
   BRAND, SEMANTIC, EIXO, GRID, tooltipProps, gradienteBarraStops,
 } from "../utils/chartTheme.js";
-import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info } from "lucide-react";
+import { Wallet, Landmark, PiggyBank, ArrowUpRight, ArrowDownCircle, DollarSign, Info, RefreshCw } from "lucide-react";
 import { Panel, KPI, InfoNote, selectCls } from "../components/ui/Primitives.jsx";
 import { fmtBRL, fmtBRLShort, fmtTaxaCambio, fmtData } from "../utils/formatUtils.js";
 import { calcularSaldosPorConta, calcularSaldoPorBanco, calcularSaldoPorEmpresa, calcularPosicaoConsolidada, listarTransferencias } from "../financial-engine/tesouraria.js";
@@ -149,7 +149,7 @@ export default function TesourariaPage({ data }) {
   // Chave que muda a cada montagem — força Recharts a re-animar do zero
   const [animKey] = React.useState(() => Date.now());
   const contasFiltradas = entidades.contasBancarias.filter((c) => c.ativo && (filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId));
-  const { carregando: cambioCarregando, dados: cambioDados } = useCambio();
+  const { carregando: cambioCarregando, dados: cambioDados, recarregar: recarregarCambio } = useCambio();
 
   const posicao = useMemo(() => calcularPosicaoConsolidada(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
   const porBanco = useMemo(() => calcularSaldoPorBanco(contasFiltradas, entidades.lancamentos, hoje), [contasFiltradas, entidades.lancamentos, hoje]);
@@ -252,7 +252,14 @@ export default function TesourariaPage({ data }) {
         </div>
       </Panel>
 
-      <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={<DollarSign size={15} className="text-slate-300" />}>
+      <Panel title="Câmbio" subtitle="Referência PTAX (Banco Central) — não integra o caixa consolidado acima" right={
+        <div className="flex items-center gap-2">
+          <button onClick={recarregarCambio} disabled={cambioCarregando} title="Recarregar cotações" className="text-slate-400 hover:text-slate-600 disabled:opacity-40 transition-colors">
+            <RefreshCw size={14} className={cambioCarregando ? "animate-spin" : ""} />
+          </button>
+          <DollarSign size={15} className="text-slate-300" />
+        </div>
+      }>
         {cambioCarregando ? <span className="text-sm text-slate-400">Carregando cotações…</span> : (
           <div className="grid grid-cols-2 gap-x-10">
             <div className="pr-5 border-r border-slate-100"><CambioMoeda nome="Dólar (USD)" d={cambioDados?.USD} /></div>

@@ -62,6 +62,11 @@ async function buscarSerieSGS(codigo, ultimos = 15) {
  * falhar volta como { indisponivel: true }, as outras seguem normalmente.
  * Retorno: { USD: {...} | { indisponivel: true }, EUR: {...} | { indisponivel: true } }
  */
+/** Remove o cache de câmbio do localStorage — força re-fetch na próxima chamada. */
+export function limparCacheCambio() {
+  window.localStorage.removeItem(CACHE_KEY);
+}
+
 export async function buscarCambio() {
   const cache = lerCache();
   if (cache) return cache;
