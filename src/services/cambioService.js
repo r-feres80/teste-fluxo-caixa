@@ -17,7 +17,7 @@ const SERIES_SGS = { USD: 1, EUR: 21619 };
 // — incremente sempre que mudar os campos retornados. A versão faz parte da
 // própria chave: bump aqui invalida sozinho qualquer cache antigo (a chave
 // velha vira órfã, ignorada; sem precisar de localStorage.clear() manual).
-const CACHE_SCHEMA_VERSION = 2;
+const CACHE_SCHEMA_VERSION = 3;
 const CACHE_KEY = `${STORAGE_KEY}-cambio-cache-v${CACHE_SCHEMA_VERSION}`;
 const TTL_MS = 4 * 60 * 60 * 1000; // 4 horas
 
