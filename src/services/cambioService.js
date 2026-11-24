@@ -27,6 +27,10 @@ function lerCache() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!parsed.timestamp || Date.now() - parsed.timestamp > TTL_MS) return null;
+    // Cache só é válido se todas as moedas esperadas estiverem presentes
+    // — se alguma falhou antes e ficou de fora, força novo fetch para retentá-la.
+    const todasPresentes = Object.keys(SERIES_SGS).every((m) => parsed.dados?.[m]);
+    if (!todasPresentes) return null;
     return parsed.dados;
   } catch {
     return null;
@@ -74,8 +78,12 @@ export async function buscarCambio() {
     })
   );
 
-  // Só cacheia se pelo menos uma moeda veio com sucesso — evita "travar"
-  // o TTL inteiro num momento de instabilidade pontual da API do BCB.
-  if (Object.values(resultado).some((r) => !r.indisponivel)) gravarCache(resultado);
+  // Só cacheia moedas que vieram com sucesso — entradas `indisponivel: true`
+  // nunca entram no cache, garantindo que a próxima carga as retente
+  // em vez de travar o estado de erro pelo TTL inteiro.
+  const paraCache = Object.fromEntries(
+    Object.entries(resultado).filter(([, v]) => !v.indisponivel)
+  );
+  if (Object.keys(paraCache).length > 0) gravarCache(paraCache);
   return resultado;
 }
