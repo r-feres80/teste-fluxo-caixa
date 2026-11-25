@@ -177,31 +177,57 @@ export default function DashboardPage({ data }) {
   const sparkData = resumo.caixa.serieDiaria30dias.map((p) => ({ data: p.data.slice(8, 10), saldo: p.saldo }));
   const waterfallData = useMemo(() => construirWaterfall(resumo.dfcMesAtual), [resumo.dfcMesAtual]);
 
-  // ── Faturamento Hoje / Mês (caixa, lançamentos Entrada realizados) ────────
+  // ── Referências de data e filtro ─────────────────────────────────────────
   const hoje = getDataAtualSistema();
-  const anoMesPfxDash = `${hoje.slice(0, 7)}`;
+  // Constantes de referência do sistema — CLAUDE.md regra obrigatória
+  const anoAtualSistema = Number(hoje.slice(0, 4));
+  const mesAtualSistema = Number(hoje.slice(5, 7)) - 1; // 0-based
+
+  // Filtro de período selecionado (Comparativo Mensal + cards AP/AR/Fat)
+  const mesRefIdx = mesesDoPeriodo(filtros).slice(-1)[0] ?? filtros.mesRef ?? parseISO(getDataAtualSistema()).getMonth();
+  const anoRefComp = filtros.anoRef;
+  const mesAnteriorAno = mesRefIdx === 0 ? anoRefComp - 1 : anoRefComp;
+  const mesAnteriorIdx = mesRefIdx === 0 ? 11 : mesRefIdx - 1;
+
+  // Badge de período em andamento — CLAUDE.md regra obrigatória
+  const mesEmAndamento = mesRefIdx === mesAtualSistema && anoRefComp === anoAtualSistema;
+
+  // Prefixo YYYY-MM para o mês do filtro (ex: "2026-10")
+  const mesFiltroStr = String(mesRefIdx + 1).padStart(2, "0");
+  const anoMesPfxFiltro = `${anoRefComp}-${mesFiltroStr}`;
+
+  // ── Faturamento Hoje / Mês (caixa, lançamentos Entrada realizados) ────────
   const fatHojeDash = useMemo(
     () => (entidades?.lancamentos ?? [])
       .filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.dataPagamento === hoje)
       .reduce((s, l) => s + l.valor, 0),
     [entidades?.lancamentos, hoje]
   );
-  const fatMesDash = useMemo(
+  // Faturamento do mês do filtro (segue o filtro Mês/Ano, não hardcoded em hoje)
+  const fatMesFiltro = useMemo(
     () => (entidades?.lancamentos ?? [])
-      .filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoMesPfxDash))
+      .filter((l) => l.tipo === "Entrada" && !l.transferencia && l.situacao === "Realizado" && l.dataPagamento?.startsWith(anoMesPfxFiltro))
       .reduce((s, l) => s + l.valor, 0),
-    [entidades?.lancamentos, anoMesPfxDash]
+    [entidades?.lancamentos, anoMesPfxFiltro]
   );
+
+  // ── AP/AR do mês filtrado (para mês não corrente: total pago/recebido) ───
+  const totaisDoMesFiltro = useMemo(() => {
+    const lancs = excluirTransferencias(entidades?.lancamentos ?? []).filter(
+      (l) => l.situacao === "Realizado" &&
+             l.dataPagamento?.startsWith(anoMesPfxFiltro) &&
+             (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
+    );
+    const recebido = lancs.filter((l) => l.tipo === "Entrada").reduce((s, l) => s + l.valor, 0);
+    const pago     = lancs.filter((l) => l.tipo === "Saída").reduce((s, l) => s + l.valor, 0);
+    return { recebido, pago };
+  }, [entidades?.lancamentos, anoMesPfxFiltro, filtros.empresaId]);
 
   // Comparativo Mensal (Bloco 4, pendência 2): único trecho do Dashboard que
   // usa o filtro Mês/Ano — os cards de caixa/EBITDA YTD acima continuam
   // hoje-real (resumo, de resumoExecutivo.js, nunca lê filtros de período).
   // Calculado localmente com calcularDRE (mesma função do DRE Gerencial),
   // não duplica lógica nem toca resumoExecutivo.js.
-  const mesRefIdx = mesesDoPeriodo(filtros).slice(-1)[0] ?? filtros.mesRef ?? parseISO(getDataAtualSistema()).getMonth();
-  const anoRefComp = filtros.anoRef;
-  const mesAnteriorAno = mesRefIdx === 0 ? anoRefComp - 1 : anoRefComp;
-  const mesAnteriorIdx = mesRefIdx === 0 ? 11 : mesRefIdx - 1;
   const comparativoMensal = useMemo(() => {
     const lancsBase = excluirTransferencias(entidades.lancamentos).filter(
       (l) => l.situacao === "Realizado" && (filtros.empresaId === "TODAS" || l.empresaId === filtros.empresaId)
@@ -230,10 +256,20 @@ export default function DashboardPage({ data }) {
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-4">
         <KpiCard label={t("kpi.caixaDisponivel")} value={fmtBRL(resumo.caixa.disponivel)} tone={resumo.caixa.disponivel >= 0 ? "positive" : "negative"} sub={`Data-base: ${fmtData(resumo.dataReferencia)}`} basis="caixa" />
-        <KpiCard label={t("kpi.contasReceberAberto")} value={fmtBRL(resumo.contasReceber.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasReceber.inadimplenciaPct))}
-          sub={`Vencido: ${fmtBRL(resumo.contasReceber.totalVencido)} (${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%)`} tooltip="Cor pelo % da carteira vencido: verde <5%, amarelo 5-10%, vermelho >10% — mesmo corte do velocímetro de Inadimplência abaixo." />
-        <KpiCard label={t("kpi.contasPagarAberto")} value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
-          sub={`Vencido: ${fmtBRL(resumo.contasPagar.totalVencido)} (${resumo.contasPagar.atrasoPct.toFixed(1)}%)`} tooltip="Cor pelo % da carteira em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
+        {mesEmAndamento ? (
+          <KpiCard label={t("kpi.contasReceberAberto")} value={fmtBRL(resumo.contasReceber.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasReceber.inadimplenciaPct))}
+            sub={`Vencido: ${fmtBRL(resumo.contasReceber.totalVencido)} (${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%) · em andamento`} tooltip="Carteira em aberto (posição de hoje) — cor pelo % vencido: verde <5%, amarelo 5-10%, vermelho >10%." />
+        ) : (
+          <KpiCard label={`AR Recebido — ${MESES[mesRefIdx]}/${anoRefComp}`} value={fmtBRL(totaisDoMesFiltro.recebido)} tone={totaisDoMesFiltro.recebido > 0 ? "positive" : "neutral"}
+            sub="Total recebido (realizados) no mês selecionado" tooltip="Para meses encerrados: total dos lançamentos Entrada realizados com dataPagamento no mês. A posição de carteira em aberto reflete hoje (ver tela Contas a Receber)." />
+        )}
+        {mesEmAndamento ? (
+          <KpiCard label={t("kpi.contasPagarAberto")} value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
+            sub={`Vencido: ${fmtBRL(resumo.contasPagar.totalVencido)} (${resumo.contasPagar.atrasoPct.toFixed(1)}%) · em andamento`} tooltip="Carteira em aberto (posição de hoje) — cor pelo % em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
+        ) : (
+          <KpiCard label={`AP Pago — ${MESES[mesRefIdx]}/${anoRefComp}`} value={fmtBRL(totaisDoMesFiltro.pago)} tone={totaisDoMesFiltro.pago > 0 ? "negative" : "neutral"}
+            sub="Total pago (realizados) no mês selecionado" tooltip="Para meses encerrados: total dos lançamentos Saída realizados com dataPagamento no mês. A posição de carteira em aberto reflete hoje (ver tela Contas a Pagar)." />
+        )}
         <KpiCard label={t("kpi.caixaProjetado30")} value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={subTendencia ?? `Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
           tooltip="Projeção de caixa: parte do Caixa Disponível de hoje e soma/subtrai os títulos já cadastrados (Previsto/Vencido) com vencimento nos próximos 30 dias — não é o saldo real desses dias, é uma estimativa com a carteira atual." />
       </div>
@@ -247,8 +283,10 @@ export default function DashboardPage({ data }) {
         <KpiCard label={t("kpi.inadimplenciaReceber")} value={`${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%`} tone={resumo.contasReceber.totalVencido > 0 ? "negative" : "neutral"} />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard label="Faturamento Hoje" value={fmtBRL(fatHojeDash)} tone={fatHojeDash > 0 ? "positive" : "neutral"} sub={`Recebimentos realizados em ${fmtData(hoje)}`} basis="caixa" />
-        <KpiCard label={`Faturamento ${hoje.slice(0,7).replace("-","/")} `} value={fmtBRL(fatMesDash)} tone={fatMesDash > 0 ? "positive" : "neutral"} sub="Recebimentos realizados no mês" basis="caixa" />
+        {mesEmAndamento && (
+          <KpiCard label="Faturamento Hoje" value={fmtBRL(fatHojeDash)} tone={fatHojeDash > 0 ? "positive" : "neutral"} sub={`Recebimentos realizados em ${fmtData(hoje)}`} basis="caixa" />
+        )}
+        <KpiCard label={`Faturamento ${MESES[mesRefIdx]}/${anoRefComp}`} value={fmtBRL(fatMesFiltro)} tone={fatMesFiltro > 0 ? "positive" : "neutral"} sub={mesEmAndamento ? "Recebimentos realizados no mês (em andamento)" : "Recebimentos realizados no mês selecionado"} basis="caixa" />
       </div>
 
       <Panel title="Comparativo Mensal" subtitle={`${MESES[mesRefIdx]}/${anoRefComp} vs. ${MESES[mesAnteriorIdx]}/${mesAnteriorAno} — Regime de Competência, use o filtro Mês/Ano acima pra escolher outro mês`}>
