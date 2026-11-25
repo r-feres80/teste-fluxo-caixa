@@ -12,9 +12,10 @@ import { fmtBRL, fmtBRLShort, fmtData } from "../utils/formatUtils.js";
 import { construirResumoExecutivo } from "../financial-engine/resumoExecutivo.js";
 import { calcularDRE } from "../financial-engine/dre.js";
 import { excluirTransferencias } from "../financial-engine/lancamentos.js";
+import { calcularPosicaoConsolidada } from "../financial-engine/tesouraria.js";
 import { classificarInadimplencia } from "../utils/moduleHealth.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
-import { getDataAtualSistema, parseISO, mesesDoPeriodo, diffDaysISO } from "../utils/dateUtils.js";
+import { getDataAtualSistema, parseISO, mesesDoPeriodo, diffDaysISO, endOfMonthISO } from "../utils/dateUtils.js";
 import { MESES } from "../config/appConfig.js";
 
 // Total em cor de marca; positivo/negativo seguem a semântica (a cor aqui é
@@ -223,6 +224,19 @@ export default function DashboardPage({ data }) {
     return { recebido, pago };
   }, [entidades?.lancamentos, anoMesPfxFiltro, filtros.empresaId]);
 
+  // ── Saldo de caixa no último dia do mês filtrado (apenas para mês não corrente) ──
+  // Usa calcularPosicaoConsolidada passando endOfMonthISO como dataReferencia,
+  // que soma saldoInicial das contas + todos os Realizados até aquela data.
+  const saldoFinalDoMesFiltro = useMemo(() => {
+    if (mesEmAndamento) return null; // mês corrente usa caixa disponível de hoje
+    const contasFiltradas = (entidades?.contasBancarias ?? []).filter(
+      (c) => filtros.empresaId === "TODAS" || c.empresaId === filtros.empresaId
+    );
+    const dataFimMes = endOfMonthISO(anoRefComp, mesRefIdx);
+    const posicao = calcularPosicaoConsolidada(contasFiltradas, entidades?.lancamentos ?? [], dataFimMes);
+    return posicao?.disponivel ?? 0;
+  }, [entidades?.contasBancarias, entidades?.lancamentos, anoRefComp, mesRefIdx, mesEmAndamento, filtros.empresaId]);
+
   // Comparativo Mensal (Bloco 4, pendência 2): único trecho do Dashboard que
   // usa o filtro Mês/Ano — os cards de caixa/EBITDA YTD acima continuam
   // hoje-real (resumo, de resumoExecutivo.js, nunca lê filtros de período).
@@ -261,14 +275,14 @@ export default function DashboardPage({ data }) {
             sub={`Vencido: ${fmtBRL(resumo.contasReceber.totalVencido)} (${resumo.contasReceber.inadimplenciaPct.toFixed(1)}%) · em andamento`} tooltip="Carteira em aberto (posição de hoje) — cor pelo % vencido: verde <5%, amarelo 5-10%, vermelho >10%." />
         ) : (
           <KpiCard label={`AR Recebido — ${MESES[mesRefIdx]}/${anoRefComp}`} value={fmtBRL(totaisDoMesFiltro.recebido)} tone={totaisDoMesFiltro.recebido > 0 ? "positive" : "neutral"}
-            sub="Total recebido (realizados) no mês selecionado" tooltip="Para meses encerrados: total dos lançamentos Entrada realizados com dataPagamento no mês. A posição de carteira em aberto reflete hoje (ver tela Contas a Receber)." />
+            sub={`Caixa final ${MESES[mesRefIdx]}: ${fmtBRL(saldoFinalDoMesFiltro)}`} tooltip="Para meses encerrados: total dos lançamentos Entrada realizados com dataPagamento no mês. Legenda: saldo consolidado de caixa no último dia do mês (Realizados acumulados)." />
         )}
         {mesEmAndamento ? (
           <KpiCard label={t("kpi.contasPagarAberto")} value={fmtBRL(resumo.contasPagar.totalEmAberto)} tone={toneDeSaude(classificarInadimplencia(resumo.contasPagar.atrasoPct))}
             sub={`Vencido: ${fmtBRL(resumo.contasPagar.totalVencido)} (${resumo.contasPagar.atrasoPct.toFixed(1)}%) · em andamento`} tooltip="Carteira em aberto (posição de hoje) — cor pelo % em atraso: verde <5%, amarelo 5-10%, vermelho >10%." />
         ) : (
           <KpiCard label={`AP Pago — ${MESES[mesRefIdx]}/${anoRefComp}`} value={fmtBRL(totaisDoMesFiltro.pago)} tone={totaisDoMesFiltro.pago > 0 ? "negative" : "neutral"}
-            sub="Total pago (realizados) no mês selecionado" tooltip="Para meses encerrados: total dos lançamentos Saída realizados com dataPagamento no mês. A posição de carteira em aberto reflete hoje (ver tela Contas a Pagar)." />
+            sub={`Caixa final ${MESES[mesRefIdx]}: ${fmtBRL(saldoFinalDoMesFiltro)}`} tooltip="Para meses encerrados: total dos lançamentos Saída realizados com dataPagamento no mês. Legenda: saldo consolidado de caixa no último dia do mês (Realizados acumulados)." />
         )}
         <KpiCard label={t("kpi.caixaProjetado30")} value={fmtBRL(resumo.caixa.projetado30dias)} tone={resumo.caixa.projetado30dias >= 0 ? "positive" : "negative"} sub={subTendencia ?? `Data-base: ${fmtData(resumo.dataReferencia)} + 30 dias`} basis="caixa"
           tooltip="Projeção de caixa: parte do Caixa Disponível de hoje e soma/subtrai os títulos já cadastrados (Previsto/Vencido) com vencimento nos próximos 30 dias — não é o saldo real desses dias, é uma estimativa com a carteira atual." />
