@@ -33,8 +33,8 @@ export const TRANSLATIONS = {
     "group.dados": "Dados",
 
     "kpi.caixaDisponivel": "Caixa Disponível",
-    "kpi.contasReceberAberto": "Contas a Receber (a vencer)",
-    "kpi.contasPagarAberto": "Contas a Pagar (a vencer)",
+    "kpi.contasReceberAberto": "Contas a Receber (em aberto)",
+    "kpi.contasPagarAberto": "Contas a Pagar (em aberto)",
     "kpi.caixaProjetado30": "Caixa Projetado 30 dias",
     "kpi.receitaBrutaAno": "Receita Bruta no ano",
     "kpi.ebitdaAno": "EBITDA no ano",
@@ -78,8 +78,8 @@ export const TRANSLATIONS = {
     "group.dados": "Data",
 
     "kpi.caixaDisponivel": "Available Cash",
-    "kpi.contasReceberAberto": "Accounts Receivable (outstanding)",
-    "kpi.contasPagarAberto": "Accounts Payable (outstanding)",
+    "kpi.contasReceberAberto": "Accounts Receivable (open)",
+    "kpi.contasPagarAberto": "Accounts Payable (open)",
     "kpi.caixaProjetado30": "Projected Cash (30 days)",
     "kpi.receitaBrutaAno": "Gross Revenue (YTD)",
     "kpi.ebitdaAno": "EBITDA (YTD)",
@@ -123,8 +123,8 @@ export const TRANSLATIONS = {
     "group.dados": "Datos",
 
     "kpi.caixaDisponivel": "Caja Disponible",
-    "kpi.contasReceberAberto": "Cuentas por Cobrar (por vencer)",
-    "kpi.contasPagarAberto": "Cuentas por Pagar (por vencer)",
+    "kpi.contasReceberAberto": "Cuentas por Cobrar (en abierto)",
+    "kpi.contasPagarAberto": "Cuentas por Pagar (en abierto)",
     "kpi.caixaProjetado30": "Caja Proyectada (30 días)",
     "kpi.receitaBrutaAno": "Ingresos Brutos (año)",
     "kpi.ebitdaAno": "EBITDA (año)",
