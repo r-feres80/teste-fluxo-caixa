@@ -5,7 +5,7 @@
 // Versão do bundle de dados demo. Incrementar sempre que lancamentosImportados.json
 // ou qualquer dado demo for atualizado. useAppData verifica na carga: se o valor
 // armazenado no localStorage difere deste, força regeneração automática do demoFresco().
-export const DEMO_DATA_VERSION = "2026-11-25-v2"; // Step 2: P&D plano de contas + lançamentos + orçamento (CPC 04)
+export const DEMO_DATA_VERSION = "2026-11-25-v3"; // Step 2: P&D plano de contas + lançamentos + orçamento (CPC 04)
 
 import lancamentosImportadosRaw from "./lancamentosImportados.json" with { type: "json" };
 import clientesImportados from "./clientesImportados.json" with { type: "json" };
