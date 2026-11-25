@@ -56,7 +56,7 @@ const fmt = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
 // Grupo 2, DISPONIVEL_ESPERADO cai de ~R$66.101 pra ~R$10.000) — nunca
 // ignore um "REGRESSÃO DETECTADA" sem antes confirmar se é essa mudança
 // pretendida ou uma perda de verdade.
-const DISPONIVEL_ESPERADO = -1063170; // redistribuir-nov2026: gaps nov/11 removidos + 30 lançamentos redistribuídos de 06/11 → aperto de tesouraria ativo; regressão pré-existente desde sessão anterior (HEAD já tinha -1.059.670)
+const DISPONIVEL_ESPERADO = 450000; // calibrar-saldo-inicial: saldoInicial das 5 contas líquidas ajustado (cb1=395k, cb2=342k, cb4=328.17k, cb5=325k, cb6=323k) → caixa disponível positivo e realista para indústria de transformação de médio porte
 const DISPONIVEL_TOLERANCIA = 5000;
 const APERTO_IMPOSTOS_ESPERADO = 149503.00; // Impostos 20/08 (cenário de aperto de tesouraria)
 const APERTO_FOLHA_ESPERADO = 351342.00; // Folha 31/08 (cenário de aperto de tesouraria)

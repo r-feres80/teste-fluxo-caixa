@@ -89,12 +89,12 @@ export const demoBancos = [
 // pré-existente (diferente de cb3, cujo saldoInicial já vem de antes da
 // janela rastreada).
 const demoContasBancariasBase = [
-  { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 45000, semLiquidez: "false", ativo: true },
-  { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 42000, semLiquidez: "false", ativo: true },
+  { id: "cb1", bancoId: "b2", empresaId: "e1", apelido: "Conta Movimento", agencia: "1234", numero: "56789-0", saldoInicial: 395000, semLiquidez: "false", ativo: true },
+  { id: "cb2", bancoId: "b1", empresaId: "e1", apelido: "Conta Movimento", agencia: "5678", numero: "12345-6", saldoInicial: 342000, semLiquidez: "false", ativo: true },
   { id: "cb3", bancoId: "b2", empresaId: "e1", apelido: "Aplicação CDB", agencia: "1234", numero: "99887-1", saldoInicial: 150000, semLiquidez: "true", ativo: true, modalidade: "CDB", taxaAnual: 12.5, dataAplicacao: "2025-11-01" },
-  { id: "cb4", bancoId: "b3", empresaId: "e1", apelido: "Conta Movimento", agencia: "4321", numero: "34521-9", saldoInicial: 40000, semLiquidez: "false", ativo: true },
-  { id: "cb5", bancoId: "b4", empresaId: "e1", apelido: "Conta Movimento", agencia: "9012", numero: "34567-8", saldoInicial: 38000, semLiquidez: "false", ativo: true },
-  { id: "cb6", bancoId: "b5", empresaId: "e1", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 35000, semLiquidez: "false", ativo: true },
+  { id: "cb4", bancoId: "b3", empresaId: "e1", apelido: "Conta Movimento", agencia: "4321", numero: "34521-9", saldoInicial: 328170, semLiquidez: "false", ativo: true },
+  { id: "cb5", bancoId: "b4", empresaId: "e1", apelido: "Conta Movimento", agencia: "9012", numero: "34567-8", saldoInicial: 325000, semLiquidez: "false", ativo: true },
+  { id: "cb6", bancoId: "b5", empresaId: "e1", apelido: "Conta Movimento", agencia: "3456", numero: "78901-2", saldoInicial: 323000, semLiquidez: "false", ativo: true },
   { id: "cb7", bancoId: "b1", empresaId: "e1", apelido: "Aplicação LCI", agencia: "5678", numero: "77123-4", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "LCI", taxaAnual: 10.8, dataAplicacao: "2026-06-01" },
   { id: "cb8", bancoId: "b3", empresaId: "e1", apelido: "Aplicação Tesouro Selic", agencia: "4321", numero: "88456-2", saldoInicial: 0, semLiquidez: "true", ativo: true, modalidade: "Tesouro Selic", taxaAnual: 11.9, dataAplicacao: "2024-01-15" },
   // cb9/cb10/cb11 — cenário "aperto de tesouraria" (comando
