@@ -24,6 +24,7 @@ export const CLASSIFICACAO_DRE = [
   "Despesas com Pessoal",
   "Despesas Administrativas",
   "Despesas Comerciais",
+  "Despesas com P&D",        // CPC 04 — Fase Pesquisa: sempre despesa (item 54)
   "Outras Despesas Operacionais",
   "Receitas Financeiras",
   "Despesas Financeiras",
@@ -40,7 +41,7 @@ export const SUBGRUPOS_POR_GRUPO_DFC = {
   Operacional: [
     "Entradas", "Saídas Diretas", "Pessoal", "Benefícios", "Impostos de Folha",
     "Impostos", "Impostos sobre o Lucro", "Terceiros e Consultorias", "Marketing e Publicidade",
-    "Real Estate e Facilities", "Outros Operacionais",
+    "Real Estate e Facilities", "P&D", "Outros Operacionais",
   ],
   Investimento: ["Investimentos", "Aplicações e Resgates"],
   Financiamento: ["Captações", "Despesas Financeiras", "Receitas Financeiras"],

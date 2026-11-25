@@ -3718,5 +3718,525 @@
     "projetoId": null,
     "mes": 11,
     "valor": -252
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 0,
+    "valor": -3800
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 0,
+    "valor": -6200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 0,
+    "valor": -2000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 0,
+    "valor": -1200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 1,
+    "valor": -3800
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 1,
+    "valor": -6200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 1,
+    "valor": -2000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 1,
+    "valor": -1200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 2,
+    "valor": -4000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 2,
+    "valor": -6500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 2,
+    "valor": -1800
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 2,
+    "valor": -1400
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 3,
+    "valor": -4200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 3,
+    "valor": -6300
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 3,
+    "valor": -2100
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 3,
+    "valor": -1500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 4,
+    "valor": -4000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 4,
+    "valor": -6500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 4,
+    "valor": -2000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 4,
+    "valor": -1300
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 5,
+    "valor": -4200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 5,
+    "valor": -6400
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 5,
+    "valor": -1900
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 5,
+    "valor": -1500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 6,
+    "valor": -4500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 6,
+    "valor": -6600
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 6,
+    "valor": -2100
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 6,
+    "valor": -1400
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 7,
+    "valor": -4000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 7,
+    "valor": -6400
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 7,
+    "valor": -2000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 7,
+    "valor": -1500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 8,
+    "valor": -4300
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 8,
+    "valor": -6700
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 8,
+    "valor": -1800
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 8,
+    "valor": -1600
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 9,
+    "valor": -4100
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 9,
+    "valor": -6500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 9,
+    "valor": -2200
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 9,
+    "valor": -1500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 10,
+    "valor": -4500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 10,
+    "valor": -6700
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 10,
+    "valor": -2000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 10,
+    "valor": -1500
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 11,
+    "valor": -4600
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 11,
+    "valor": -7000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.03",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 11,
+    "valor": -1800
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc3.05.04",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 11,
+    "valor": -1400
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.07.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 1,
+    "valor": -30000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.07.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 4,
+    "valor": -30000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.07.02",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 7,
+    "valor": -25000
+  },
+  {
+    "id": null,
+    "ano": 2026,
+    "empresaId": "e1",
+    "contaGerencialId": "pc5.07.01",
+    "centroCustoId": "cc3100",
+    "projetoId": null,
+    "mes": 10,
+    "valor": -30000
   }
 ]

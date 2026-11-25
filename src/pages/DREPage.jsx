@@ -47,10 +47,11 @@ export default function DREPage({ data }) {
     });
     const receitaLiquida = buckets["Receita Bruta"] + buckets["Deduções"];
     const margemBruta = receitaLiquida + buckets["Custos"];
-    const ebitda = margemBruta + buckets["Despesas com Pessoal"] + buckets["Despesas Administrativas"] + buckets["Despesas Comerciais"] + buckets["Outras Despesas Operacionais"];
+    const despesasPD = buckets["Despesas com P&D"];
+    const ebitda = margemBruta + buckets["Despesas com Pessoal"] + buckets["Despesas Administrativas"] + buckets["Despesas Comerciais"] + despesasPD + buckets["Outras Despesas Operacionais"];
     const resultadoFinanceiro = buckets["Receitas Financeiras"] + buckets["Despesas Financeiras"];
     const impostosSobreLucro = buckets["Impostos sobre o Lucro"];
-    return { receitaBruta: buckets["Receita Bruta"], deducoes: buckets["Deduções"], receitaLiquida, custos: buckets["Custos"], margemBruta, despesasPessoal: buckets["Despesas com Pessoal"], despesasAdministrativas: buckets["Despesas Administrativas"], despesasComerciais: buckets["Despesas Comerciais"], outrasDespesasOperacionais: buckets["Outras Despesas Operacionais"], ebitda, receitasFinanceiras: buckets["Receitas Financeiras"], despesasFinanceiras: buckets["Despesas Financeiras"], resultadoFinanceiro, impostosSobreLucro, resultadoGerencial: ebitda + resultadoFinanceiro + impostosSobreLucro };
+    return { receitaBruta: buckets["Receita Bruta"], deducoes: buckets["Deduções"], receitaLiquida, custos: buckets["Custos"], margemBruta, despesasPessoal: buckets["Despesas com Pessoal"], despesasAdministrativas: buckets["Despesas Administrativas"], despesasComerciais: buckets["Despesas Comerciais"], despesasPD, outrasDespesasOperacionais: buckets["Outras Despesas Operacionais"], ebitda, receitasFinanceiras: buckets["Receitas Financeiras"], despesasFinanceiras: buckets["Despesas Financeiras"], resultadoFinanceiro, impostosSobreLucro, resultadoGerencial: ebitda + resultadoFinanceiro + impostosSobreLucro };
   }, [entidades.planoDeContas, entidades.orcamentoItens, anoRef, filtros.empresaId, meses]);
 
   const linhasReal = linhasDRE(realizado);
@@ -88,6 +89,7 @@ export default function DREPage({ data }) {
     { label: "(-) Despesas com Pessoal", campo: "despesasPessoal" },
     { label: "(-) Despesas Administrativas", campo: "despesasAdministrativas" },
     { label: "(-) Despesas Comerciais", campo: "despesasComerciais" },
+    { label: "(-) Despesas com P&D", campo: "despesasPD" },
     { label: "(-) Outras Despesas Operacionais", campo: "outrasDespesasOperacionais" },
     { label: "= EBITDA", campo: "ebitda", destaque: true },
   ];

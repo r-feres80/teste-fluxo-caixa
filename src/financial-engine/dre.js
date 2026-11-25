@@ -25,8 +25,10 @@ export function calcularDRE(lancamentos, planoDeContas) {
   const despesasPessoal = buckets["Despesas com Pessoal"];
   const despesasAdministrativas = buckets["Despesas Administrativas"];
   const despesasComerciais = buckets["Despesas Comerciais"];
+  // CPC 04 — Fase Pesquisa: despesa do período (item 54); Fase Desenvolvimento capitalizada vai para pc5.07 (Fora do DRE)
+  const despesasPD = buckets["Despesas com P&D"];
   const outrasDespesasOperacionais = buckets["Outras Despesas Operacionais"];
-  const ebitda = margemBruta + despesasPessoal + despesasAdministrativas + despesasComerciais + outrasDespesasOperacionais;
+  const ebitda = margemBruta + despesasPessoal + despesasAdministrativas + despesasComerciais + despesasPD + outrasDespesasOperacionais;
   const receitasFinanceiras = buckets["Receitas Financeiras"];
   const despesasFinanceiras = buckets["Despesas Financeiras"];
   const resultadoFinanceiro = receitasFinanceiras + despesasFinanceiras;
@@ -37,7 +39,7 @@ export function calcularDRE(lancamentos, planoDeContas) {
 
   return {
     receitaBruta, deducoes, receitaLiquida, custos, margemBruta,
-    despesasPessoal, despesasAdministrativas, despesasComerciais, outrasDespesasOperacionais,
+    despesasPessoal, despesasAdministrativas, despesasComerciais, despesasPD, outrasDespesasOperacionais,
     ebitda, receitasFinanceiras, despesasFinanceiras, resultadoFinanceiro, impostosSobreLucro, resultadoGerencial,
   };
 }
@@ -53,6 +55,7 @@ export function linhasDRE(dre) {
     { label: "(-) Despesas com Pessoal", valor: dre.despesasPessoal, nivel: 0 },
     { label: "(-) Despesas Administrativas", valor: dre.despesasAdministrativas, nivel: 0 },
     { label: "(-) Despesas Comerciais", valor: dre.despesasComerciais, nivel: 0 },
+    { label: "(-) Despesas com P&D", valor: dre.despesasPD, nivel: 0 },   // CPC 04 § 54 — fase pesquisa
     { label: "(-) Outras Despesas Operacionais", valor: dre.outrasDespesasOperacionais, nivel: 0 },
     { label: "= EBITDA", valor: dre.ebitda, nivel: 0, destaque: true },
     { label: "(+/-) Resultado Financeiro", valor: dre.resultadoFinanceiro, nivel: 0 },
